@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Home | Benkyo-Fi{% endblock %}
+{% block content %}
+<section class="panel" style="margin-bottom: 1rem;">
+	<h2>Welcome</h2>
+	<p class="muted">Choose a module to begin.</p>
+</section>
+
+<div class="module-grid">
+	<article class="panel module-card">
+		<h3 class="module-card__title">Module 1: Flashcards + Typing</h3>
+		<p>Practice recognition and recall with instant feedback.</p>
+		<p style="margin-top: .75rem;"><a class="btn" href="{{ url_for('module1.module1_index') }}">Open Module 1</a></p>
+	</article>
+
+	<article class="panel module-card module-card--locked" aria-disabled="true">
+		<div class="module-card__badge" title="Locked">
+			<span aria-hidden="true">🔒</span>
+		</div>
+		<h3 class="module-card__title">Module 2: Coming Soon</h3>
+		<p>Placeholder module.</p>
+		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
+	</article>
+
+	<article class="panel module-card module-card--locked" aria-disabled="true">
+		<div class="module-card__badge" title="Locked">
+			<span aria-hidden="true">🔒</span>
+		</div>
+		<h3 class="module-card__title">Module 3: Coming Soon</h3>
+		<p>Placeholder module.</p>
+		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
+	</article>
+
+	<article class="panel module-card module-card--locked" aria-disabled="true">
+		<div class="module-card__badge" title="Locked">
+			<span aria-hidden="true">🔒</span>
+		</div>
+		<h3 class="module-card__title">Module 4: Coming Soon</h3>
+		<p>Placeholder module.</p>
+		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
+	</article>
+</div>
+{% endblock %}
+
+

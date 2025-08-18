@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{% block title %}Benkyo-Fi{% endblock %}</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+	<div class="floating-elements">
+		<div class="floating-element"></div>
+		<div class="floating-element"></div>
+		<div class="floating-element"></div>
+	</div>
+
+	<header class="header">
+		<div class="header-container">
+			<h1 class="main-title">Benkyo-Fi</h1>
+			<p class="subtitle">Study Japanese, one card at a time</p>
+		</div>
+	</header>
+
+	<main class="main-content">
+		{% block content %}{% endblock %}
+	</main>
+
+	<footer class="footer">
+		<div class="footer-text">Benkyo-Fi © 2025</div>
+	</footer>
+
+	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+	{% block scripts %}{% endblock %}
+</body>
+</html>
+
+
