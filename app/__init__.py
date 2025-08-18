@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 import os
 from flask_dance.contrib.google import make_google_blueprint
 
@@ -37,6 +37,11 @@ def create_app() -> Flask:
 	
 	# Register Google OAuth blueprint without extra prefix so routes are /login/google and /login/google/authorized
 	app.register_blueprint(google_bp, url_prefix="/login")
+
+	# Make session user available in all templates as `current_user`
+	@app.context_processor
+	def inject_user():
+		return {"current_user": session.get("user")}
 
 	return app
 

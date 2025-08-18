@@ -74,6 +74,24 @@ body {
 	padding: 0 2rem;
 }
 
+.header-flex {
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	gap: 1rem;
+	align-items: center;
+}
+
+.brand { display: flex; align-items: center; gap: .75rem; }
+.brand-icon {
+	width: 44px; height: 64px; border-radius: 12px;
+	background: #6b7df0;
+	color: #fff;
+	display: grid; place-items: center;
+	font-weight: 700;
+	box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+}
+.brand-text { text-align: left; }
+
 .main-title {
 	font-size: 3rem;
 	font-weight: 300;
@@ -100,6 +118,23 @@ body {
 		transform: translateY(0);
 	}
 }
+
+.nav-links { display: flex; gap: 1rem; justify-content: center; }
+.nav-links a { color: #4a5568; text-decoration: none; }
+.nav-links a:hover { color: #2d3748; text-decoration: underline; }
+
+.user-chip {
+	display: flex; align-items: center; gap: .5rem;
+	background: rgba(255,255,255,0.9);
+	border-radius: 16px;
+	padding: .35rem .6rem;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.user-avatar--placeholder { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: #edf2f7; }
+.user-meta { line-height: 1.1; text-align: left; }
+.user-name { font-weight: 600; color: #2d3748; }
+.user-sub { font-size: .8rem; color: #718096; }
 
 /* Main Content */
 .main-content {

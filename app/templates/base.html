@@ -14,17 +14,37 @@
 	</div>
 
 	<header class="header">
-		<div class="header-container">
-			<h1 class="main-title">Benkyo-Fi</h1>
-			<p class="subtitle">Study Japanese, one card at a time</p>
+		<div class="header-container header-flex">
+			<div class="brand">
+				<div class="brand-icon" aria-hidden="true">FY</div>
+				<div class="brand-text">
+					<h1 class="main-title">Benkyo-Fi</h1>
+					<p class="subtitle">Study Japanese, one card at a time</p>
+				</div>
+			</div>
+
+			<nav class="nav-links">
+				<a href="{{ url_for('main.home') }}">Home</a>
+				<a href="{{ url_for('auth.login') }}">Login</a>
+				<a href="{{ url_for('auth.logout') }}">Logout</a>
+			</nav>
+
+			<div class="user-chip">
+				{% if current_user %}
+					<img class="user-avatar" src="{{ current_user.picture }}" alt="{{ current_user.name }} avatar" />
+					<div class="user-meta">
+						<div class="user-name">{{ current_user.name }}</div>
+						<div class="user-sub">basic info</div>
+					</div>
+				{% else %}
+					<div class="user-avatar user-avatar--placeholder">👤</div>
+					<div class="user-meta">
+						<div class="user-name">Guest</div>
+						<div class="user-sub">not signed in</div>
+					</div>
+				{% endif %}
+			</div>
 		</div>
-		<nav style="margin-top: .75rem; text-align: center;">
-			<a href="{{ url_for('main.home') }}">Home</a>
-			|
-			<a href="{{ url_for('auth.login') }}">Login</a>
-			|
-			<a href="{{ url_for('auth.logout') }}">Logout</a>
-		</nav>
 	</header>
 
 	<main class="main-content">

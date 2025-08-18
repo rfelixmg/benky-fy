@@ -2,8 +2,11 @@
 {% block title %}Home | Benkyo-Fi{% endblock %}
 {% block content %}
 <section class="panel" style="margin-bottom: 1rem;">
-	<h2>{{ greeting }}</h2>
-	{% if not user %}
+	{% set u = user or current_user %}
+	<h2>
+		{% if u %}Hello, {{ u.name }}!{% else %}Hello, Guest. Please log in.{% endif %}
+	</h2>
+	{% if not u %}
 		<p class="muted">Please <a href="{{ url_for('auth.login') }}">log in</a> to personalize your study experience.</p>
 	{% else %}
 		<p class="muted">Choose a module to begin.</p>
