@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session, url_for
 
 
 main_bp = Blueprint("main", __name__)
@@ -6,17 +6,15 @@ main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
 def index():
-	if True: #not current_user.is_authenticated:
-		return login()
 	return home()
 
 @main_bp.route("/home")
 def home():
-	return render_template("home.html")
+	user = session.get("user")
+	greeting = f"Hello, {user['name']}!" if user else "Hello, Guest. Please log in."
+	return render_template("home.html", user=user, greeting=greeting)
 
 
-@main_bp.route("/login")
-def login():
-	return render_template("login.html")
+"""Auth routes live in auth blueprint. No local /login here."""
 
 

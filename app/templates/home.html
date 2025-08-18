@@ -2,8 +2,12 @@
 {% block title %}Home | Benkyo-Fi{% endblock %}
 {% block content %}
 <section class="panel" style="margin-bottom: 1rem;">
-	<h2>Welcome</h2>
-	<p class="muted">Choose a module to begin.</p>
+	<h2>{{ greeting }}</h2>
+	{% if not user %}
+		<p class="muted">Please <a href="{{ url_for('auth.login') }}">log in</a> to personalize your study experience.</p>
+	{% else %}
+		<p class="muted">Choose a module to begin.</p>
+	{% endif %}
 </section>
 
 <div class="module-grid">
