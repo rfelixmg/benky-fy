@@ -9,7 +9,6 @@ def create_app() -> Flask:
 	app = Flask(__name__, static_folder="static", template_folder="templates")
 
 	# Secret key for sessions (required by Flask and Flask-Dance)
-	app.secret_key = "supersekrit"
 	app.secret_key = os.environ.get("FLASK_SECRET_KEY", "superkey-benky-fy")
 
 	# Register blueprints
@@ -20,9 +19,6 @@ def create_app() -> Flask:
 	# Google OAuth with Flask-Dance
 	google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
 	google_client_secret = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET")
-
-	print(f"GOOGLE_OAUTH_CLIENT_ID: {google_client_id}")
-	print(f"GOOGLE_OAUTH_CLIENT_SECRET: {google_client_secret}")
 
 	google_bp = make_google_blueprint(
 		client_id=google_client_id,
