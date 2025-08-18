@@ -145,6 +145,28 @@ body {
 .result.correct { background: rgba(72,187,120,0.1); border: 1px solid #48bb78; }
 .result.incorrect { background: rgba(245,101,101,0.1); border: 1px solid #f56565; }
 
+/* Home modules grid */
+.module-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	gap: 1.5rem;
+}
+
+.module-card { position: relative; overflow: hidden; }
+.module-card__title { margin-bottom: .25rem; }
+.module-card__badge {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	background: rgba(0,0,0,0.1);
+	border: 1px solid rgba(0,0,0,0.08);
+	backdrop-filter: blur(6px);
+	width: 32px; height: 32px; border-radius: 999px;
+	display: grid; place-items: center;
+}
+.module-card--locked { opacity: .6; }
+.module-card--locked .btn { opacity: .7; cursor: not-allowed; }
+
 /* Footer */
 .footer {
 	background: rgba(255, 255, 255, 0.95);
