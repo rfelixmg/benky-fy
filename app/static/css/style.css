@@ -82,13 +82,11 @@ body {
 }
 
 .brand { display: flex; align-items: center; gap: .75rem; }
-.brand-icon {
-	width: 44px; height: 64px; border-radius: 12px;
-	background: #6b7df0;
-	color: #fff;
-	display: grid; place-items: center;
-	font-weight: 700;
-	box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+.brand-logo {
+	height:120px;   /* adjust as needed */
+	width: auto;    /* keeps aspect ratio */
+	object-fit: contain;
+	display: block;
 }
 .brand-text { text-align: left; }
 
@@ -218,6 +216,7 @@ body {
 @media (max-width: 768px) {
 	.main-content { padding: 2rem 1rem; }
 	.main-title { font-size: 2rem; }
+	.brand-logo { height: 56px; } /* new */
 }
 
 
