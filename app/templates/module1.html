@@ -8,13 +8,24 @@
 		<div class="prompt-value">{{ item.hiragana }}</div>
 	</div>
 	<form class="answer-form" method="POST" action="{{ url_for('module1.module1_check') }}">
-		<label for="user_input">Your answer ({{ item.answer_script }}):</label>
-		<input type="text" id="user_input" name="user_input" placeholder="Type your answer" autofocus />
+		<div class="input-row">
+			<div class="input-group">
+				<label for="user_input">Your answer (hiragana / romaji):</label>
+				<input type="text" id="user_input" name="user_input" class="answer-input" placeholder="Type here..." autofocus />
+			</div>
+	
+			<div class="input-group">
+				<label for="user_english">Your answer (english):</label>
+				<input type="text" id="user_english" name="user_english" class="answer-input" placeholder="Translate here..." />
+			</div>
+		</div>	
+		<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
+	
 		<div class="actions">
-			<button type="submit" class="btn">Reveal</button>
+			<button type="submit" class="btn">Reveal 🌟</button>
 		</div>
 	</form>
-
+	
 	{% if result is not none %}
 	<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
 		<p><strong>{{ 'Correct!' if result.is_correct else 'Incorrect' }}</strong></p>

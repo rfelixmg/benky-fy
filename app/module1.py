@@ -11,6 +11,7 @@ module1_bp = Blueprint("module1", __name__)
 
 @dataclass
 class FlashcardItem:
+	index: int
 	kanji: str
 	hiragana: str
 	katakana: str
@@ -24,9 +25,10 @@ def load_flashcards_from_csv(path: str) -> list[FlashcardItem]:
     flashcards = []
     with open(path, newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
-        for row in reader:
+        for idx, row in enumerate(reader):
 			# FlashcardItem(prompt="あ", answer="a", prompt_script="hiragana", answer_script="romaji"),
             item = FlashcardItem(
+				index=idx,
                 kanji=row["Kanji"],
                 hiragana=row["Hiragana"],
                 katakana=row["Katakana"],
@@ -49,13 +51,16 @@ class FlashcardEngine:
 		self._data = load_flashcards_from_csv(filename)
 
 
+	def __getitem__(self, index: int) -> FlashcardItem:
+		return self._data[index]
+
 	def get_next(self) -> FlashcardItem:
 		# Placeholder: returns first for now
 		return self._data[random.randint(0, len(self._data))]
 
 	def check_answer(self, user_input: str, item: FlashcardItem) -> Tuple[bool, str]:
-		# Placeholder comparison (case-insensitive)
 		is_correct = user_input.strip().lower() == item.answer.lower()
+		print(f"{is_correct=}")
 		return is_correct, item.answer
 
 
@@ -70,8 +75,9 @@ def module1_index():
 
 @module1_bp.route("/check", methods=["POST"])  # /module1/check
 def module1_check():
-	item = engine.get_next()
-	user_input: Optional[str] = request.form.get("user_input")
+	item = engine[int(request.form["item_id"])]
+	user_input: Optional[str] = request.form.get("user_english")
+	
 	is_correct, correct_answer = engine.check_answer(user_input or "", item)
 	result = {
 		"is_correct": is_correct,
