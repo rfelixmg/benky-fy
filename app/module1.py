@@ -1,3 +1,4 @@
+import csv
 import random
 from dataclasses import dataclass
 from typing import Optional, Tuple
@@ -10,25 +11,47 @@ module1_bp = Blueprint("module1", __name__)
 
 @dataclass
 class FlashcardItem:
+	kanji: str
+	hiragana: str
+	katakana: str
+	english: str
 	prompt: str
 	answer: str
 	prompt_script: str  # e.g., hiragana, katakana, kanji, romaji, english
 	answer_script: str
 
+def load_flashcards_from_csv(path: str) -> list[FlashcardItem]:
+    flashcards = []
+    with open(path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+			# FlashcardItem(prompt="あ", answer="a", prompt_script="hiragana", answer_script="romaji"),
+            item = FlashcardItem(
+                kanji=row["Kanji"],
+                hiragana=row["Hiragana"],
+                katakana=row["Katakana"],
+                english=row["English"],
+                prompt=row["Hiragana"],          # default prompt
+                answer=row["English"],           # default answer
+                prompt_script="hiragana",        # default script
+                answer_script="english"
+            )
+            flashcards.append(item)
+    return flashcards
+
 
 class FlashcardEngine:
 	"""Placeholder OOP class for future flashcard logic."""
 
-	def __init__(self) -> None:
-		self._seed_data = [
-			FlashcardItem(prompt="あ", answer="a", prompt_script="hiragana", answer_script="romaji"),
-			FlashcardItem(prompt="い", answer="i", prompt_script="hiragana", answer_script="romaji"),
-			FlashcardItem(prompt="水", answer="mizu", prompt_script="kanji", answer_script="romaji"),
-		]
+	def __init__(self, filename: str = "./datum/verbs.csv") -> None:
+		import os
+		print(os.getcwd())
+		self._data = load_flashcards_from_csv(filename)
+
 
 	def get_next(self) -> FlashcardItem:
 		# Placeholder: returns first for now
-		return random.choice(self._seed_data)
+		return self._data[random.randint(0, len(self._data))]
 
 	def check_answer(self, user_input: str, item: FlashcardItem) -> Tuple[bool, str]:
 		# Placeholder comparison (case-insensitive)

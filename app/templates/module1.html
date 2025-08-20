@@ -5,7 +5,7 @@
 	<h1>Flashcards + Typing</h1>
 	<div class="prompt">
 		<p class="muted">Prompt ({{ item.prompt_script }})</p>
-		<div class="prompt-value">{{ item.prompt }}</div>
+		<div class="prompt-value">{{ item.hiragana }}</div>
 	</div>
 	<form class="answer-form" method="POST" action="{{ url_for('module1.module1_check') }}">
 		<label for="user_input">Your answer ({{ item.answer_script }}):</label>
