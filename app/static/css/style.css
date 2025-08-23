@@ -59,6 +59,33 @@ body {
 	50% { transform: translateY(-20px) rotate(180deg); }
 }
 
+@keyframes moduleFloat {
+	0%, 100% { 
+		transform: translateY(0px);
+	}
+	33% { 
+		transform: translateY(-5px);
+	}
+	66% { 
+		transform: translateY(2px);
+	}
+}
+
+@keyframes pulseGlow {
+	0%, 100% {
+		box-shadow: 
+			0 8px 32px rgba(102, 126, 234, 0.15),
+			0 4px 16px rgba(0, 0, 0, 0.08),
+			inset 0 1px 0 rgba(255, 255, 255, 0.8);
+	}
+	50% {
+		box-shadow: 
+			0 12px 40px rgba(102, 126, 234, 0.25),
+			0 6px 20px rgba(0, 0, 0, 0.1),
+			inset 0 1px 0 rgba(255, 255, 255, 0.9);
+	}
+}
+
 /* Header */
 .header {
 	background: rgba(255, 255, 255, 0.95);
@@ -181,24 +208,208 @@ body {
 /* Home modules grid */
 .module-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-	gap: 1.5rem;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: repeat(2, 1fr);
+	gap: 2rem;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 2rem;
 }
 
-.module-card { position: relative; overflow: hidden; }
-.module-card__title { margin-bottom: .25rem; }
+.module-card { 
+	position: relative; 
+	width: 140px;
+	height: 140px;
+	border-radius: 50%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 1.2rem;
+	cursor: pointer;
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	margin: 0 auto;
+	background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+	backdrop-filter: blur(15px);
+	border: 3px solid transparent;
+	background-clip: padding-box;
+	box-shadow: 
+		0 8px 32px rgba(102, 126, 234, 0.15),
+		0 4px 16px rgba(0, 0, 0, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.8);
+	animation: moduleFloat 6s ease-in-out infinite;
+}
+
+.module-card::before {
+	content: '';
+	position: absolute;
+	top: -3px;
+	left: -3px;
+	right: -3px;
+	bottom: -3px;
+	border-radius: 50%;
+	background: linear-gradient(145deg, #667eea, #764ba2, #f093fb);
+	z-index: -1;
+	opacity: 0.7;
+	transition: opacity 0.4s ease;
+}
+
+.module-card:hover {
+	transform: translateY(-8px) scale(1.05);
+	box-shadow: 
+		0 16px 48px rgba(102, 126, 234, 0.25),
+		0 8px 24px rgba(0, 0, 0, 0.12),
+		inset 0 1px 0 rgba(255, 255, 255, 0.9);
+	animation-play-state: paused;
+}
+
+.module-card:hover::before {
+	opacity: 1;
+	background: linear-gradient(145deg, #667eea, #764ba2, #f093fb, #48cae4);
+}
+
+.module-card:active {
+	transform: translateY(-6px) scale(1.02);
+}
+
+.module-card-link:active .module-card {
+	transform: translateY(-4px) scale(0.98);
+}
+
+/* Add ripple effect on click */
+.module-card::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border-radius: 50%;
+	background: rgba(102, 126, 234, 0.3);
+	transform: translate(-50%, -50%);
+	transition: width 0.6s, height 0.6s;
+}
+
+.module-card:active::after {
+	width: 200px;
+	height: 200px;
+}
+
+.module-card__title { 
+	margin-bottom: 0.5rem; 
+	font-size: 0.9rem;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+.module-card p {
+	display: none; /* Hide description in circular view */
+}
+
+.module-card-link {
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}
+
+.module-card-link:hover {
+	text-decoration: none;
+}
+
+.module-btn {
+	display: inline-block;
+	pointer-events: none; /* Prevent double-click issues */
+}
+
+.module-card .btn {
+	padding: 0.5rem 0.75rem;
+	font-size: 0.8rem;
+	margin-top: 0.5rem;
+}
+
 .module-card__badge {
 	position: absolute;
-	top: 12px;
-	right: 12px;
-	background: rgba(0,0,0,0.1);
-	border: 1px solid rgba(0,0,0,0.08);
-	backdrop-filter: blur(6px);
-	width: 32px; height: 32px; border-radius: 999px;
-	display: grid; place-items: center;
+	top: -5px;
+	right: -5px;
+	background: rgba(0,0,0,0.8);
+	color: white;
+	width: 30px; 
+	height: 30px; 
+	border-radius: 50%;
+	display: grid; 
+	place-items: center;
+	font-size: 1.2rem;
+	border: 2px solid white;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
-.module-card--locked { opacity: .6; }
-.module-card--locked .btn { opacity: .7; cursor: not-allowed; }
+
+.module-card--locked { 
+	opacity: 0.5; 
+	background: linear-gradient(145deg, rgba(220, 220, 220, 0.8), rgba(200, 200, 200, 0.8));
+	filter: grayscale(0.7);
+	animation-delay: 0.5s;
+}
+
+.module-card--locked::before {
+	background: linear-gradient(145deg, #9ca3af, #6b7280);
+	opacity: 0.4;
+}
+
+.module-card--locked .btn { 
+	opacity: 0.6; 
+	cursor: not-allowed;
+	background: linear-gradient(145deg, #9ca3af, #6b7280);
+}
+
+.module-card--locked:hover {
+	transform: translateY(-2px) scale(1.01);
+	opacity: 0.7;
+	filter: grayscale(0.5);
+}
+
+.module-card--locked:hover::before {
+	opacity: 0.6;
+}
+
+/* Staggered animation delays for dynamic effect */
+.module-card:nth-child(1) { animation-delay: 0s; }
+.module-card:nth-child(2) { animation-delay: 0.5s; }
+.module-card:nth-child(3) { animation-delay: 1s; }
+.module-card:nth-child(4) { animation-delay: 1.5s; }
+.module-card:nth-child(5) { animation-delay: 2s; }
+.module-card:nth-child(6) { animation-delay: 2.5s; }
+.module-card:nth-child(7) { animation-delay: 3s; }
+.module-card:nth-child(8) { animation-delay: 3.5s; }
+
+/* Special glow for unlocked module */
+.module-card:not(.module-card--locked) {
+	animation: moduleFloat 6s ease-in-out infinite, pulseGlow 3s ease-in-out infinite;
+}
+
+/* Responsive adjustments for circular modules */
+@media (max-width: 768px) {
+	.module-grid {
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(4, 1fr);
+		gap: 1.5rem;
+		padding: 1rem;
+	}
+	
+	.module-card {
+		width: 120px;
+		height: 120px;
+	}
+	
+	.module-card__title {
+		font-size: 0.85rem;
+	}
+	
+	.module-card .btn {
+		font-size: 0.75rem;
+		padding: 0.5rem 0.7rem;
+	}
+}
 
 /* Footer */
 .footer {
