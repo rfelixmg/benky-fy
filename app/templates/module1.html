@@ -20,8 +20,8 @@
 					<div class="settings-section">
 						<h3>Checking Style:</h3>
 						<div class="checkbox-group">
-							<label><input type="checkbox" name="checking_hiragana" {% if 'hiragana' in settings.checking_styles %}checked{% endif %}> Hiragana <span class="note">(type romaji, converts to hiragana)</span></label>
-							<label><input type="checkbox" name="checking_romaji" {% if 'romaji' in settings.checking_styles %}checked{% endif %}> Romaji <span class="note">(type romaji, stays as romaji)</span></label>
+							<label><input type="checkbox" name="checking_hiragana" {% if 'hiragana' in settings.checking_styles %}checked{% endif %}> Hiragana <span class="note">(converts romaji → hiragana as you type)</span></label>
+							<label><input type="checkbox" name="checking_romaji" {% if 'romaji' in settings.checking_styles %}checked{% endif %}> Romaji <span class="note">(keeps romaji as you type)</span></label>
 							<label><input type="checkbox" name="checking_kanji" {% if 'kanji' in settings.checking_styles %}checked{% endif %}> Kanji</label>
 							<label><input type="checkbox" name="checking_katakana" {% if 'katakana' in settings.checking_styles %}checked{% endif %}> Katakana</label>
 							<label><input type="checkbox" name="checking_english" {% if 'english' in settings.checking_styles %}checked{% endif %}> English</label>
@@ -58,14 +58,31 @@
 					{%- endif -%}
 					):
 				</label>
-				<input type="text" id="user_hiragana_romaji" name="user_hiragana_romaji" class="answer-input" placeholder="Type in romaji..." autofocus />
+				<input type="text" 
+					   id="user_hiragana_romaji" 
+					   name="user_hiragana_romaji" 
+					   class="answer-input" 
+					   placeholder="Type in romaji..." 
+					   autofocus 
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false" />
 			</div>
 			{% endif %}
 			
 			{% for style in other_styles %}
 			<div class="input-group">
 				<label for="user_{{ style }}">Your answer ({{ style }}):</label>
-				<input type="text" id="user_{{ style }}" name="user_{{ style }}" class="answer-input" placeholder="Type {{ style }}..." {% if not has_hiragana_romaji and loop.first %}autofocus{% endif %} />
+				<input type="text" 
+					   id="user_{{ style }}" 
+					   name="user_{{ style }}" 
+					   class="answer-input" 
+					   placeholder="Type {{ style }}..." 
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false" />
 			</div>
 			{% endfor %}
 		</div>	
@@ -85,12 +102,7 @@
 				{% for style, result in results.items() %}
 		<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
 			<h4>{{ style.title() }}</h4>
-			{% if style == 'hiragana' and result.user_input_converted %}
-			<p>Your input: <code>{{ result.user_input or '(empty)' }}</code></p>
-			<p>Converted to hiragana: <code>{{ result.user_input_converted }}</code></p>
-			{% else %}
 			<p>Your answer: <code>{{ result.user_input or '(empty)' }}</code></p>
-			{% endif %}
 			<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
 			<p class="result-status">{{ '✓ Correct' if result.is_correct else '✗ Incorrect' }}</p>
 		</div>
@@ -101,41 +113,153 @@
 		Next ➡️
 	</button>
 
-	<script>
-	document.addEventListener("keydown", function(e) {
-		if (e.key === "Enter") {
-			const resultBox = document.querySelector(".results-container");
-			if (resultBox) {
-				// prevent submitting the form again
-				e.preventDefault();
-				// go to next card
-				goToNext();
-			}
-		}
-	});
-	
-	function toggleSettings() {
-		const panel = document.getElementById('settingsPanel');
-		panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-	}
-	
-	function goToNext() {
-		window.location.href = "{{ url_for('module1.module1_index') }}";
-	}
-	
-	// Close settings panel when clicking outside
-	document.addEventListener('click', function(e) {
-		const settingsDropdown = document.querySelector('.settings-dropdown');
-		const settingsPanel = document.getElementById('settingsPanel');
-		if (!settingsDropdown.contains(e.target)) {
-			settingsPanel.style.display = 'none';
-		}
-	});
-	</script>
 	{% endif %}
   
   
 </section>
+
+<script>
+document.addEventListener("keydown", function(e) {
+	if (e.key === "Enter") {
+		const resultBox = document.querySelector(".results-container");
+		if (resultBox) {
+			// prevent submitting the form again
+			e.preventDefault();
+			// go to next card
+			goToNext();
+		}
+	}
+});
+
+function toggleSettings() {
+	const panel = document.getElementById('settingsPanel');
+	panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+}
+
+function goToNext() {
+	window.location.href = "{{ url_for('module1.module1_index') }}";
+}
+
+// Close settings panel when clicking outside
+document.addEventListener('click', function(e) {
+	const settingsDropdown = document.querySelector('.settings-dropdown');
+	const settingsPanel = document.getElementById('settingsPanel');
+	if (!settingsDropdown.contains(e.target)) {
+		settingsPanel.style.display = 'none';
+	}
+});
+
+// Romaji to Hiragana conversion mapping
+const romajiToHiragana = {
+	'a': 'あ', 'i': 'い', 'u': 'う', 'e': 'え', 'o': 'お',
+	'ka': 'か', 'ki': 'き', 'ku': 'く', 'ke': 'け', 'ko': 'こ',
+	'ga': 'が', 'gi': 'ぎ', 'gu': 'ぐ', 'ge': 'げ', 'go': 'ご',
+	'sa': 'さ', 'shi': 'し', 'su': 'す', 'se': 'せ', 'so': 'そ',
+	'za': 'ざ', 'ji': 'じ', 'zu': 'ず', 'ze': 'ぜ', 'zo': 'ぞ',
+	'ta': 'た', 'chi': 'ち', 'tsu': 'つ', 'te': 'て', 'to': 'と',
+	'da': 'だ', 'di': 'ぢ', 'du': 'づ', 'de': 'で', 'do': 'ど',
+	'na': 'な', 'ni': 'に', 'nu': 'ぬ', 'ne': 'ね', 'no': 'の',
+	'ha': 'は', 'hi': 'ひ', 'fu': 'ふ', 'he': 'へ', 'ho': 'ほ',
+	'ba': 'ば', 'bi': 'び', 'bu': 'ぶ', 'be': 'べ', 'bo': 'ぼ',
+	'pa': 'ぱ', 'pi': 'ぴ', 'pu': 'ぷ', 'pe': 'ぺ', 'po': 'ぽ',
+	'ma': 'ま', 'mi': 'み', 'mu': 'む', 'me': 'め', 'mo': 'も',
+	'ya': 'や', 'yu': 'ゆ', 'yo': 'よ',
+	'ra': 'ら', 'ri': 'り', 'ru': 'る', 're': 'れ', 'ro': 'ろ',
+	'wa': 'わ', 'wi': 'ゐ', 'we': 'ゑ', 'wo': 'を', 'n': 'ん',
+	// Common combinations
+	'kya': 'きゃ', 'kyu': 'きゅ', 'kyo': 'きょ',
+	'gya': 'ぎゃ', 'gyu': 'ぎゅ', 'gyo': 'ぎょ',
+	'sha': 'しゃ', 'shu': 'しゅ', 'sho': 'しょ',
+	'ja': 'じゃ', 'ju': 'じゅ', 'jo': 'じょ',
+	'cha': 'ちゃ', 'chu': 'ちゅ', 'cho': 'ちょ',
+	'nya': 'にゃ', 'nyu': 'にゅ', 'nyo': 'にょ',
+	'hya': 'ひゃ', 'hyu': 'ひゅ', 'hyo': 'ひょ',
+	'bya': 'びゃ', 'byu': 'びゅ', 'byo': 'びょ',
+	'pya': 'ぴゃ', 'pyu': 'ぴゅ', 'pyo': 'ぴょ',
+	'mya': 'みゃ', 'myu': 'みゅ', 'myo': 'みょ',
+	'rya': 'りゃ', 'ryu': 'りゅ', 'ryo': 'りょ'
+};
+
+function convertRomajiToHiragana(romajiText) {
+	if (!romajiText) return "";
+	
+	romajiText = romajiText.toLowerCase().trim();
+	let result = "";
+	let i = 0;
+	
+	while (i < romajiText.length) {
+		let found = false;
+		
+		// Try longer combinations first (3 chars, then 2, then 1)
+		for (let length = 3; length >= 1; length--) {
+			if (i + length <= romajiText.length) {
+				const substring = romajiText.substring(i, i + length);
+				if (romajiToHiragana[substring]) {
+					result += romajiToHiragana[substring];
+					i += length;
+					found = true;
+					break;
+				}
+			}
+		}
+		
+		if (!found) {
+			// If no mapping found, keep the original character
+			result += romajiText[i];
+			i++;
+		}
+	}
+	
+	return result;
+}
+
+// Setup real-time conversion for hiragana input
+document.addEventListener('DOMContentLoaded', function() {
+	const hiraganaRomajiInput = document.getElementById('user_hiragana_romaji');
+	const checkingStyles = {{ settings.checking_styles | tojson }};
+	const hasHiraganaChecking = checkingStyles.includes('hiragana');
+	
+	console.log('Input element found:', !!hiraganaRomajiInput);
+	console.log('Checking styles:', checkingStyles);
+	console.log('Has hiragana checking:', hasHiraganaChecking);
+	
+	if (hiraganaRomajiInput) {
+		console.log('Setting up real-time conversion');
+		
+		// Test conversion function
+		console.log('Test conversion: ka =', convertRomajiToHiragana('ka'));
+		
+		hiraganaRomajiInput.addEventListener('input', function(e) {
+			console.log('Input event triggered, value:', e.target.value);
+			
+			// Only convert if hiragana checking is enabled
+			if (!hasHiraganaChecking) {
+				console.log('Hiragana checking not enabled, skipping conversion');
+				return;
+			}
+			
+			const cursorPos = e.target.selectionStart;
+			const originalValue = e.target.value;
+			const convertedValue = convertRomajiToHiragana(originalValue);
+			
+			console.log('Original:', originalValue, 'Converted:', convertedValue);
+			
+			if (convertedValue !== originalValue) {
+				console.log('Updating value from', originalValue, 'to', convertedValue);
+				e.target.value = convertedValue;
+				
+				// Try to maintain cursor position
+				const newCursorPos = Math.min(cursorPos, convertedValue.length);
+				setTimeout(() => {
+					e.target.setSelectionRange(newCursorPos, newCursorPos);
+				}, 0);
+			}
+		});
+	} else {
+		console.log('Input element not found!');
+	}
+});
+</script>
 {% endblock %}
 
 

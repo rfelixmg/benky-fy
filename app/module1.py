@@ -151,14 +151,13 @@ class FlashcardEngine:
 			user_input_raw = user_inputs.get(f"user_{style}", "").strip()
 			
 			if style == "hiragana":
-				# For hiragana checking: convert user's romaji input to hiragana, then compare
-				user_input_converted = romaji_to_hiragana(user_input_raw)
+				# For hiragana checking: JavaScript converts romaji to hiragana in real-time
+				# So user_input_raw should already be hiragana characters
 				correct_answer = item.hiragana
-				is_correct = user_input_converted.lower() == correct_answer.lower() if user_input_raw else False
+				is_correct = user_input_raw.lower() == correct_answer.lower() if user_input_raw else False
 				
 				results[style] = {
-					"user_input": user_input_raw,  # Show original romaji input
-					"user_input_converted": user_input_converted,  # Show converted hiragana
+					"user_input": user_input_raw,  # Show what user typed (should be hiragana)
 					"correct_answer": correct_answer,
 					"is_correct": is_correct
 				}
