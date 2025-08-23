@@ -26,7 +26,11 @@ const romajiToHiragana = {
     'bya': 'びゃ', 'byu': 'びゅ', 'byo': 'びょ',
     'pya': 'ぴゃ', 'pyu': 'ぴゅ', 'pyo': 'ぴょ',
     'mya': 'みゃ', 'myu': 'みゅ', 'myo': 'みょ',
-    'rya': 'りゃ', 'ryu': 'りゅ', 'ryo': 'りょ'
+    'rya': 'りゃ', 'ryu': 'りゅ', 'ryo': 'りょ',
+    // Long vowel mark
+    '-': 'ー',
+    // Small tsu (double consonants) - these will be handled specially
+    'xtsu': 'っ', 'xtu': 'っ', 'ltsu': 'っ', 'ltu': 'っ'
 };
 
 function convertRomajiToHiragana(romajiText) {
@@ -39,15 +43,66 @@ function convertRomajiToHiragana(romajiText) {
     while (i < romajiText.length) {
         let found = false;
 
-        // Try longer combinations first (3 chars, then 2, then 1)
-        for (let length = 3; length >= 1; length--) {
-            if (i + length <= romajiText.length) {
-                const substring = romajiText.substring(i, i + length);
-                if (romajiToHiragana[substring]) {
-                    result += romajiToHiragana[substring];
-                    i += length;
+        // Handle small tsu (っ) - double consonants
+        if (i < romajiText.length - 1) {
+            const currentChar = romajiText[i];
+            const nextChar = romajiText[i + 1];
+            
+            // Check for double consonants (except 'n' and vowels)
+            if (currentChar === nextChar && 
+                currentChar !== 'n' && 
+                !'aeiou'.includes(currentChar) && 
+                'kgsztdhbpmyrw'.includes(currentChar)) {
+                
+                result += 'っ';
+                i++; // Skip the first consonant, the second will be processed normally
+                found = true;
+            }
+        }
+
+        // Special handling for 'n' - don't convert if followed by vowels or 'y'
+        if (!found && romajiText[i] === 'n' && i < romajiText.length - 1) {
+            const nextChar = romajiText[i + 1];
+            
+            // Don't convert 'n' if it's followed by a vowel or 'y' or another 'n'
+            if (nextChar === 'a' || nextChar === 'i' || nextChar === 'u' || 
+                nextChar === 'e' || nextChar === 'o' || nextChar === 'y' || 
+                nextChar === 'n') {
+                
+                // Try longer combinations first
+                for (let length = 3; length >= 2; length--) {
+                    if (i + length <= romajiText.length) {
+                        const substring = romajiText.substring(i, i + length);
+                        if (romajiToHiragana[substring]) {
+                            result += romajiToHiragana[substring];
+                            i += length;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                
+                // If no combination found, leave 'n' as is for now
+                if (!found) {
+                    result += romajiText[i];
+                    i++;
                     found = true;
-                    break;
+                }
+            }
+        }
+
+        // Regular conversion if not handled above
+        if (!found) {
+            // Try longer combinations first (4 chars, then 3, then 2, then 1)
+            for (let length = 4; length >= 1; length--) {
+                if (i + length <= romajiText.length) {
+                    const substring = romajiText.substring(i, i + length);
+                    if (romajiToHiragana[substring]) {
+                        result += romajiToHiragana[substring];
+                        i += length;
+                        found = true;
+                        break;
+                    }
                 }
             }
         }

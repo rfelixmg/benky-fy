@@ -216,12 +216,21 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('=== Answer Check Results ===');
             
             for (const [key, userInput] of Object.entries(userInputs)) {
-                const correctAnswer = correctAnswers[key];
-                const isCorrect = userInput === correctAnswer;
+                const correctAnswerText = correctAnswers[key];
+                let isCorrect = false;
+                
+                // Handle multiple correct answers for English (separated by " / ")
+                if (key === "user_english" && correctAnswerText) {
+                    const correctAnswersArray = correctAnswerText.split(" / ").map(answer => answer.trim().toLowerCase());
+                    isCorrect = correctAnswersArray.includes(userInput.toLowerCase());
+                } else {
+                    // Simple exact match for other types
+                    isCorrect = userInput === correctAnswerText;
+                }
                 
                 results[key] = {
                     user_input: userInput,
-                    correct_answer: correctAnswer,
+                    correct_answer: correctAnswerText,
                     is_correct: isCorrect
                 };
                 
@@ -229,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const style = key.replace('user_', '');
                 console.log(`${style.toUpperCase()}:`);
                 console.log(`  Your answer: "${userInput}"`);
-                console.log(`  Correct answer: "${correctAnswer}"`);
+                console.log(`  Correct answer: "${correctAnswerText}"`);
                 console.log(`  Result: ${isCorrect ? '✅ CORRECT' : '❌ INCORRECT'}`);
                 console.log('---');
                 
@@ -309,30 +318,32 @@ document.addEventListener('DOMContentLoaded', function() {
 		// console.log('Test conversion: ka =', convertRomajiToHiragana('ka'));
 		
 		hiraganaRomajiInput.addEventListener('input', function(e) {
-			// console.log('Input event triggered, value:', e.target.value);
-			
 			// Only convert if hiragana checking is enabled
 			if (!hasHiraganaChecking) {
-				// console.log('Hiragana checking not enabled, skipping conversion');
 				return;
 			}
 			
-			const cursorPos = e.target.selectionStart;
-			const originalValue = e.target.value;
-			const convertedValue = convertRomajiToHiragana(originalValue);
-			
-			// console.log('Original:', originalValue, 'Converted:', convertedValue);
-			
-			if (convertedValue !== originalValue) {
-				// console.log('Updating value from', originalValue, 'to', convertedValue);
-				e.target.value = convertedValue;
-				
-				// Try to maintain cursor position
-				const newCursorPos = Math.min(cursorPos, convertedValue.length);
-				setTimeout(() => {
-					e.target.setSelectionRange(newCursorPos, newCursorPos);
-				}, 0);
+			// Clear any existing timeout
+			if (window.conversionTimeout) {
+				clearTimeout(window.conversionTimeout);
 			}
+			
+			// Set a short delay before converting to allow for complete syllable input
+			window.conversionTimeout = setTimeout(() => {
+				const cursorPos = e.target.selectionStart;
+				const originalValue = e.target.value;
+				const convertedValue = convertRomajiToHiragana(originalValue);
+				
+				if (convertedValue !== originalValue) {
+					e.target.value = convertedValue;
+					
+					// Try to maintain cursor position
+					const newCursorPos = Math.min(cursorPos, convertedValue.length);
+					setTimeout(() => {
+						e.target.setSelectionRange(newCursorPos, newCursorPos);
+					}, 0);
+				}
+			}, 300); // 300ms delay - adjust as needed
 		});
 	}
 });

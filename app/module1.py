@@ -193,13 +193,18 @@ class FlashcardEngine:
 					"is_correct": is_correct
 				}
 			elif style == "english":
-				user_input = user_input_raw.lower()
-				correct_answer = item.english.lower()
-				is_correct = user_input == correct_answer if user_input_raw else False
+				user_input = user_input_raw.lower().strip()
+				correct_answers_text = item.english
+				
+				# Split by " / " to get multiple correct answers
+				correct_answers = [answer.strip().lower() for answer in correct_answers_text.split(" / ")]
+				
+				# Check if user input matches any of the correct answers
+				is_correct = user_input in correct_answers if user_input_raw else False
 				
 				results[style] = {
 					"user_input": user_input_raw,
-					"correct_answer": item.english,
+					"correct_answer": correct_answers_text,  # Show all possible answers
 					"is_correct": is_correct
 				}
 		
@@ -300,6 +305,7 @@ def get_correct_answers():
             elif style == "katakana":
                 correct_answers["user_katakana"] = item.katakana
             elif style == "english":
+                # Return the full string for display, but we'll handle multiple answers in frontend
                 correct_answers["user_english"] = item.english
         
         return correct_answers
