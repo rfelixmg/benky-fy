@@ -1,16 +1,58 @@
-from flask import Blueprint, redirect, url_for, session
-from flask_dance.contrib.google import google
+from flask import Blueprint, redirect, url_for, session, request, flash, render_template
+# from flask_dance.contrib.google import google
+from functools import wraps
 
 
 auth_bp = Blueprint("auth", __name__)
 
 
-@auth_bp.route("/login")
+def login_required(f):
+	"""Decorator to require authentication for a route."""
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		if 'user' not in session:
+			# Store the URL they were trying to access
+			session['next_url'] = request.url
+			flash('Please log in to access this page.', 'info')
+			return redirect(url_for('auth.login'))
+		return f(*args, **kwargs)
+	return decorated_function
+
+
+def get_current_user():
+	"""Helper function to get current user from session."""
+	return session.get('user')
+
+
+def is_authenticated():
+	"""Helper function to check if user is authenticated."""
+	return 'user' in session and session['user'] is not None
+
+
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
-	# Start Google OAuth flow via Flask-Dance's google blueprint
-	if not google.authorized:
-		return redirect(url_for("google.login"))
-	return redirect(url_for("auth.post_login"))
+	if request.method == "POST":
+		# Simple username/password login for development
+		username = request.form.get("username", "").strip()
+		password = request.form.get("password", "").strip()
+		
+		# Simple validation - in production, use proper authentication
+		if username and password:
+			session["user"] = {
+				"name": username,
+				"email": f"{username}@example.com",
+				"picture": None,
+			}
+			
+			# Redirect to originally requested URL or home
+			next_url = session.pop('next_url', None)
+			if next_url:
+				return redirect(next_url)
+			return redirect(url_for("main.home"))
+		else:
+			flash('Please enter both username and password.', 'error')
+	
+	return render_template("login.html")
 
 
 @auth_bp.route("/post-login")
@@ -34,6 +76,10 @@ def post_login():
 		"picture": user_picture,
 	}
 
+	# Redirect to originally requested URL or home
+	next_url = session.pop('next_url', None)
+	if next_url:
+		return redirect(next_url)
 	return redirect(url_for("main.home"))
 
 

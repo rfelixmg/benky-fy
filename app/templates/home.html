@@ -1,173 +1,75 @@
 {% extends 'base.html' %}
 {% block title %}Home | Benkyo-Fi{% endblock %}
 {% block content %}
-<section class="panel" style="margin-bottom: 1rem;">
-	{% set u = user or current_user %}
-	<h2>
-		{% if u %}Hello, {{ u.name }}!{% else %}Hello, Guest. Please log in.{% endif %}
-	</h2>
-	{% if not u %}
-		<p class="muted">Please <a href="{{ url_for('auth.login') }}">log in</a> to personalize your study experience.</p>
-	{% else %}
-		<p class="muted">Choose a module to begin.</p>
-	{% endif %}
-</section>
-
-<section class="panel" style="margin-bottom: 1rem;">
-	<h2>Beginner</h2>
-	<p class="muted">Start your Japanese learning journey with these fundamental modules.</p>
-</section>
-
-<div class="module-grid">
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
+<div class="home-layout">
+	<!-- Hero Section -->
+	<section class="hero-section">
+		<div class="hero-content">
+			<h1 class="hero-title">Welcome to Benkyo-Fi</h1>
+			<p class="hero-subtitle">Your journey to Japanese fluency starts here</p>
+			<div class="hero-actions">
+				{% set u = user or current_user %}
+				{% if not u %}
+					<a href="{{ url_for('auth.login') }}" class="btn btn-primary">Get Started</a>
+					<p class="hero-note">Please log in to begin your learning adventure</p>
+				{% else %}
+					<a href="/modules" class="btn btn-primary">Browse Modules</a>
+					<p class="hero-note">Welcome back, {{ u.name }}! Ready to practice?</p>
+				{% endif %}
+			</div>
 		</div>
-		<h3 class="module-card__title">Hiragana</h3>
-		<p>Learn the basic Japanese phonetic writing system.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
+	</section>
 
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Katakana</h3>
-		<p>Master the second Japanese phonetic writing system.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
+	<!-- Main Content Area -->
+	<div class="content-area">
+		<!-- Cute Background Section -->
+		<section class="background-section">
+			<div class="floating-elements-home">
+				<div class="floating-kanji">漢</div>
+				<div class="floating-kanji">字</div>
+				<div class="floating-kanji">学</div>
+				<div class="floating-kanji">習</div>
+			</div>
+			<div class="background-content">
+				<h2>Interactive Learning</h2>
+				<p>Master Japanese through engaging exercises, flashcards, and interactive practice sessions designed to make learning fun and effective.</p>
+			</div>
+		</section>
 
-	<a href="{{ url_for('module1.module1_index') }}" class="module-card-link">
-		<article class="panel module-card">
-			<h3 class="module-card__title">Base Verbs</h3>
-			<p>Practice essential Japanese verbs and their forms.</p>
-			<span class="btn module-btn">Start Base Verbs</span>
-		</article>
-	</a>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Days of the Week</h3>
-		<p>Learn the seven days of the week in Japanese.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Base Nouns</h3>
-		<p>Learn fundamental Japanese nouns for everyday use.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Numbers</h3>
-		<p>Master counting and number systems in Japanese.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Greetings</h3>
-		<p>Learn common Japanese greetings and polite expressions.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Colors</h3>
-		<p>Identify and use color names in Japanese.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-</div>
-
-<section class="panel" style="margin-bottom: 1rem; margin-top: 2rem;">
-	<h2>Beginner #2</h2>
-	<p class="muted">Continue building your foundation with these intermediate beginner modules.</p>
-</section>
-
-<div class="module-grid">
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Family</h3>
-		<p>Learn words for family members and relationships.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Food</h3>
-		<p>Master common food and drink vocabulary.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Body Parts</h3>
-		<p>Learn essential body part vocabulary.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Animals</h3>
-		<p>Discover names for common animals in Japanese.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Clothes</h3>
-		<p>Learn clothing and accessory vocabulary.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Weather</h3>
-		<p>Express weather conditions and seasons.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Time</h3>
-		<p>Tell time and express temporal concepts.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
-
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Directions</h3>
-		<p>Navigate with basic direction vocabulary.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
+		<!-- Login/User Status -->
+		<aside class="user-status">
+			{% set u = user or current_user %}
+			{% if not u %}
+				<div class="login-prompt">
+					<h3>Ready to Start?</h3>
+					<p>Create your account or log in to track your progress and unlock personalized learning paths.</p>
+					<div class="auth-buttons">
+						<a href="{{ url_for('auth.login') }}" class="btn btn-outline">Log In</a>
+						<a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Sign Up</a>
+					</div>
+				</div>
+			{% else %}
+				<div class="user-progress">
+					<h3>Your Progress</h3>
+					<div class="progress-card">
+						<div class="progress-item">
+							<span class="progress-label">Current Level</span>
+							<span class="progress-value">Beginner</span>
+						</div>
+						<div class="progress-item">
+							<span class="progress-label">Modules Completed</span>
+							<span class="progress-value">0/16</span>
+						</div>
+						<div class="progress-item">
+							<span class="progress-label">Study Streak</span>
+							<span class="progress-value">0 days</span>
+						</div>
+					</div>
+					<a href="/modules" class="btn btn-accent">Browse Modules</a>
+				</div>
+			{% endif %}
+		</aside>
+	</div>
 </div>
 {% endblock %}
 

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import Optional, Tuple, List
 
 from flask import Blueprint, render_template, request, session, redirect, url_for
+from app.auth import login_required, get_current_user
 
 
 # Romaji to Hiragana conversion mapping
@@ -226,12 +227,14 @@ def get_user_settings():
 	return session.get("settings", get_default_settings())
 
 @module1_bp.route("/", methods=["GET"])  # /module1/
+@login_required
 def module1_index():
 	settings = get_user_settings()
 	item = engine.get_next(settings["flashcard_styles"])
 	return render_template("module1.html", item=item, results=None, settings=settings)
 
 @module1_bp.route("/settings", methods=["POST"])  # /module1/settings
+@login_required
 def update_settings():
 	"""Update user settings"""
 	# Get flashcard styles
@@ -260,6 +263,7 @@ def update_settings():
 	return redirect(url_for("module1.module1_index"))
 
 @module1_bp.route("/check", methods=["POST"])  # /module1/check
+@login_required
 def module1_check():
 	item = engine[int(request.form["item_id"])]
 	settings = get_user_settings()
@@ -282,6 +286,7 @@ def module1_check():
 
 
 @module1_bp.route("/api/correct-answers", methods=["GET"])
+@login_required
 def get_correct_answers():
     """API endpoint to get correct answers for the current item"""
     item_id = request.args.get('item_id')
