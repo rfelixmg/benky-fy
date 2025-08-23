@@ -38,76 +38,77 @@
 		<p class="muted">Prompt ({{ item.prompt_script }})</p>
 		<div class="prompt-value">{{ item.prompt }}</div>
 	</div>
-	<form class="answer-form" method="POST" action="{{ url_for('module1.module1_check') }}">
-		<div class="input-row">
-			{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
-			{% set other_styles = settings.checking_styles | reject('in', ['hiragana', 'romaji']) | list %}
-			
-			{% if has_hiragana_romaji %}
-			<div class="input-group">
-				{% set hiragana_label = 'hiragana' in settings.checking_styles %}
-				{% set romaji_label = 'romaji' in settings.checking_styles %}
-				<label for="user_hiragana_romaji">
-					Your answer (
-					{%- if hiragana_label and romaji_label -%}
-						hiragana/romaji
-					{%- elif hiragana_label -%}
-						hiragana
-					{%- else -%}
-						romaji
-					{%- endif -%}
-					):
-				</label>
-				<input type="text" 
-					   id="user_hiragana_romaji" 
-					   name="user_hiragana_romaji" 
-					   class="answer-input" 
-					   placeholder="Type in romaji..." 
-					   autofocus 
-					   autocomplete="off" 
-					   autocorrect="off" 
-					   autocapitalize="off" 
-					   spellcheck="false" />
-			</div>
-			{% endif %}
-			
-			{% for style in other_styles %}
-			<div class="input-group">
-				<label for="user_{{ style }}">Your answer ({{ style }}):</label>
-				<input type="text" 
-					   id="user_{{ style }}" 
-					   name="user_{{ style }}" 
-					   class="answer-input" 
-					   placeholder="Type {{ style }}..." 
-					   autocomplete="off" 
-					   autocorrect="off" 
-					   autocapitalize="off" 
-					   spellcheck="false" />
-			</div>
-			{% endfor %}
-		</div>	
-		<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
-	
-		<div class="actions">
-			<button type="submit" class="btn">Reveal 🌟</button>
-		</div>
-	</form>
-	
-	{% if results is not none %}
-	<div class="results-container">
-		<div class="overall-result {{ 'correct' if all_correct else 'incorrect' }}">
-			<p><strong>{{ 'All Correct!' if all_correct else 'Some Incorrect' }}</strong></p>
-		</div>
+	<div class="answer-form">
+		{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
+		{% set other_styles = settings.checking_styles | reject('in', ['hiragana', 'romaji']) | list %}
 		
-				{% for style, result in results.items() %}
-		<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
-			<h4>{{ style.title() }}</h4>
-			<p>Your answer: <code>{{ result.user_input or '(empty)' }}</code></p>
-			<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
-			<p class="result-status">{{ '✓ Correct' if result.is_correct else '✗ Incorrect' }}</p>
+		{% if has_hiragana_romaji %}
+		<div class="input-group">
+			{% set hiragana_label = 'hiragana' in settings.checking_styles %}
+			{% set romaji_label = 'romaji' in settings.checking_styles %}
+			<label for="user_hiragana_romaji">
+				Your answer (
+				{%- if hiragana_label and romaji_label -%}
+					hiragana/romaji
+				{%- elif hiragana_label -%}
+					hiragana
+				{%- else -%}
+					romaji
+				{%- endif -%}
+				):
+			</label>
+			<input type="text" 
+				   id="user_hiragana_romaji" 
+				   name="user_hiragana_romaji" 
+				   class="answer-input" 
+				   placeholder="Type in romaji..." 
+				   autofocus 
+				   autocomplete="off" 
+				   autocorrect="off" 
+				   autocapitalize="off" 
+				   spellcheck="false" />
+		</div>
+		{% endif %}
+		
+		{% for style in other_styles %}
+		<div class="input-group">
+			<label for="user_{{ style }}">Your answer ({{ style }}):</label>
+			<input type="text" 
+				   id="user_{{ style }}" 
+				   name="user_{{ style }}" 
+				   class="answer-input" 
+				   placeholder="Type {{ style }}..." 
+				   autocomplete="off" 
+				   autocorrect="off" 
+				   autocapitalize="off" 
+				   spellcheck="false" />
 		</div>
 		{% endfor %}
+	</div>	
+	<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
+
+	<div class="actions">
+		<button type="button" class="btn" onclick="checkAnswers()">Reveal 🌟</button>
 	</div>
+	
+	<!-- Always render the results container -->
+	<div class="results-container">
+		<!-- Initial content can be empty or a placeholder -->
+	</div>
+
+	{% if results is not none %}
+	<div class="overall-result {{ 'correct' if all_correct else 'incorrect' }}">
+		<p><strong>{{ 'All Correct!' if all_correct else 'Some Incorrect' }}</strong></p>
+	</div>
+		
+				{% for style, result in results.items() %}
+	<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
+		<h4>{{ style.title() }}</h4>
+		<p>Your answer: <code>{{ result.user_input or '(empty)' }}</code></p>
+		<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
+		<p class="result-status">{{ '✓ Correct' if result.is_correct else '✗ Incorrect' }}</p>
+	</div>
+	{% endfor %}
 
 	<button class="btn" onclick="goToNext()">
 		Next ➡️
@@ -212,6 +213,58 @@ function convertRomajiToHiragana(romajiText) {
 	
 	return result;
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    function checkAnswers() {
+        // Retrieve user inputs
+        const userInputs = {};
+        const inputElements = document.querySelectorAll('.answer-input');
+        inputElements.forEach(input => {
+            userInputs[input.name] = input.value.trim();
+        });
+
+        // Simulate correct answers (this should be replaced with actual data)
+        const correctAnswers = {
+            user_hiragana_romaji: 'correct_hiragana_romaji',
+            user_kanji: 'correct_kanji',
+            user_katakana: 'correct_katakana',
+            user_english: 'correct_english'
+        };
+
+        // Compare user inputs with correct answers
+        const results = {};
+        for (const [key, userInput] of Object.entries(userInputs)) {
+            const correctAnswer = correctAnswers[key];
+            results[key] = {
+                user_input: userInput,
+                correct_answer: correctAnswer,
+                is_correct: userInput === correctAnswer
+            };
+        }
+
+        // Update the UI with results
+        const resultsContainer = document.querySelector('.results-container');
+        if (!resultsContainer) {
+            console.error('Results container not found!');
+            return;
+        }
+        resultsContainer.innerHTML = ''; // Clear previous results
+        for (const [style, result] of Object.entries(results)) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${result.is_correct ? 'correct' : 'incorrect'}`;
+            resultDiv.innerHTML = `
+                <h4>${style.replace('user_', '').toUpperCase()}</h4>
+                <p>Your answer: <code>${result.user_input || '(empty)'}</code></p>
+                <p>Correct answer: <code>${result.correct_answer}</code></p>
+                <p class="result-status">${result.is_correct ? '✓ Correct' : '✗ Incorrect'}</p>
+            `;
+            resultsContainer.appendChild(resultDiv);
+        }
+    }
+
+    // Attach the function to the button click
+    document.querySelector('button[onclick="checkAnswers()"]').onclick = checkAnswers;
+});
 
 // Setup real-time conversion for hiragana input
 document.addEventListener('DOMContentLoaded', function() {
