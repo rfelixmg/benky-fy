@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | Benkyo-Fi{% endblock %}
+{% block content %}
+<section class="panel">
+	<h1>Welcome back, {{ user.name }}!</h1>
+	
+	<div class="dashboard-overview">
+		<div class="overview-card today-progress">
+			<h3>Today's Progress</h3>
+			<div class="progress-stats">
+				<div class="progress-stat">
+					<span class="stat-number">{{ dashboard.today_progress.cards_reviewed }}</span>
+					<span class="stat-label">Cards Reviewed</span>
+				</div>
+				<div class="progress-stat">
+					<span class="stat-number">{{ dashboard.today_progress.time_studied }}</span>
+					<span class="stat-label">Time Studied</span>
+				</div>
+				<div class="progress-stat">
+					<span class="stat-number">{{ "✅" if dashboard.today_progress.streak_maintained else "❌" }}</span>
+					<span class="stat-label">Streak Maintained</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="overview-card weekly-stats">
+			<h3>This Week</h3>
+			<div class="weekly-metrics">
+				<div class="metric">
+					<span class="metric-value">{{ dashboard.weekly_stats.total_cards }}</span>
+					<span class="metric-label">Total Cards</span>
+				</div>
+				<div class="metric">
+					<span class="metric-value">{{ dashboard.weekly_stats.accuracy }}</span>
+					<span class="metric-label">Accuracy</span>
+				</div>
+				<div class="metric">
+					<span class="metric-value">{{ dashboard.weekly_stats.streak }}</span>
+					<span class="metric-label">Day Streak</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="dashboard-content">
+		<div class="dashboard-section">
+			<h2>Recent Activity</h2>
+			<div class="activity-list">
+				{% for activity in dashboard.recent_activity %}
+				<div class="activity-item">
+					<div class="activity-icon">
+						{% if activity.type == "Hiragana" %}ひ
+						{% elif activity.type == "Katakana" %}カ
+						{% else %}語{% endif %}
+					</div>
+					<div class="activity-details">
+						<div class="activity-action">{{ activity.action }}</div>
+						<div class="activity-time">{{ activity.time }}</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<div class="dashboard-section">
+			<h2>Next Goals</h2>
+			<div class="goals-list">
+				{% for goal in dashboard.next_goals %}
+				<div class="goal-item">
+					<span class="goal-icon">🎯</span>
+					<span class="goal-text">{{ goal }}</span>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+.dashboard-overview {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 2rem;
+	margin-bottom: 3rem;
+}
+
+.overview-card {
+	background: white;
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.overview-card h3 {
+	margin: 0 0 1.5rem 0;
+	color: #333;
+	border-bottom: 2px solid #667eea;
+	padding-bottom: 0.5rem;
+}
+
+.progress-stats {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+}
+
+.progress-stat {
+	text-align: center;
+}
+
+.stat-number {
+	display: block;
+	font-size: 1.8rem;
+	font-weight: 700;
+	color: #667eea;
+	margin-bottom: 0.5rem;
+}
+
+.stat-label {
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.weekly-metrics {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+}
+
+.metric {
+	text-align: center;
+}
+
+.metric-value {
+	display: block;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #333;
+	margin-bottom: 0.5rem;
+}
+
+.metric-label {
+	color: #666;
+	font-size: 0.8rem;
+}
+
+.dashboard-content {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	gap: 2rem;
+}
+
+.dashboard-section h2 {
+	margin-bottom: 1.5rem;
+	color: #333;
+	border-bottom: 2px solid #667eea;
+	padding-bottom: 0.5rem;
+}
+
+.activity-list, .goals-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.activity-item {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.activity-icon {
+	font-size: 1.5rem;
+	color: #667eea;
+	font-weight: bold;
+}
+
+.activity-details {
+	flex: 1;
+}
+
+.activity-action {
+	color: #333;
+	font-weight: 500;
+	margin-bottom: 0.25rem;
+}
+
+.activity-time {
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.goal-item {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.goal-icon {
+	font-size: 1.2rem;
+}
+
+.goal-text {
+	color: #333;
+	font-weight: 500;
+}
+</style>
+{% endblock %}

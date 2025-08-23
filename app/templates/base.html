@@ -42,15 +42,15 @@
 					</div>
 				</div>
 				<div class="dropdown-menu">
-					<a href="#" class="dropdown-item">
+					<a href="{{ url_for('auth.profile') }}" class="dropdown-item">
 						<span>👤</span>
 						Profile
 					</a>
-					<a href="#" class="dropdown-item">
+					<a href="{{ url_for('auth.dashboard') }}" class="dropdown-item">
 						<span>📊</span>
 						Dashboard
 					</a>
-					<a href="#" class="dropdown-item">
+					<a href="{{ url_for('auth.settings') }}" class="dropdown-item">
 						<span>⚙️</span>
 						Settings
 					</a>

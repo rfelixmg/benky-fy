@@ -16,7 +16,7 @@ def create_app() -> Flask:
 	from .module1 import module1_bp
 	from .auth import auth_bp
 
-		# Import and create flashcard modules
+	# Import and create flashcard modules
 	from .flashcard import create_flashcard_module
 	
 	# Create flashcard modules
@@ -34,13 +34,12 @@ def create_app() -> Flask:
 		client_id=google_client_id,
 		client_secret=google_client_secret,
 		scope=["profile", "email"],
-		# redirect_url="/auth/oauth-callback"  # Custom callback URL
-		redirect_url="/home"  # Custom callback URL
+		# Remove custom redirect_url - let Flask-Dance handle it
 	)
 
 	app.register_blueprint(main_bp)
 	app.register_blueprint(module1_bp, url_prefix="/module1")
-	app.register_blueprint(auth_bp)
+	app.register_blueprint(auth_bp, url_prefix="/auth")  # Add URL prefix for auth routes
 	app.register_blueprint(hiragana_bp, url_prefix="/begginer/hiragana")
 	app.register_blueprint(katakana_bp, url_prefix="/begginer/katakana")
 	

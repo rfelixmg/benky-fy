@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block title %}Profile | Benkyo-Fi{% endblock %}
+{% block content %}
+<section class="panel">
+	<div class="profile-header">
+		<img class="profile-avatar" src="{{ user.picture }}" alt="{{ user.name }} avatar" />
+		<div class="profile-info">
+			<h1>{{ user.name }}</h1>
+			<p class="profile-email">{{ user.email }}</p>
+			<p class="profile-level">{{ profile.level }} • Member since {{ profile.join_date }}</p>
+		</div>
+	</div>
+
+	<div class="profile-stats">
+		<div class="stat-card">
+			<div class="stat-number">{{ profile.total_study_time }}</div>
+			<div class="stat-label">Total Study Time</div>
+		</div>
+		<div class="stat-card">
+			<div class="stat-number">{{ profile.streak }}</div>
+			<div class="stat-label">Current Streak</div>
+		</div>
+		<div class="stat-card">
+			<div class="stat-number">{{ profile.achievements|length }}</div>
+			<div class="stat-label">Achievements</div>
+		</div>
+	</div>
+
+	<div class="profile-sections">
+		<div class="profile-section">
+			<h2>Achievements</h2>
+			<div class="achievements-list">
+				{% for achievement in profile.achievements %}
+				<div class="achievement-item">
+					<span class="achievement-icon">🏆</span>
+					<span class="achievement-text">{{ achievement }}</span>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+
+		<div class="profile-section">
+			<h2>Preferences</h2>
+			<div class="preferences-list">
+				<div class="preference-item">
+					<span class="preference-label">Daily Goal:</span>
+					<span class="preference-value">{{ profile.preferences.daily_goal }}</span>
+				</div>
+				<div class="preference-item">
+					<span class="preference-label">Notifications:</span>
+					<span class="preference-value">{{ profile.preferences.notifications }}</span>
+				</div>
+				<div class="preference-item">
+					<span class="preference-label">Theme:</span>
+					<span class="preference-value">{{ profile.preferences.theme }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+.profile-header {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	margin-bottom: 3rem;
+	padding-bottom: 2rem;
+	border-bottom: 1px solid #eee;
+}
+
+.profile-avatar {
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	border: 4px solid #667eea;
+}
+
+.profile-info h1 {
+	margin: 0 0 0.5rem 0;
+	font-size: 2.5rem;
+	color: #333;
+}
+
+.profile-email {
+	color: #666;
+	margin-bottom: 0.5rem;
+	font-size: 1.1rem;
+}
+
+.profile-level {
+	color: #888;
+	font-size: 1rem;
+}
+
+.profile-stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1.5rem;
+	margin-bottom: 3rem;
+}
+
+.stat-card {
+	background: white;
+	padding: 1.5rem;
+	border-radius: 12px;
+	text-align: center;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-number {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #667eea;
+	margin-bottom: 0.5rem;
+}
+
+.stat-label {
+	color: #666;
+	font-size: 0.9rem;
+}
+
+.profile-sections {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+	gap: 2rem;
+}
+
+.profile-section h2 {
+	margin-bottom: 1.5rem;
+	color: #333;
+	border-bottom: 2px solid #667eea;
+	padding-bottom: 0.5rem;
+}
+
+.achievements-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.achievement-item {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 1rem;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.achievement-icon {
+	font-size: 1.5rem;
+}
+
+.achievement-text {
+	color: #333;
+	font-weight: 500;
+}
+
+.preferences-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.preference-item {
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem;
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.preference-label {
+	color: #666;
+	font-weight: 500;
+}
+
+.preference-value {
+	color: #333;
+	font-weight: 600;
+}
+</style>
+{% endblock %}

@@ -24,6 +24,12 @@ def modules():
 	user = get_current_user()
 	return render_template("modules.html", user=user)
 
+@main_bp.route("/profile")
+@login_required
+def profile():
+	user = get_current_user()
+	return render_template("profile.html", user=user)
+
 @main_bp.route("/begginer")
 @login_required
 def begginers():

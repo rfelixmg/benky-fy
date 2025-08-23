@@ -32,19 +32,26 @@ def is_authenticated():
 
 @auth_bp.route("/login")
 def login():
-	"""Login route that handles both initial login and post-OAuth callback"""
+	"""Login route that handles the complete OAuth flow"""
+	
+	# If user is already logged in, redirect to home
+	if 'user' in session:
+		return redirect(url_for("main.home"))
+	
 	# Check if Google OAuth is authorized
 	if not google.authorized:
-		print("Google not authorized, redirecting to Google login")
+		print("Google not authorized, starting OAuth flow")
+		# Start the OAuth flow - this will redirect to Google
 		return redirect(url_for("google.login"))
 	
-	# Google is authorized, fetch user info
-	print("Google authorized, fetching user info")
+	# Google is authorized, fetch user info and complete login
+	print("Google authorized, fetching user info and completing login")
 	response = google.get("/oauth2/v2/userinfo")
 	
 	if not response.ok:
 		print(f"Failed to get user info: {response.status_code}")
 		session.clear()  # Clear any partial session data
+		# Try OAuth flow again
 		return redirect(url_for("google.login"))
 
 	profile = response.json()
@@ -67,10 +74,7 @@ def login():
 	
 	print(f"User session created: {session['user']}")
 
-	# Always redirect to /home after successful login (unless there's a specific next_url)
-	next_url = session.pop('next_url', None)
-	if next_url and next_url != url_for('main.index'):  # Don't redirect back to landing page
-		return redirect(next_url)
+	# Always redirect to /home after successful login
 	return redirect(url_for("main.home"))
 
 
@@ -114,9 +118,8 @@ def google_logged_in(blueprint, token):
 	
 	flash(f"Successfully logged in as {user_name}!", category="success")
 	
-	# IMPORTANT: Return a redirect response to /home
-	from flask import redirect, url_for
-	return redirect(url_for("main.home"))
+	# Don't store the token since we're using session-based auth
+	return False
 
 
 @auth_bp.route("/post-login")
@@ -135,6 +138,100 @@ def logout():
 	session.clear()
 	flash("You have been logged out.", category="info")
 	return redirect(url_for("main.index"))  # Redirect to landing page after logout
+
+
+# New pseudo-pages
+@auth_bp.route("/profile")
+@login_required
+def profile():
+	"""User profile page with dummy data"""
+	user = get_current_user()
+	
+	# Dummy profile data
+	dummy_profile = {
+		"name": user["name"],
+		"email": user["email"],
+		"join_date": "January 2025",
+		"level": "Beginner",
+		"total_study_time": "12 hours",
+		"streak": "5 days",
+		"achievements": ["First Login", "Completed Hiragana", "7-Day Streak"],
+		"preferences": {
+			"daily_goal": "30 minutes",
+			"notifications": "Enabled",
+			"theme": "Default"
+		}
+	}
+	
+	return render_template("profile.html", user=user, profile=dummy_profile)
+
+
+@auth_bp.route("/dashboard")
+@login_required
+def dashboard():
+	"""User dashboard with dummy progress data"""
+	user = get_current_user()
+	
+	# Dummy dashboard data
+	dummy_dashboard = {
+		"today_progress": {
+			"cards_reviewed": 25,
+			"time_studied": "45 minutes",
+			"streak_maintained": True
+		},
+		"weekly_stats": {
+			"total_cards": 150,
+			"accuracy": "87%",
+			"streak": "5 days"
+		},
+		"recent_activity": [
+			{"type": "Hiragana", "action": "Reviewed あ-お", "time": "2 hours ago"},
+			{"type": "Katakana", "action": "Learned カ-コ", "time": "1 day ago"},
+			{"type": "Vocabulary", "action": "Mastered 10 words", "time": "3 days ago"}
+		],
+		"next_goals": [
+			"Complete Hiragana basics",
+			"Start Katakana learning",
+			"Build 100-word vocabulary"
+		]
+	}
+	
+	return render_template("dashboard.html", user=user, dashboard=dummy_dashboard)
+
+
+@auth_bp.route("/settings")
+@login_required
+def settings():
+	"""User settings page with dummy options"""
+	user = get_current_user()
+	
+	# Dummy settings data
+	dummy_settings = {
+		"account": {
+			"email": user["email"],
+			"timezone": "UTC-5",
+			"language": "English"
+		},
+		"study": {
+			"daily_goal": "30 minutes",
+			"difficulty": "Beginner",
+			"auto_advance": True,
+			"sound_enabled": True
+		},
+		"notifications": {
+			"daily_reminder": True,
+			"streak_alerts": True,
+			"achievement_notifications": True,
+			"email_updates": False
+		},
+		"privacy": {
+			"profile_public": False,
+			"show_progress": True,
+			"allow_friend_requests": False
+		}
+	}
+	
+	return render_template("settings.html", user=user, settings=dummy_settings)
 
 
 @auth_bp.route("/check-auth")

@@ -155,8 +155,8 @@ body {
 	padding: .35rem .6rem;
 	box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
-.user-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-.user-avatar--placeholder { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: #edf2f7; }
+.user-avatar { width: 25px; height: 25px; border-radius: 50%; object-fit: cover; }
+.user-avatar--placeholder { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 50%; background: #edf2f7; }
 .user-meta { line-height: 1.1; text-align: left; }
 .user-name { font-weight: 600; color: #2d3748; }
 .user-sub { font-size: .8rem; color: #718096; }

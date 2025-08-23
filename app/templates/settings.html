@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block title %}Settings | Benkyo-Fi{% endblock %}
+{% block content %}
+<section class="panel">
+	<h1>Settings</h1>
+	
+	<div class="settings-sections">
+		<div class="settings-section">
+			<h2>Account Settings</h2>
+			<div class="settings-group">
+				<div class="setting-item">
+					<label>Email</label>
+					<input type="email" value="{{ settings.account.email }}" readonly class="setting-input" />
+				</div>
+				<div class="setting-item">
+					<label>Timezone</label>
+					<select class="setting-input">
+						<option value="UTC-5" selected>UTC-5 (Eastern Time)</option>
+						<option value="UTC-8">UTC-8 (Pacific Time)</option>
+						<option value="UTC+0">UTC+0 (London)</option>
+						<option value="UTC+1">UTC+1 (Central Europe)</option>
+					</select>
+				</div>
+				<div class="setting-item">
+					<label>Language</label>
+					<select class="setting-input">
+						<option value="English" selected>English</option>
+						<option value="Spanish">Spanish</option>
+						<option value="French">French</option>
+						<option value="German">German</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="settings-section">
+			<h2>Study Preferences</h2>
+			<div class="settings-group">
+				<div class="setting-item">
+					<label>Daily Study Goal</label>
+					<select class="setting-input">
+						<option value="15 minutes">15 minutes</option>
+						<option value="30 minutes" selected>30 minutes</option>
+						<option value="45 minutes">45 minutes</option>
+						<option value="1 hour">1 hour</option>
+					</select>
+				</div>
+				<div class="setting-item">
+					<label>Difficulty Level</label>
+					<select class="setting-input">
+						<option value="Beginner" selected>Beginner</option>
+						<option value="Intermediate">Intermediate</option>
+						<option value="Advanced">Advanced</option>
+					</select>
+				</div>
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.study.auto_advance %}checked{% endif %} />
+						Auto-advance to next card
+					</label>
+				</div>
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.study.sound_enabled %}checked{% endif %} />
+						Enable sound effects
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="settings-section">
+			<h2>Notifications</h2>
+			<div class="settings-group">
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.notifications.daily_reminder %}checked{% endif %} />
+						Daily study reminders
+					</label>
+				</div>
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.notifications.streak_alerts %}checked{% endif %} />
+						Streak maintenance alerts
+					</label>
+				</div>
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.notifications.achievement_notifications %}checked{% endif %} />
+						Achievement notifications
+					</label>
+				</div>
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.notifications.email_updates %}checked{% endif %} />
+						Email progress updates
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="settings-section">
+			<h2>Privacy</h2>
+			<div class="settings-group">
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.privacy.profile_public %}checked{% endif %} />
+						Make profile public
+					</label>
+				</div>
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.privacy.show_progress %}checked{% endif %} />
+						Show progress to friends
+					</label>
+				</div>
+				<div class="setting-item">
+					<label class="checkbox-label">
+						<input type="checkbox" {% if settings.privacy.allow_friend_requests %}checked{% endif %} />
+						Allow friend requests
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="settings-actions">
+		<button class="btn btn-primary">Save Changes</button>
+		<button class="btn btn-secondary">Reset to Defaults</button>
+	</div>
+</section>
+
+<style>
+.settings-sections {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	margin-bottom: 3rem;
+}
+
+.settings-section h2 {
+	margin-bottom: 1.5rem;
+	color: #333;
+	border-bottom: 2px solid #667eea;
+	padding-bottom: 0.5rem;
+}
+
+.settings-group {
+	background: white;
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.setting-item {
+	margin-bottom: 1.5rem;
+}
+
+.setting-item:last-child {
+	margin-bottom: 0;
+}
+
+.setting-item label {
+	display: block;
+	margin-bottom: 0.5rem;
+	color: #333;
+	font-weight: 500;
+}
+
+.setting-input {
+	width: 100%;
+	padding: 0.75rem;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	font-size: 1rem;
+}
+
+.setting-input:focus {
+	outline: none;
+	border-color: #667eea;
+	box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+	width: auto;
+	margin: 0;
+}
+
+.settings-actions {
+	display: flex;
+	gap: 1rem;
+	justify-content: flex-end;
+}
+
+.btn-secondary {
+	background: #6c757d;
+	color: white;
+	border: none;
+}
+
+.btn-secondary:hover {
+	background: #5a6268;
+}
+</style>
+{% endblock %}
