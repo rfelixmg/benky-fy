@@ -7,12 +7,15 @@ main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/")
 def index():
-	return home()
+	"""Public landing page"""
+	return render_template("landing.html")
 
 @main_bp.route("/home")
+@login_required
 def home():
-	user = session.get("user")
-	greeting = f"Hello, {user['name']}!" if user else "Hello, Guest. Please log in."
+	"""Private dashboard after login"""
+	user = get_current_user()
+	greeting = f"Hello, {user['name']}!"
 	return render_template("home.html", user=user, greeting=greeting)
 
 @main_bp.route("/modules")

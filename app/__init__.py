@@ -34,6 +34,8 @@ def create_app() -> Flask:
 		client_id=google_client_id,
 		client_secret=google_client_secret,
 		scope=["profile", "email"],
+		# redirect_url="/auth/oauth-callback"  # Custom callback URL
+		redirect_url="/home"  # Custom callback URL
 	)
 
 	app.register_blueprint(main_bp)

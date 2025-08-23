@@ -83,6 +83,33 @@
 
 	<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 	{% block scripts %}{% endblock %}
+
+	<script>
+	// Check for OAuth completion and refresh if needed
+	document.addEventListener('DOMContentLoaded', function() {
+		// Check if we're coming back from OAuth (URL contains 'authorized')
+		if (window.location.pathname.includes('authorized') || 
+			window.location.search.includes('code=') ||
+			window.location.hash.includes('access_token')) {
+			
+			// Wait a moment for the server to process the OAuth callback
+			setTimeout(function() {
+				// Check auth status
+				fetch('{{ url_for("auth.check_auth") }}')
+					.then(response => response.json())
+					.then(data => {
+						if (data.authenticated && !{{ 'true' if current_user else 'false' }}) {
+							// User is authenticated but page hasn't updated
+							window.location.reload();
+						}
+					})
+					.catch(error => {
+						console.log('Auth check failed:', error);
+					});
+			}, 1000); // 1 second delay
+		}
+	});
+	</script>
 </body>
 </html>
 
