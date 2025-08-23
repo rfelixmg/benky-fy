@@ -142,6 +142,18 @@ document.addEventListener('click', function(e) {
 
 // Now you can use convertRomajiToHiragana directly in your existing code
 
+function getFriendlyStyleName(style) {
+    const styleMap = {
+        'hiragana_romaji': 'Hiragana/Romaji',
+        'hiragana': 'Hiragana',
+        'romaji': 'Romaji',
+        'kanji': 'Kanji',
+        'katakana': 'Katakana',
+        'english': 'English'
+    };
+    return styleMap[style] || style.charAt(0).toUpperCase() + style.slice(1);
+}
+
 function fetchCorrectAnswers() {
     // Get the item ID from the hidden input
     const itemId = document.getElementById('item_id').value;
@@ -170,6 +182,12 @@ function fetchCorrectAnswers() {
 document.addEventListener('DOMContentLoaded', function() {
     let resultsShown = false; // Define resultsShown in the correct scope
 
+    // Initialize panel color to waiting state
+    const panel = document.querySelector('.panel');
+    if (panel) {
+        panel.classList.add('waiting'); // White for waiting answer
+    }
+
     function updateButton() {
         const button = document.querySelector('button[onclick="handleCheckAnswers()"]');
         if (button) {
@@ -182,6 +200,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.classList.add('check-button');
                 button.classList.remove('next-button');
             }
+        }
+    }
+
+    function resetPanelColor() {
+        const panel = document.querySelector('.panel');
+        if (panel) {
+            panel.classList.remove('waiting', 'correct', 'incorrect');
+            panel.classList.add('waiting'); // Reset to white waiting state
         }
     }
 
@@ -259,24 +285,49 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsContainer.style.display = 'block'; // Ensure it's visible
             resultsContainer.innerHTML = ''; // Clear previous results
             
-            // Add overall result
-            const overallDiv = document.createElement('div');
-            overallDiv.className = `overall-result ${allCorrect ? 'correct' : 'incorrect'}`;
-            overallDiv.innerHTML = `<p><strong>${allCorrect ? 'All Correct!' : 'Some Incorrect'}</strong></p>`;
-            resultsContainer.appendChild(overallDiv);
-            
-            // Add individual results
-            for (const [style, result] of Object.entries(results)) {
-                const resultDiv = document.createElement('div');
-                resultDiv.className = `result ${result.is_correct ? 'correct' : 'incorrect'}`;
-                resultDiv.innerHTML = `
-                    <h4>${style.replace('user_', '').toUpperCase()}</h4>
-                    <p>Your answer: <code>${result.user_input || '(empty)'}</code></p>
-                    <p>Correct answer: <code>${result.correct_answer}</code></p>
-                    <p class="result-status">${result.is_correct ? '✓ Correct' : '✗ Incorrect'}</p>
-                `;
-                resultsContainer.appendChild(resultDiv);
+            // Change panel color based on results
+            const panel = document.querySelector('.panel');
+            if (panel) {
+                // Remove any existing color classes
+                panel.classList.remove('waiting', 'correct', 'incorrect');
+                
+                if (allCorrect) {
+                    panel.classList.add('correct'); // Green for all correct
+                } else {
+                    panel.classList.add('incorrect'); // Red for some incorrect
+                }
             }
+            
+            // Create a single unified results box
+            const unifiedResultsBox = document.createElement('div');
+            unifiedResultsBox.className = 'unified-results';
+            
+            // Build the content for the unified box (removed overall-status div)
+            let resultsHTML = '<div class="results-list">';
+            
+            // Add individual results to the same container
+            for (const [style, result] of Object.entries(results)) {
+                // Skip if the correct answer is empty or just a dash (like katakana when not available)
+                if (!result.correct_answer || result.correct_answer === '–' || result.correct_answer.trim() === '') {
+                    continue;
+                }
+                
+                // Clean style name for display with user-friendly labels
+                const styleName = getFriendlyStyleName(style.replace('user_', ''));
+                
+                resultsHTML += `
+                    <div class="result-item ${result.is_correct ? 'correct' : 'incorrect'}">
+                        <span class="style-name">${styleName}</span>
+                        <span class="result-status">${result.is_correct ? '✓' : '✗'}</span>
+                        <span class="user-answer">Your answer: <code>${result.user_input || '(empty)'}</code></span>
+                        ${!result.is_correct ? `<span class="correct-answer">Correct: <code>${result.correct_answer}</code></span>` : ''}
+                    </div>
+                `;
+            }
+            
+            resultsHTML += '</div>';
+            unifiedResultsBox.innerHTML = resultsHTML;
+            resultsContainer.appendChild(unifiedResultsBox);
 
             resultsShown = true; // Set flag to true after showing results
             updateButton(); // Update button text and style
@@ -285,6 +336,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetOrNext() {
         console.log('Moving to next question');
+        // Reset panel color before navigating
+        resetPanelColor();
         // Navigate to next question instead of just resetting inputs
         window.location.href = "{{ url_for('module1.module1_index') }}";
     }

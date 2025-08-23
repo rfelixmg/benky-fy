@@ -184,6 +184,10 @@ class FlashcardEngine:
 					"is_correct": is_correct
 				}
 			elif style == "katakana":
+				# Skip if katakana is not available (marked with "–" or empty)
+				if not item.katakana or item.katakana.strip() in ['–', '']:
+					continue
+					
 				user_input = user_input_raw.lower()
 				correct_answer = item.katakana.lower()
 				is_correct = user_input == correct_answer if user_input_raw else False
@@ -308,7 +312,9 @@ def get_correct_answers():
             elif style == "kanji":
                 correct_answers["user_kanji"] = item.kanji
             elif style == "katakana":
-                correct_answers["user_katakana"] = item.katakana
+                # Only include if katakana is available (not "–" or empty)
+                if item.katakana and item.katakana.strip() not in ['–', '']:
+                    correct_answers["user_katakana"] = item.katakana
             elif style == "english":
                 # Return the full string for display, but we'll handle multiple answers in frontend
                 correct_answers["user_english"] = item.english
