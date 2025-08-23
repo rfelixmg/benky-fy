@@ -182,6 +182,21 @@ function fetchCorrectAnswers() {
 document.addEventListener('DOMContentLoaded', function() {
     let resultsShown = false; // Define resultsShown in the correct scope
 
+    function updateButton() {
+        const button = document.querySelector('button[onclick="handleCheckAnswers()"]');
+        if (button) {
+            if (resultsShown) {
+                button.textContent = '+1';
+                button.classList.add('next-button');
+                button.classList.remove('check-button');
+            } else {
+                button.textContent = 'benkyfy';
+                button.classList.add('check-button');
+                button.classList.remove('next-button');
+            }
+        }
+    }
+
     function handleCheckAnswers(event) {
         if (event) {
             event.preventDefault(); // Prevent default behavior
@@ -267,23 +282,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             resultsShown = true; // Set flag to true after showing results
+            updateButton(); // Update button text and style
         });
     }
 
     function resetOrNext() {
-        console.log('Moving to next question or resetting inputs');
-        // Example: Reset inputs
-        const inputElements = document.querySelectorAll('.answer-input');
-        inputElements.forEach(input => {
-            input.value = '';
-        });
-        resultsShown = false; // Reset the flag
+        console.log('Moving to next question');
+        // Navigate to next question instead of just resetting inputs
+        window.location.href = "{{ url_for('module1.module1_index') }}";
     }
 
     // Attach the function to the button click
     const button = document.querySelector('button[onclick="handleCheckAnswers()"]');
     if (button) {
         button.onclick = handleCheckAnswers;
+        // Initialize button state
+        updateButton();
     } else {
         console.error('Button not found!');
     }

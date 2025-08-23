@@ -412,3 +412,21 @@ body {
 		right: auto;
 	}
 }
+
+.check-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.next-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.check-button:hover {
+    background-color: #0056b3;
+}
+
+.next-button:hover {
+    background-color: #218838;
+}
