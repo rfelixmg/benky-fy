@@ -72,4 +72,22 @@ def logout():
 	return redirect(url_for("main.home"))
 
 
+@auth_bp.route("/debug-oauth")
+def debug_oauth():
+	"""Debug endpoint to see OAuth configuration"""
+	from flask_dance.contrib.google import google
+	
+	debug_info = {
+		"google_authorized": google.authorized,
+		"google_oauth_url": url_for("google.login"),
+		"google_authorized_url": url_for("google.authorized"),
+		"current_url": request.url,
+		"base_url": request.base_url,
+		"host": request.host,
+		"scheme": request.scheme,
+	}
+	
+	return debug_info
+
+
 

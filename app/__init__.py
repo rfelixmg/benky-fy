@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask, session, request
 import os
 from flask_dance.contrib.google import make_google_blueprint
 
@@ -27,7 +27,6 @@ def create_app() -> Flask:
 		client_id=google_client_id,
 		client_secret=google_client_secret,
 		scope=["profile", "email"],
-		redirect_to="auth.post_login",
 	)
 
 	app.register_blueprint(main_bp)
