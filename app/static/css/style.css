@@ -96,7 +96,7 @@ body {
 }
 
 .header-container {
-	max-width: 1200px;
+	max-width: 1820px;
 	margin: 0 auto;
 	padding: 0 2rem;
 }
@@ -165,7 +165,7 @@ body {
 .main-content {
 	padding: 3rem 2rem;
 	max-width: 1400px;
-	margin: 0 auto;
+	margin: 0 15% 0 15%;
 }
 
 /* Generic panel reusing existing style */
@@ -987,6 +987,15 @@ body {
 	margin-bottom: 1.5rem;
 }
 
+.header-with-settings h1 {
+	font-size: clamp(1.8rem, 4vw, 2.5rem); /* Responsive font size */
+	font-weight: 300;
+	color: #2d3748;
+	margin: 0;
+	letter-spacing: -0.5px;
+	line-height: 1.2;
+}
+
 .settings-dropdown {
 	position: relative;
 }
@@ -994,11 +1003,11 @@ body {
 .settings-btn {
 	background: rgba(102, 126, 234, 0.1);
 	border: 1px solid rgba(102, 126, 234, 0.3);
-	border-radius: 12px;
-	padding: 0.5rem 1rem;
+	border-radius: 6px;
+	padding: 10px;
 	color: #667eea;
 	cursor: pointer;
-	font-size: 0.9rem;
+	font-size: 1.3rem;
 	transition: all 0.2s ease;
 }
 

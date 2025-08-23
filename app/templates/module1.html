@@ -3,9 +3,9 @@
 {% block content %}
 <section class="panel">
 	<div class="header-with-settings">
-		<h1>Flashcards + Typing</h1>
+		<h1>Spaced repetition flashcards (SRF)</h1>
 		<div class="settings-dropdown">
-			<button class="settings-btn" onclick="toggleSettings()">⚙️ Settings</button>
+			<button class="settings-btn" onclick="toggleSettings()">⚙️</button>
 			<div class="settings-panel" id="settingsPanel">
 				<form method="POST" action="{{ url_for('module1.update_settings') }}">
 					<div class="settings-section">
