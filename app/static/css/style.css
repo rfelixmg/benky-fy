@@ -335,6 +335,12 @@ body {
 	transform: scale(1.1);
 }
 
+.checkbox-group .note {
+	font-size: 0.75rem;
+	color: #718096;
+	font-style: italic;
+}
+
 .settings-actions {
 	margin-top: 1rem;
 	text-align: center;

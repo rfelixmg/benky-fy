@@ -20,11 +20,11 @@
 					<div class="settings-section">
 						<h3>Checking Style:</h3>
 						<div class="checkbox-group">
-							<label><input type="checkbox" name="checking_hiragana" {% if 'hiragana' in settings.checking_styles %}checked{% endif %}> Hiragana</label>
+							<label><input type="checkbox" name="checking_hiragana" {% if 'hiragana' in settings.checking_styles %}checked{% endif %}> Hiragana <span class="note">(type romaji, converts to hiragana)</span></label>
+							<label><input type="checkbox" name="checking_romaji" {% if 'romaji' in settings.checking_styles %}checked{% endif %}> Romaji <span class="note">(type romaji, stays as romaji)</span></label>
 							<label><input type="checkbox" name="checking_kanji" {% if 'kanji' in settings.checking_styles %}checked{% endif %}> Kanji</label>
 							<label><input type="checkbox" name="checking_katakana" {% if 'katakana' in settings.checking_styles %}checked{% endif %}> Katakana</label>
 							<label><input type="checkbox" name="checking_english" {% if 'english' in settings.checking_styles %}checked{% endif %}> English</label>
-							<label><input type="checkbox" name="checking_romaji" {% if 'romaji' in settings.checking_styles %}checked{% endif %}> Romaji</label>
 						</div>
 					</div>
 					<div class="settings-actions">
@@ -40,10 +40,32 @@
 	</div>
 	<form class="answer-form" method="POST" action="{{ url_for('module1.module1_check') }}">
 		<div class="input-row">
-			{% for style in settings.checking_styles %}
+			{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
+			{% set other_styles = settings.checking_styles | reject('in', ['hiragana', 'romaji']) | list %}
+			
+			{% if has_hiragana_romaji %}
+			<div class="input-group">
+				{% set hiragana_label = 'hiragana' in settings.checking_styles %}
+				{% set romaji_label = 'romaji' in settings.checking_styles %}
+				<label for="user_hiragana_romaji">
+					Your answer (
+					{%- if hiragana_label and romaji_label -%}
+						hiragana/romaji
+					{%- elif hiragana_label -%}
+						hiragana
+					{%- else -%}
+						romaji
+					{%- endif -%}
+					):
+				</label>
+				<input type="text" id="user_hiragana_romaji" name="user_hiragana_romaji" class="answer-input" placeholder="Type in romaji..." autofocus />
+			</div>
+			{% endif %}
+			
+			{% for style in other_styles %}
 			<div class="input-group">
 				<label for="user_{{ style }}">Your answer ({{ style }}):</label>
-				<input type="text" id="user_{{ style }}" name="user_{{ style }}" class="answer-input" placeholder="Type {{ style }}..." {% if loop.first %}autofocus{% endif %} />
+				<input type="text" id="user_{{ style }}" name="user_{{ style }}" class="answer-input" placeholder="Type {{ style }}..." {% if not has_hiragana_romaji and loop.first %}autofocus{% endif %} />
 			</div>
 			{% endfor %}
 		</div>	
@@ -60,13 +82,18 @@
 			<p><strong>{{ 'All Correct!' if all_correct else 'Some Incorrect' }}</strong></p>
 		</div>
 		
-		{% for style, result in results.items() %}
-			<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
-				<h4>{{ style.title() }}</h4>
-				<p>Your answer: <code>{{ result.user_input or '(empty)' }}</code></p>
-				<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
-				<p class="result-status">{{ '✓ Correct' if result.is_correct else '✗ Incorrect' }}</p>
-			</div>
+				{% for style, result in results.items() %}
+		<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
+			<h4>{{ style.title() }}</h4>
+			{% if style == 'hiragana' and result.user_input_converted %}
+			<p>Your input: <code>{{ result.user_input or '(empty)' }}</code></p>
+			<p>Converted to hiragana: <code>{{ result.user_input_converted }}</code></p>
+			{% else %}
+			<p>Your answer: <code>{{ result.user_input or '(empty)' }}</code></p>
+			{% endif %}
+			<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
+			<p class="result-status">{{ '✓ Correct' if result.is_correct else '✗ Incorrect' }}</p>
+		</div>
 		{% endfor %}
 	</div>
 

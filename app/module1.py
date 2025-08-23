@@ -6,6 +6,67 @@ from typing import Optional, Tuple, List
 from flask import Blueprint, render_template, request, session, redirect, url_for
 
 
+# Romaji to Hiragana conversion mapping
+ROMAJI_TO_HIRAGANA = {
+    'a': 'あ', 'i': 'い', 'u': 'う', 'e': 'え', 'o': 'お',
+    'ka': 'か', 'ki': 'き', 'ku': 'く', 'ke': 'け', 'ko': 'こ',
+    'ga': 'が', 'gi': 'ぎ', 'gu': 'ぐ', 'ge': 'げ', 'go': 'ご',
+    'sa': 'さ', 'shi': 'し', 'su': 'す', 'se': 'せ', 'so': 'そ',
+    'za': 'ざ', 'ji': 'じ', 'zu': 'ず', 'ze': 'ぜ', 'zo': 'ぞ',
+    'ta': 'た', 'chi': 'ち', 'tsu': 'つ', 'te': 'て', 'to': 'と',
+    'da': 'だ', 'di': 'ぢ', 'du': 'づ', 'de': 'で', 'do': 'ど',
+    'na': 'な', 'ni': 'に', 'nu': 'ぬ', 'ne': 'ね', 'no': 'の',
+    'ha': 'は', 'hi': 'ひ', 'fu': 'ふ', 'he': 'へ', 'ho': 'ほ',
+    'ba': 'ば', 'bi': 'び', 'bu': 'ぶ', 'be': 'べ', 'bo': 'ぼ',
+    'pa': 'ぱ', 'pi': 'ぴ', 'pu': 'ぷ', 'pe': 'ぺ', 'po': 'ぽ',
+    'ma': 'ま', 'mi': 'み', 'mu': 'む', 'me': 'め', 'mo': 'も',
+    'ya': 'や', 'yu': 'ゆ', 'yo': 'よ',
+    'ra': 'ら', 'ri': 'り', 'ru': 'る', 're': 'れ', 'ro': 'ろ',
+    'wa': 'わ', 'wi': 'ゐ', 'we': 'ゑ', 'wo': 'を', 'n': 'ん',
+    # Common combinations
+    'kya': 'きゃ', 'kyu': 'きゅ', 'kyo': 'きょ',
+    'gya': 'ぎゃ', 'gyu': 'ぎゅ', 'gyo': 'ぎょ',
+    'sha': 'しゃ', 'shu': 'しゅ', 'sho': 'しょ',
+    'ja': 'じゃ', 'ju': 'じゅ', 'jo': 'じょ',
+    'cha': 'ちゃ', 'chu': 'ちゅ', 'cho': 'ちょ',
+    'nya': 'にゃ', 'nyu': 'にゅ', 'nyo': 'にょ',
+    'hya': 'ひゃ', 'hyu': 'ひゅ', 'hyo': 'ひょ',
+    'bya': 'びゃ', 'byu': 'びゅ', 'byo': 'びょ',
+    'pya': 'ぴゃ', 'pyu': 'ぴゅ', 'pyo': 'ぴょ',
+    'mya': 'みゃ', 'myu': 'みゅ', 'myo': 'みょ',
+    'rya': 'りゃ', 'ryu': 'りゅ', 'ryo': 'りょ',
+}
+
+
+def romaji_to_hiragana(romaji_text: str) -> str:
+    """Convert romaji text to hiragana"""
+    if not romaji_text:
+        return ""
+    
+    romaji_text = romaji_text.lower().strip()
+    result = ""
+    i = 0
+    
+    while i < len(romaji_text):
+        # Try longer combinations first (3 chars, then 2, then 1)
+        found = False
+        for length in [3, 2, 1]:
+            if i + length <= len(romaji_text):
+                substring = romaji_text[i:i + length]
+                if substring in ROMAJI_TO_HIRAGANA:
+                    result += ROMAJI_TO_HIRAGANA[substring]
+                    i += length
+                    found = True
+                    break
+        
+        if not found:
+            # If no mapping found, keep the original character
+            result += romaji_text[i]
+            i += 1
+    
+    return result
+
+
 module1_bp = Blueprint("module1", __name__)
 
 
@@ -87,27 +148,61 @@ class FlashcardEngine:
 		results = {}
 		
 		for style in checking_styles:
-			user_input = user_inputs.get(f"user_{style}", "").strip().lower()
+			user_input_raw = user_inputs.get(f"user_{style}", "").strip()
 			
 			if style == "hiragana":
-				correct_answer = item.hiragana.lower()
-			elif style == "kanji":
-				correct_answer = item.kanji.lower()
-			elif style == "katakana":
-				correct_answer = item.katakana.lower()
-			elif style == "english":
-				correct_answer = item.english.lower()
+				# For hiragana checking: convert user's romaji input to hiragana, then compare
+				user_input_converted = romaji_to_hiragana(user_input_raw)
+				correct_answer = item.hiragana
+				is_correct = user_input_converted.lower() == correct_answer.lower() if user_input_raw else False
+				
+				results[style] = {
+					"user_input": user_input_raw,  # Show original romaji input
+					"user_input_converted": user_input_converted,  # Show converted hiragana
+					"correct_answer": correct_answer,
+					"is_correct": is_correct
+				}
 			elif style == "romaji":
-				correct_answer = item.romaji.lower() if item.romaji else item.hiragana.lower()  # fallback
-			else:
-				correct_answer = ""
-			
-			is_correct = user_input == correct_answer if user_input else False
-			results[style] = {
-				"user_input": user_inputs.get(f"user_{style}", ""),
-				"correct_answer": correct_answer,
-				"is_correct": is_correct
-			}
+				# For romaji checking: compare romaji directly
+				user_input = user_input_raw.lower()
+				correct_answer = item.romaji.lower() if item.romaji else ""
+				is_correct = user_input == correct_answer if user_input_raw else False
+				
+				results[style] = {
+					"user_input": user_input_raw,
+					"correct_answer": item.romaji if item.romaji else "",
+					"is_correct": is_correct
+				}
+			elif style == "kanji":
+				user_input = user_input_raw.lower()
+				correct_answer = item.kanji.lower()
+				is_correct = user_input == correct_answer if user_input_raw else False
+				
+				results[style] = {
+					"user_input": user_input_raw,
+					"correct_answer": item.kanji,
+					"is_correct": is_correct
+				}
+			elif style == "katakana":
+				user_input = user_input_raw.lower()
+				correct_answer = item.katakana.lower()
+				is_correct = user_input == correct_answer if user_input_raw else False
+				
+				results[style] = {
+					"user_input": user_input_raw,
+					"correct_answer": item.katakana,
+					"is_correct": is_correct
+				}
+			elif style == "english":
+				user_input = user_input_raw.lower()
+				correct_answer = item.english.lower()
+				is_correct = user_input == correct_answer if user_input_raw else False
+				
+				results[style] = {
+					"user_input": user_input_raw,
+					"correct_answer": item.english,
+					"is_correct": is_correct
+				}
 		
 		return results
 
@@ -168,7 +263,11 @@ def module1_check():
 	# Collect user inputs for all checking styles
 	user_inputs = {}
 	for style in settings["checking_styles"]:
-		user_inputs[f"user_{style}"] = request.form.get(f"user_{style}", "")
+		if style in ["hiragana", "romaji"]:
+			# Both hiragana and romaji use the same input field
+			user_inputs[f"user_{style}"] = request.form.get("user_hiragana_romaji", "")
+		else:
+			user_inputs[f"user_{style}"] = request.form.get(f"user_{style}", "")
 	
 	results = engine.check_answers(user_inputs, item, settings["checking_styles"])
 	
