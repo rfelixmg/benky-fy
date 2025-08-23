@@ -32,7 +32,27 @@
 		<p>Your answer: <code>{{ result.user_input }}</code></p>
 		<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
 	</div>
+	
+	<button class="btn" onclick="window.location.href='{{ url_for('module1.module1_index') }}'">
+		Next ➡️
+	</button>
+
+	<script>
+	document.addEventListener("keydown", function(e) {
+		if (e.key === "Enter") {
+			const resultBox = document.querySelector(".result");
+			if (resultBox) {
+				// prevent submitting the form again
+				e.preventDefault();
+				// go to next card
+				window.location.href = "{{ url_for('module1.module1_index') }}";
+			}
+		}
+	});
+	</script>
 	{% endif %}
+  
+  
 </section>
 {% endblock %}
 
