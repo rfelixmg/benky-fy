@@ -2,22 +2,50 @@
 {% block title %}Module 1 | Benkyo-Fi{% endblock %}
 {% block content %}
 <section class="panel">
-	<h1>Flashcards + Typing</h1>
+	<div class="header-with-settings">
+		<h1>Flashcards + Typing</h1>
+		<div class="settings-dropdown">
+			<button class="settings-btn" onclick="toggleSettings()">⚙️ Settings</button>
+			<div class="settings-panel" id="settingsPanel">
+				<form method="POST" action="{{ url_for('module1.update_settings') }}">
+					<div class="settings-section">
+						<h3>Flashcard Style:</h3>
+						<div class="checkbox-group">
+							<label><input type="checkbox" name="flashcard_hiragana" {% if 'hiragana' in settings.flashcard_styles %}checked{% endif %}> Hiragana</label>
+							<label><input type="checkbox" name="flashcard_kanji" {% if 'kanji' in settings.flashcard_styles %}checked{% endif %}> Kanji</label>
+							<label><input type="checkbox" name="flashcard_katakana" {% if 'katakana' in settings.flashcard_styles %}checked{% endif %}> Katakana</label>
+							<label><input type="checkbox" name="flashcard_english" {% if 'english' in settings.flashcard_styles %}checked{% endif %}> English</label>
+						</div>
+					</div>
+					<div class="settings-section">
+						<h3>Checking Style:</h3>
+						<div class="checkbox-group">
+							<label><input type="checkbox" name="checking_hiragana" {% if 'hiragana' in settings.checking_styles %}checked{% endif %}> Hiragana</label>
+							<label><input type="checkbox" name="checking_kanji" {% if 'kanji' in settings.checking_styles %}checked{% endif %}> Kanji</label>
+							<label><input type="checkbox" name="checking_katakana" {% if 'katakana' in settings.checking_styles %}checked{% endif %}> Katakana</label>
+							<label><input type="checkbox" name="checking_english" {% if 'english' in settings.checking_styles %}checked{% endif %}> English</label>
+							<label><input type="checkbox" name="checking_romaji" {% if 'romaji' in settings.checking_styles %}checked{% endif %}> Romaji</label>
+						</div>
+					</div>
+					<div class="settings-actions">
+						<button type="submit" class="btn btn-small">Save Settings</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 	<div class="prompt">
 		<p class="muted">Prompt ({{ item.prompt_script }})</p>
-		<div class="prompt-value">{{ item.hiragana }}</div>
+		<div class="prompt-value">{{ item.prompt }}</div>
 	</div>
 	<form class="answer-form" method="POST" action="{{ url_for('module1.module1_check') }}">
 		<div class="input-row">
+			{% for style in settings.checking_styles %}
 			<div class="input-group">
-				<label for="user_input">Your answer (hiragana / romaji):</label>
-				<input type="text" id="user_input" name="user_input" class="answer-input" placeholder="Type here..." autofocus />
+				<label for="user_{{ style }}">Your answer ({{ style }}):</label>
+				<input type="text" id="user_{{ style }}" name="user_{{ style }}" class="answer-input" placeholder="Type {{ style }}..." {% if loop.first %}autofocus{% endif %} />
 			</div>
-	
-			<div class="input-group">
-				<label for="user_english">Your answer (english):</label>
-				<input type="text" id="user_english" name="user_english" class="answer-input" placeholder="Translate here..." />
-			</div>
+			{% endfor %}
 		</div>	
 		<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
 	
@@ -26,27 +54,54 @@
 		</div>
 	</form>
 	
-	{% if result is not none %}
-	<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
-		<p><strong>{{ 'Correct!' if result.is_correct else 'Incorrect' }}</strong></p>
-		<p>Your answer: <code>{{ result.user_input }}</code></p>
-		<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
+	{% if results is not none %}
+	<div class="results-container">
+		<div class="overall-result {{ 'correct' if all_correct else 'incorrect' }}">
+			<p><strong>{{ 'All Correct!' if all_correct else 'Some Incorrect' }}</strong></p>
+		</div>
+		
+		{% for style, result in results.items() %}
+			<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
+				<h4>{{ style.title() }}</h4>
+				<p>Your answer: <code>{{ result.user_input or '(empty)' }}</code></p>
+				<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
+				<p class="result-status">{{ '✓ Correct' if result.is_correct else '✗ Incorrect' }}</p>
+			</div>
+		{% endfor %}
 	</div>
-	
-	<button class="btn" onclick="window.location.href='{{ url_for('module1.module1_index') }}'">
+
+	<button class="btn" onclick="goToNext()">
 		Next ➡️
 	</button>
 
 	<script>
 	document.addEventListener("keydown", function(e) {
 		if (e.key === "Enter") {
-			const resultBox = document.querySelector(".result");
+			const resultBox = document.querySelector(".results-container");
 			if (resultBox) {
 				// prevent submitting the form again
 				e.preventDefault();
 				// go to next card
-				window.location.href = "{{ url_for('module1.module1_index') }}";
+				goToNext();
 			}
+		}
+	});
+	
+	function toggleSettings() {
+		const panel = document.getElementById('settingsPanel');
+		panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+	}
+	
+	function goToNext() {
+		window.location.href = "{{ url_for('module1.module1_index') }}";
+	}
+	
+	// Close settings panel when clicking outside
+	document.addEventListener('click', function(e) {
+		const settingsDropdown = document.querySelector('.settings-dropdown');
+		const settingsPanel = document.getElementById('settingsPanel');
+		if (!settingsDropdown.contains(e.target)) {
+			settingsPanel.style.display = 'none';
 		}
 	});
 	</script>
