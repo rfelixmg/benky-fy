@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
-{% block title %}Module 1 | Benky-Fy{% endblock %}
+{% block title %}{{ module_name|title }} | Benky-Fy{% endblock %}
 {% block content %}
 <section class="panel">
 	<div class="header-with-settings">
-		<h1>Spaced repetition flashcards (SRF)</h1>
+		<h1>Spaced repetition flashcards (SRF) - {{ module_name|title }}</h1>
 		<div class="settings-dropdown">
 			<button class="settings-btn" onclick="toggleSettings()">⚙️</button>
 			<div class="settings-panel" id="settingsPanel">
-				<form method="POST" action="{{ url_for('module1.update_settings') }}">
+				<form method="POST" action="{{ url_for(module_name + '.update_settings') }}">
 					<div class="settings-section">
 						<h3>Flashcard Style:</h3>
 						<div class="checkbox-group">
@@ -128,7 +128,7 @@ function toggleSettings() {
 }
 
 function goToNext() {
-	window.location.href = "{{ url_for('module1.module1_index') }}";
+	window.location.href = "{{ url_for(module_name + '.index') }}";
 }
 
 // Close settings panel when clicking outside
@@ -159,7 +159,7 @@ function fetchCorrectAnswers() {
     const itemId = document.getElementById('item_id').value;
     
     // Define the API endpoint with item_id parameter
-    const apiUrl = `/module1/api/correct-answers?item_id=${itemId}`;
+    const apiUrl = `/{{ module_name }}/api/correct-answers?item_id=${itemId}`;
 
     // Make the API request
     return fetch(apiUrl)
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset panel color before navigating
         resetPanelColor();
         // Navigate to next question instead of just resetting inputs
-        window.location.href = "{{ url_for('module1.module1_index') }}";
+        window.location.href = "{{ url_for(module_name + '.index') }}";
     }
 
     // Attach the function to the button click
@@ -402,5 +402,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
-
-

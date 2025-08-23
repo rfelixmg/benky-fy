@@ -21,6 +21,13 @@ def modules():
 	user = get_current_user()
 	return render_template("modules.html", user=user)
 
+@main_bp.route("/begginer")
+@login_required
+def begginers():
+	user = get_current_user()
+	# This route now shows available flashcard modules
+	return render_template("flashcards.html", user=user)
+
 
 """Auth routes live in auth blueprint. No local /login here."""
 

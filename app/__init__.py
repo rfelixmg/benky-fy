@@ -16,6 +16,13 @@ def create_app() -> Flask:
 	from .module1 import module1_bp
 	from .auth import auth_bp
 
+		# Import and create flashcard modules
+	from .flashcard import create_flashcard_module
+	
+	# Create flashcard modules
+	hiragana_bp = create_flashcard_module("hiragana", "./datum/hiragana.csv")
+	katakana_bp = create_flashcard_module("katakana", "./datum/katakana.csv")
+
 	# Google OAuth with Flask-Dance
 	google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
 	google_client_secret = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET")
@@ -32,6 +39,8 @@ def create_app() -> Flask:
 	app.register_blueprint(main_bp)
 	app.register_blueprint(module1_bp, url_prefix="/module1")
 	app.register_blueprint(auth_bp)
+	app.register_blueprint(hiragana_bp, url_prefix="/begginer/hiragana")
+	app.register_blueprint(katakana_bp, url_prefix="/begginer/katakana")
 	
 	# Register Google OAuth blueprint
 	app.register_blueprint(google_bp, url_prefix="/login")
