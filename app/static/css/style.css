@@ -518,6 +518,43 @@ body {
 	color: #4a5568;
 	margin-bottom: 2rem;
 	font-size: 1.1rem;
+	line-height: 1.5;
+}
+
+.google-login {
+	margin-bottom: 2rem;
+}
+
+.btn-google {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	background: #fff;
+	color: #333;
+	border: 2px solid #dadce0;
+	border-radius: 12px;
+	padding: 0.75rem 2rem;
+	font-size: 1rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	max-width: 280px;
+}
+
+.btn-google:hover {
+	background: #f8f9fa;
+	border-color: #dadce0;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	text-decoration: none;
+	color: #333;
+	transform: translateY(-1px);
+}
+
+.google-icon {
+	flex-shrink: 0;
 }
 
 .flash-messages {

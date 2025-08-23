@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, url_for, session, request, flash, render_template
-# from flask_dance.contrib.google import google
+from flask_dance.contrib.google import google
 from functools import wraps
 
 
@@ -29,30 +29,12 @@ def is_authenticated():
 	return 'user' in session and session['user'] is not None
 
 
-@auth_bp.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/login")
 def login():
-	if request.method == "POST":
-		# Simple username/password login for development
-		username = request.form.get("username", "").strip()
-		password = request.form.get("password", "").strip()
-		
-		# Simple validation - in production, use proper authentication
-		if username and password:
-			session["user"] = {
-				"name": username,
-				"email": f"{username}@example.com",
-				"picture": None,
-			}
-			
-			# Redirect to originally requested URL or home
-			next_url = session.pop('next_url', None)
-			if next_url:
-				return redirect(next_url)
-			return redirect(url_for("main.home"))
-		else:
-			flash('Please enter both username and password.', 'error')
-	
-	return render_template("login.html")
+	# Start Google OAuth flow via Flask-Dance's google blueprint
+	if not google.authorized:
+		return redirect(url_for("google.login"))
+	return redirect(url_for("auth.post_login"))
 
 
 @auth_bp.route("/post-login")

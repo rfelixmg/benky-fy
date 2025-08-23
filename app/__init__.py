@@ -1,6 +1,6 @@
 from flask import Flask, session
 import os
-# from flask_dance.contrib.google import make_google_blueprint
+from flask_dance.contrib.google import make_google_blueprint
 
 
 def create_app() -> Flask:
@@ -16,23 +16,26 @@ def create_app() -> Flask:
 	from .module1 import module1_bp
 	from .auth import auth_bp
 
-	# Google OAuth with Flask-Dance (disabled for now)
-	# When ready for Google OAuth, uncomment these lines:
-	# google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
-	# google_client_secret = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET")
-	# google_bp = make_google_blueprint(
-	#     client_id=google_client_id,
-	#     client_secret=google_client_secret,
-	#     scope=["profile", "email"],
-	#     redirect_to="auth.post_login",
-	# )
+	# Google OAuth with Flask-Dance
+	google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
+	google_client_secret = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET")
+	
+	if not google_client_id or not google_client_secret:
+		raise ValueError("Google OAuth credentials not found. Please set GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET environment variables.")
+	
+	google_bp = make_google_blueprint(
+		client_id=google_client_id,
+		client_secret=google_client_secret,
+		scope=["profile", "email"],
+		redirect_to="auth.post_login",
+	)
 
 	app.register_blueprint(main_bp)
 	app.register_blueprint(module1_bp, url_prefix="/module1")
 	app.register_blueprint(auth_bp)
 	
-	# Register Google OAuth blueprint (disabled for now)
-	# app.register_blueprint(google_bp, url_prefix="/login")
+	# Register Google OAuth blueprint
+	app.register_blueprint(google_bp, url_prefix="/login")
 
 	# Make session user available in all templates as `current_user`
 	@app.context_processor
