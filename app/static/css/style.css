@@ -202,15 +202,46 @@ body {
 
 /* Footer */
 .footer {
-	background: rgba(255, 255, 255, 0.95);
-	backdrop-filter: blur(10px);
-	padding: 2rem 0;
-	text-align: center;
-	border-top: 1px solid #e2e8f0;
-	margin-top: 3rem;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: auto; /* Push footer to bottom */
+    position: relative; /* Ensure it's in normal document flow */
+    z-index: 1; /* Ensure it appears above background elements */
 }
 
-.footer .footer-text { color: #718096; }
+.footer-text {
+    color: #6c757d;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Ensure the body/html takes full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Make the main container flex to push footer down */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Make the main content area grow to fill available space */
+.container, main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensure panels and other content don't overlap footer */
+.panel {
+    margin-bottom: 20px; /* Add some space before footer */
+}
 
 /* Responsive */
 @media (max-width: 768px) {
