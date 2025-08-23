@@ -276,3 +276,35 @@ def module1_check():
 	return render_template("module1.html", item=item, results=results, all_correct=all_correct, settings=settings)
 
 
+@module1_bp.route("/api/correct-answers", methods=["GET"])
+def get_correct_answers():
+    """API endpoint to get correct answers for the current item"""
+    item_id = request.args.get('item_id')
+    if not item_id:
+        return {"error": "item_id parameter is required"}, 400
+    
+    try:
+        item_id = int(item_id)
+        item = engine[item_id]
+        settings = get_user_settings()
+        
+        # Build correct answers based on checking styles
+        correct_answers = {}
+        for style in settings["checking_styles"]:
+            if style == "hiragana":
+                correct_answers["user_hiragana_romaji"] = item.hiragana
+            elif style == "romaji":
+                correct_answers["user_hiragana_romaji"] = item.romaji
+            elif style == "kanji":
+                correct_answers["user_kanji"] = item.kanji
+            elif style == "katakana":
+                correct_answers["user_katakana"] = item.katakana
+            elif style == "english":
+                correct_answers["user_english"] = item.english
+        
+        return correct_answers
+    
+    except (ValueError, IndexError):
+        return {"error": "Invalid item_id"}, 400
+
+
