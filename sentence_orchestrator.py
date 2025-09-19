@@ -33,6 +33,7 @@ class SentenceOrchestrator:
     def __init__(self, data_dir: str = "tmp"):
         self.data_dir = Path(data_dir)
         self.word_generator = WordSeedGenerator(data_dir)
+        self.show_prompt = False
         
         # Load comprehensive data
         self.vocab_data = []
@@ -42,6 +43,11 @@ class SentenceOrchestrator:
         
         self._load_comprehensive_data()
         self._build_enhanced_themes()
+        
+        # LLM server management
+        self.llm_server_process = None
+        self.llm_server_port = 8080
+        self.llm_server_ready = False
     
     def _load_comprehensive_data(self):
         """Load all data files from tmp directory"""
@@ -116,63 +122,10 @@ class SentenceOrchestrator:
                 if self._matches_theme(theme_name, tags, "", "", adj.get("english", "")):
                     theme_words["adjectives"].append(adj["english"])
             
-            # Add fallback words if categories are empty
-            self._add_fallback_words(theme_name, theme_words)
-            
             enhanced_themes[theme_name] = theme_words
         
         # Update the word generator's themes
         self.word_generator.theme_words = enhanced_themes
-    
-    def _add_fallback_words(self, theme_name: str, theme_words: Dict[str, List[str]]):
-        """Add fallback words if categories are empty"""
-        fallback_words = {
-            "school": {
-                "places": ["school", "classroom", "library"],
-                "people": ["student", "teacher", "friend"],
-                "objects": ["book", "pen", "notebook"],
-                "activities": ["study", "read", "write", "learn"],
-                "verbs": ["study", "read", "write", "learn"],
-                "adjectives": ["difficult", "easy", "interesting"]
-            },
-            "shopping": {
-                "places": ["store", "market", "mall"],
-                "people": ["customer", "clerk", "friend"],
-                "objects": ["money", "bag", "clothes", "food"],
-                "activities": ["buy", "pay", "choose"],
-                "verbs": ["buy", "pay", "choose", "shop"],
-                "adjectives": ["expensive", "cheap", "good"]
-            },
-            "hangout": {
-                "places": ["park", "cafe", "restaurant"],
-                "people": ["friend", "family", "group"],
-                "objects": ["coffee", "food", "phone"],
-                "activities": ["meet", "eat", "drink", "talk"],
-                "verbs": ["meet", "eat", "drink", "talk"],
-                "adjectives": ["fun", "interesting", "good"]
-            },
-            "home": {
-                "places": ["house", "room", "kitchen"],
-                "people": ["family", "mother", "father"],
-                "objects": ["bed", "table", "TV", "food"],
-                "activities": ["sleep", "cook", "clean", "relax"],
-                "verbs": ["sleep", "cook", "clean", "relax"],
-                "adjectives": ["quiet", "comfortable", "warm"]
-            },
-            "travel": {
-                "places": ["station", "airport", "hotel"],
-                "people": ["traveler", "guide", "friend"],
-                "objects": ["ticket", "bag", "camera"],
-                "activities": ["go", "visit", "explore", "travel"],
-                "verbs": ["go", "visit", "explore", "travel"],
-                "adjectives": ["interesting", "beautiful", "far"]
-            }
-        }
-        
-        fallback = fallback_words.get(theme_name, {})
-        for category, words in theme_words.items():
-            if not words and category in fallback:
-                words.extend(fallback[category])
     
     def _matches_theme(self, theme: str, tags: List[str], category: str, entity: str, english: str) -> bool:
         """Check if a word matches a theme"""
@@ -188,6 +141,80 @@ class SentenceOrchestrator:
         text_to_check = " ".join(tags + [category, entity, english]).lower()
         
         return any(keyword in text_to_check for keyword in keywords)
+    
+    def _start_llm_server(self):
+        """Start the LLM server in the background"""
+        if self.llm_server_process is not None:
+            return  # Already running
+        
+        project_root = Path(__file__).parent
+        models_dir = project_root / "models"
+        llama_server_path = models_dir / "llama.cpp" / "build" / "bin" / "llama-server"
+        model_path = models_dir / "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
+        
+        # Check if files exist
+        if not llama_server_path.exists():
+            raise FileNotFoundError(f"llama-server not found at {llama_server_path}")
+        
+        if not model_path.exists():
+            raise FileNotFoundError(f"Model not found at {model_path}")
+        
+        # Start server in background
+        cmd = [
+            str(llama_server_path),
+            "-m", str(model_path),
+            "--host", "127.0.0.1",
+            "--port", str(self.llm_server_port),
+            "--no-webui",  # Disable web UI for faster startup
+            "--threads", "4"
+        ]
+        
+        try:
+            self.llm_server_process = subprocess.Popen(
+                cmd, 
+                stdout=subprocess.PIPE, 
+                stderr=subprocess.PIPE,
+                text=True
+            )
+            
+            # Wait for server to start and check if it's ready
+            import time
+            import requests
+            
+            for attempt in range(10):  # Try for up to 10 seconds
+                time.sleep(1)
+                
+                # Check if process is still running
+                if self.llm_server_process.poll() is not None:
+                    # Process died, get error output
+                    stdout, stderr = self.llm_server_process.communicate()
+                    raise RuntimeError(f"LLM server process died. Stderr: {stderr}")
+                
+                # Try to connect to the server
+                try:
+                    response = requests.get(f"http://127.0.0.1:{self.llm_server_port}/health", timeout=1)
+                    if response.status_code == 200:
+                        self.llm_server_ready = True
+                        print(f"✅ LLM server started on port {self.llm_server_port}")
+                        return
+                except requests.exceptions.RequestException:
+                    continue  # Server not ready yet
+            
+            # If we get here, server didn't start in time
+            raise RuntimeError("LLM server failed to start within 10 seconds")
+                
+        except Exception as e:
+            self.llm_server_process = None
+            raise RuntimeError(f"Failed to start LLM server: {e}")
+    
+    def _stop_llm_server(self):
+        """Stop the LLM server"""
+        if self.llm_server_process is not None:
+            self.llm_server_process.terminate()
+            self.llm_server_process.wait()
+            self.llm_server_process = None
+            self.llm_server_ready = False
+            print("🛑 LLM server stopped")
     
     def generate_sentence(self, theme: str, use_llm: bool = True) -> SentenceResult:
         """Generate a complete sentence with word seed and LLM processing"""
@@ -217,13 +244,15 @@ class SentenceOrchestrator:
     
     def _call_enhanced_llm(self, word_seed: WordSeed) -> str:
         """Call LLM with enhanced prompt including grammar context"""
-        # Create enhanced prompt with grammar rules
+        # First generate a basic Japanese sentence using rule-based approach
+        basic_sentence = self._generate_rule_based_sentence(word_seed)
+        
+        # Then ask LLM to improve it (similar to robust_llm_integration.py)
         grammar_context = self._get_grammar_context(word_seed.theme)
         
-        enhanced_prompt = f"""You are a Japanese language expert. Create a natural Japanese sentence using these words.
-
+        enhanced_prompt = f"""Improve this Japanese sentence to make it more natural:
+Words to incorporate: {', '.join(word_seed.words)}
 Theme: {word_seed.theme}
-Words: {', '.join(word_seed.words)}
 
 Grammar Guidelines:
 {grammar_context}
@@ -231,13 +260,104 @@ Grammar Guidelines:
 Requirements:
 - Use N5/N4 level Japanese
 - Make it sound natural and conversational
-- Use appropriate particles (は, が, を, に, で, etc.)
 - Include proper verb conjugations
 - Keep it simple but grammatically correct
 
-Output only the Japanese sentence."""
+Provide a better version in this format:
+Japanese: [improved sentence]"""
 
-        return self.word_generator._call_local_llm(enhanced_prompt)
+        # Show prompt if requested
+        if self.show_prompt:
+            print("\n" + "="*60)
+            print("LLM PROMPT:")
+            print("="*60)
+            print(enhanced_prompt)
+            print("="*60)
+            print("END PROMPT")
+            print("="*60 + "\nNow response:")
+
+        try:
+            response = self._call_llm_improved(enhanced_prompt)
+            
+            # Parse the response to extract Japanese sentence
+            import re
+            
+            # Try different patterns that the LLM might use
+            patterns = [
+                r'Japanese:\s*(.+)',
+                r'N5/N4:\s*(.+)',
+                r'([あ-んア-ン一-龯]+[。！？])',  # Japanese sentence ending with punctuation
+                r'([あ-んア-ン一-龯]+)',  # Any Japanese text
+            ]
+            
+            for pattern in patterns:
+                match = re.search(pattern, response)
+                if match:
+                    japanese_text = match.group(1).strip()
+                    # Clean up the text
+                    japanese_text = re.sub(r'[。！？]+$', '。', japanese_text)  # Ensure ends with period
+                    return japanese_text
+            
+            # If no pattern matches, fallback to basic sentence
+            return basic_sentence
+                
+        except Exception as e:
+            print(f"LLM enhancement failed: {e}")
+            # Fallback to basic sentence
+            return basic_sentence
+    
+    def _call_llm_improved(self, prompt: str) -> str:
+        """Call LLM using command line approach with better error handling"""
+        project_root = Path(__file__).parent
+        models_dir = project_root / "models"
+        llama_cli_path = models_dir / "llama.cpp" / "build" / "bin" / "llama-cli"
+        model_path = models_dir / "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
+        
+        # Check if files exist
+        if not llama_cli_path.exists():
+            raise FileNotFoundError(f"llama-cli not found at {llama_cli_path}")
+        
+        if not model_path.exists():
+            raise FileNotFoundError(f"Model not found at {model_path}")
+        
+        # Use the same command structure as robust_llm_integration.py
+        cmd = [
+            str(llama_cli_path),
+            "-m", str(model_path),
+            "-p", prompt,  # Use -p instead of -f
+            "-n", "100",  # Shorter responses work better
+            "--temp", "0.7",
+            "--top-p", "0.9",
+            "--no-conversation"
+        ]
+        
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            
+            if result.returncode == 0:
+                # Clean up the response
+                response = result.stdout.strip()
+                
+                # Debug: show the raw response
+                if self.show_prompt:
+                    print(f"Raw LLM response: {repr(response)}")
+                
+                # Remove the prompt from the response
+                if prompt in response:
+                    response = response.replace(prompt, "").strip()
+                
+                # Check if response contains only [end of text] or similar markers
+                if not response or response in ["[end of text]", "end of text", ""]:
+                    raise RuntimeError("LLM could not generate Japanese content - model may not support Japanese generation")
+                
+                return response
+            else:
+                raise RuntimeError(f"LLM execution failed: {result.stderr}")
+                
+        except subprocess.TimeoutExpired:
+            raise RuntimeError("LLM generation timed out")
+        except Exception as e:
+            raise RuntimeError(f"Error calling LLM: {e}")
     
     def _get_grammar_context(self, theme: str) -> str:
         """Get relevant grammar rules for the theme"""
@@ -320,6 +440,10 @@ Output only the Japanese sentence."""
                 print(f"Grammar: {result.grammar_notes}")
             print(f"Level: {result.difficulty_level}")
             print("-" * 50)
+    
+    def cleanup(self):
+        """Clean up resources"""
+        self._stop_llm_server()
 
 
 def main():
@@ -356,8 +480,15 @@ def main():
         help="Directory containing comprehensive data files (default: tmp)"
     )
     
+    parser.add_argument(
+        "--show-prompt",
+        action="store_true",
+        help="Show the LLM prompt for testing with external LLMs"
+    )
+    
     args = parser.parse_args()
     
+    orchestrator = None
     try:
         # Create orchestrator
         orchestrator = SentenceOrchestrator(args.data_dir)
@@ -368,6 +499,9 @@ def main():
             print("(Using LLM for sentence generation)")
         else:
             print("(Using rule-based generation)")
+        
+        # Set show_prompt flag for orchestrator
+        orchestrator.show_prompt = args.show_prompt
         
         results = orchestrator.generate_multiple_sentences(
             args.theme, 
@@ -391,6 +525,10 @@ def main():
     except Exception as e:
         print(f"Unexpected error: {e}")
         exit(1)
+    finally:
+        # Clean up resources
+        if orchestrator:
+            orchestrator.cleanup()
 
 
 if __name__ == "__main__":
