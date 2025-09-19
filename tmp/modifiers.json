@@ -17,9 +17,9 @@
       },
       "none": {
         "probability": 0.4,
-        "scope": all
+        "scope": "all"
       },
-    "adverb_manner": {
+      "adverb_manner": {
             "examples": ["ゆっくり", "はやく"],
             "probability": 0.3,
             "position": "before_verb"
@@ -39,4 +39,5 @@
             "probability": 0.2,
             "position": "sentence_initial"
         }
-  }
+    }
+}

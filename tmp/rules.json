@@ -22,11 +22,141 @@
         "structure": "A を Verb",
         "slots": {
             "A": ["person", "animal", "thing", "concept", "group", "place", "event", "phenomenon"],
-            "Verb": { "depends_on": "A", "options": "[A].compatible_verbs"},
+            "Verb": { "depends_on": "A", "options": "[A].compatible_verbs"}
         },
         "particles": ["を"],
         "extensions": ["ます", "ません", "ました", "ませんでした"]
-        }
+        },
+  "motion": {
+      "structure": "A は Place に Verb",
+      "slots": {
+          "A": ["person", "thing", "concept", "group"],
+          "Place": ["place"],
+          "Verb": { "depends_on": "A", "options": "[A].compatible_verbs" }
+      },
+      "particles": ["は", "に"],
+      "extensions": ["ます", "ません", "ました", "ませんでした"]
+  },
+  "action_at_location": {
+      "structure": "A で Verb",
+      "slots": {
+          "A": ["location", "thing"],
+          "Verb": { "depends_on": "A", "options": "[A].compatible_verbs" }
+      },
+      "particles": ["で"],
+      "extensions": ["ます", "ません", "ました", "ませんでした"]
+  },
+  "destination": {
+      "structure": "A へ/に Verb",
+      "slots": {
+          "A": ["place", "thing"],
+          "Verb": { "depends_on": "A", "options": "[A].compatible_verbs" }
+      },
+      "particles": ["へ", "に"],
+      "extensions": ["ます", "ません", "ました", "ませんでした"]
+  },
+  "possession": {
+      "structure": "A の B",
+      "slots": {
+          "A": ["person", "thing"],
+          "B": ["thing"]
+      },
+      "particles": ["の"],
+      "extensions": []
+  },
+  "relation": {
+      "structure": "A の B",
+      "slots": {
+          "A": ["thing", "concept"],
+          "B": ["thing"]
+      },
+      "particles": ["の"],
+      "extensions": []
+  },
+  "description": {
+      "structure": "A は Adj です",
+      "slots": {
+          "A": ["thing"],
+          "Adj": ["i-adj", "na-adj"]
+      },
+      "particles": ["は", "です"],
+      "extensions": ["くない", "でしょう"]
+  },
+  "attribution": {
+      "structure": "Adj + Noun",
+      "slots": {
+          "Adj": ["i-adj", "na-adj"],
+          "Noun": ["thing"]
+      },
+      "particles": [],
+      "extensions": []
+  },
+  "denial": {
+      "structure": "Negation",
+      "slots": {
+          "Verb": ["any"],
+          "Adj": ["i-adj", "na-adj"],
+          "Noun": ["thing"]
+      },
+      "particles": ["ない", "ではない"],
+      "extensions": ["ません"]
+  },
+  "contradiction": {
+      "structure": "Negation",
+      "slots": {
+          "Verb": ["any"],
+          "Adj": ["i-adj", "na-adj"],
+          "Noun": ["thing"]
+      },
+      "particles": ["ない", "ではない"],
+      "extensions": ["ません"]
+  },
+  "inquiry": {
+      "structure": "Question",
+      "slots": {
+          "clause": ["any"]
+      },
+      "particles": ["か", "Wh-words"],
+      "extensions": ["でしょう", "だろう"]
+  },
+  "existence": {
+      "structure": "A が Verb",
+      "slots": {
+          "A": ["thing", "person"],
+          "Verb": ["existence", "stative", "motion"]
+      },
+      "particles": ["が"],
+      "extensions": ["Wh-questions"]
+  },
+  "subject_focus": {
+      "structure": "A が Verb",
+      "slots": {
+          "A": ["thing", "person"],
+          "Verb": ["existence", "stative", "motion"]
+      },
+      "particles": ["が"],
+      "extensions": ["Wh-questions"]
+  },
+  "property": {
+      "structure": "A は B が Adj",
+      "slots": {
+          "A": ["thing"],
+          "B": ["thing"],
+          "Adj": ["i-adj", "na-adj"]
+      },
+      "particles": ["は", "が"],
+      "extensions": ["くない"]
+  },
+  "condition": {
+      "structure": "A は B が Adj",
+      "slots": {
+          "A": ["thing"],
+          "B": ["thing"],
+          "Adj": ["i-adj", "na-adj"]
+      },
+      "particles": ["は", "が"],
+      "extensions": ["くない"]
+  }
 
 
   }
