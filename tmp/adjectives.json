@@ -397,5 +397,207 @@
     ],
     "jlpt_level": "n4",
     "priority_group": "p3"
+  },
+  {
+    "english": "good",
+    "kanji": "いい",
+    "kana": "いい",
+    "hiragana": "いい",
+    "romaji": "ii",
+    "entity_tags": [
+      "thing",
+      "person",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "bad",
+    "kanji": "悪い",
+    "kana": "わるい",
+    "hiragana": "わるい",
+    "romaji": "warui",
+    "entity_tags": [
+      "thing",
+      "person",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "big, large",
+    "kanji": "大きい",
+    "kana": "おおきい",
+    "hiragana": "おおきい",
+    "romaji": "ookii",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "size"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "small, little",
+    "kanji": "小さい",
+    "kana": "ちいさい",
+    "hiragana": "ちいさい",
+    "romaji": "chiisai",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "size"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "hot",
+    "kanji": "熱い",
+    "kana": "あつい",
+    "hiragana": "あつい",
+    "romaji": "atsui",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "temperature"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "cold",
+    "kanji": "寒い",
+    "kana": "さむい",
+    "hiragana": "さむい",
+    "romaji": "samui",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "temperature"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "interesting",
+    "kanji": "面白い",
+    "kana": "おもしろい",
+    "hiragana": "おもしろい",
+    "romaji": "omoshiroi",
+    "entity_tags": [
+      "thing",
+      "concept"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "boring",
+    "kanji": "つまらない",
+    "kana": "つまらない",
+    "hiragana": "つまらない",
+    "romaji": "tsumaranai",
+    "entity_tags": [
+      "thing",
+      "concept"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "expensive",
+    "kanji": "高い",
+    "kana": "たかい",
+    "hiragana": "たかい",
+    "romaji": "takai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "price"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "cheap",
+    "kanji": "安い",
+    "kana": "やすい",
+    "hiragana": "やすい",
+    "romaji": "yasui",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "price"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "fast",
+    "kanji": "速い",
+    "kana": "はやい",
+    "hiragana": "はやい",
+    "romaji": "hayai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "speed"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "slow",
+    "kanji": "遅い",
+    "kana": "おそい",
+    "hiragana": "おそい",
+    "romaji": "osoi",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "speed"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
   }
 ]

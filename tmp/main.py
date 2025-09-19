@@ -1,5 +1,6 @@
 import json
 import random
+import argparse
 from dataclasses import dataclass
 from typing import Dict, List, Any, Optional, Union, Tuple
 from pathlib import Path
@@ -105,6 +106,12 @@ class JapaneseSentenceGenerator:
             return None
             
         return random.choice(candidates)
+    
+    def _pick_adjective_sample(self) -> Optional[Dict[str, Any]]:
+        """Pick a random adjective from the adjectives list"""
+        if not self.adjectives:
+            return None
+        return random.choice(self.adjectives)
     
     def weighted_random_choice(self, choices: List[Any], weights: List[float] = None) -> Any:
         """Apply probabilities for weighted random selection"""
@@ -691,8 +698,8 @@ class JapaneseSentenceGenerator:
                 
                 # Handle special cases
                 if slot_name == "Adj":
-                    # Get compatible adjective with relationship context
-                    adjective = self.get_compatible_adjective(entity_type, relationship)
+                    # For adjectives, pick from the adjectives list directly
+                    adjective = self._pick_adjective_sample()
                     if adjective:
                         components[slot_name] = adjective
                     else:
@@ -931,7 +938,7 @@ class JapaneseSentenceGenerator:
         return True
     
     def _check_description_coherence(self, components: Dict[str, Any]) -> bool:
-        """Check if description relationship makes logical sense"""
+        """Check if description relationship makes logical sense with semantic intelligence"""
         if "A" not in components or "Adj" not in components:
             return False
         
@@ -942,22 +949,137 @@ class JapaneseSentenceGenerator:
             return False
         
         described_entity = described.get("entity", "thing")
+        described_tags = described.get("tags", [])
+        described_english = described.get("english", "").lower()
         adj_tags = adjective.get("tags", [])
+        adj_english = adjective.get("english", "").lower()
         
-        # Check if adjective tags are appropriate for the entity
-        if described_entity == "person" and any(tag in ["people", "feelings", "description"] for tag in adj_tags):
-            return True
+        # Define semantic appropriateness rules for specific adjective-noun combinations
+        semantic_rules = {
+            # Adjectives that only apply to people
+            "famous": ["person", "place", "concept"],  # Famous people, places, concepts - NOT things
+            "popular": ["person", "place", "concept"],  # Popular people, places, concepts - NOT things
+            "intelligent": ["person", "animal"],  # Intelligent people/animals - NOT things
+            "kind": ["person", "animal"],  # Kind people/animals - NOT things
+            "brave": ["person", "animal"],  # Brave people/animals - NOT things
+            "honest": ["person"],  # Honest people - NOT things/animals
+            "patient": ["person"],  # Patient people - NOT things/animals
+            "creative": ["person"],  # Creative people - NOT things/animals
+            "talented": ["person"],  # Talented people - NOT things/animals
+            "wise": ["person"],  # Wise people - NOT things/animals
+            
+            # Adjectives that only apply to things/objects
+            "expensive": ["thing"],  # Expensive things - NOT people/animals
+            "cheap": ["thing"],  # Cheap things - NOT people/animals
+            "broken": ["thing"],  # Broken things - NOT people/animals
+            "new": ["thing"],  # New things - NOT people/animals
+            "old": ["thing", "person", "animal", "place"],  # Can apply to many things
+            "heavy": ["thing"],  # Heavy things - NOT people/animals (usually)
+            "light": ["thing"],  # Light things - NOT people/animals (usually)
+            "soft": ["thing"],  # Soft things - NOT people/animals (usually)
+            "hard": ["thing"],  # Hard things - NOT people/animals (usually)
+            "sharp": ["thing"],  # Sharp things - NOT people/animals (usually)
+            "smooth": ["thing"],  # Smooth things - NOT people/animals (usually)
+            "rough": ["thing"],  # Rough things - NOT people/animals (usually)
+            
+            # Adjectives that only apply to places/spatial concepts
+            "crowded": ["place"],  # Crowded places - NOT people/things
+            "quiet": ["place"],  # Quiet places - NOT people/things
+            "noisy": ["place"],  # Noisy places - NOT people/things
+            "beautiful": ["place", "person", "thing"],  # Can apply to many things
+            "scenic": ["place"],  # Scenic places - NOT people/things
+            "remote": ["place"],  # Remote places - NOT people/things
+            "urban": ["place"],  # Urban places - NOT people/things
+            "rural": ["place"],  # Rural places - NOT people/things
+            "far": ["place"],  # Far places - NOT people/things/animals
+            "distant": ["place"],  # Distant places - NOT people/things/animals
+            "near": ["place"],  # Near places - NOT people/things/animals
+            "close": ["place"],  # Close places - NOT people/things/animals
+            
+            # Adjectives that only apply to food/drink
+            "delicious": ["thing"],  # Delicious food - NOT people/places
+            "spicy": ["thing"],  # Spicy food - NOT people/places
+            "sweet": ["thing"],  # Sweet food - NOT people/places
+            "bitter": ["thing"],  # Bitter food - NOT people/places
+            "salty": ["thing"],  # Salty food - NOT people/places
+            "fresh": ["thing"],  # Fresh food - NOT people/places
+            "sour": ["thing"],  # Sour food - NOT people/places/time
+            "hot": ["thing", "concept"],  # Hot food/weather - NOT people/animals/time
+            "cold": ["thing", "concept"],  # Cold food/weather - NOT people/animals/time
+            
+            # Adjectives that only apply to concepts/abstract things
+            "important": ["concept", "thing"],  # Important concepts/things - NOT people/animals
+            "necessary": ["concept", "thing"],  # Necessary concepts/things - NOT people/animals
+            "useful": ["concept", "thing"],  # Useful concepts/things - NOT people/animals
+            "difficult": ["concept", "thing"],  # Difficult concepts/things - NOT people/animals
+            "easy": ["concept", "thing"],  # Easy concepts/things - NOT people/animals
+            "simple": ["concept", "thing"],  # Simple concepts/things - NOT people/animals
+            "interesting": ["concept", "thing", "person"],  # Can apply to many things
+            "boring": ["concept", "thing", "person"],  # Can apply to many things
+            
+            # Adjectives that only apply to time concepts
+            "early": ["concept"],  # Early time - NOT people/things/places
+            "late": ["concept"],  # Late time - NOT people/things/places
+            "fast": ["concept", "thing"],  # Fast time/things - NOT people/animals
+            "slow": ["concept", "thing"],  # Slow time/things - NOT people/animals
+            
+            # Adjectives that only apply to emotions/feelings (for people/animals)
+            "fun": ["person", "concept"],  # Fun people/concepts - NOT things/places
+            "enjoyable": ["person", "concept"],  # Enjoyable people/concepts - NOT things/places
+            "sad": ["person", "animal"],  # Sad people/animals - NOT things/places
+            "happy": ["person", "animal"],  # Happy people/animals - NOT things/places
+            "angry": ["person", "animal"],  # Angry people/animals - NOT things/places
+            "excited": ["person", "animal"],  # Excited people/animals - NOT things/places
+        }
         
-        if described_entity == "thing" and any(tag in ["description", "feelings", "taste", "quantity", "study", "daily life"] for tag in adj_tags):
-            return True
+        # Check specific semantic rules first
+        if adj_english in semantic_rules:
+            allowed_entities = semantic_rules[adj_english]
+            if described_entity not in allowed_entities:
+                return False
         
-        if described_entity == "place" and any(tag in ["places", "description", "feelings"] for tag in adj_tags):
-            return True
+        # Additional semantic checks based on entity type and tags
+        if described_entity == "person":
+            # People can be described by personality, appearance, emotional, or general descriptive adjectives
+            if not any(tag in ["people", "feelings", "description", "appearance", "personality"] for tag in adj_tags):
+                # Check if it's a general descriptive adjective that could apply to people
+                if adj_english in ["good", "bad", "big", "small", "young", "old", "beautiful", "ugly"]:
+                    return True
+                return False
         
-        if described_entity == "animal" and any(tag in ["description", "feelings"] for tag in adj_tags):
-            return True
+        elif described_entity == "thing":
+            # Things can be described by physical, functional, or general descriptive adjectives
+            if not any(tag in ["description", "feelings", "taste", "quantity", "study", "daily life", "physical", "functional"] for tag in adj_tags):
+                # Check if it's a general descriptive adjective that could apply to things
+                if adj_english in ["good", "bad", "big", "small", "new", "old", "beautiful", "ugly", "interesting", "boring"]:
+                    return True
+                return False
         
-        return False
+        elif described_entity == "place":
+            # Places can be described by spatial, environmental, or general descriptive adjectives
+            if not any(tag in ["places", "description", "feelings", "spatial", "environmental"] for tag in adj_tags):
+                # Check if it's a general descriptive adjective that could apply to places
+                if adj_english in ["good", "bad", "big", "small", "beautiful", "ugly", "interesting", "boring", "quiet", "noisy"]:
+                    return True
+                return False
+        
+        elif described_entity == "animal":
+            # Animals can be described by behavioral, physical, or general descriptive adjectives
+            if not any(tag in ["description", "feelings", "behavioral", "physical"] for tag in adj_tags):
+                # Check if it's a general descriptive adjective that could apply to animals
+                if adj_english in ["good", "bad", "big", "small", "beautiful", "ugly", "interesting", "boring", "kind", "brave"]:
+                    return True
+                return False
+        
+        elif described_entity == "concept":
+            # Concepts can be described by abstract, intellectual, or general descriptive adjectives
+            if not any(tag in ["description", "feelings", "abstract", "intellectual", "study"] for tag in adj_tags):
+                # Check if it's a general descriptive adjective that could apply to concepts
+                if adj_english in ["good", "bad", "important", "interesting", "boring", "difficult", "easy"]:
+                    return True
+                return False
+        
+        return True
     
     def _check_identity_coherence(self, components: Dict[str, Any]) -> bool:
         """Check if identity relationship makes logical sense"""
@@ -1035,30 +1157,101 @@ class JapaneseSentenceGenerator:
         return True
 
 def main():
-    """Main function to demonstrate sentence generation"""
+    """Main function to demonstrate sentence generation with command-line arguments"""
+    parser = argparse.ArgumentParser(description='Japanese Sentence Generator with Semantic Intelligence')
+    parser.add_argument('--theme', '-t', type=str, help='Specific theme to test (e.g., identity, motion, description)')
+    parser.add_argument('--count', '-c', type=int, default=1, help='Number of sentences to generate (default: 1)')
+    parser.add_argument('--list-themes', '-l', action='store_true', help='List all available themes')
+    parser.add_argument('--debug', '-d', action='store_true', help='Show detailed component information')
+    parser.add_argument('--coherent-only', action='store_true', help='Only show coherent sentences')
+    
+    args = parser.parse_args()
+    
     generator = JapaneseSentenceGenerator()
     
-    # Generate sentences for different themes
-    themes = ["identity", "motion", "action_with_object", "description", "possession"]
+    # Get all available themes
+    available_themes = list(generator.rules.keys())
+    
+    if args.list_themes:
+        print("Available themes:")
+        for theme in available_themes:
+            structure = generator.rules[theme]["structure"]
+            print(f"  {theme}: {structure}")
+        return
+    
+    # Determine which theme(s) to use
+    if args.theme:
+        if args.theme not in available_themes:
+            print(f"Error: Theme '{args.theme}' not found.")
+            print(f"Available themes: {', '.join(available_themes)}")
+            return
+        themes_to_test = [args.theme]
+    else:
+        themes_to_test = available_themes
     
     print("Japanese Sentence Generation Examples:")
     print("=" * 50)
     
-    theme = random.choice(themes)
-    try:
-        sentence = generator.generate_sentence(theme)
-        is_coherent, issues = generator.check_coherence(sentence)
+    sentences_generated = 0
+    attempts = 0
+    max_attempts = args.count * 10  # Prevent infinite loops
+    
+    while sentences_generated < args.count and attempts < max_attempts:
+        attempts += 1
+        theme = random.choice(themes_to_test)
         
-        print(f"\nTheme: {theme}")
-        print(f"Structure: {sentence.structure}")
-        print(f"Japanese: {sentence.japanese}")
-        print(f"English: {sentence.english}")
-        print(f"Coherent: {'✓ YES' if is_coherent else '✗ NO'}")
-        if issues:
-            print(f"Issues: {', '.join(issues)}")
-        # print(f"Components: {sentence.components}")
-    except Exception as e:
-        print(f"Error generating sentence for theme '{theme}': {e}")
+        try:
+            sentence = generator.generate_sentence(theme)
+            is_coherent, issues = generator.check_coherence(sentence)
+            
+            # Skip incoherent sentences if coherent-only is requested
+            if args.coherent_only and not is_coherent:
+                continue
+            
+            sentences_generated += 1
+            
+            # Enhanced structured display
+            print(f"\n{'='*60}")
+            print(f"Structure: {sentence.structure}")
+            print(f"Theme: {theme}")
+            print()
+            
+            print("Components:")
+            for key, component in sentence.components.items():
+                if isinstance(component, dict):
+                    english = component.get('english', '[NO ENGLISH]')
+                    hiragana = component.get('hiragana', component.get('kana', '[NO KANA]'))
+                    print(f"  {key}: {english} | {hiragana}")
+                else:
+                    print(f"  {key}: {component}")
+            
+            print()
+            print(f"Japanese: {sentence.japanese}")
+            print(f"English: {sentence.english}")
+            print()
+            
+            print("Checks:")
+            status = "✓ PASS" if is_coherent else "✗ FAIL"
+            print(f"  Coherence: {status}")
+            if issues:
+                for issue in issues:
+                    print(f"  Issue: {issue}")
+            else:
+                print("  No issues detected")
+            
+            if args.debug:
+                print()
+                print("Debug Info:")
+                print(f"  Particles: {sentence.particles}")
+                print(f"  Extensions: {sentence.extensions}")
+                print(f"  Relationship: {generator.structure_relationships.get(sentence.structure, 'Unknown')}")
+                
+        except Exception as e:
+            print(f"Error generating sentence for theme '{theme}': {e}")
+    
+    if sentences_generated == 0 and args.coherent_only:
+        print(f"\nNo coherent sentences found after {attempts} attempts.")
+        print("Try running without --coherent-only to see what's being generated.")
 
 if __name__ == "__main__":
     main()

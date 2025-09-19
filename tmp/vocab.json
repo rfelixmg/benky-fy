@@ -256,11 +256,11 @@
     "category": "noun"
   },
   {
-    "english": "person (polite)",
-    "kanji": "かた",
-    "kana": "かた",
-    "hiragana": "かた",
-    "romaji": "kata",
+    "english": "child",
+    "kanji": "子供",
+    "kana": "こども",
+    "hiragana": "こども",
+    "romaji": "kodomo",
     "entity": "person",
     "semantic": [
       "profession",
@@ -269,7 +269,71 @@
       "role"
     ],
     "tags": [
-      "polite"
+      "people",
+      "family"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "noun"
+  },
+  {
+    "english": "friend",
+    "kanji": "友達",
+    "kana": "ともだち",
+    "hiragana": "ともだち",
+    "romaji": "tomodachi",
+    "entity": "person",
+    "semantic": [
+      "profession",
+      "occupation",
+      "nationality",
+      "role"
+    ],
+    "tags": [
+      "people",
+      "social"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "noun"
+  },
+  {
+    "english": "student",
+    "kanji": "学生",
+    "kana": "がくせい",
+    "hiragana": "がくせい",
+    "romaji": "gakusei",
+    "entity": "person",
+    "semantic": [
+      "profession",
+      "occupation",
+      "nationality",
+      "role"
+    ],
+    "tags": [
+      "people",
+      "school"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "noun"
+  },
+  {
+    "english": "teacher",
+    "kanji": "先生",
+    "kana": "せんせい",
+    "hiragana": "せんせい",
+    "romaji": "sensei",
+    "entity": "person",
+    "semantic": [
+      "profession",
+      "occupation",
+      "nationality",
+      "role"
+    ],
+    "tags": [
+      "people",
+      "profession"
     ],
     "jlpt_level": "n5",
     "priority_group": "p0",
@@ -458,41 +522,117 @@
     "category": "expression"
   },
   {
-    "english": "o’clock, hour",
-    "kanji": "時",
-    "kana": "じ",
-    "hiragana": "じ",
-    "romaji": "ji",
-    "entity": "thing",
+    "english": "10 o'clock",
+    "kanji": "１０時",
+    "kana": "じゅうじ",
+    "hiragana": "じゅうじ",
+    "romaji": "juuji",
+    "entity": "concept",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "time",
+      "hour"
     ],
     "tags": [
-      "time"
+      "time",
+      "hour"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p0",
+    "priority_group": "p1",
     "category": "time"
   },
   {
-    "english": "minute",
-    "kanji": "分",
-    "kana": "ふん／ぷん",
-    "hiragana": "ふん／ぷん",
-    "romaji": "fun/pun",
-    "entity": "thing",
+    "english": "3 o'clock",
+    "kanji": "３時",
+    "kana": "さんじ",
+    "hiragana": "さんじ",
+    "romaji": "sanji",
+    "entity": "concept",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "time",
+      "hour"
     ],
     "tags": [
-      "time"
+      "time",
+      "hour"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p0",
+    "priority_group": "p1",
+    "category": "time"
+  },
+  {
+    "english": "morning",
+    "kanji": "朝",
+    "kana": "あさ",
+    "hiragana": "あさ",
+    "romaji": "asa",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "period"
+    ],
+    "tags": [
+      "time",
+      "period"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "time"
+  },
+  {
+    "english": "evening",
+    "kanji": "夕方",
+    "kana": "ゆうがた",
+    "hiragana": "ゆうがた",
+    "romaji": "yuugata",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "period"
+    ],
+    "tags": [
+      "time",
+      "period"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "time"
+  },
+  {
+    "english": "5 minutes",
+    "kanji": "５分",
+    "kana": "ごふん",
+    "hiragana": "ごふん",
+    "romaji": "gofun",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "duration"
+    ],
+    "tags": [
+      "time",
+      "duration"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "time"
+  },
+  {
+    "english": "10 minutes",
+    "kanji": "１０分",
+    "kana": "じゅっぷん",
+    "hiragana": "じゅっぷん",
+    "romaji": "juppun",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "duration"
+    ],
+    "tags": [
+      "time",
+      "duration"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
     "category": "time"
   },
   {
@@ -1140,6 +1280,107 @@
     "jlpt_level": "n4",
     "priority_group": "p2",
     "category": "proper_noun"
+  },
+  {
+    "english": "restaurant",
+    "kanji": "レストラン",
+    "kana": "レストラン",
+    "hiragana": "れすとらん",
+    "romaji": "resutoran",
+    "entity": "place",
+    "semantic": [
+      "restaurant",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "restaurant",
+      "dining"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "cafe",
+    "kanji": "カフェ",
+    "kana": "カフェ",
+    "hiragana": "かふぇ",
+    "romaji": "kafe",
+    "entity": "place",
+    "semantic": [
+      "cafe",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "cafe",
+      "dining"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "bar",
+    "kanji": "バー",
+    "kana": "バー",
+    "hiragana": "ばー",
+    "romaji": "baa",
+    "entity": "place",
+    "semantic": [
+      "bar",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "bar",
+      "drinking"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "izakaya",
+    "kanji": "居酒屋",
+    "kana": "いざかや",
+    "hiragana": "いざかや",
+    "romaji": "izakaya",
+    "entity": "place",
+    "semantic": [
+      "izakaya",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "izakaya",
+      "drinking",
+      "dining"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "pub",
+    "kanji": "パブ",
+    "kana": "パブ",
+    "hiragana": "ぱぶ",
+    "romaji": "pabu",
+    "entity": "place",
+    "semantic": [
+      "pub",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "pub",
+      "drinking"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
   },
   {
     "english": "Monday",
@@ -2380,19 +2621,19 @@
     "category": "noun"
   },
   {
-    "english": "minute",
-    "kanji": "分",
-    "kana": "ふん／ぷん",
-    "hiragana": "ふん／ぷん",
-    "romaji": "fun/pun",
-    "entity": "thing",
+    "english": "15 minutes",
+    "kanji": "１５分",
+    "kana": "じゅうごふん",
+    "hiragana": "じゅうごふん",
+    "romaji": "juugofun",
+    "entity": "concept",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "time",
+      "duration"
     ],
     "tags": [
-      "time"
+      "time",
+      "duration"
     ],
     "jlpt_level": "n5",
     "priority_group": "p2",
@@ -2418,41 +2659,41 @@
     "category": "time"
   },
   {
-    "english": "a.m.",
-    "kanji": "午前",
-    "kana": "ごぜん",
-    "hiragana": "ごぜん",
-    "romaji": "gozen",
-    "entity": "thing",
+    "english": "early morning",
+    "kanji": "早朝",
+    "kana": "そうちょう",
+    "hiragana": "そうちょう",
+    "romaji": "souchou",
+    "entity": "concept",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "time",
+      "period"
     ],
     "tags": [
-      "time"
+      "time",
+      "period"
     ],
-    "jlpt_level": "n5",
+    "jlpt_level": "n4",
     "priority_group": "p2",
     "category": "time"
   },
   {
-    "english": "p.m.",
+    "english": "afternoon",
     "kanji": "午後",
     "kana": "ごご",
     "hiragana": "ごご",
     "romaji": "gogo",
-    "entity": "thing",
+    "entity": "concept",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "time",
+      "period"
     ],
     "tags": [
-      "time"
+      "time",
+      "period"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p2",
+    "priority_group": "p1",
     "category": "time"
   },
   {
@@ -2863,137 +3104,270 @@
     "category": "noun"
   },
   {
-    "english": "counter for flat objects",
-    "kanji": "～まい",
-    "kana": "まい",
-    "hiragana": "まい",
-    "romaji": "mai",
+    "english": "one sheet",
+    "kanji": "一枚",
+    "kana": "いちまい",
+    "hiragana": "いちまい",
+    "romaji": "ichimai",
     "entity": "thing",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "quantity",
+      "count"
     ],
     "tags": [
-      "counters"
+      "quantity",
+      "count"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p3",
-    "category": "counter"
+    "priority_group": "p2",
+    "category": "noun"
   },
   {
-    "english": "counter for long cylindrical",
-    "kanji": "～ほん／～ぽん／～ぼん",
-    "kana": "ほん／ぽん／ぼん",
-    "hiragana": "ほん／ぽん／ぼん",
-    "romaji": "hon/pon/bon",
+    "english": "two sheets",
+    "kanji": "二枚",
+    "kana": "にまい",
+    "hiragana": "にまい",
+    "romaji": "nimai",
     "entity": "thing",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "quantity",
+      "count"
     ],
     "tags": [
-      "counters"
+      "quantity",
+      "count"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p3",
-    "category": "counter"
+    "priority_group": "p2",
+    "category": "noun"
   },
   {
-    "english": "counter for books",
-    "kanji": "～さつ",
-    "kana": "さつ",
-    "hiragana": "さつ",
-    "romaji": "satsu",
+    "english": "one bottle",
+    "kanji": "一本",
+    "kana": "いっぽん",
+    "hiragana": "いっぽん",
+    "romaji": "ippon",
     "entity": "thing",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "quantity",
+      "count"
     ],
     "tags": [
-      "counters"
+      "quantity",
+      "count"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p3",
-    "category": "counter"
+    "priority_group": "p2",
+    "category": "noun"
   },
   {
-    "english": "counter for small animals",
-    "kanji": "～ひき／～ぴき／～びき",
-    "kana": "ひき／ぴき／びき",
-    "hiragana": "ひき／ぴき／びき",
-    "romaji": "hiki/piki/biki",
+    "english": "two bottles",
+    "kanji": "二本",
+    "kana": "にほん",
+    "hiragana": "にほん",
+    "romaji": "nihon",
     "entity": "thing",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "quantity",
+      "count"
     ],
     "tags": [
-      "counters"
+      "quantity",
+      "count"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p3",
-    "category": "counter"
+    "priority_group": "p2",
+    "category": "noun"
   },
   {
-    "english": "counter for cups/glasses",
-    "kanji": "～はい／～ぱい／～ばい",
-    "kana": "はい／ぱい／ばい",
-    "hiragana": "はい／ぱい／ばい",
-    "romaji": "hai/pai/bai",
+    "english": "one book",
+    "kanji": "一冊",
+    "kana": "いっさつ",
+    "hiragana": "いっさつ",
+    "romaji": "issatsu",
     "entity": "thing",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "quantity",
+      "count"
     ],
     "tags": [
-      "counters"
+      "quantity",
+      "count"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p3",
-    "category": "counter"
+    "priority_group": "p2",
+    "category": "noun"
   },
   {
-    "english": "counter for people",
-    "kanji": "～にん",
-    "kana": "にん",
-    "hiragana": "にん",
-    "romaji": "nin",
+    "english": "two books",
+    "kanji": "二冊",
+    "kana": "にさつ",
+    "hiragana": "にさつ",
+    "romaji": "nisatsu",
     "entity": "thing",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "quantity",
+      "count"
     ],
     "tags": [
-      "counters"
+      "quantity",
+      "count"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p3",
-    "category": "counter"
+    "priority_group": "p2",
+    "category": "noun"
   },
   {
-    "english": "general counter",
-    "kanji": "～つ",
-    "kana": "つ",
-    "hiragana": "つ",
-    "romaji": "tsu",
+    "english": "one animal",
+    "kanji": "一匹",
+    "kana": "いっぴき",
+    "hiragana": "いっぴき",
+    "romaji": "ippiki",
     "entity": "thing",
     "semantic": [
-      "category",
-      "material",
-      "type"
+      "quantity",
+      "count"
     ],
     "tags": [
-      "counters"
+      "quantity",
+      "count"
     ],
     "jlpt_level": "n5",
-    "priority_group": "p3",
-    "category": "counter"
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "two animals",
+    "kanji": "二匹",
+    "kana": "にひき",
+    "hiragana": "にひき",
+    "romaji": "nihiki",
+    "entity": "thing",
+    "semantic": [
+      "quantity",
+      "count"
+    ],
+    "tags": [
+      "quantity",
+      "count"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "one cup",
+    "kanji": "一杯",
+    "kana": "いっぱい",
+    "hiragana": "いっぱい",
+    "romaji": "ippai",
+    "entity": "thing",
+    "semantic": [
+      "quantity",
+      "count"
+    ],
+    "tags": [
+      "quantity",
+      "count"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "two cups",
+    "kanji": "二杯",
+    "kana": "にはい",
+    "hiragana": "にはい",
+    "romaji": "nihai",
+    "entity": "thing",
+    "semantic": [
+      "quantity",
+      "count"
+    ],
+    "tags": [
+      "quantity",
+      "count"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "one person",
+    "kanji": "一人",
+    "kana": "ひとり",
+    "hiragana": "ひとり",
+    "romaji": "hitori",
+    "entity": "person",
+    "semantic": [
+      "quantity",
+      "count"
+    ],
+    "tags": [
+      "quantity",
+      "count"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "two people",
+    "kanji": "二人",
+    "kana": "ふたり",
+    "hiragana": "ふたり",
+    "romaji": "futari",
+    "entity": "person",
+    "semantic": [
+      "quantity",
+      "count"
+    ],
+    "tags": [
+      "quantity",
+      "count"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "one thing",
+    "kanji": "一つ",
+    "kana": "ひとつ",
+    "hiragana": "ひとつ",
+    "romaji": "hitotsu",
+    "entity": "thing",
+    "semantic": [
+      "quantity",
+      "count"
+    ],
+    "tags": [
+      "quantity",
+      "count"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "two things",
+    "kanji": "二つ",
+    "kana": "ふたつ",
+    "hiragana": "ふたつ",
+    "romaji": "futatsu",
+    "entity": "thing",
+    "semantic": [
+      "quantity",
+      "count"
+    ],
+    "tags": [
+      "quantity",
+      "count"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
   },
   {
     "english": "hakone (place)",

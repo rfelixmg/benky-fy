@@ -40,7 +40,7 @@
   "action_at_location": {
       "structure": "A で Verb",
       "slots": {
-          "A": ["location", "thing"],
+          "A": ["place", "thing"],
           "Verb": { "depends_on": "A", "options": "[A].compatible_verbs" }
       },
       "particles": ["で"],
