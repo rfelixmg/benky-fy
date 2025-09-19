@@ -1,0 +1,32 @@
+{
+    "identity": {
+        "structure": "A は B です",
+        "slots": {
+          "A": ["person", "thing", "place", "concept"],
+          "B": { "depends_on": "A", "options": "[A].semantic_match" }
+        },
+        "particles": ["は"],
+        "extensions": ["です"]
+      },
+
+      "classification": {
+        "structure": "A は B です",
+        "slots": {
+          "A": ["thing", "concept", "person"],
+          "B": { "depends_on": "A", "options": "[A].semantic_match" }
+        },
+        "particles": ["は"],
+        "extensions": ["です"]
+      },
+    "action_with_object": {
+        "structure": "A を Verb",
+        "slots": {
+            "A": ["person", "animal", "thing", "concept", "group", "place", "event", "phenomenon"],
+            "Verb": { "depends_on": "A", "options": "[A].compatible_verbs"},
+        },
+        "particles": ["を"],
+        "extensions": ["ます", "ません", "ました", "ませんでした"]
+        }
+
+
+  }

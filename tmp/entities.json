@@ -1,0 +1,48 @@
+{
+    "entities": {
+      "person": {
+        "semantic_match": ["profession", "occupation", "nationality", "role"],
+        "modifiers": ["adjective", "none"],
+        "compatible_verbs": [
+          "action", "cognitive", "communication", "learning",
+          "transaction", "occupation", "social", "motion",
+          "emotion", "change", "life"
+        ]
+      },
+      "animal": {
+        "semantic_match": ["species", "pet", "wildlife"],
+        "modifiers": ["adjective", "none"],
+        "compatible_verbs": ["action", "physiological", "motion", "perception", "emotion", "life"]
+      },
+      "thing": {
+        "semantic_match": ["category", "material", "type"],
+        "modifiers": ["adjective", "demonstrative", "none"],
+        "compatible_verbs": ["existence", "change", "spatial", "transaction", "perception"]
+      },
+      "place": {
+        "semantic_match": ["location_type", "country", "city"],
+        "modifiers": ["adjective", "demonstrative_place", "none"],
+        "compatible_verbs": ["existence", "motion", "spatial", "weather", "nature"]
+      },
+      "concept": {
+        "semantic_match": ["field", "subject"],
+        "modifiers": ["adjective", "none"],
+        "compatible_verbs": ["cognitive", "learning", "communication", "existence", "change"]
+      },
+      "group": {
+        "semantic_match": ["organization", "company", "team"],
+        "modifiers": ["adjective", "none"],
+        "compatible_verbs": ["transaction", "occupation", "social", "communication", "existence"]
+      },
+      "event": {
+        "semantic_match": ["festival", "exam", "meeting", "incident"],
+        "modifiers": ["adjective", "none"],
+        "compatible_verbs": ["existence", "social", "temporal", "initiation", "termination"]
+      },
+      "phenomenon": {
+        "semantic_match": ["weather", "natural_force", "time"],
+        "modifiers": ["adjective", "none"],
+        "compatible_verbs": ["weather", "nature", "existence", "temporal", "change"]
+      }
+    }
+  }

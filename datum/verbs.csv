@@ -1,46 +1,47 @@
-Kanji,Hiragana,Katakana,Romaji,English,Grammatical Type
-知っている,しっている,–,shitte iru,to know,verb
-考える,かんがえる,–,kangaeru,to think,verb
-開ける,あける,–,akeru,to open,verb
-閉める,しめる,–,shimeru,to close,verb
-寝る,ねる,–,neru,to sleep,verb
-起きる,おきる,–,okiru,to wake up,verb
-歩く,あるく,–,aruku,to walk,verb
-行く,いく,–,iku,to go,verb
-話す,はなす,–,hanasu,to speak,verb
-言う,いう,–,iu,to say,verb
-勉強する,べんきょうする,–,benkyou suru,to study,verb
-買う,かう,–,kau,to buy,verb
-売る,うる,–,uru,to sell,verb
-覚える,おぼえる,–,oboeru,to remember,verb
-忘れる,わすれる,–,wasureru,to forget,verb
-見る,みる,–,miru,to see / to watch,verb
-食べる,たべる,–,taberu,to eat,verb
-飲む,のむ,–,nomu,to drink,verb
-聞く,きく,–,kiku,to ask / to listen,verb
-走る,はしる,–,hashiru,to run,verb
-乗る,のる,–,noru,to ride,verb
-働く,はたらく,–,hataraku,to work,verb
-あげる,あげる,–,ageru,to give,verb
-置く,おく,–,oku,to put / place,verb
-降る,ふる,–,furu,to fall,verb
-歌う,うたう,–,utau,to sing,verb
-泣く,なく,–,naku,to cry,verb
-取る,とる,–,toru,to take,verb
-電話する,でんわする,–,denwa suru,to call,verb
-叫ぶ,さけぶ,–,sakebu,to scream,verb
-止める,やめる,–,yameru,to stop / quit,verb
-始める,はじめる,–,hajimeru,to start,verb
-なる,なる,–,naru,to become,verb
-生まれる,うまれる,–,umareru,to be born,verb
-いる,いる,–,iru,to be,verb
-ある,ある,–,aru,to be,verb
-支払う,しはらう,–,shiharau,to pay,verb
-切る,きる,–,kiru,to cut,verb
-調べる,しらべる,–,shiraberu,to search / look up,verb
-見つける,みつける,–,mitsukeru,to find,verb
-会う,あう,–,au,to meet,verb
-書く,かく,–,kaku,to write,verb
-撮る,とる,–,toru,to take,verb
-待つ,まつ,–,matsu,to wait,verb
-分かる,わかる,–,wakaru,to understand,verb
+kanji,hiragana,katakana,furigana,kanji_breakdown,romaji,english,grammatical_type,tag,common_usage
+為る,する,–,する,為=to do,suru,to do,verb (irregular),action,daily / general
+知っている,しっている,–,知「し」っている,知=know,shitte iru,to know,verb (godan - う),state,daily / conversation
+考える,かんがえる,–,考「かんが」える,考=think,kangaeru,to think,verb (ichidan),cognition,daily / business
+開ける,あける,–,開「あ」ける,開=open,akeru,to open,verb (ichidan),action,daily / home / work
+閉める,しめる,–,閉「し」める,閉=close,shimeru,to close,verb (ichidan),action,daily / home / work
+寝る,ねる,–,寝「ね」る,寝=sleep,neru,to sleep,verb (ichidan),state,daily / routine
+起きる,おきる,–,起「お」きる,起=rise,okiru,to wake up,verb (ichidan),action,daily / routine
+歩く,あるく,–,歩「ある」く,歩=walk,aruku,to walk,verb (godan - く),motion,daily / travel / health
+行く,いく,–,行「い」く,行=go,iku,to go,verb (godan - く),motion,daily / travel
+話す,はなす,–,話「はな」す,話=speak,hanasu,to speak,verb (godan - す),communication,daily / business / social
+言う,いう,–,言「い」う,言=say,iu,to say,verb (godan - う),communication,daily / general
+勉強する,べんきょうする,–,勉強「べんきょう」する,勉=exert,強=strong,benkyou suru,to study,verb (irregular),learning,daily / school
+買う,かう,–,買「か」う,買=buy,kau,to buy,verb (godan - う),transaction,daily / shopping
+売る,うる,–,売「う」る,売=sell,uru,to sell,verb (godan - る),transaction,business / market
+覚える,おぼえる,–,覚「おぼ」える,覚=remember,oboeru,to remember,verb (ichidan),memory,learning / school
+忘れる,わすれる,–,忘「わす」れる,忘=forget,wasureru,to forget,verb (ichidan),memory,learning / daily
+見る,みる,–,見「み」る,見=see,miru,to see / watch,verb (ichidan),perception,daily / entertainment
+食べる,たべる,–,食「た」べる,食=eat,taberu,to eat,verb (ichidan),consumption,daily / routine
+飲む,のむ,–,飲「の」む,飲=drink,nomu,to drink,verb (godan - む),consumption,daily / social
+聞く,きく,–,聞「き」く,聞=hear,kiku,to ask / listen,verb (godan - く),communication,daily / learning
+走る,はしる,–,走「はし」る,走=run,hashiru,to run,verb (godan - る irregular),motion,daily / health / travel
+乗る,のる,–,乗「の」る,乗=ride,noru,to ride,verb (godan - る),motion,daily / travel
+働く,はたらく,–,働「はたら」く,働=work,hataraku,to work,verb (godan - く),action,business / daily
+あげる,あげる,–,あげる,–,ageru,to give,verb (ichidan),transaction,daily / social
+置く,おく,–,置「お」く,置=put,oku,to put / place,verb (godan - く),action,daily / home
+降る,ふる,–,降「ふ」る,降=fall,furu,to fall (rain/snow),verb (godan - る),nature,nature / weather
+歌う,うたう,–,歌「うた」う,歌=sing,utau,to sing,verb (godan - う),expression,daily / entertainment
+泣く,なく,–,泣「な」く,泣=cry,naku,to cry,verb (godan - く),emotion,daily / emotion
+取る,とる,–,取「と」る,取=take,toru,to take,verb (godan - る),action,daily / general
+電話する,でんわする,–,電話「でんわ」する,電=electric,話=speak,denwa suru,to call,verb (irregular),communication,daily / business
+叫ぶ,さけぶ,–,叫「さけ」ぶ,叫=shout,sakebu,to scream,verb (godan - ぶ),expression,daily / emotion
+止める,やめる,–,止「や」める,止=stop,yameru,to stop / quit,verb (ichidan),action,daily / business / personal
+始める,はじめる,–,始「はじ」める,始=start,hajimeru,to start,verb (ichidan),action,daily / business
+なる,なる,–,なる,–,naru,to become,verb (godan - る),state,daily / general
+生まれる,うまれる,–,生「う」まれる,生=life,umareru,to be born,verb (ichidan),state,nature / life
+いる,いる,–,いる,–,iru,to exist (animate),verb (ichidan),existence,daily / general
+ある,ある,–,ある,–,aru,to exist (inanimate),verb (godan - る),existence,daily / general
+支払う,しはらう,–,支「し」払「はら」う,支=support,払=pay,shiharau,to pay,verb (godan - う),transaction,business / shopping
+切る,きる,–,切「き」る,切=cut,kiru,to cut,verb (godan - る),action,daily / cooking / craft
+調べる,しらべる,–,調「しら」べる,調=investigate,shiraberu,to search / look up,verb (ichidan),research,learning / business
+見つける,みつける,–,見「み」つける,見=find,mitsukeru,to find,verb (ichidan),discovery,daily / learning
+会う,あう,–,会「あ」う,会=meet,au,to meet,verb (godan - う),interaction,daily / social / business
+書く,かく,–,書「か」く,書=write,kaku,to write,verb (godan - く),expression,daily / school / business
+撮る,とる,–,撮「と」る,撮=take photo,toru,to take (a photo),verb (godan - る),expression,daily / travel / social
+待つ,まつ,–,待「ま」つ,待=wait,matsu,to wait,verb (godan - つ),action,daily / travel / social
+分かる,わかる,–,分「わ」かる,分=understand,wakaru,to understand,verb (godan - る),cognition,daily / learning / business

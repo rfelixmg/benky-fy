@@ -1,0 +1,45 @@
+{
+    "politeness": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response"
+    ],
+    "people_identity": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "pronoun", "people", "country", "nationality", "occupation",
+        "student", "teacher", "career", "academia", "mentorship"
+    ],
+    "daily_life_lifestyle": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "daily", "daily life", "lifestyle", "meal", "shopping", "food",
+        "drink", "fruit", "clothing", "furniture", "household"
+    ],
+    "places_travel_events": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "place", "places", "school", "transport", "travel", "restaurant",
+        "holiday", "japan", "culture", "event", "leisure"
+    ],
+    "knowledge_communication": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "question", "confirmation", "vocabulary", "language", "study",
+        "religion", "ai", "media", "safety"
+    ],
+    "nature_description": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "weather", "feelings", "description", "quantity", "taste",
+        "nature", "counters"
+    ],
+    "actions_time": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "time", "frequency", "verb", "event", "study", "confirmation"
+    ],
+    "ai_professional": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "ai", "safety", "media", "mentorship", "career", "academia"
+    ]
+}

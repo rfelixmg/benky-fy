@@ -1,0 +1,296 @@
+{
+    "structures": [
+      {
+          "structure":"A は B です",
+          "theme":[
+              "identity",
+              "classification"
+          ],
+          "slots":{
+              "A":[
+                  "noun",
+                  "pronoun"
+              ],
+              "B":[
+                  "noun",
+                  "na-adj",
+                  "i-adj"
+              ]
+          },
+          "particles":[
+              "は",
+              "です"
+          ],
+          "extensions":[
+              "か",
+              "ではない"
+          ],
+          "example":"わたしは せんせいです"
+      },
+      {
+          "structure":"A を Verb",
+          "theme":[
+              "action with object"
+          ],
+          "slots":{
+              "A":[
+                  "noun"
+              ],
+              "Verb":[
+                  "any"
+              ]
+          },
+          "particles":[
+              "を"
+          ],
+          "extensions":[
+              "たい",
+              "ない"
+          ],
+          "example":"パンを たべます"
+      },
+      {
+          "structure":"A で Verb",
+          "theme":[
+              "action at location"
+          ],
+          "slots":{
+              "A":[
+                  "location",
+                  "noun"
+              ],
+              "Verb":[
+                  "any"
+              ]
+          },
+          "particles":[
+              "で"
+          ],
+          "extensions":[
+              "て-form",
+              "ない"
+          ],
+          "example":"がっこうで べんきょうします"
+      },
+      {
+          "structure":"A へ\/に Verb",
+          "theme":[
+              "motion",
+              "destination"
+          ],
+          "slots":{
+              "A":[
+                  "place",
+                  "noun"
+              ],
+              "Verb":[
+                  "motion"
+              ]
+          },
+          "particles":[
+              "へ",
+              "に"
+          ],
+          "extensions":[
+              "までに",
+              "ない"
+          ],
+          "example":"にほんへ いきます"
+      },
+      {
+          "structure":"A の B",
+          "theme":[
+              "possession",
+              "relation"
+          ],
+          "slots":{
+              "A":[
+                  "noun",
+                  "pronoun"
+              ],
+              "B":[
+                  "noun"
+              ]
+          },
+          "particles":[
+              "の"
+          ],
+          "extensions":[
+              "nested possession"
+          ],
+          "example":"わたしの かばん"
+      },
+      {
+          "structure":"A は Adj です",
+          "theme":[
+              "description"
+          ],
+          "slots":{
+              "A":[
+                  "noun"
+              ],
+              "Adj":[
+                  "i-adj",
+                  "na-adj"
+              ]
+          },
+          "particles":[
+              "は",
+              "です"
+          ],
+          "extensions":[
+              "くない",
+              "でしょう"
+          ],
+          "example":"この本は おもしろいです"
+      },
+      {
+          "structure":"Adj + Noun",
+          "theme":[
+              "attribution"
+          ],
+          "slots":{
+              "Adj":[
+                  "i-adj",
+                  "na-adj"
+              ],
+              "Noun":[
+                  "noun"
+              ]
+          },
+          "particles":[
+  
+          ],
+          "extensions":[
+  
+          ],
+          "example":"おおきい いぬ"
+      },
+      {
+          "structure":"Negation",
+          "theme":[
+              "denial",
+              "contradiction"
+          ],
+          "slots":{
+              "Verb":[
+                  "any"
+              ],
+              "Adj":[
+                  "i-adj",
+                  "na-adj"
+              ],
+              "Noun":[
+                  "noun"
+              ]
+          },
+          "particles":[
+              "ない",
+              "ではない"
+          ],
+          "extensions":[
+              "ません"
+          ],
+          "example":"たべない"
+      },
+      {
+          "structure":"Question",
+          "theme":[
+              "inquiry"
+          ],
+          "slots":{
+              "clause":[
+                  "any"
+              ]
+          },
+          "particles":[
+              "か",
+              "Wh-words"
+          ],
+          "extensions":[
+              "でしょう",
+              "だろう"
+          ],
+          "example":"これは なんですか"
+      },
+      {
+          "structure":"A が Verb",
+          "theme":[
+              "existence",
+              "subject focus"
+          ],
+          "slots":{
+              "A":[
+                  "noun",
+                  "pronoun"
+              ],
+              "Verb":[
+                  "existence",
+                  "stative",
+                  "motion"
+              ]
+          },
+          "particles":[
+              "が"
+          ],
+          "extensions":[
+              "Wh-questions"
+          ],
+          "example":"だれが きましたか"
+      },
+      {
+          "structure":"A は B が Adj",
+          "theme":[
+              "property",
+              "condition"
+          ],
+          "slots":{
+              "A":[
+                  "noun"
+              ],
+              "B":[
+                  "noun"
+              ],
+              "Adj":[
+                  "i-adj",
+                  "na-adj"
+              ]
+          },
+          "particles":[
+              "は",
+              "が"
+          ],
+          "extensions":[
+              "くない"
+          ],
+          "example":"わたしは あたまが いたいです"
+      }
+  ],
+  
+  "extensions": [
+      { "category": ["reason"], "markers": ["から", "ので"], "function": ["express cause"], "example": "雨だから 行きません" },
+      { "category": ["contrast"], "markers": ["けど", "が"], "function": ["show contrast"], "example": "雨だけど 行きます" },
+      { "category": ["conditional"], "markers": ["と", "ば", "たら"], "function": ["if", "when"], "example": "雨が ふったら 行きません" },
+      { "category": ["desire", "ability"], "markers": ["たい", "られる"], "function": ["want", "can"], "example": "ケーキを たべたいです" },
+      { "category": ["experience", "frequency"], "markers": ["たことがある", "frequency adverbs"], "function": ["past experience", "frequency"], "example": "日本に 行ったことが あります" },
+      { "category": ["permission", "prohibition"], "markers": ["てもいい", "てはいけません"], "function": ["may", "must not"], "example": "ここで たばこを すっては いけません" },
+      { "category": ["sequence", "time"], "markers": ["てから", "まえに", "あとで", "ながら"], "function": ["order", "simultaneity"], "example": "ごはんを たべてから、べんきょうします" },
+      { "category": ["comparison", "listing"], "markers": ["より〜ほうが", "や", "と"], "function": ["compare", "list"], "example": "バスより 電車のほうが はやいです" },
+      { "category": ["quoting", "thinking"], "markers": ["と思います", "と言いました"], "function": ["report thoughts", "speech"], "example": "明日 行くと 思います" },
+      { "category": ["speculation", "possibility"], "markers": ["でしょう", "だろう", "かもしれない"], "function": ["guess", "might"], "example": "雨でしょう" }
+    ],
+
+    "pragmatics": [
+      { "ending": "ね", "nuance": ["seek agreement"], "register": ["casual", "polite"], "example": "いい天気だね" },
+      { "ending": "よ", "nuance": ["assertion", "info-giving"], "register": ["casual", "polite"], "example": "明日行くよ" },
+      { "ending": "よね", "nuance": ["assertion", "confirmation"], "register": ["casual"], "example": "明日行くよね" },
+      { "ending": "かな", "nuance": ["wondering"], "register": ["casual"], "example": "雨かな" },
+      { "ending": "でしょう/だろう", "nuance": ["probability", "guess"], "register": ["polite", "casual"], "example": "雨でしょう" },
+      { "ending": "かもしれない", "nuance": ["possibility"], "register": ["neutral"], "example": "雨かもしれない" },
+      { "ending": "な", "nuance": ["prohibition", "masculine"], "register": ["casual"], "example": "行くな" },
+      { "ending": "なあ", "nuance": ["exclamation"], "register": ["casual"], "example": "きれいだなあ" },
+      { "ending": "ぞ/ぜ", "nuance": ["rough emphasis"], "register": ["casual"], "example": "行くぞ" },
+      { "ending": "わ", "nuance": ["feminine softener"], "register": ["casual"], "example": "行くわ" },
+      { "ending": "さ", "nuance": ["casual filler"], "register": ["casual"], "example": "行くさ" }
+    ]
+  }

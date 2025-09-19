@@ -1,0 +1,158 @@
+,,,,,,,,,,
+,Word (Kanji),Kana,Furigana,Romaji,English Meaning,Part of Speech,JLPT Level,Kanji Breakdown,Example Sentence,Tags
+,はじめまして,はじめまして,はじめまして,hajimemashite,Nice to meet you,Expression,N5,―,はじめまして、タンです。,"greeting, intro"
+,こんにちは,こんにちは,こんにちは,konnichiwa,Hello / Good afternoon,Expression,N5,―,こんにちは、サラさん。,greeting
+,こんばんは,こんばんは,こんばんは,konbanwa,Good evening,Expression,N5,―,こんばんは、やまださん。,greeting
+,おはようございます,おはようございます,おはようございます,ohayou gozaimasu,Good morning,Expression,N5,早 = early,おはようございます、せんせい。,greeting
+,さようなら,さようなら,さようなら,sayounara,Goodbye,Expression,N5,―,では、さようなら。,farewell
+,おやすみなさい,おやすみなさい,おやすみなさい,oyasuminasai,Good night,Expression,N5,休 = rest,おやすみなさい、またあした。,farewell
+,すみません,すみません,すみません,sumimasen,Excuse me / I’m sorry,Expression,N5,済 = finish,すみません、にほんごは？,"apology, polite"
+,ごめんなさい,ごめんなさい,ごめんなさい,gomennasai,Sorry,Expression,N5,―,ごめんなさい、ちがいます。,apology
+,ありがとう ございます,ありがとうございます,ありがとうございます,arigatou gozaimasu,Thank you,Expression,N5,"有 = exist, 難 = hardship",どうもありがとうございます。,gratitude
+,どうぞ,どうぞ,どうぞ,douzo,Please (go ahead / here you are),Expression,N5,―,コーヒーをどうぞ。,offering
+,はい,はい,はい,hai,Yes,Interjection,N5,―,はい、そうです。,response
+,いいえ,いいえ,いいえ,iie,No,Interjection,N5,―,いいえ、ちがいます。,response
+,わたし,わたし,わたし,watashi,I (formal),Pronoun,N5,私 = private,わたしは サラです。,pronoun
+,あのひと,あのひと,あのひと,ano hito,That person (over there),Pronoun,N5,人 = person,あのひとは せんせいです。,pronoun
+,どなた,どなた,どなた,donata,Who (polite),Pronoun,N5,方 = person,あのかたは どなたですか。,question
+,ひと,ひと,ひと,hito,Person,Noun,N5,人 = person,にほんじんです。,people
+,かた,かた,かた,kata,Person (polite),Noun,N5,方 = person,にほんのかたですか。,polite
+,国,くに,くに,kuni,Country,Noun,N5,国 = country,おくに は どちらですか。,"country, nationality"
+,日本,にほん,にほん,nihon,Japan,Proper noun,N5,日本 = Japan,にほんから きました。,country
+,日本人,にほんじん,にほんじん,nihonjin,Japanese person,Noun,N5,"日本 = Japan, 人 = person",わたしは にほんじんです。,nationality
+,ベトナム,ベトナム,ベトナム,betonamu,Vietnam,Proper noun,N5,―,ベトナムからきました。,country
+,フランス,フランス,フランス,furansu,France,Proper noun,N5,―,フランスからきました。,country
+,ことば,ことば,ことば,kotoba,"Word, language",Noun,N5,"言 = word, 葉 = leaf",にほんごのことば。,vocabulary
+,語,ご,ご,go,Language (suffix),Noun,N5,語 = language,にほんごをべんきょうします。,language
+,学生,がくせい,がくせい,gakusei,Student,Noun,N5,"学 = study, 生 = life",わたしは がくせいです。,student
+,大学生,だいがくせい,だいがくせい,daigakusei,University student,Noun,N5,"大 = big, 学 = study, 生 = life",キムさんは だいがくせいです。,student
+,会社員,かいしゃいん,かいしゃいん,kaishain,Company employee,Noun,N5,"会社 = company, 員 = member",サラさんは かいしゃいんです。,occupation
+,先生,せんせい,せんせい,sensei,Teacher,Noun,N5,"先 = ahead, 生 = life",あのひとは せんせいです。,teacher
+,教師,きょうし,きょうし,kyoushi,Teacher (formal job title),Noun,N4,"教 = teach, 師 = master",わたしは きょうしです。,occupation
+,学校,がっこう,がっこう,gakkou,School,Noun,N5,"学 = study, 校 = school",にほんの がっこうです。,school
+,天気,てんき,てんき,tenki,Weather,Noun,N5,"天 = sky, 気 = spirit",いいてんきですね。,weather
+,はい、そうです,はい、そうです,はい、そうです,"hai, sou desu","Yes, that’s right",Expression,N5,―,A: にほんじんですか？ B: はい、そうです。,response
+,いいえ、ちがいます,いいえ、ちがいます,いいえ、ちがいます,"iie, chigaimasu","No, that’s not correct",Expression,N5,違 = different,A: がくせいですか？ B: いいえ、ちがいます。,response
+,ゆっくり,ゆっくり,ゆっくり,yukkuri,Slowly,Adverb,N5,―,ゆっくり はなしてください。,manner
+,はい、わかりました,はい、わかりました,はい、わかりました,"hai, wakarimashita","Yes, I understood",Expression,N5,分 = understand,はい、わかりました。,confirmation
+,店員,てんいん,てんいん,ten’in,"clerk, shop staff",Noun,N5,店 (shop) + 員 (member),店員にききます。,"shopping, people"
+,いらっしゃいませ,いらっしゃいませ,いらっしゃいませ,irasshaimase,welcome (store greeting),Expression,N5,—,店員が「いらっしゃいませ」と言います。,"shopping, greeting"
+,チーズバーガー,ちーずばーがー,チーズバーガー,chiizubaagaa,cheeseburger,Noun,—,—,チーズバーガーをください。,"food, shopping"
+,オレンジジュース,おれんじじゅーす,オレンジジュース,orenji juusu,orange juice,Noun,—,—,オレンジジュースをのみます。,"drink, shopping"
+,ジュース,じゅーす,ジュース,juusu,juice,Noun,N5,—,ジュースを二つください。,drink
+,ハンバーガー,はんばーがー,ハンバーガー,hanbaagaa,hamburger,Noun,N5,—,ハンバーガーを一つください。,food
+,ポテト,ぽてと,ポテト,poteto,fries,Noun,—,—,ポテトを食べます。,food
+,サンドイッチ,さんどいっち,サンドイッチ,sandoicchi,sandwich,Noun,N5,—,サンドイッチを二つください。,food
+,おにぎり,おにぎり,おにぎり,onigiri,rice ball,Noun,N5,—,おにぎりを食べます。,food
+,ケーキ,けーき,ケーキ,keeki,cake,Noun,N5,—,ケーキをたべました。,food
+,プリン,ぷりん,プリン,purin,pudding,Noun,N5,—,プリンをください。,food
+,アイスクリーム,あいすくりーむ,アイスクリーム,aisu kuriimu,ice cream,Noun,N5,—,アイスクリームを食べます。,food
+,コーラ,こーら,コーラ,koora,"cola, coke",Noun,—,—,コーラをのみます。,drink
+,おちゃ,おちゃ,お茶,ocha,green tea,Noun,N5,茶 (tea),おちゃをください。,drink
+,こうちゃ,こうちゃ,紅茶,koucha,black tea,Noun,N5,紅 (red) + 茶 (tea),こうちゃをのみます。,drink
+,ビール,びーる,ビール,biiru,beer,Noun,N5,—,ビールを飲みます。,drink
+,日本酒,にほんしゅ,日本酒,nihonshu,"sake, Japanese rice wine",Noun,N4,日本 (Japan) + 酒 (alcohol),日本酒を飲みます。,drink
+,焼酎,しょうちゅう,焼酎,shouchuu,shochu,Noun,N3,焼 (burn) + 酎 (liquor),焼酎をください。,drink
+,ポップコーン,ぽっぷこーん,ポップコーン,poppuko-n,popcorn,Noun,—,—,ポップコーンを食べます。,food
+,ドーナツ,どーなつ,ドーナツ,doonatsu,donut,Noun,—,—,ドーナツを一つください。,food
+,コロッケ,ころっけ,コロッケ,korokke,croquette,Noun,—,—,コロッケを買いました。,food
+,りんご,りんご,りんご,ringo,apple,Noun,N5,—,りんごを三つください。,fruit
+,はな,はな,花,hana,flower,Noun,N5,花 (flower),花をかいます。,shopping
+,シャツ,しゃつ,シャツ,shatsu,shirt,Noun,N5,—,シャツをきます。,clothing
+,いす,いす,いす,isu,chair,Noun,N5,—,いすにすわります。,furniture
+,テレビ,てれび,テレビ,terebi,television,Noun,N5,—,テレビをみます。,household
+,ほん,ほん,本,hon,book,Noun,N5,本 (book),本をよみます。,study
+,つくえ,つくえ,机,tsukue,desk,Noun,N5,机 (desk),つくえにすわります。,furniture
+,ノート,のーと,ノート,nooto,notebook,Noun,N5,—,ノートにかきます。,school
+,ボール,ぼーる,ボール,booru,ball,Noun,N5,—,ボールであそびます。,object
+,コップ,こっぷ,コップ,koppu,cup,Noun,N5,—,コップをつかいます。,object
+,バナナ,ばなな,バナナ,banana,Noun,N5,—,バナナを食べます。,fruit,
+,レモン,れもん,レモン,remon,lemon,Noun,N5,—,レモンを食べます。,fruit
+,パイナップル,ぱいなっぷる,パイナップル,painappuru,pineapple,Noun,—,—,パイナップルをたべます。,fruit
+,メロン,めろん,メロン,meron,melon,Noun,N5,—,メロンをたべます。,fruit
+,たまご,たまご,卵,tamago,egg,Noun,N5,卵 (egg),卵を二つください。,food
+,やさい,やさい,野菜,yasai,vegetable,Noun,N5,野 (field) + 菜 (greens),やさいをたべます。,food
+,にく,にく,肉,niku,meat,Noun,N5,肉 (meat),にくをかいます。,food
+,ぎゅうにゅう,ぎゅうにゅう,牛乳,gyuunyuu,milk,Noun,N5,牛 (cow) + 乳 (milk),ぎゅうにゅうをのみます。,drink
+,さかな,さかな,魚,sakana,fish,Noun,N5,魚 (fish),さかなをたべます。,food
+,くだもの,くだもの,果物,kudamono,fruit,Noun,N5,果 (fruit) + 物 (thing),くだものを食べます。,food
+,くつ,くつ,靴,kutsu,shoes,Noun,N5,靴 (shoes),くつをかいます。,clothing
+,ビジネスシューズ,びじねすしゅーず,ビジネスシューズ,bijinesu shuuzu,business shoes,Noun,—,—,ビジネスシューズを買いました。,clothing
+,スニーカー,すにーかー,スニーカー,suniikaa,sneakers,Noun,—,—,スニーカーをはきます。,clothing
+,とけい,とけい,時計,tokei,"watch, clock",Noun,N5,時 (time) + 計 (measure),時計をみます。,object
+,めがね,めがね,眼鏡,megane,glasses,Noun,N5,眼 (eye) + 鏡 (mirror),めがねをかけます。,object
+,セーター,せーたー,セーター,seetaa,sweater,Noun,N5,—,セーターをきます。,clothing
+,かばん,かばん,かばん,kaban,bag,Noun,N5,—,かばんをもちます。,clothing
+,ぼうし,ぼうし,帽子,boushi,hat,Noun,N5,帽 (hat) + 子 (child),帽子をかぶります。,clothing
+,ネクタイ,ねくたい,ネクタイ,nekutai,necktie,Noun,N5,—,ネクタイをしめます。,clothing
+,しょくひん,しょくひん,食品,shokuhin,food product,Noun,N4,食 (eat) + 品 (goods),食品うりばに行きます。,shopping
+,パン,ぱん,パン,pan,bread,Noun,N5,—,パンをたべます。,food
+,トイレ,といれ,トイレ,toire,"toilet, restroom",Noun,N5,—,トイレはどこですか。,location
+,かいだん,かいだん,階段,kaidan,stairs,Noun,N4,階 (floor) + 段 (steps),階段をおります。,place
+,エレベーター,えれべーたー,エレベーター,erebeetaa,elevator,Noun,—,—,エレベーターにのります。,place
+,デパート,でぱーと,デパート,depaato,department store,Noun,N5,—,デパートでかいものします。,place
+,うりば,うりば,売り場,uriba,"sales counter, department",Noun,N5,売 (sell) + 場 (place),くつうりばはどこですか。,shopping
+,行きます,いきます,いきます,ikimasu,to go,verb,N5,行 (go),がっこうへ いきます,motion
+,来ます,きます,きます,kimasu,to come,verb,N5,来 (come),ともだちが きます,motion
+,帰ります,かえります,かえります,kaerimasu,to return,verb,N5,帰 (return),うちへ かえります,motion
+,乗ります,のります,のります,norimasu,to ride / get on,verb,N5,乗 (ride),バスに のります,transport
+,降ります,おります,おります,orimasu,to get off,verb,N5,降 (descend),バスを おります,transport
+,歩いて,あるいて,あるいて,aruite,on foot / walking,adverb / verb,N5,歩 (walk),えきまで あるいて いきます,transport
+,バス,バス,バス,basu,bus,noun,N5,—,バスで いきます,transport
+,電車,でんしゃ,でんしゃ,densha,train,noun,N5,電 (electric) 車 (vehicle),でんしゃに のります,transport
+,地下鉄,ちかてつ,ちかてつ,chikatetsu,subway,noun,N5,地 (ground) 下 (below) 鉄 (iron),ちかてつで いきます,transport
+,自転車,じてんしゃ,じてんしゃ,jitensha,bicycle,noun,N5,自 (self) 転 (turn) 車 (vehicle),じてんしゃに のります,transport
+,バイク,バイク,バイク,baiku,motorbike / motorcycle,noun,N5,—,バイクで いきます,transport
+,タクシー,タクシー,タクシー,takushii,taxi,noun,N5,—,タクシーで いきます,transport
+,新幹線,しんかんせん,しんかんせん,shinkansen,bullet train,noun,N4,新 (new) 幹 (trunk) 線 (line),しんかんせんで おおさかへ いきます,transport
+,駅,えき,えき,eki,station,noun,N5,駅 (station),えきで おります,transport
+,バス停,バスてい,バスてい,basutei,bus stop,noun,N5,停 (stop),バスていで まちます,transport
+,会社,かいしゃ,かいしゃ,kaisha,"company, office",noun,N5,会 (meet) 社 (company),かいしゃへ いきます,place
+,学校,がっこう,がっこう,gakkou,school,noun,N5,学 (study) 校 (school),がっこうに いきます,place
+,家,うち,うち,uchi,"home, house",noun,N5,家 (house),うちに かえります,place
+,時,じ,じ,ji,"o’clock, hour",counter,N5,時 (time),9じに おきます,time
+,分,ふん／ぷん,ふん／ぷん,fun/pun,minute,counter,N5,分 (divide),5ふん あります,time
+,日曜日,にちようび,にちようび,nichiyoubi,Sunday,noun (day),N5,日 (sun) 曜 (weekday) 日 (day),にちようびに えきへ いきます,time
+,毎日,まいにち,まいにち,mainichi,every day,noun,N5,毎 (every) 日 (day),まいにち べんきょうします,time
+,来週,らいしゅう,らいしゅう,raishuu,next week,noun,N5,来 (come) 週 (week),らいしゅう きょうとへ いきます,time
+,今日,きょう,きょう,kyou,today,noun,N5,今 (now) 日 (day),きょうは にちようびです,time
+,映画,えいが,えいが,eiga,movie,noun,N5,映 (project) 画 (picture),えいがを みます,activity
+,見ます,みます,みます,mimasu,to watch / see,verb,N5,見 (see),えいがを みます,action
+,勉強します,べんきょうします,べんきょうします,benkyou shimasu,to study,verb,N5,勉 (study) 強 (strong),がっこうで べんきょうします,"school, activity"
+,読みます,よみます,よみます,yomimasu,to read,verb,N5,読 (read),ほんを よみます,activity
+,書きます,かきます,かきます,kakimasu,to write,verb,N5,書 (write),てがみを かきます,activity
+,見ます,みます,みます,mimasu,"to see, watch",verb,N5,見 (see),テレビを みます,activity
+,聞きます,ききます,ききます,kikimasu,"to listen, hear",verb,N5,聞 (hear),おんがくを ききます,activity
+,食べます,たべます,たべます,tabemasu,to eat,verb,N5,食 (eat),ごはんを たべます,daily
+,飲みます,のみます,のみます,nomimasu,to drink,verb,N5,飲 (drink),コーヒーを のみます,daily
+,起きます,おきます,おきます,okimasu,to wake up,verb,N5,起 (wake up),あさ 6じに おきます,daily
+,寝ます,ねます,ねます,nemasu,to sleep,verb,N5,寝 (sleep),12じに ねます,daily
+,働きます,はたらきます,はたらきます,hatarakimasu,to work,verb,N5,働 (work),かいしゃで はたらきます,work
+,休みます,やすみます,やすみます,yasumimasu,"to rest, take a break",verb,N5,休 (rest),にちようびは やすみます,daily
+,練習します,れんしゅうします,れんしゅうします,renshuu shimasu,to practice,verb,N5,練 (practice) 習 (learn),ギターを れんしゅうします,activity
+,料理をします,りょうりをします,りょうりをします,ryouri o shimasu,to cook,verb,N5,"料 (fee) 理 (reason, manage)",まいにち りょうりを します,"food, daily"
+,買い物をします,かいものをします,かいものをします,kaimono o shimasu,to shop,verb,N5,買 (buy) 物 (thing),デパートで かいものを します,shopping
+,掃除します,そうじします,そうじします,souji shimasu,to clean,verb,N5,掃 (sweep) 除 (remove),きのう へやを そうじしました,home
+,洗濯します,せんたくします,せんたくします,sentaku shimasu,to wash laundry,verb,N5,洗 (wash) 濯 (rinse),せんたくを します,home
+,散歩します,さんぽします,さんぽします,sanpo shimasu,to take a walk,verb,N5,散 (scatter) 歩 (walk),こうえんを さんぽします,leisure
+,写真をとります,しゃしんをとります,しゃしんをとります,shashin o torimasu,to take a photo,verb,N5,写 (copy) 真 (true),しゃしんを とります,activity
+,電話します,でんわします,でんわします,denwa shimasu,to make a phone call,verb,N5,電 (electric) 話 (talk),ともだちに でんわします,communication
+,買います,かいます,かいます,kaimasu,to buy,verb,N5,買 (buy),ほんを かいます,shopping
+,作ります,つくります,つくります,tsukurimasu,to make,verb,N5,作 (make),りょうりを つくります,food
+,遊びます,あそびます,あそびます,asobimasu,"to play, hang out",verb,N5,遊 (play),ともだちと あそびます,leisure
+,会います,あいます,あいます,aimasu,to meet,verb,N5,会 (meet),ともだちに あいます,social
+,聞きます,ききます,ききます,kikimasu,to ask,verb,N5,"聞 (ask, hear)",せんせいに ききます,question
+,言います,いいます,いいます,iimasu,to say,verb,N5,言 (say),ありがとうと いいます,communication
+,図書館,としょかん,としょかん,toshokan,library,noun,N5,図 (diagram) 書 (book) 館 (building),としょかんで ほんを よみます,place
+,友だち,ともだち,ともだち,tomodachi,friend,noun,N5,友 (friend) 達 (attain),ともだちと あそびます,people
+,毎日,まいにち,まいにち,mainichi,every day,adv,N5,毎 (every) 日 (day),まいにち べんきょうします,frequency
+,毎週,まいしゅう,まいしゅう,maishuu,every week,adv,N5,毎 (every) 週 (week),まいしゅう サッカーを します,frequency
+,昨日,きのう,きのう,kinou,yesterday,noun,N5,昨 (previous) 日 (day),きのう テレビを みました,time
+,今日,きょう,きょう,kyou,today,noun,N5,今 (now) 日 (day),きょうは にちようびです,time
+,明日,あした,あした,ashita,tomorrow,noun,N5,明 (bright) 日 (day),あした サッカーを します,time
+,午前,ごぜん,ごぜん,gozen,a.m.,noun,N5,午 (noon) 前 (before),ごぜん9じに おきます,time
+,午後,ごご,ごご,gogo,p.m.,noun,N5,午 (noon) 後 (after),ごご3じに としょかんへ いきます,time
+,夜,よる,よる,yoru,"night, evening",noun,N5,夜 (night),よる 10じに ねます,time
+,朝,あさ,あさ,asa,morning,noun,N5,朝 (morning),あさ ごはんを たべます,time
+,昼,ひる,ひる,hiru,"noon, daytime",noun,N5,昼 (daytime),ひるごはんを たべます,time
+,晩,ばん,ばん,ban,evening,noun,N5,晩 (evening),ばんごはんを たべます,time
