@@ -1,0 +1,68 @@
+[
+  {
+    "structure": "A は B です",
+    "theme": "identity / classification",
+    "slots": { "A": ["noun", "pronoun"], "B": ["noun", "na-adj", "i-adj"] },
+    "example": "わたしは せんせいです"
+  },
+  {
+    "structure": "A を Verb",
+    "theme": "action with object",
+    "slots": { "A": ["noun"], "Verb": ["any"]},
+    "example": "パンを たべます"
+  },
+  {
+    "structure": "A で Verb",
+    "theme": "action at location",
+    "slots": { "A": ["location","noun"], "Verb": ["any"] },
+    "example": "がっこうで べんきょうします"
+  },
+  {
+    "structure": "A へ/に Verb",
+    "theme": "motion / destination",
+    "slots": { "A": ["place", "noun"], "Verb": ["motion"]},
+    "example": "にほんへ いきます"
+  },
+  {
+    "structure": "A の B",
+    "theme": "possession / relation",
+    "slots": { "A": ["noun","pronoun"], "B": ["noun"] },
+    "example": "わたしの かばん"
+  },
+  {
+    "structure": "A は Adj です",
+    "theme": "description",
+    "slots": { "A": ["noun"], "Adj": ["i-adj","na-adj"] },
+    "example": "この本は おもしろいです"
+  },
+  {
+    "structure": "Adj + Noun",
+    "theme": "attribution",
+    "slots": { "Adj": ["i-adj","na-adj"], "Noun": ["noun"] },
+    "example": "おおきい いぬ"
+  },
+  {
+    "structure": "Negation",
+    "theme": "denial / contradiction",
+    "slots": { "Verb": ["any"], "Adj": ["i-adj","na-adj"], "Noun": ["noun"] },
+    "example": "たべない"
+  },
+  {
+    "structure": "Question",
+    "theme": "inquiry",
+    "slots": { "clause": ["any"] },
+    "example": "これは なんですか"
+  },
+  {
+    "structure": "A が Verb",
+    "theme": "existence / subject focus",
+    "slots": { "A": ["noun","pronoun"], "Verb": ["existence","stative","motion"]},
+    "example": "だれが きましたか"
+  },
+  {
+    "structure": "A は B が Adj",
+    "theme": "property / condition",
+    "slots": { "A": ["noun"], "B": ["noun"], "Adj": ["i-adj","na-adj"] },
+    "example": "わたしは あたまが いたいです"
+  }
+]

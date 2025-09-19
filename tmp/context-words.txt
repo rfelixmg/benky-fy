@@ -1,0 +1,261 @@
+nice to meet you
+hello / good afternoon
+good evening
+good morning
+goodbye
+good night
+excuse me / i’m sorry
+sorry
+thank you
+please (go ahead / here you are)
+yes
+no
+i (formal)
+that person (over there)
+who (polite)
+person
+person (polite)
+country
+japan
+japanese person
+student
+teacher
+school
+weather
+yes, that’s right
+no, that’s not correct
+yes, i understood
+o’clock, hour
+minute
+today
+tomorrow
+yesterday
+every day
+next week
+person (general use)
+vietnam
+france
+word, language
+language (suffix)
+university student
+company employee
+teacher (formal)
+clerk, shop staff
+welcome (store greeting)
+cheeseburger
+orange juice
+juice
+hamburger
+fries
+sandwich
+rice ball
+cake
+pudding
+ice cream
+cola, coke
+green tea
+black tea
+beer
+sake, japanese rice wine
+shochu
+apple
+flower
+shirt
+chair
+television
+book
+desk
+notebook
+cup
+banana
+lemon
+melon
+egg
+vegetable
+meat
+milk
+fish
+fruit
+shoes
+watch, clock
+bus
+train
+subway
+bicycle
+motorbike
+taxi
+bullet train
+station
+bus stop
+company, office
+home, house
+minute
+sunday
+a.m.
+p.m.
+night
+morning
+noon, daytime
+evening
+meal, dining
+rice, meal
+travel, trip
+exam, test
+tough, serious
+kyoto
+shrine
+place
+festival
+fun, enjoyable
+difficult
+simple, easy
+busy
+pretty, clean
+quiet
+famous
+kind
+energetic, healthy
+convenient
+near, close
+far, distant
+new
+old (not for people)
+many, numerous
+few, little
+heavy
+light (not heavy)
+mountain
+river
+sea, ocean
+rain
+spacious, wide
+narrow, cramped
+movie theater
+lunchbox
+lunch
+camera
+photograph
+counter for flat objects
+counter for long cylindrical
+counter for books
+counter for small animals
+counter for cups/glasses
+counter for people
+general counter
+sweet
+spicy, hot
+bitter
+salty
+sour
+hakone (place)
+cable car
+business shoes
+sneakers
+sweater
+bag
+hat
+necktie
+food product
+pineapple
+popcorn
+donut
+croquette
+ramen
+curry rice
+pizza
+steak
+pork cutlet
+tempura
+grilled chicken skewers
+cooking, cuisine
+thank you for the meal (after)
+said before eating
+restaurant
+menu
+coffee
+wine
+spaghetti
+bread
+long weekend, consecutive holidays
+typhoon
+temple
+library
+friend
+on foot / walking
+toilet, restroom
+stairs
+elevator
+department store
+sales counter
+ball
+glasses
+hakone
+kyoto
+job interview
+company, enterprise
+big tech, major company
+work experience
+specialty, expertise
+researcher
+phd degree
+academic society, conference
+research paper
+artificial intelligence
+machine learning
+deep learning
+neural network
+robotics
+reliability, trust
+safety
+algorithm
+content moderation
+social media
+content creator
+guidance, mentorship
+mentor
+to do
+to know
+to think
+to open
+to close
+to sleep
+to wake up
+to walk
+to go
+to speak
+to say
+to study
+to buy
+to sell
+to remember
+to forget
+to see / to watch
+to eat
+to drink
+to ask / to listen
+to run
+to ride
+to work
+to give
+to put / place
+to fall (rain/snow)
+to sing
+to cry
+to take
+to call
+to scream
+to stop / quit
+to start
+to become
+to be born
+to exist (animate)
+to exist (inanimate)
+to pay
+to cut
+to search / look up
+to find
+to meet
+to write
+to take (a photo)
+to wait
+to understand

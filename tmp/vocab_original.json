@@ -1,0 +1,3249 @@
+[
+    {
+        "kanji":"はじめまして",
+        "kana":"はじめまして",
+        "furigana":"はじめまして",
+        "romaji":"hajimemashite",
+        "english":"nice to meet you",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"はじめまして、タンです。",
+        "tags":[
+            "greeting",
+            "intro"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"こんにちは",
+        "kana":"こんにちは",
+        "furigana":"こんにちは",
+        "romaji":"konnichiwa",
+        "english":"hello \/ good afternoon",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"こんにちは、サラさん。",
+        "tags":[
+            "greeting"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"こんばんは",
+        "kana":"こんばんは",
+        "furigana":"こんばんは",
+        "romaji":"konbanwa",
+        "english":"good evening",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"こんばんは、やまださん。",
+        "tags":[
+            "greeting"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"おはようございます",
+        "kana":"おはようございます",
+        "furigana":"おはようございます",
+        "romaji":"ohayou gozaimasu",
+        "english":"good morning",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"早 = early",
+        "example_sentence":"おはようございます、せんせい。",
+        "tags":[
+            "greeting"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"さようなら",
+        "kana":"さようなら",
+        "furigana":"さようなら",
+        "romaji":"sayounara",
+        "english":"goodbye",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"では、さようなら。",
+        "tags":[
+            "farewell"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"おやすみなさい",
+        "kana":"おやすみなさい",
+        "furigana":"おやすみなさい",
+        "romaji":"oyasuminasai",
+        "english":"good night",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"休 = rest",
+        "example_sentence":"おやすみなさい、またあした。",
+        "tags":[
+            "farewell"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"すみません",
+        "kana":"すみません",
+        "furigana":"すみません",
+        "romaji":"sumimasen",
+        "english":"excuse me \/ i’m sorry",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"済 = finish",
+        "example_sentence":"すみません、にほんごは？",
+        "tags":[
+            "apology",
+            "polite"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"ごめんなさい",
+        "kana":"ごめんなさい",
+        "furigana":"ごめんなさい",
+        "romaji":"gomennasai",
+        "english":"sorry",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"ごめんなさい、ちがいます。",
+        "tags":[
+            "apology"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"ありがとう ございます",
+        "kana":"ありがとうございます",
+        "furigana":"ありがとうございます",
+        "romaji":"arigatou gozaimasu",
+        "english":"thank you",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"有 = exist, 難 = hardship",
+        "example_sentence":"どうもありがとうございます。",
+        "tags":[
+            "gratitude"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"どうぞ",
+        "kana":"どうぞ",
+        "furigana":"どうぞ",
+        "romaji":"douzo",
+        "english":"please (go ahead \/ here you are)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"コーヒーをどうぞ。",
+        "tags":[
+            "offering"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"はい",
+        "kana":"はい",
+        "furigana":"はい",
+        "romaji":"hai",
+        "english":"yes",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"はい、そうです。",
+        "tags":[
+            "response"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"いいえ",
+        "kana":"いいえ",
+        "furigana":"いいえ",
+        "romaji":"iie",
+        "english":"no",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"いいえ、ちがいます。",
+        "tags":[
+            "response"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"わたし",
+        "kana":"わたし",
+        "furigana":"わたし",
+        "romaji":"watashi",
+        "english":"i (formal)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"私 = private",
+        "example_sentence":"わたしは サラです。",
+        "tags":[
+            "pronoun"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"あのひと",
+        "kana":"あのひと",
+        "furigana":"あのひと",
+        "romaji":"ano hito",
+        "english":"that person (over there)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"人 = person",
+        "example_sentence":"あのひとは せんせいです。",
+        "tags":[
+            "pronoun"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"どなた",
+        "kana":"どなた",
+        "furigana":"どなた",
+        "romaji":"donata",
+        "english":"who (polite)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"方 = person",
+        "example_sentence":"あのかたは どなたですか。",
+        "tags":[
+            "question"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"ひと",
+        "kana":"ひと",
+        "furigana":"ひと",
+        "romaji":"hito",
+        "english":"person",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"人 = person",
+        "example_sentence":"にほんじんです。",
+        "tags":[
+            "people"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"かた",
+        "kana":"かた",
+        "furigana":"かた",
+        "romaji":"kata",
+        "english":"person (polite)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"方 = person",
+        "example_sentence":"にほんのかたですか。",
+        "tags":[
+            "polite"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"国",
+        "kana":"くに",
+        "furigana":"くに",
+        "romaji":"kuni",
+        "english":"country",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"国 = country",
+        "example_sentence":"おくに は どちらですか。",
+        "tags":[
+            "country",
+            "nationality"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"日本",
+        "kana":"にほん",
+        "furigana":"にほん",
+        "romaji":"nihon",
+        "english":"japan",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"日本 = japan",
+        "example_sentence":"にほんから きました。",
+        "tags":[
+            "country"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"日本人",
+        "kana":"にほんじん",
+        "furigana":"にほんじん",
+        "romaji":"nihonjin",
+        "english":"japanese person",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"日本 = japan, 人 = person",
+        "example_sentence":"わたしは にほんじんです。",
+        "tags":[
+            "nationality"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"学生",
+        "kana":"がくせい",
+        "furigana":"がくせい",
+        "romaji":"gakusei",
+        "english":"student",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"学 = study, 生 = life",
+        "example_sentence":"わたしは がくせいです。",
+        "tags":[
+            "student"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"先生",
+        "kana":"せんせい",
+        "furigana":"せんせい",
+        "romaji":"sensei",
+        "english":"teacher",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"先 = ahead, 生 = life",
+        "example_sentence":"あのひとは せんせいです。",
+        "tags":[
+            "teacher"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"学校",
+        "kana":"がっこう",
+        "furigana":"がっこう",
+        "romaji":"gakkou",
+        "english":"school",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"学 = study, 校 = school",
+        "example_sentence":"にほんの がっこうです。",
+        "tags":[
+            "school"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"天気",
+        "kana":"てんき",
+        "furigana":"てんき",
+        "romaji":"tenki",
+        "english":"weather",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"天 = sky, 気 = spirit",
+        "example_sentence":"いいてんきですね。",
+        "tags":[
+            "weather"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"はい、そうです",
+        "kana":"はい、そうです",
+        "furigana":"はい、そうです",
+        "romaji":"hai, sou desu",
+        "english":"yes, that’s right",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"a: にほんじんですか？ b: はい、そうです。",
+        "tags":[
+            "response"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"いいえ、ちがいます",
+        "kana":"いいえ、ちがいます",
+        "furigana":"いいえ、ちがいます",
+        "romaji":"iie, chigaimasu",
+        "english":"no, that’s not correct",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"違 = different",
+        "example_sentence":"a: がくせいですか？ b: いいえ、ちがいます。",
+        "tags":[
+            "response"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"はい、わかりました",
+        "kana":"はい、わかりました",
+        "furigana":"はい、わかりました",
+        "romaji":"hai, wakarimashita",
+        "english":"yes, i understood",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"分 = understand",
+        "example_sentence":"はい、わかりました。",
+        "tags":[
+            "confirmation"
+        ],
+        "priority_group":"p0",
+        "category":"expression"
+    },
+    {
+        "kanji":"時",
+        "kana":"じ",
+        "furigana":"じ",
+        "romaji":"ji",
+        "english":"o’clock, hour",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"時 (time)",
+        "example_sentence":"9じに おきます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p0",
+        "category":"time"
+    },
+    {
+        "kanji":"分",
+        "kana":"ふん／ぷん",
+        "furigana":"ふん／ぷん",
+        "romaji":"fun\/pun",
+        "english":"minute",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"分 (divide)",
+        "example_sentence":"5ふん あります",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p0",
+        "category":"time"
+    },
+    {
+        "kanji":"今日",
+        "kana":"きょう",
+        "furigana":"きょう",
+        "romaji":"kyou",
+        "english":"today",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"今 (now) 日 (day)",
+        "example_sentence":"きょうは にちようびです",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p0",
+        "category":"time"
+    },
+    {
+        "kanji":"明日",
+        "kana":"あした",
+        "furigana":"あした",
+        "romaji":"ashita",
+        "english":"tomorrow",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"明 (bright) 日 (day)",
+        "example_sentence":"あした サッカーを します",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p0",
+        "category":"time"
+    },
+    {
+        "kanji":"昨日",
+        "kana":"きのう",
+        "furigana":"きのう",
+        "romaji":"kinou",
+        "english":"yesterday",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"昨 (previous) 日 (day)",
+        "example_sentence":"きのう テレビを みました",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p0",
+        "category":"time"
+    },
+    {
+        "kanji":"毎日",
+        "kana":"まいにち",
+        "furigana":"まいにち",
+        "romaji":"mainichi",
+        "english":"every day",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"毎 (every) 日 (day)",
+        "example_sentence":"まいにち べんきょうします",
+        "tags":[
+            "frequency"
+        ],
+        "priority_group":"p0",
+        "category":"time"
+    },
+    {
+        "kanji":"来週",
+        "kana":"らいしゅう",
+        "furigana":"らいしゅう",
+        "romaji":"raishuu",
+        "english":"next week",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"来 (come) 週 (week)",
+        "example_sentence":"らいしゅう きょうとへ いきます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p0",
+        "category":"time"
+    },
+    {
+        "kanji":"人",
+        "kana":"ひと",
+        "furigana":"ひと",
+        "romaji":"hito",
+        "english":"person (general use)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"人 (person)",
+        "example_sentence":"この町には人がたくさんいます",
+        "tags":[
+            "people"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"ベトナム",
+        "kana":"ベトナム",
+        "furigana":"ベトナム",
+        "romaji":"betonamu",
+        "english":"vietnam",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"ベトナムからきました。",
+        "tags":[
+            "country"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"フランス",
+        "kana":"フランス",
+        "furigana":"フランス",
+        "romaji":"furansu",
+        "english":"france",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"―",
+        "example_sentence":"フランスからきました。",
+        "tags":[
+            "country"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ことば",
+        "kana":"ことば",
+        "furigana":"ことば",
+        "romaji":"kotoba",
+        "english":"word, language",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"言 = word, 葉 = leaf",
+        "example_sentence":"にほんごのことば。",
+        "tags":[
+            "vocabulary"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"語",
+        "kana":"ご",
+        "furigana":"ご",
+        "romaji":"go",
+        "english":"language (suffix)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"語 = language",
+        "example_sentence":"にほんごをべんきょうします。",
+        "tags":[
+            "language"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"大学生",
+        "kana":"だいがくせい",
+        "furigana":"だいがくせい",
+        "romaji":"daigakusei",
+        "english":"university student",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"大 = big, 学 = study, 生 = life",
+        "example_sentence":"キムさんは だいがくせいです。",
+        "tags":[
+            "student"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"会社員",
+        "kana":"かいしゃいん",
+        "furigana":"かいしゃいん",
+        "romaji":"kaishain",
+        "english":"company employee",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"会社 = company, 員 = member",
+        "example_sentence":"サラさんは かいしゃいんです。",
+        "tags":[
+            "occupation"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"教師",
+        "kana":"きょうし",
+        "furigana":"きょうし",
+        "romaji":"kyoushi",
+        "english":"teacher (formal)",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"教 = teach, 師 = master",
+        "example_sentence":"わたしは きょうしです。",
+        "tags":[
+            "occupation"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"店員",
+        "kana":"てんいん",
+        "furigana":"てんいん",
+        "romaji":"ten’in",
+        "english":"clerk, shop staff",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"店 = shop + 員 = member",
+        "example_sentence":"店員にききます。",
+        "tags":[
+            "shopping",
+            "people"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"いらっしゃいませ",
+        "kana":"いらっしゃいませ",
+        "furigana":"いらっしゃいませ",
+        "romaji":"irasshaimase",
+        "english":"welcome (store greeting)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"店員が「いらっしゃいませ」と言います。",
+        "tags":[
+            "shopping",
+            "greeting"
+        ],
+        "priority_group":"p1",
+        "category":"expression"
+    },
+    {
+        "kanji":"チーズバーガー",
+        "kana":"ちーずばーがー",
+        "furigana":"チーズバーガー",
+        "romaji":"chiizubaagaa",
+        "english":"cheeseburger",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"チーズバーガーをください。",
+        "tags":[
+            "food",
+            "shopping"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"オレンジジュース",
+        "kana":"おれんじじゅーす",
+        "furigana":"オレンジジュース",
+        "romaji":"orenji juusu",
+        "english":"orange juice",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"オレンジジュースをのみます。",
+        "tags":[
+            "drink",
+            "shopping"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ジュース",
+        "kana":"じゅーす",
+        "furigana":"ジュース",
+        "romaji":"juusu",
+        "english":"juice",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ジュースを二つください。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ハンバーガー",
+        "kana":"はんばーがー",
+        "furigana":"ハンバーガー",
+        "romaji":"hanbaagaa",
+        "english":"hamburger",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ハンバーガーを一つください。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ポテト",
+        "kana":"ぽてと",
+        "furigana":"ポテト",
+        "romaji":"poteto",
+        "english":"fries",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"ポテトを食べます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"サンドイッチ",
+        "kana":"さんどいっち",
+        "furigana":"サンドイッチ",
+        "romaji":"sandoicchi",
+        "english":"sandwich",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"サンドイッチを二つください。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"おにぎり",
+        "kana":"おにぎり",
+        "furigana":"おにぎり",
+        "romaji":"onigiri",
+        "english":"rice ball",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"おにぎりを食べます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ケーキ",
+        "kana":"けーき",
+        "furigana":"ケーキ",
+        "romaji":"keeki",
+        "english":"cake",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ケーキをたべました。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"プリン",
+        "kana":"ぷりん",
+        "furigana":"プリン",
+        "romaji":"purin",
+        "english":"pudding",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"プリンをください。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"アイスクリーム",
+        "kana":"あいすくりーむ",
+        "furigana":"アイスクリーム",
+        "romaji":"aisu kuriimu",
+        "english":"ice cream",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"アイスクリームを食べます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"コーラ",
+        "kana":"こーら",
+        "furigana":"コーラ",
+        "romaji":"koora",
+        "english":"cola, coke",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"コーラをのみます。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"おちゃ",
+        "kana":"おちゃ",
+        "furigana":"お茶",
+        "romaji":"ocha",
+        "english":"green tea",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"茶 = tea",
+        "example_sentence":"おちゃをください。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"こうちゃ",
+        "kana":"こうちゃ",
+        "furigana":"紅茶",
+        "romaji":"koucha",
+        "english":"black tea",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"紅 = red, 茶 = tea",
+        "example_sentence":"こうちゃをのみます。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ビール",
+        "kana":"びーる",
+        "furigana":"ビール",
+        "romaji":"biiru",
+        "english":"beer",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ビールを飲みます。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"日本酒",
+        "kana":"にほんしゅ",
+        "furigana":"日本酒",
+        "romaji":"nihonshu",
+        "english":"sake, japanese rice wine",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"日本 + 酒",
+        "example_sentence":"日本酒を飲みます。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"焼酎",
+        "kana":"しょうちゅう",
+        "furigana":"焼酎",
+        "romaji":"shouchuu",
+        "english":"shochu",
+        "jlpt_level":"n3",
+        "kanji_breakdown":"焼 = burn + 酎 = liquor",
+        "example_sentence":"焼酎をください。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"りんご",
+        "kana":"りんご",
+        "furigana":"りんご",
+        "romaji":"ringo",
+        "english":"apple",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"りんごを三つください。",
+        "tags":[
+            "fruit"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"はな",
+        "kana":"はな",
+        "furigana":"花",
+        "romaji":"hana",
+        "english":"flower",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"花 = flower",
+        "example_sentence":"花をかいます。",
+        "tags":[
+            "shopping"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"シャツ",
+        "kana":"しゃつ",
+        "furigana":"シャツ",
+        "romaji":"shatsu",
+        "english":"shirt",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"シャツをきます。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"いす",
+        "kana":"いす",
+        "furigana":"いす",
+        "romaji":"isu",
+        "english":"chair",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"いすにすわります。",
+        "tags":[
+            "furniture"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"テレビ",
+        "kana":"てれび",
+        "furigana":"テレビ",
+        "romaji":"terebi",
+        "english":"television",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"テレビをみます。",
+        "tags":[
+            "household"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ほん",
+        "kana":"ほん",
+        "furigana":"本",
+        "romaji":"hon",
+        "english":"book",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"本 = book",
+        "example_sentence":"本をよみます。",
+        "tags":[
+            "study"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"つくえ",
+        "kana":"つくえ",
+        "furigana":"机",
+        "romaji":"tsukue",
+        "english":"desk",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"机 = desk",
+        "example_sentence":"つくえにすわります。",
+        "tags":[
+            "furniture"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ノート",
+        "kana":"のーと",
+        "furigana":"ノート",
+        "romaji":"nooto",
+        "english":"notebook",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ノートにかきます。",
+        "tags":[
+            "school"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"コップ",
+        "kana":"こっぷ",
+        "furigana":"コップ",
+        "romaji":"koppu",
+        "english":"cup",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"コップをつかいます。",
+        "tags":[
+            "object"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"バナナ",
+        "kana":"ばなな",
+        "furigana":"バナナ",
+        "romaji":"banana",
+        "english":"banana",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"バナナを食べます。",
+        "tags":[
+            "fruit"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"レモン",
+        "kana":"れもん",
+        "furigana":"レモン",
+        "romaji":"remon",
+        "english":"lemon",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"レモンを食べます。",
+        "tags":[
+            "fruit"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"メロン",
+        "kana":"めろん",
+        "furigana":"メロン",
+        "romaji":"meron",
+        "english":"melon",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"メロンをたべます。",
+        "tags":[
+            "fruit"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"たまご",
+        "kana":"たまご",
+        "furigana":"卵",
+        "romaji":"tamago",
+        "english":"egg",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"卵 = egg",
+        "example_sentence":"卵を二つください。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"やさい",
+        "kana":"やさい",
+        "furigana":"野菜",
+        "romaji":"yasai",
+        "english":"vegetable",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"野 = field, 菜 = greens",
+        "example_sentence":"やさいをたべます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"にく",
+        "kana":"にく",
+        "furigana":"肉",
+        "romaji":"niku",
+        "english":"meat",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"肉 = meat",
+        "example_sentence":"にくをかいます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ぎゅうにゅう",
+        "kana":"ぎゅうにゅう",
+        "furigana":"牛乳",
+        "romaji":"gyuunyuu",
+        "english":"milk",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"牛 = cow, 乳 = milk",
+        "example_sentence":"ぎゅうにゅうをのみます。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"さかな",
+        "kana":"さかな",
+        "furigana":"魚",
+        "romaji":"sakana",
+        "english":"fish",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"魚 = fish",
+        "example_sentence":"さかなをたべます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"くだもの",
+        "kana":"くだもの",
+        "furigana":"果物",
+        "romaji":"kudamono",
+        "english":"fruit",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"果 = fruit, 物 = thing",
+        "example_sentence":"くだものを食べます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"くつ",
+        "kana":"くつ",
+        "furigana":"靴",
+        "romaji":"kutsu",
+        "english":"shoes",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"靴 = shoes",
+        "example_sentence":"くつをかいます。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"とけい",
+        "kana":"とけい",
+        "furigana":"時計",
+        "romaji":"tokei",
+        "english":"watch, clock",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"時 = time, 計 = measure",
+        "example_sentence":"時計をみます。",
+        "tags":[
+            "object"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"バス",
+        "kana":"バス",
+        "furigana":"バス",
+        "romaji":"basu",
+        "english":"bus",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"バスで いきます",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"電車",
+        "kana":"でんしゃ",
+        "furigana":"でんしゃ",
+        "romaji":"densha",
+        "english":"train",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"電 = electric, 車 = vehicle",
+        "example_sentence":"でんしゃに のります",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"地下鉄",
+        "kana":"ちかてつ",
+        "furigana":"ちかてつ",
+        "romaji":"chikatetsu",
+        "english":"subway",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"地 = ground, 下 = below, 鉄 = iron",
+        "example_sentence":"ちかてつで いきます",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"自転車",
+        "kana":"じてんしゃ",
+        "furigana":"じてんしゃ",
+        "romaji":"jitensha",
+        "english":"bicycle",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"自 = self, 転 = turn, 車 = vehicle",
+        "example_sentence":"じてんしゃに のります",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"バイク",
+        "kana":"バイク",
+        "furigana":"バイク",
+        "romaji":"baiku",
+        "english":"motorbike",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"バイクで いきます",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"タクシー",
+        "kana":"タクシー",
+        "furigana":"タクシー",
+        "romaji":"takushii",
+        "english":"taxi",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"タクシーで いきます",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"新幹線",
+        "kana":"しんかんせん",
+        "furigana":"しんかんせん",
+        "romaji":"shinkansen",
+        "english":"bullet train",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"新 = new, 幹 = trunk, 線 = line",
+        "example_sentence":"しんかんせんで おおさかへ いきます",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"駅",
+        "kana":"えき",
+        "furigana":"えき",
+        "romaji":"eki",
+        "english":"station",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"駅 = station",
+        "example_sentence":"えきで おります",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"バス停",
+        "kana":"バスてい",
+        "furigana":"バスてい",
+        "romaji":"basutei",
+        "english":"bus stop",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"停 = stop",
+        "example_sentence":"バスていで まちます",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"会社",
+        "kana":"かいしゃ",
+        "furigana":"かいしゃ",
+        "romaji":"kaisha",
+        "english":"company, office",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"会 = meet, 社 = company",
+        "example_sentence":"かいしゃへ いきます",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"家",
+        "kana":"うち",
+        "furigana":"うち",
+        "romaji":"uchi",
+        "english":"home, house",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"家 = house",
+        "example_sentence":"うちに かえります",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"分",
+        "kana":"ふん／ぷん",
+        "furigana":"ふん／ぷん",
+        "romaji":"fun\/pun",
+        "english":"minute",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"分 (divide)",
+        "example_sentence":"5ふん あります",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"日曜日",
+        "kana":"にちようび",
+        "furigana":"にちようび",
+        "romaji":"nichiyoubi",
+        "english":"sunday",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"日 = sun, 曜 = weekday, 日 = day",
+        "example_sentence":"にちようびに えきへ いきます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"午前",
+        "kana":"ごぜん",
+        "furigana":"ごぜん",
+        "romaji":"gozen",
+        "english":"a.m.",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"午 = noon, 前 = before",
+        "example_sentence":"ごぜん9じに おきます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"午後",
+        "kana":"ごご",
+        "furigana":"ごご",
+        "romaji":"gogo",
+        "english":"p.m.",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"午 = noon, 後 = after",
+        "example_sentence":"ごご3じに としょかんへ いきます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"夜",
+        "kana":"よる",
+        "furigana":"よる",
+        "romaji":"yoru",
+        "english":"night",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"夜 = night",
+        "example_sentence":"よる 10じに ねます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"朝",
+        "kana":"あさ",
+        "furigana":"あさ",
+        "romaji":"asa",
+        "english":"morning",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"朝 = morning",
+        "example_sentence":"あさ ごはんを たべます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"昼",
+        "kana":"ひる",
+        "furigana":"ひる",
+        "romaji":"hiru",
+        "english":"noon, daytime",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"昼 = daytime",
+        "example_sentence":"ひるごはんを たべます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"晩",
+        "kana":"ばん",
+        "furigana":"ばん",
+        "romaji":"ban",
+        "english":"evening",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"晩 = evening",
+        "example_sentence":"ばんごはんを たべます",
+        "tags":[
+            "time"
+        ],
+        "priority_group":"p2",
+        "category":"time"
+    },
+    {
+        "kanji":"食事",
+        "kana":"しょくじ",
+        "furigana":"しょくじ",
+        "romaji":"shokuji",
+        "english":"meal, dining",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"食 = eat, 事 = thing",
+        "example_sentence":"レストランで しょくじを します。",
+        "tags":[
+            "food",
+            "daily"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"ごはん",
+        "kana":"ごはん",
+        "furigana":"ごはん",
+        "romaji":"gohan",
+        "english":"rice, meal",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"飯 = rice, meal",
+        "example_sentence":"あさごはんを たべましたか。",
+        "tags":[
+            "food",
+            "meal"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"旅行",
+        "kana":"りょこう",
+        "furigana":"りょこう",
+        "romaji":"ryokou",
+        "english":"travel, trip",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"旅 = travel, 行 = go",
+        "example_sentence":"来週、京都へ旅行します。",
+        "tags":[
+            "travel",
+            "verb"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"試験",
+        "kana":"しけん",
+        "furigana":"しけん",
+        "romaji":"shiken",
+        "english":"exam, test",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"試 = try, 験 = test",
+        "example_sentence":"明日、試験があります。",
+        "tags":[
+            "study",
+            "school"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"大変",
+        "kana":"たいへん",
+        "furigana":"たいへん",
+        "romaji":"taihen",
+        "english":"tough, serious",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"大 = big, 変 = change",
+        "example_sentence":"試験は大変でした。",
+        "tags":[
+            "feelings"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"京都",
+        "kana":"きょうと",
+        "furigana":"きょうと",
+        "romaji":"kyouto",
+        "english":"kyoto",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"京 = capital, 都 = metropolis",
+        "example_sentence":"京都はおてらがたくさんあります。",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"神社",
+        "kana":"じんじゃ",
+        "furigana":"じんじゃ",
+        "romaji":"jinja",
+        "english":"shrine",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"神 = god, 社 = shrine",
+        "example_sentence":"神社でおまいりしました。",
+        "tags":[
+            "religion",
+            "place"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"所",
+        "kana":"ところ",
+        "furigana":"ところ",
+        "romaji":"tokoro",
+        "english":"place",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"所 = place",
+        "example_sentence":"京都はどんなところですか。",
+        "tags":[
+            "location"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"祭り",
+        "kana":"まつり",
+        "furigana":"まつり",
+        "romaji":"matsuri",
+        "english":"festival",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"祭 = festival",
+        "example_sentence":"夏祭りに行きたいです。",
+        "tags":[
+            "event",
+            "culture"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"楽しい",
+        "kana":"たのしい",
+        "furigana":"たのしい",
+        "romaji":"tanoshii",
+        "english":"fun, enjoyable",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"楽 = comfort",
+        "example_sentence":"パーティーは楽しかったです。",
+        "tags":[
+            "feelings"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"難しい",
+        "kana":"むずかしい",
+        "furigana":"むずかしい",
+        "romaji":"muzukashii",
+        "english":"difficult",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"難 = difficult",
+        "example_sentence":"このテストは難しいです。",
+        "tags":[
+            "study",
+            "feelings"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"簡単",
+        "kana":"かんたん",
+        "furigana":"かんたん",
+        "romaji":"kantan",
+        "english":"simple, easy",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"簡 = simple, 単 = single",
+        "example_sentence":"問題は簡単でした。",
+        "tags":[
+            "study"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"忙しい",
+        "kana":"いそがしい",
+        "furigana":"いそがしい",
+        "romaji":"isogashii",
+        "english":"busy",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"忙 = busy",
+        "example_sentence":"毎日忙しいです。",
+        "tags":[
+            "daily life"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"きれい",
+        "kana":"きれい",
+        "furigana":"きれい",
+        "romaji":"kirei",
+        "english":"pretty, clean",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"綺麗 (kana use)",
+        "example_sentence":"この町はきれいです。",
+        "tags":[
+            "description"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"静か",
+        "kana":"しずか",
+        "furigana":"しずか",
+        "romaji":"shizuka",
+        "english":"quiet",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"静 = quiet",
+        "example_sentence":"図書館は静かです。",
+        "tags":[
+            "places"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"有名",
+        "kana":"ゆうめい",
+        "furigana":"ゆうめい",
+        "romaji":"yuumei",
+        "english":"famous",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"有 = have, 名 = name",
+        "example_sentence":"京都は有名です。",
+        "tags":[
+            "description"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"親切",
+        "kana":"しんせつ",
+        "furigana":"しんせつ",
+        "romaji":"shinsetsu",
+        "english":"kind",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"親 = parent, 切 = cut\/close",
+        "example_sentence":"先生は親切です。",
+        "tags":[
+            "people"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"元気",
+        "kana":"げんき",
+        "furigana":"げんき",
+        "romaji":"genki",
+        "english":"energetic, healthy",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"元 = origin, 気 = spirit",
+        "example_sentence":"元気ですか。",
+        "tags":[
+            "gre"
+        ],
+        "priority_group":"p2",
+        "category":"adjective"
+    },
+    {
+        "kanji":"便利",
+        "kana":"べんり",
+        "furigana":"べんり",
+        "romaji":"benri",
+        "english":"convenient",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"便 = convenience, 利 = benefit",
+        "example_sentence":"コンビニは便利です。",
+        "tags":[
+            "lifestyle"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"近い",
+        "kana":"ちかい",
+        "furigana":"ちかい",
+        "romaji":"chikai",
+        "english":"near, close",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"近 = near",
+        "example_sentence":"駅は近いです。",
+        "tags":[
+            "places"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"遠い",
+        "kana":"とおい",
+        "furigana":"とおい",
+        "romaji":"tooi",
+        "english":"far, distant",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"遠 = far",
+        "example_sentence":"家は学校から遠いです。",
+        "tags":[
+            "places"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"新しい",
+        "kana":"あたらしい",
+        "furigana":"あたらしい",
+        "romaji":"atarashii",
+        "english":"new",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"新 = new",
+        "example_sentence":"新しい本を買いました。",
+        "tags":[
+            "description"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"古い",
+        "kana":"ふるい",
+        "furigana":"ふるい",
+        "romaji":"furui",
+        "english":"old (not for people)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"古 = old",
+        "example_sentence":"古い寺があります。",
+        "tags":[
+            "description"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"多い",
+        "kana":"おおい",
+        "furigana":"おおい",
+        "romaji":"ooi",
+        "english":"many, numerous",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"多 = many",
+        "example_sentence":"京都は観光客が多いです。",
+        "tags":[
+            "quantity"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"少ない",
+        "kana":"すくない",
+        "furigana":"すくない",
+        "romaji":"sukunai",
+        "english":"few, little",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"少 = few",
+        "example_sentence":"この町は人が少ないです。",
+        "tags":[
+            "quantity"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"重い",
+        "kana":"おもい",
+        "furigana":"おもい",
+        "romaji":"omoi",
+        "english":"heavy",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"重 = heavy",
+        "example_sentence":"荷物が重いです。",
+        "tags":[
+            "description"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"軽い",
+        "kana":"かるい",
+        "furigana":"かるい",
+        "romaji":"karui",
+        "english":"light (not heavy)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"軽 = light",
+        "example_sentence":"このかばんは軽いです。",
+        "tags":[
+            "description"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"山",
+        "kana":"やま",
+        "furigana":"やま",
+        "romaji":"yama",
+        "english":"mountain",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"山 = mountain",
+        "example_sentence":"山に登ります。",
+        "tags":[
+            "nature"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"川",
+        "kana":"かわ",
+        "furigana":"かわ",
+        "romaji":"kawa",
+        "english":"river",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"川 = river",
+        "example_sentence":"川であそびました。",
+        "tags":[
+            "nature"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"海",
+        "kana":"うみ",
+        "furigana":"うみ",
+        "romaji":"umi",
+        "english":"sea, ocean",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"海 = sea",
+        "example_sentence":"夏に海へ行きます。",
+        "tags":[
+            "nature"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"雨",
+        "kana":"あめ",
+        "furigana":"あめ",
+        "romaji":"ame",
+        "english":"rain",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"雨 = rain",
+        "example_sentence":"昨日は雨でした。",
+        "tags":[
+            "weather"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"広い",
+        "kana":"ひろい",
+        "furigana":"ひろい",
+        "romaji":"hiroi",
+        "english":"spacious, wide",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"広 = wide",
+        "example_sentence":"このへやは広いです。",
+        "tags":[
+            "places"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"狭い",
+        "kana":"せまい",
+        "furigana":"せまい",
+        "romaji":"semai",
+        "english":"narrow, cramped",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"狭 = narrow",
+        "example_sentence":"このへやは狭いです。",
+        "tags":[
+            "places"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"映画館",
+        "kana":"えいがかん",
+        "furigana":"えいがかん",
+        "romaji":"eigakan",
+        "english":"movie theater",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"映 = project, 画 = picture, 館 = hall",
+        "example_sentence":"友だちと映画館へ行きました。",
+        "tags":[
+            "leisure"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"お弁当",
+        "kana":"おべんとう",
+        "furigana":"おべんとう",
+        "romaji":"obentou",
+        "english":"lunchbox",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"弁 = speech, 当 = appropriate",
+        "example_sentence":"お弁当を たべました。",
+        "tags":[
+            "food",
+            "daily"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"昼ご飯",
+        "kana":"ひるごはん",
+        "furigana":"ひるごはん",
+        "romaji":"hirugohan",
+        "english":"lunch",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"昼 = daytime, 飯 = meal",
+        "example_sentence":"昼ごはんを たべます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"カメラ",
+        "kana":"カメラ",
+        "furigana":"カメラ",
+        "romaji":"kamera",
+        "english":"camera",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"カメラで しゃしんを とります。",
+        "tags":[
+            "object"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"写真",
+        "kana":"しゃしん",
+        "furigana":"しゃしん",
+        "romaji":"shashin",
+        "english":"photograph",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"写 = copy, 真 = truth",
+        "example_sentence":"しゃしんを とりました。",
+        "tags":[
+            "object"
+        ],
+        "priority_group":"p3",
+        "category":"noun"
+    },
+    {
+        "kanji":"～まい",
+        "kana":"まい",
+        "furigana":"まい",
+        "romaji":"mai",
+        "english":"counter for flat objects",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"シャツを ２まい かいました。",
+        "tags":[
+            "counters"
+        ],
+        "priority_group":"p3",
+        "category":"counter"
+    },
+    {
+        "kanji":"～ほん／～ぽん／～ぼん",
+        "kana":"ほん／ぽん／ぼん",
+        "furigana":"ほん／ぽん／ぼん",
+        "romaji":"hon\/pon\/bon",
+        "english":"counter for long cylindrical",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ペンを ３ぼん かいました。",
+        "tags":[
+            "counters"
+        ],
+        "priority_group":"p3",
+        "category":"counter"
+    },
+    {
+        "kanji":"～さつ",
+        "kana":"さつ",
+        "furigana":"さつ",
+        "romaji":"satsu",
+        "english":"counter for books",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"本を １さつ よみました。",
+        "tags":[
+            "counters"
+        ],
+        "priority_group":"p3",
+        "category":"counter"
+    },
+    {
+        "kanji":"～ひき／～ぴき／～びき",
+        "kana":"ひき／ぴき／びき",
+        "furigana":"ひき／ぴき／びき",
+        "romaji":"hiki\/piki\/biki",
+        "english":"counter for small animals",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ねこが ２ひき います。",
+        "tags":[
+            "counters"
+        ],
+        "priority_group":"p3",
+        "category":"counter"
+    },
+    {
+        "kanji":"～はい／～ぱい／～ばい",
+        "kana":"はい／ぱい／ばい",
+        "furigana":"はい／ぱい／ばい",
+        "romaji":"hai\/pai\/bai",
+        "english":"counter for cups\/glasses",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"みずを ２はい のみました。",
+        "tags":[
+            "counters"
+        ],
+        "priority_group":"p3",
+        "category":"counter"
+    },
+    {
+        "kanji":"～にん",
+        "kana":"にん",
+        "furigana":"にん",
+        "romaji":"nin",
+        "english":"counter for people",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"３にん で いきました。",
+        "tags":[
+            "counters"
+        ],
+        "priority_group":"p3",
+        "category":"counter"
+    },
+    {
+        "kanji":"～つ",
+        "kana":"つ",
+        "furigana":"つ",
+        "romaji":"tsu",
+        "english":"general counter",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"りんごを ４つ たべました。",
+        "tags":[
+            "counters"
+        ],
+        "priority_group":"p3",
+        "category":"counter"
+    },
+    {
+        "kanji":"あまい",
+        "kana":"あまい",
+        "furigana":"あまい",
+        "romaji":"amai",
+        "english":"sweet",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"この ケーキは あまいです。",
+        "tags":[
+            "taste"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"からい",
+        "kana":"からい",
+        "furigana":"からい",
+        "romaji":"karai",
+        "english":"spicy, hot",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"カレーは からいです。",
+        "tags":[
+            "taste"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"にがい",
+        "kana":"にがい",
+        "furigana":"にがい",
+        "romaji":"nigai",
+        "english":"bitter",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"—",
+        "example_sentence":"この コーヒーは にがいです。",
+        "tags":[
+            "taste"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"しょっぱい",
+        "kana":"しょっぱい",
+        "furigana":"しょっぱい",
+        "romaji":"shoppai",
+        "english":"salty",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"—",
+        "example_sentence":"この スープは しょっぱいです。",
+        "tags":[
+            "taste"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"すっぱい",
+        "kana":"すっぱい",
+        "furigana":"すっぱい",
+        "romaji":"suppai",
+        "english":"sour",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"—",
+        "example_sentence":"レモンは すっぱいです。",
+        "tags":[
+            "taste"
+        ],
+        "priority_group":"p3",
+        "category":"adjective"
+    },
+    {
+        "kanji":"箱根",
+        "kana":"はこね",
+        "furigana":"はこね",
+        "romaji":"hakone",
+        "english":"hakone (place)",
+        "jlpt_level":null,
+        "kanji_breakdown":"箱 = box, 根 = root",
+        "example_sentence":"はこねへ りょこうしました。",
+        "tags":[
+            "place",
+            "travel"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ケーブルカー",
+        "kana":"ケーブルカー",
+        "furigana":"ケーブルカー",
+        "romaji":"keeburukaa",
+        "english":"cable car",
+        "jlpt_level":null,
+        "kanji_breakdown":"—",
+        "example_sentence":"ケーブルカーで のぼりました。",
+        "tags":[
+            "transport",
+            "travel"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ビジネスシューズ",
+        "kana":"びじねすしゅーず",
+        "furigana":"ビジネスシューズ",
+        "romaji":"bijinesu shuuzu",
+        "english":"business shoes",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"ビジネスシューズを買いました。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"スニーカー",
+        "kana":"すにーかー",
+        "furigana":"スニーカー",
+        "romaji":"suniikaa",
+        "english":"sneakers",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"スニーカーをはきます。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"セーター",
+        "kana":"せーたー",
+        "furigana":"セーター",
+        "romaji":"seetaa",
+        "english":"sweater",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"セーターをきます。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"かばん",
+        "kana":"かばん",
+        "furigana":"かばん",
+        "romaji":"kaban",
+        "english":"bag",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"かばんをもちます。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ぼうし",
+        "kana":"ぼうし",
+        "furigana":"帽子",
+        "romaji":"boushi",
+        "english":"hat",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"帽 = hat, 子 = child",
+        "example_sentence":"帽子をかぶります。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ネクタイ",
+        "kana":"ねくたい",
+        "furigana":"ネクタイ",
+        "romaji":"nekutai",
+        "english":"necktie",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ネクタイをしめます。",
+        "tags":[
+            "clothing"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"しょくひん",
+        "kana":"しょくひん",
+        "furigana":"食品",
+        "romaji":"shokuhin",
+        "english":"food product",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"食 = eat, 品 = goods",
+        "example_sentence":"食品うりばに行きます。",
+        "tags":[
+            "shopping"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"パイナップル",
+        "kana":"ぱいなっぷる",
+        "furigana":"パイナップル",
+        "romaji":"painappuru",
+        "english":"pineapple",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"パイナップルをたべます。",
+        "tags":[
+            "fruit"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ポップコーン",
+        "kana":"ぽっぷこーん",
+        "furigana":"ポップコーン",
+        "romaji":"poppukoon",
+        "english":"popcorn",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"ポップコーンを食べます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ドーナツ",
+        "kana":"どーなつ",
+        "furigana":"ドーナツ",
+        "romaji":"doonatsu",
+        "english":"donut",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"ドーナツを一つください。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"コロッケ",
+        "kana":"ころっけ",
+        "furigana":"コロッケ",
+        "romaji":"korokke",
+        "english":"croquette",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"コロッケを買いました。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ラーメン",
+        "kana":"ラーメン",
+        "furigana":"ラーメン",
+        "romaji":"raamen",
+        "english":"ramen",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ラーメンは にほんの たべものです。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"カレーライス",
+        "kana":"カレーライス",
+        "furigana":"カレーライス",
+        "romaji":"karee raisu",
+        "english":"curry rice",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"カレーライスが すきです。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ピザ",
+        "kana":"ピザ",
+        "furigana":"ピザ",
+        "romaji":"piza",
+        "english":"pizza",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ピザを ２まい ください。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ステーキ",
+        "kana":"ステーキ",
+        "furigana":"ステーキ",
+        "romaji":"suteeki",
+        "english":"steak",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ステーキを ちゅうもんします。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"とんかつ",
+        "kana":"とんかつ",
+        "furigana":"とんかつ",
+        "romaji":"tonkatsu",
+        "english":"pork cutlet",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"—",
+        "example_sentence":"とんかつは にほんの りょうりです。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"天ぷら",
+        "kana":"てんぷら",
+        "furigana":"てんぷら",
+        "romaji":"tenpura",
+        "english":"tempura",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"天 = heaven",
+        "example_sentence":"てんぷらを たべた ことが ありますか。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"焼き鳥",
+        "kana":"やきとり",
+        "furigana":"やきとり",
+        "romaji":"yakitori",
+        "english":"grilled chicken skewers",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"焼 = grill, 鳥 = bird",
+        "example_sentence":"やきとりを いっしょに たべましょう。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"りょうり",
+        "kana":"りょうり",
+        "furigana":"りょうり",
+        "romaji":"ryouri",
+        "english":"cooking, cuisine",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"料 = fee, 理 = logic",
+        "example_sentence":"にほんりょうりが すきです。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ごちそうさまでした",
+        "kana":"ごちそうさまでした",
+        "furigana":"ごちそうさまでした",
+        "romaji":"gochisousama deshita",
+        "english":"thank you for the meal (after)",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"しょくじの あとに「ごちそうさまでした」と いいます。",
+        "tags":[
+            "polite",
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"expression"
+    },
+    {
+        "kanji":"いただきます",
+        "kana":"いただきます",
+        "furigana":"いただきます",
+        "romaji":"itadakimasu",
+        "english":"said before eating",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"しょくじの まえに「いただきます」と いいます。",
+        "tags":[
+            "polite",
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"expression"
+    },
+    {
+        "kanji":"レストラン",
+        "kana":"レストラン",
+        "furigana":"レストラン",
+        "romaji":"resutoran",
+        "english":"restaurant",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"あの レストランは おいしいです。",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"メニュー",
+        "kana":"メニュー",
+        "furigana":"メニュー",
+        "romaji":"menyuu",
+        "english":"menu",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"メニューを みせて ください。",
+        "tags":[
+            "restaurant"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"コーヒー",
+        "kana":"コーヒー",
+        "furigana":"コーヒー",
+        "romaji":"koohii",
+        "english":"coffee",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"あさ コーヒーを のみます。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"ワイン",
+        "kana":"ワイン",
+        "furigana":"ワイン",
+        "romaji":"wain",
+        "english":"wine",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ワインを のみませんか。",
+        "tags":[
+            "drink"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"スパゲッティ",
+        "kana":"スパゲッティ",
+        "furigana":"スパゲッティ",
+        "romaji":"supagetti",
+        "english":"spaghetti",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ひるごはんに スパゲッティを たべました。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"パン",
+        "kana":"ぱん",
+        "furigana":"パン",
+        "romaji":"pan",
+        "english":"bread",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"パンをたべます。",
+        "tags":[
+            "food"
+        ],
+        "priority_group":"p4",
+        "category":"noun"
+    },
+    {
+        "kanji":"連休",
+        "kana":"れんきゅう",
+        "furigana":"れんきゅう",
+        "romaji":"renkyuu",
+        "english":"long weekend, consecutive holidays",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"連 = connect, 休 = rest",
+        "example_sentence":"連休はどこへ行きますか。",
+        "tags":[
+            "holiday",
+            "time"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"台風",
+        "kana":"たいふう",
+        "furigana":"たいふう",
+        "romaji":"taifuu",
+        "english":"typhoon",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"台 = platform, 風 = wind",
+        "example_sentence":"台風で学校は休みでした。",
+        "tags":[
+            "weather"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"お寺",
+        "kana":"おてら",
+        "furigana":"おてら",
+        "romaji":"otera",
+        "english":"temple",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"寺 = temple",
+        "example_sentence":"京都には有名なお寺があります。",
+        "tags":[
+            "religion",
+            "place"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"としょかん",
+        "kana":"としょかん",
+        "furigana":"としょかん",
+        "romaji":"toshokan",
+        "english":"library",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"図 = diagram, 書 = book, 館 = building",
+        "example_sentence":"図書館で ほんを よみます。",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"友だち",
+        "kana":"ともだち",
+        "furigana":"ともだち",
+        "romaji":"tomodachi",
+        "english":"friend",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"友 = friend, 達 = attain",
+        "example_sentence":"ともだちと あそびます。",
+        "tags":[
+            "people"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"歩いて",
+        "kana":"あるいて",
+        "furigana":"あるいて",
+        "romaji":"aruite",
+        "english":"on foot \/ walking",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"歩 = walk",
+        "example_sentence":"えきまで あるいて いきます。",
+        "tags":[
+            "transport"
+        ],
+        "priority_group":"p5",
+        "category":"adverb"
+    },
+    {
+        "kanji":"トイレ",
+        "kana":"といれ",
+        "furigana":"トイレ",
+        "romaji":"toire",
+        "english":"toilet, restroom",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"トイレはどこですか。",
+        "tags":[
+            "location"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"かいだん",
+        "kana":"かいだん",
+        "furigana":"階段",
+        "romaji":"kaidan",
+        "english":"stairs",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"階 = floor, 段 = steps",
+        "example_sentence":"階段をおります。",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"エレベーター",
+        "kana":"えれべーたー",
+        "furigana":"エレベーター",
+        "romaji":"erebeetaa",
+        "english":"elevator",
+        "jlpt_level":"—",
+        "kanji_breakdown":"—",
+        "example_sentence":"エレベーターにのります。",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"デパート",
+        "kana":"でぱーと",
+        "furigana":"デパート",
+        "romaji":"depaato",
+        "english":"department store",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"デパートでかいものします。",
+        "tags":[
+            "place"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"うりば",
+        "kana":"うりば",
+        "furigana":"売り場",
+        "romaji":"uriba",
+        "english":"sales counter",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"売 = sell, 場 = place",
+        "example_sentence":"くつうりばはどこですか。",
+        "tags":[
+            "shopping"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"ボール",
+        "kana":"ぼーる",
+        "furigana":"ボール",
+        "romaji":"booru",
+        "english":"ball",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"—",
+        "example_sentence":"ボールであそびます。",
+        "tags":[
+            "object"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"めがね",
+        "kana":"めがね",
+        "furigana":"眼鏡",
+        "romaji":"megane",
+        "english":"glasses",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"眼 = eye, 鏡 = mirror",
+        "example_sentence":"めがねをかけます。",
+        "tags":[
+            "object"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"箱根",
+        "kana":"はこね",
+        "furigana":"はこね",
+        "romaji":"hakone",
+        "english":"hakone",
+        "jlpt_level":null,
+        "kanji_breakdown":"箱 = box, 根 = root",
+        "example_sentence":"はこねへ りょこうしました。",
+        "tags":[
+            "travel"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"京都",
+        "kana":"きょうと",
+        "furigana":"きょうと",
+        "romaji":"kyoto",
+        "english":"kyoto",
+        "jlpt_level":"n5",
+        "kanji_breakdown":"京 = capital, 都 = metropolis",
+        "example_sentence":"京都はおてらがたくさんあります。",
+        "tags":[
+            "japan",
+            "places"
+        ],
+        "priority_group":"p5",
+        "category":"noun"
+    },
+    {
+        "kanji":"面接",
+        "kana":"めんせつ",
+        "furigana":"めんせつ",
+        "romaji":"mensetsu",
+        "english":"job interview",
+        "jlpt_level":"n3",
+        "kanji_breakdown":"面 = face, 接 = connect",
+        "example_sentence":"来週、会社の面接があります。",
+        "tags":[
+            "career"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"企業",
+        "kana":"きぎょう",
+        "furigana":"きぎょう",
+        "romaji":"kigyou",
+        "english":"company, enterprise",
+        "jlpt_level":"n3",
+        "kanji_breakdown":"企 = plan, 業 = business",
+        "example_sentence":"大きな企業で働きたいです。",
+        "tags":[
+            "career"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"大手企業",
+        "kana":"おおてきぎょう",
+        "furigana":"おおてきぎょう",
+        "romaji":"oote kigyou",
+        "english":"big tech, major company",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"大手 = major, 企業 = company",
+        "example_sentence":"大手企業に就職しました。",
+        "tags":[
+            "career"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"職歴",
+        "kana":"しょくれき",
+        "furigana":"しょくれき",
+        "romaji":"shokureki",
+        "english":"work experience",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"職 = job, 歴 = history",
+        "example_sentence":"職歴を履歴書に書きました。",
+        "tags":[
+            "career"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"専門",
+        "kana":"せんもん",
+        "furigana":"せんもん",
+        "romaji":"senmon",
+        "english":"specialty, expertise",
+        "jlpt_level":"n4",
+        "kanji_breakdown":"専 = exclusive, 門 = field",
+        "example_sentence":"私の専門は人工知能です。",
+        "tags":[
+            "career"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"研究者",
+        "kana":"けんきゅうしゃ",
+        "furigana":"けんきゅうしゃ",
+        "romaji":"kenkyuusha",
+        "english":"researcher",
+        "jlpt_level":"n3",
+        "kanji_breakdown":"研究 = research, 者 = person",
+        "example_sentence":"彼は有名な研究者です。",
+        "tags":[
+            "academia"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"博士号",
+        "kana":"はくしごう",
+        "furigana":"はくしごう",
+        "romaji":"hakushigou",
+        "english":"phd degree",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"博 = wide knowledge, 士 = scholar, 号 = title",
+        "example_sentence":"博士号を取りました。",
+        "tags":[
+            "academia"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"学会",
+        "kana":"がっかい",
+        "furigana":"がっかい",
+        "romaji":"gakkai",
+        "english":"academic society, conference",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"学 = study, 会 = meeting",
+        "example_sentence":"学会で発表しました。",
+        "tags":[
+            "academia"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"論文",
+        "kana":"ろんぶん",
+        "furigana":"ろんぶん",
+        "romaji":"ronbun",
+        "english":"research paper",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"論 = argument, 文 = writing",
+        "example_sentence":"論文を書いています。",
+        "tags":[
+            "academia"
+        ],
+        "priority_group":"p2",
+        "category":"noun"
+    },
+    {
+        "kanji":"人工知能",
+        "kana":"じんこうちのう",
+        "furigana":"じんこうちのう",
+        "romaji":"jinkou chinou",
+        "english":"artificial intelligence",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"人工 = artificial, 知能 = intelligence",
+        "example_sentence":"人工知能を研究しています。",
+        "tags":[
+            "ai"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"機械学習",
+        "kana":"きかいがくしゅう",
+        "furigana":"きかいがくしゅう",
+        "romaji":"kikai gakushuu",
+        "english":"machine learning",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"機械 = machine, 学習 = learning",
+        "example_sentence":"機械学習のモデルを作りました。",
+        "tags":[
+            "ai"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"深層学習",
+        "kana":"しんそうがくしゅう",
+        "furigana":"しんそうがくしゅう",
+        "romaji":"shinsou gakushuu",
+        "english":"deep learning",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"深層 = deep layer, 学習 = learning",
+        "example_sentence":"深層学習を使っています。",
+        "tags":[
+            "ai"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"ニューラルネットワーク",
+        "kana":"ニューラルネットワーク",
+        "furigana":"ニューラルネットワーク",
+        "romaji":"nyūraru nettowāku",
+        "english":"neural network",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"—",
+        "example_sentence":"ニューラルネットワークを訓練しました。",
+        "tags":[
+            "ai"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"ロボット工学",
+        "kana":"ロボットこうがく",
+        "furigana":"ロボット工学",
+        "romaji":"robotto kougaku",
+        "english":"robotics",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"ロボット = robot, 工学 = engineering",
+        "example_sentence":"ロボット工学を専攻しました。",
+        "tags":[
+            "ai"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"信頼性",
+        "kana":"しんらいせい",
+        "furigana":"しんらいせい",
+        "romaji":"shinraisei",
+        "english":"reliability, trust",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"信頼 = trust, 性 = nature",
+        "example_sentence":"信頼性の高いシステムです。",
+        "tags":[
+            "safety"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"安全性",
+        "kana":"あんぜんせい",
+        "furigana":"あんぜんせい",
+        "romaji":"anzen sei",
+        "english":"safety",
+        "jlpt_level":"n3",
+        "kanji_breakdown":"安全 = safe, 性 = nature",
+        "example_sentence":"安全性を確認してください。",
+        "tags":[
+            "safety"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"アルゴリズム",
+        "kana":"アルゴリズム",
+        "furigana":"アルゴリズム",
+        "romaji":"arugorizumu",
+        "english":"algorithm",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"—",
+        "example_sentence":"新しいアルゴリズムを開発しました。",
+        "tags":[
+            "ai"
+        ],
+        "priority_group":"p0",
+        "category":"noun"
+    },
+    {
+        "kanji":"コンテンツ管理",
+        "kana":"コンテンツかんり",
+        "furigana":"コンテンツ管理",
+        "romaji":"kontentsu kanri",
+        "english":"content moderation",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"コンテンツ = content, 管理 = management",
+        "example_sentence":"コンテンツ管理の仕組みを作りました。",
+        "tags":[
+            "safety"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"ソーシャルメディア",
+        "kana":"ソーシャルメディア",
+        "furigana":"ソーシャルメディア",
+        "romaji":"soosharu media",
+        "english":"social media",
+        "jlpt_level":"n3",
+        "kanji_breakdown":"—",
+        "example_sentence":"ソーシャルメディアで発信しています。",
+        "tags":[
+            "media"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"コンテンツ制作者",
+        "kana":"コンテンツせいさくしゃ",
+        "furigana":"コンテンツ制作者",
+        "romaji":"kontentsu seisakusha",
+        "english":"content creator",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"コンテンツ = content, 制作 = create, 者 = person",
+        "example_sentence":"コンテンツ制作者として活動しています。",
+        "tags":[
+            "media"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"指導",
+        "kana":"しどう",
+        "furigana":"しどう",
+        "romaji":"shidou",
+        "english":"guidance, mentorship",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"指 = point, 導 = guide",
+        "example_sentence":"学生を指導しています。",
+        "tags":[
+            "mentorship"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    },
+    {
+        "kanji":"メンター",
+        "kana":"メンター",
+        "furigana":"メンター",
+        "romaji":"mentā",
+        "english":"mentor",
+        "jlpt_level":"n2",
+        "kanji_breakdown":"—",
+        "example_sentence":"彼は私のメンターです。",
+        "tags":[
+            "mentorship"
+        ],
+        "priority_group":"p1",
+        "category":"noun"
+    }
+]

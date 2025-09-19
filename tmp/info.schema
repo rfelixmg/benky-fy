@@ -1,0 +1,81 @@
+
+verbs.usage:
+['daily', 'general', 'conversation', 'business', 'home', 'work',
+'routine', 'travel', 'health', 'social', 'school', 'shopping',
+'market', 'learning', 'entertainment', 'nature', 'weather',
+'emotion', 'personal', 'life', 'cooking', 'craft']
+
+verbs.semantic:
+['action', 'stative', 'cognitive', 'physiological', 'motion',
+'communication', 'learning', 'transaction', 'perception',
+'occupation', 'social', 'spatial', 'nature', 'weather', 'artistic',
+'emotion', 'termination', 'initiation', 'change', 'life',
+'existence', 'temporal'])
+
+vocabulary.tags:
+['greeting', 'intro', 'farewell', 'apology', 'polite', 'gratitude',
+'offering', 'response', 'pronoun', 'question', 'people', 'country',
+'nationality', 'student', 'teacher', 'school', 'weather',
+'confirmation', 'time', 'frequency', 'vocabulary', 'language',
+'occupation', 'shopping', 'food', 'drink', 'fruit', 'clothing',
+'furniture', 'household', 'study', 'object', 'transport', 'place',
+'daily', 'meal', 'travel', 'verb', 'feelings', 'religion',
+'location', 'event', 'culture', 'daily life', 'description',
+'places', 'gre', 'lifestyle', 'quantity', 'nature', 'leisure',
+'counters', 'taste', 'restaurant', 'holiday', 'japan', 'career',
+'academia', 'ai', 'safety', 'media', 'mentorship']
+
+vocabulary.category:
+['expression', 'noun', 'time', 'adjective', 'counter', 'adverb']
+
+
+sentence.structure.theme:
+['identity', 'classification', 'action with object',
+'action at location', 'motion', 'destination', 'possession',
+'relation', 'description', 'attribution', 'denial',
+'contradiction', 'inquiry', 'existence', 'subject focus',
+'property', 'condition']
+
+sentece.structure.slots.components:
+['A', 'B', 'Verb', 'Adj', 'Noun', 'clause']
+
+
+sentece.structure.slots.particles:
+['は', 'を', 'で', 'へ', 'に', 'の', 'が', 'は', 'です', 'ます', 'ではない', 'ではないです', 'ではないます']
+
+sentece.structure.slots.extensions:
+['か', 'たい', 'ない', 'て-form', 'までに', 'ない', 'nested possession', 'くない', 'でしょう', 'Wh-questions', 'くない']
+
+
+
+vocab_interests:
+{
+    "politeness": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response"
+    ],
+    "people_identity": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "pronoun", "people", "country", "nationality", "occupation",
+        "student", "teacher", "career", "academia", "mentorship"
+    ],
+    "daily_life_lifestyle": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "daily", "daily life", "lifestyle", "meal", "shopping", "food",
+        "drink", "fruit", "clothing", "furniture", "household"
+    ],
+    "places_travel_events": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "place", "places", "school", "transport", "travel", "restaurant",
+        "holiday", "japan", "culture", "event", "leisure"
+    ],
+    "actions_time": [
+        "greeting", "intro", "farewell", "apology", "polite",
+        "gratitude", "offering", "response",
+        "time", "frequency", "verb", "event", "study", "confirmation"
+    ],
+
+}
