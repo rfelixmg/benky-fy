@@ -1,0 +1,43 @@
+{
+    "modifiers": {
+      "adjective": {
+        "type": ["i-adj", "na-adj"],
+        "probability": 0.3,
+        "position": "before_noun"
+      },
+      "demonstrative": {
+        "forms": ["この", "その", "あの"],
+        "probability": 0.3,
+        "position": "before_noun"
+      },
+      "demonstrative_place": {
+        "forms": ["ここ", "そこ", "あそこ"],
+        "probability": 0.3,
+        "position": "substitute"
+      },
+      "none": {
+        "probability": 0.4,
+        "scope": "all"
+      },
+      "adverb_manner": {
+            "examples": ["ゆっくり", "はやく"],
+            "probability": 0.3,
+            "position": "before_verb"
+        },
+        "adverb_frequency": {
+            "examples": ["よく", "たいてい", "ときどき", "まいにち"],
+            "probability": 0.3,
+            "position": "before_verb"
+        },
+        "adverb_degree": {
+            "examples": ["たくさん", "すこし", "ぜんぜん"],
+            "probability": 0.2,
+            "position": "before_verb"
+        },
+        "temporal": {
+            "examples": ["きのう", "あした", "いま"],
+            "probability": 0.2,
+            "position": "sentence_initial"
+        }
+    }
+}

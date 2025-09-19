@@ -1,0 +1,603 @@
+[
+  {
+    "english": "tough, serious",
+    "kanji": "大変",
+    "kana": "たいへん",
+    "hiragana": "たいへん",
+    "romaji": "taihen",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "fun, enjoyable",
+    "kanji": "楽しい",
+    "kana": "たのしい",
+    "hiragana": "たのしい",
+    "romaji": "tanoshii",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "difficult",
+    "kanji": "難しい",
+    "kana": "むずかしい",
+    "hiragana": "むずかしい",
+    "romaji": "muzukashii",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "study",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "simple, easy",
+    "kanji": "簡単",
+    "kana": "かんたん",
+    "hiragana": "かんたん",
+    "romaji": "kantan",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "study"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "busy",
+    "kanji": "忙しい",
+    "kana": "いそがしい",
+    "hiragana": "いそがしい",
+    "romaji": "isogashii",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "daily life"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "pretty, clean",
+    "kanji": "きれい",
+    "kana": "きれい",
+    "hiragana": "きれい",
+    "romaji": "kirei",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "quiet",
+    "kanji": "静か",
+    "kana": "しずか",
+    "hiragana": "しずか",
+    "romaji": "shizuka",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "places"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "famous",
+    "kanji": "有名",
+    "kana": "ゆうめい",
+    "hiragana": "ゆうめい",
+    "romaji": "yuumei",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "kind",
+    "kanji": "親切",
+    "kana": "しんせつ",
+    "hiragana": "しんせつ",
+    "romaji": "shinsetsu",
+    "entity_tags": [
+      "person"
+    ],
+    "tags": [
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "energetic, healthy",
+    "kanji": "元気",
+    "kana": "げんき",
+    "hiragana": "げんき",
+    "romaji": "genki",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "gre"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p2"
+  },
+  {
+    "english": "convenient",
+    "kanji": "便利",
+    "kana": "べんり",
+    "hiragana": "べんり",
+    "romaji": "benri",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "lifestyle"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "near, close",
+    "kanji": "近い",
+    "kana": "ちかい",
+    "hiragana": "ちかい",
+    "romaji": "chikai",
+    "entity_tags": [
+      "place",
+      "thing"
+    ],
+    "tags": [
+      "places"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "far, distant",
+    "kanji": "遠い",
+    "kana": "とおい",
+    "hiragana": "とおい",
+    "romaji": "tooi",
+    "entity_tags": [
+      "place",
+      "thing"
+    ],
+    "tags": [
+      "places"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "new",
+    "kanji": "新しい",
+    "kana": "あたらしい",
+    "hiragana": "あたらしい",
+    "romaji": "atarashii",
+    "entity_tags": [
+      "place",
+      "thing",
+      "person"
+    ],
+    "tags": [
+      "description"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "old (not for people)",
+    "kanji": "古い",
+    "kana": "ふるい",
+    "hiragana": "ふるい",
+    "romaji": "furui",
+    "entity_tags": [
+      "place",
+      "thing",
+      "person"
+    ],
+    "tags": [
+      "description"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "many, numerous",
+    "kanji": "多い",
+    "kana": "おおい",
+    "hiragana": "おおい",
+    "romaji": "ooi",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "quantity"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "few, little",
+    "kanji": "少ない",
+    "kana": "すくない",
+    "hiragana": "すくない",
+    "romaji": "sukunai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "quantity"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "heavy",
+    "kanji": "重い",
+    "kana": "おもい",
+    "hiragana": "おもい",
+    "romaji": "omoi",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "light (not heavy)",
+    "kanji": "軽い",
+    "kana": "かるい",
+    "hiragana": "かるい",
+    "romaji": "karui",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "spacious, wide",
+    "kanji": "広い",
+    "kana": "ひろい",
+    "hiragana": "ひろい",
+    "romaji": "hiroi",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "places"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "narrow, cramped",
+    "kanji": "狭い",
+    "kana": "せまい",
+    "hiragana": "せまい",
+    "romaji": "semai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "places"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "sweet",
+    "kanji": "あまい",
+    "kana": "あまい",
+    "hiragana": "あまい",
+    "romaji": "amai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "taste"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "spicy, hot",
+    "kanji": "からい",
+    "kana": "からい",
+    "hiragana": "からい",
+    "romaji": "karai",
+    "entity_tags": [
+      "place",
+      "thing",
+      "person"
+    ],
+    "tags": [
+      "taste"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p3"
+  },
+  {
+    "english": "bitter",
+    "kanji": "にがい",
+    "kana": "にがい",
+    "hiragana": "にがい",
+    "romaji": "nigai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "taste"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p3"
+  },
+  {
+    "english": "salty",
+    "kanji": "しょっぱい",
+    "kana": "しょっぱい",
+    "hiragana": "しょっぱい",
+    "romaji": "shoppai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "taste"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p3"
+  },
+  {
+    "english": "sour",
+    "kanji": "すっぱい",
+    "kana": "すっぱい",
+    "hiragana": "すっぱい",
+    "romaji": "suppai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "taste"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p3"
+  },
+  {
+    "english": "good",
+    "kanji": "いい",
+    "kana": "いい",
+    "hiragana": "いい",
+    "romaji": "ii",
+    "entity_tags": [
+      "thing",
+      "person",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "bad",
+    "kanji": "悪い",
+    "kana": "わるい",
+    "hiragana": "わるい",
+    "romaji": "warui",
+    "entity_tags": [
+      "thing",
+      "person",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "big, large",
+    "kanji": "大きい",
+    "kana": "おおきい",
+    "hiragana": "おおきい",
+    "romaji": "ookii",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "size"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "small, little",
+    "kanji": "小さい",
+    "kana": "ちいさい",
+    "hiragana": "ちいさい",
+    "romaji": "chiisai",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "size"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0"
+  },
+  {
+    "english": "hot",
+    "kanji": "熱い",
+    "kana": "あつい",
+    "hiragana": "あつい",
+    "romaji": "atsui",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "temperature"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "cold",
+    "kanji": "寒い",
+    "kana": "さむい",
+    "hiragana": "さむい",
+    "romaji": "samui",
+    "entity_tags": [
+      "thing",
+      "place"
+    ],
+    "tags": [
+      "description",
+      "temperature"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "interesting",
+    "kanji": "面白い",
+    "kana": "おもしろい",
+    "hiragana": "おもしろい",
+    "romaji": "omoshiroi",
+    "entity_tags": [
+      "thing",
+      "concept"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "boring",
+    "kanji": "つまらない",
+    "kana": "つまらない",
+    "hiragana": "つまらない",
+    "romaji": "tsumaranai",
+    "entity_tags": [
+      "thing",
+      "concept"
+    ],
+    "tags": [
+      "description",
+      "feelings"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "expensive",
+    "kanji": "高い",
+    "kana": "たかい",
+    "hiragana": "たかい",
+    "romaji": "takai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "price"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "cheap",
+    "kanji": "安い",
+    "kana": "やすい",
+    "hiragana": "やすい",
+    "romaji": "yasui",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "price"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "fast",
+    "kanji": "速い",
+    "kana": "はやい",
+    "hiragana": "はやい",
+    "romaji": "hayai",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "speed"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  },
+  {
+    "english": "slow",
+    "kanji": "遅い",
+    "kana": "おそい",
+    "hiragana": "おそい",
+    "romaji": "osoi",
+    "entity_tags": [
+      "thing"
+    ],
+    "tags": [
+      "description",
+      "speed"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1"
+  }
+]

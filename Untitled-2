@@ -1,0 +1,28 @@
+{
+  "extensions": [
+    { "category": "reason", "markers": ["から", "ので"], "function": "express cause", "example": "雨だから 行きません" },
+    { "category": "contrast", "markers": ["けど", "が"], "function": "show contrast", "example": "雨だけど 行きます" },
+    { "category": "conditional", "markers": ["と", "ば", "たら"], "function": "if, when", "example": "雨が ふったら 行きません" },
+    { "category": "desire, ability", "markers": ["たい", "られる"], "function": "want, can", "example": "ケーキを たべたいです" },
+    { "category": "experience, frequency", "markers": ["たことがある", "frequency adverbs"], "function": "past experience, frequency", "example": "日本に 行ったことが あります" },
+    { "category": "permission, prohibition", "markers": ["てもいい", "てはいけません"], "function": "may, must not", "example": "ここで たばこを すっては いけません" },
+    { "category": "sequence, time", "markers": ["てから", "まえに", "あとで", "ながら"], "function": "order & simultaneity", "example": "ごはんを たべてから、べんきょうします" },
+    { "category": "comparison, listing", "markers": ["より〜ほうが", "や", "と"], "function": "compare, list", "example": "バスより 電車のほうが はやいです" },
+    { "category": "quoting, thinking", "markers": ["と思います", "と言いました"], "function": "report thoughts or speech", "example": "明日 行くと 思います" },
+    { "category": "speculation, possibility", "markers": ["でしょう", "だろう", "かもしれない"], "function": "guess, might", "example": "雨でしょう" }
+  ],
+
+  "pragmatics": [
+    { "ending": "ね", "nuance": "seek agreement", "register": "casual, polite", "example": "いい天気だね" },
+    { "ending": "よ", "nuance": "assertion, info-giving", "register": "casual, polite", "example": "明日行くよ" },
+    { "ending": "よね", "nuance": "assertion + confirmation", "register": "casual", "example": "明日行くよね" },
+    { "ending": "かな", "nuance": "wondering", "register": "casual", "example": "雨かな" },
+    { "ending": "でしょう, だろう", "nuance": "probability, guess", "register": "polite, casual", "example": "雨でしょう" },
+    { "ending": "かもしれない", "nuance": "possibility", "register": "neutral", "example": "雨かもしれない" },
+    { "ending": "な", "nuance": "prohibition, masculine", "register": "casual", "example": "行くな" },
+    { "ending": "なあ", "nuance": "exclamation", "register": "casual", "example": "きれいだなあ" },
+    { "ending": "ぞ, ぜ", "nuance": "rough emphasis", "register": "casual", "example": "行くぞ" },
+    { "ending": "わ", "nuance": "feminine softener", "register": "casual", "example": "行くわ" },
+    { "ending": "さ", "nuance": "casual filler", "register": "casual", "example": "行くさ" }
+  ]
+}

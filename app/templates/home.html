@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Home | Benky-Fy{% endblock %}
+{% block content %}
+<div class="home-layout">
+	<!-- Hero Section -->
+	<section class="hero-section">
+		<div class="hero-content">
+			<h1 class="hero-title">Welcome to Benky-Fy</h1>
+			<p class="hero-subtitle">Your journey to Japanese fluency starts here</p>
+			<div class="hero-actions">
+				{% set u = user or current_user %}
+				{% if not u %}
+					<a href="{{ url_for('auth.login') }}" class="btn btn-primary">Get Started</a>
+					<p class="hero-note">Please log in to begin your learning adventure</p>
+				{% else %}
+					<a href="/modules" class="btn btn-primary">Browse Modules</a>
+					<p class="hero-note">Welcome back, {{ u.name }}! Ready to practice?</p>
+				{% endif %}
+			</div>
+		</div>
+	</section>
+
+	<!-- Main Content Area -->
+	<div class="content-area">
+		<!-- Cute Background Section -->
+		<section class="background-section">
+			<div class="floating-elements-home">
+				<div class="floating-kanji">漢</div>
+				<div class="floating-kanji">字</div>
+				<div class="floating-kanji">学</div>
+				<div class="floating-kanji">習</div>
+			</div>
+			<div class="background-content">
+				<h2>Interactive Learning</h2>
+				<p>Master Japanese through engaging exercises, flashcards, and interactive practice sessions designed to make learning fun and effective.</p>
+			</div>
+		</section>
+
+		<!-- Login/User Status -->
+		<aside class="user-status">
+			{% set u = user or current_user %}
+			{% if not u %}
+				<div class="login-prompt">
+					<h3>Ready to Start?</h3>
+					<p>Create your account or log in to track your progress and unlock personalized learning paths.</p>
+					<div class="auth-buttons">
+						<a href="{{ url_for('auth.login') }}" class="btn btn-outline">Log In</a>
+						<a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Sign Up</a>
+					</div>
+				</div>
+			{% else %}
+				<div class="user-progress">
+					<h3>Your Progress</h3>
+					<div class="progress-card">
+						<div class="progress-item">
+							<span class="progress-label">Current Level</span>
+							<span class="progress-value">Beginner</span>
+						</div>
+						<div class="progress-item">
+							<span class="progress-label">Modules Completed</span>
+							<span class="progress-value">0/16</span>
+						</div>
+						<div class="progress-item">
+							<span class="progress-label">Study Streak</span>
+							<span class="progress-value">0 days</span>
+						</div>
+					</div>
+					<a href="/modules" class="btn btn-accent">Browse Modules</a>
+				</div>
+			{% endif %}
+		</aside>
+	</div>
+</div>
+{% endblock %}
+
+

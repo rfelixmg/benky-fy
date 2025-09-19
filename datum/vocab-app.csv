@@ -1,0 +1,217 @@
+,,,,,,,,,,,
+,kanji,kana,furigana,romaji,english,jlpt_level,kanji_breakdown,example_sentence,tags,priority_group,category
+,はじめまして,はじめまして,はじめまして,hajimemashite,nice to meet you,n5,―,はじめまして、タンです。,"greeting, intro",p0,expression
+,こんにちは,こんにちは,こんにちは,konnichiwa,hello / good afternoon,n5,―,こんにちは、サラさん。,greeting,p0,expression
+,こんばんは,こんばんは,こんばんは,konbanwa,good evening,n5,―,こんばんは、やまださん。,greeting,p0,expression
+,おはようございます,おはようございます,おはようございます,ohayou gozaimasu,good morning,n5,早 = early,おはようございます、せんせい。,greeting,p0,expression
+,さようなら,さようなら,さようなら,sayounara,goodbye,n5,―,では、さようなら。,farewell,p0,expression
+,おやすみなさい,おやすみなさい,おやすみなさい,oyasuminasai,good night,n5,休 = rest,おやすみなさい、またあした。,farewell,p0,expression
+,すみません,すみません,すみません,sumimasen,excuse me / i’m sorry,n5,済 = finish,すみません、にほんごは？,"apology, polite",p0,expression
+,ごめんなさい,ごめんなさい,ごめんなさい,gomennasai,sorry,n5,―,ごめんなさい、ちがいます。,apology,p0,expression
+,ありがとう ございます,ありがとうございます,ありがとうございます,arigatou gozaimasu,thank you,n5,"有 = exist, 難 = hardship",どうもありがとうございます。,gratitude,p0,expression
+,どうぞ,どうぞ,どうぞ,douzo,please (go ahead / here you are),n5,―,コーヒーをどうぞ。,offering,p0,expression
+,はい,はい,はい,hai,yes,n5,―,はい、そうです。,response,p0,expression
+,いいえ,いいえ,いいえ,iie,no,n5,―,いいえ、ちがいます。,response,p0,expression
+,わたし,わたし,わたし,watashi,i (formal),n5,私 = private,わたしは サラです。,pronoun,p0,noun
+,あのひと,あのひと,あのひと,ano hito,that person (over there),n5,人 = person,あのひとは せんせいです。,pronoun,p0,noun
+,どなた,どなた,どなた,donata,who (polite),n5,方 = person,あのかたは どなたですか。,question,p0,expression
+,ひと,ひと,ひと,hito,person,n5,人 = person,にほんじんです。,people,p0,noun
+,かた,かた,かた,kata,person (polite),n5,方 = person,にほんのかたですか。,polite,p0,noun
+,国,くに,くに,kuni,country,n5,国 = country,おくに は どちらですか。,"country, nationality",p0,noun
+,日本,にほん,にほん,nihon,japan,n5,日本 = japan,にほんから きました。,country,p0,noun
+,日本人,にほんじん,にほんじん,nihonjin,japanese person,n5,"日本 = japan, 人 = person",わたしは にほんじんです。,nationality,p0,noun
+,学生,がくせい,がくせい,gakusei,student,n5,"学 = study, 生 = life",わたしは がくせいです。,student,p0,noun
+,先生,せんせい,せんせい,sensei,teacher,n5,"先 = ahead, 生 = life",あのひとは せんせいです。,teacher,p0,noun
+,学校,がっこう,がっこう,gakkou,school,n5,"学 = study, 校 = school",にほんの がっこうです。,school,p0,noun
+,天気,てんき,てんき,tenki,weather,n5,"天 = sky, 気 = spirit",いいてんきですね。,weather,p0,noun
+,はい、そうです,はい、そうです,はい、そうです,"hai, sou desu","yes, that’s right",n5,―,a: にほんじんですか？ b: はい、そうです。,response,p0,expression
+,いいえ、ちがいます,いいえ、ちがいます,いいえ、ちがいます,"iie, chigaimasu","no, that’s not correct",n5,違 = different,a: がくせいですか？ b: いいえ、ちがいます。,response,p0,expression
+,はい、わかりました,はい、わかりました,はい、わかりました,"hai, wakarimashita","yes, i understood",n5,分 = understand,はい、わかりました。,confirmation,p0,expression
+,時,じ,じ,ji,"o’clock, hour",n5,時 (time),9じに おきます,time,p0,time
+,分,ふん／ぷん,ふん／ぷん,fun/pun,minute,n5,分 (divide),5ふん あります,time,p0,time
+,今日,きょう,きょう,kyou,today,n5,今 (now) 日 (day),きょうは にちようびです,time,p0,time
+,明日,あした,あした,ashita,tomorrow,n5,明 (bright) 日 (day),あした サッカーを します,time,p0,time
+,昨日,きのう,きのう,kinou,yesterday,n5,昨 (previous) 日 (day),きのう テレビを みました,time,p0,time
+,毎日,まいにち,まいにち,mainichi,every day,n5,毎 (every) 日 (day),まいにち べんきょうします,frequency,p0,time
+,来週,らいしゅう,らいしゅう,raishuu,next week,n5,来 (come) 週 (week),らいしゅう きょうとへ いきます,time,p0,time
+,人,ひと,ひと,hito,person (general use),n5,人 (person),この町には人がたくさんいます,people,p0,noun
+,ベトナム,ベトナム,ベトナム,betonamu,vietnam,n5,―,ベトナムからきました。,country,p1,noun
+,フランス,フランス,フランス,furansu,france,n5,―,フランスからきました。,country,p1,noun
+,ことば,ことば,ことば,kotoba,"word, language",n5,"言 = word, 葉 = leaf",にほんごのことば。,vocabulary,p1,noun
+,語,ご,ご,go,language (suffix),n5,語 = language,にほんごをべんきょうします。,language,p1,noun
+,大学生,だいがくせい,だいがくせい,daigakusei,university student,n5,"大 = big, 学 = study, 生 = life",キムさんは だいがくせいです。,student,p1,noun
+,会社員,かいしゃいん,かいしゃいん,kaishain,company employee,n5,"会社 = company, 員 = member",サラさんは かいしゃいんです。,occupation,p1,noun
+,教師,きょうし,きょうし,kyoushi,teacher (formal),n4,"教 = teach, 師 = master",わたしは きょうしです。,occupation,p1,noun
+,店員,てんいん,てんいん,ten’in,"clerk, shop staff",n5,店 = shop + 員 = member,店員にききます。,"shopping, people",p1,noun
+,いらっしゃいませ,いらっしゃいませ,いらっしゃいませ,irasshaimase,welcome (store greeting),n5,—,店員が「いらっしゃいませ」と言います。,"shopping, greeting",p1,expression
+,チーズバーガー,ちーずばーがー,チーズバーガー,chiizubaagaa,cheeseburger,—,—,チーズバーガーをください。,"food, shopping",p1,noun
+,オレンジジュース,おれんじじゅーす,オレンジジュース,orenji juusu,orange juice,—,—,オレンジジュースをのみます。,"drink, shopping",p1,noun
+,ジュース,じゅーす,ジュース,juusu,juice,n5,—,ジュースを二つください。,drink,p1,noun
+,ハンバーガー,はんばーがー,ハンバーガー,hanbaagaa,hamburger,n5,—,ハンバーガーを一つください。,food,p1,noun
+,ポテト,ぽてと,ポテト,poteto,fries,—,—,ポテトを食べます。,food,p1,noun
+,サンドイッチ,さんどいっち,サンドイッチ,sandoicchi,sandwich,n5,—,サンドイッチを二つください。,food,p1,noun
+,おにぎり,おにぎり,おにぎり,onigiri,rice ball,n5,—,おにぎりを食べます。,food,p1,noun
+,ケーキ,けーき,ケーキ,keeki,cake,n5,—,ケーキをたべました。,food,p1,noun
+,プリン,ぷりん,プリン,purin,pudding,n5,—,プリンをください。,food,p1,noun
+,アイスクリーム,あいすくりーむ,アイスクリーム,aisu kuriimu,ice cream,n5,—,アイスクリームを食べます。,food,p1,noun
+,コーラ,こーら,コーラ,koora,"cola, coke",—,—,コーラをのみます。,drink,p1,noun
+,おちゃ,おちゃ,お茶,ocha,green tea,n5,茶 = tea,おちゃをください。,drink,p1,noun
+,こうちゃ,こうちゃ,紅茶,koucha,black tea,n5,"紅 = red, 茶 = tea",こうちゃをのみます。,drink,p1,noun
+,ビール,びーる,ビール,biiru,beer,n5,—,ビールを飲みます。,drink,p1,noun
+,日本酒,にほんしゅ,日本酒,nihonshu,"sake, japanese rice wine",n4,日本 + 酒,日本酒を飲みます。,drink,p1,noun
+,焼酎,しょうちゅう,焼酎,shouchuu,shochu,n3,焼 = burn + 酎 = liquor,焼酎をください。,drink,p1,noun
+,りんご,りんご,りんご,ringo,apple,n5,—,りんごを三つください。,fruit,p1,noun
+,はな,はな,花,hana,flower,n5,花 = flower,花をかいます。,shopping,p1,noun
+,シャツ,しゃつ,シャツ,shatsu,shirt,n5,—,シャツをきます。,clothing,p1,noun
+,いす,いす,いす,isu,chair,n5,—,いすにすわります。,furniture,p1,noun
+,テレビ,てれび,テレビ,terebi,television,n5,—,テレビをみます。,household,p1,noun
+,ほん,ほん,本,hon,book,n5,本 = book,本をよみます。,study,p1,noun
+,つくえ,つくえ,机,tsukue,desk,n5,机 = desk,つくえにすわります。,furniture,p1,noun
+,ノート,のーと,ノート,nooto,notebook,n5,—,ノートにかきます。,school,p1,noun
+,コップ,こっぷ,コップ,koppu,cup,n5,—,コップをつかいます。,object,p1,noun
+,バナナ,ばなな,バナナ,banana,banana,n5,—,バナナを食べます。,fruit,p1,noun
+,レモン,れもん,レモン,remon,lemon,n5,—,レモンを食べます。,fruit,p1,noun
+,メロン,めろん,メロン,meron,melon,n5,—,メロンをたべます。,fruit,p1,noun
+,たまご,たまご,卵,tamago,egg,n5,卵 = egg,卵を二つください。,food,p1,noun
+,やさい,やさい,野菜,yasai,vegetable,n5,"野 = field, 菜 = greens",やさいをたべます。,food,p1,noun
+,にく,にく,肉,niku,meat,n5,肉 = meat,にくをかいます。,food,p1,noun
+,ぎゅうにゅう,ぎゅうにゅう,牛乳,gyuunyuu,milk,n5,"牛 = cow, 乳 = milk",ぎゅうにゅうをのみます。,drink,p1,noun
+,さかな,さかな,魚,sakana,fish,n5,魚 = fish,さかなをたべます。,food,p1,noun
+,くだもの,くだもの,果物,kudamono,fruit,n5,"果 = fruit, 物 = thing",くだものを食べます。,food,p1,noun
+,くつ,くつ,靴,kutsu,shoes,n5,靴 = shoes,くつをかいます。,clothing,p1,noun
+,とけい,とけい,時計,tokei,"watch, clock",n5,"時 = time, 計 = measure",時計をみます。,object,p1,noun
+,バス,バス,バス,basu,bus,n5,—,バスで いきます,transport,p2,noun
+,電車,でんしゃ,でんしゃ,densha,train,n5,"電 = electric, 車 = vehicle",でんしゃに のります,transport,p2,noun
+,地下鉄,ちかてつ,ちかてつ,chikatetsu,subway,n5,"地 = ground, 下 = below, 鉄 = iron",ちかてつで いきます,transport,p2,noun
+,自転車,じてんしゃ,じてんしゃ,jitensha,bicycle,n5,"自 = self, 転 = turn, 車 = vehicle",じてんしゃに のります,transport,p2,noun
+,バイク,バイク,バイク,baiku,motorbike,n5,—,バイクで いきます,transport,p2,noun
+,タクシー,タクシー,タクシー,takushii,taxi,n5,—,タクシーで いきます,transport,p2,noun
+,新幹線,しんかんせん,しんかんせん,shinkansen,bullet train,n4,"新 = new, 幹 = trunk, 線 = line",しんかんせんで おおさかへ いきます,transport,p2,noun
+,駅,えき,えき,eki,station,n5,駅 = station,えきで おります,transport,p2,noun
+,バス停,バスてい,バスてい,basutei,bus stop,n5,停 = stop,バスていで まちます,transport,p2,noun
+,会社,かいしゃ,かいしゃ,kaisha,"company, office",n5,"会 = meet, 社 = company",かいしゃへ いきます,place,p2,noun
+,家,うち,うち,uchi,"home, house",n5,家 = house,うちに かえります,place,p2,noun
+,分,ふん／ぷん,ふん／ぷん,fun/pun,minute,n5,分 (divide),5ふん あります,time,p2,time
+,日曜日,にちようび,にちようび,nichiyoubi,sunday,n5,"日 = sun, 曜 = weekday, 日 = day",にちようびに えきへ いきます,time,p2,time
+,午前,ごぜん,ごぜん,gozen,a.m.,n5,"午 = noon, 前 = before",ごぜん9じに おきます,time,p2,time
+,午後,ごご,ごご,gogo,p.m.,n5,"午 = noon, 後 = after",ごご3じに としょかんへ いきます,time,p2,time
+,夜,よる,よる,yoru,night,n5,夜 = night,よる 10じに ねます,time,p2,time
+,朝,あさ,あさ,asa,morning,n5,朝 = morning,あさ ごはんを たべます,time,p2,time
+,昼,ひる,ひる,hiru,"noon, daytime",n5,昼 = daytime,ひるごはんを たべます,time,p2,time
+,晩,ばん,ばん,ban,evening,n5,晩 = evening,ばんごはんを たべます,time,p2,time
+,食事,しょくじ,しょくじ,shokuji,"meal, dining",n5,"食 = eat, 事 = thing",レストランで しょくじを します。,"food, daily",p2,noun
+,ごはん,ごはん,ごはん,gohan,"rice, meal",n5,"飯 = rice, meal",あさごはんを たべましたか。,"food, meal",p2,noun
+,旅行,りょこう,りょこう,ryokou,"travel, trip",n5,"旅 = travel, 行 = go",来週、京都へ旅行します。,"travel, verb",p2,noun
+,試験,しけん,しけん,shiken,"exam, test",n5,"試 = try, 験 = test",明日、試験があります。,"study, school",p2,noun
+,大変,たいへん,たいへん,taihen,"tough, serious",n5,"大 = big, 変 = change",試験は大変でした。,feelings,p2,adjective
+,京都,きょうと,きょうと,kyouto,kyoto,n5,"京 = capital, 都 = metropolis",京都はおてらがたくさんあります。,place,p2,noun
+,神社,じんじゃ,じんじゃ,jinja,shrine,n5,"神 = god, 社 = shrine",神社でおまいりしました。,"religion, place",p2,noun
+,所,ところ,ところ,tokoro,place,n5,所 = place,京都はどんなところですか。,location,p2,noun
+,祭り,まつり,まつり,matsuri,festival,n5,祭 = festival,夏祭りに行きたいです。,"event, culture",p2,noun
+,楽しい,たのしい,たのしい,tanoshii,"fun, enjoyable",n5,楽 = comfort,パーティーは楽しかったです。,feelings,p2,adjective
+,難しい,むずかしい,むずかしい,muzukashii,difficult,n5,難 = difficult,このテストは難しいです。,"study, feelings",p2,adjective
+,簡単,かんたん,かんたん,kantan,"simple, easy",n5,"簡 = simple, 単 = single",問題は簡単でした。,study,p2,adjective
+,忙しい,いそがしい,いそがしい,isogashii,busy,n5,忙 = busy,毎日忙しいです。,daily life,p2,adjective
+,きれい,きれい,きれい,kirei,"pretty, clean",n5,綺麗 (kana use),この町はきれいです。,description,p2,adjective
+,静か,しずか,しずか,shizuka,quiet,n5,静 = quiet,図書館は静かです。,places,p2,adjective
+,有名,ゆうめい,ゆうめい,yuumei,famous,n5,"有 = have, 名 = name",京都は有名です。,description,p2,adjective
+,親切,しんせつ,しんせつ,shinsetsu,kind,n5,"親 = parent, 切 = cut/close",先生は親切です。,people,p2,adjective
+,元気,げんき,げんき,genki,"energetic, healthy",n5,"元 = origin, 気 = spirit",元気ですか。,gre,p2,adjective
+,便利,べんり,べんり,benri,convenient,n5,"便 = convenience, 利 = benefit",コンビニは便利です。,lifestyle,p3,adjective
+,近い,ちかい,ちかい,chikai,"near, close",n5,近 = near,駅は近いです。,places,p3,adjective
+,遠い,とおい,とおい,tooi,"far, distant",n5,遠 = far,家は学校から遠いです。,places,p3,adjective
+,新しい,あたらしい,あたらしい,atarashii,new,n5,新 = new,新しい本を買いました。,description,p3,adjective
+,古い,ふるい,ふるい,furui,old (not for people),n5,古 = old,古い寺があります。,description,p3,adjective
+,多い,おおい,おおい,ooi,"many, numerous",n5,多 = many,京都は観光客が多いです。,quantity,p3,adjective
+,少ない,すくない,すくない,sukunai,"few, little",n5,少 = few,この町は人が少ないです。,quantity,p3,adjective
+,重い,おもい,おもい,omoi,heavy,n5,重 = heavy,荷物が重いです。,description,p3,adjective
+,軽い,かるい,かるい,karui,light (not heavy),n5,軽 = light,このかばんは軽いです。,description,p3,adjective
+,山,やま,やま,yama,mountain,n5,山 = mountain,山に登ります。,nature,p3,noun
+,川,かわ,かわ,kawa,river,n5,川 = river,川であそびました。,nature,p3,noun
+,海,うみ,うみ,umi,"sea, ocean",n5,海 = sea,夏に海へ行きます。,nature,p3,noun
+,雨,あめ,あめ,ame,rain,n5,雨 = rain,昨日は雨でした。,weather,p3,noun
+,広い,ひろい,ひろい,hiroi,"spacious, wide",n5,広 = wide,このへやは広いです。,places,p3,adjective
+,狭い,せまい,せまい,semai,"narrow, cramped",n5,狭 = narrow,このへやは狭いです。,places,p3,adjective
+,映画館,えいがかん,えいがかん,eigakan,movie theater,n5,"映 = project, 画 = picture, 館 = hall",友だちと映画館へ行きました。,leisure,p3,noun
+,お弁当,おべんとう,おべんとう,obentou,lunchbox,n5,"弁 = speech, 当 = appropriate",お弁当を たべました。,"food, daily",p3,noun
+,昼ご飯,ひるごはん,ひるごはん,hirugohan,lunch,n5,"昼 = daytime, 飯 = meal",昼ごはんを たべます。,food,p3,noun
+,カメラ,カメラ,カメラ,kamera,camera,n5,—,カメラで しゃしんを とります。,object,p3,noun
+,写真,しゃしん,しゃしん,shashin,photograph,n5,"写 = copy, 真 = truth",しゃしんを とりました。,object,p3,noun
+,～まい,まい,まい,mai,counter for flat objects,n5,—,シャツを ２まい かいました。,counters,p3,counter
+,～ほん／～ぽん／～ぼん,ほん／ぽん／ぼん,ほん／ぽん／ぼん,hon/pon/bon,counter for long cylindrical,n5,—,ペンを ３ぼん かいました。,counters,p3,counter
+,～さつ,さつ,さつ,satsu,counter for books,n5,—,本を １さつ よみました。,counters,p3,counter
+,～ひき／～ぴき／～びき,ひき／ぴき／びき,ひき／ぴき／びき,hiki/piki/biki,counter for small animals,n5,—,ねこが ２ひき います。,counters,p3,counter
+,～はい／～ぱい／～ばい,はい／ぱい／ばい,はい／ぱい／ばい,hai/pai/bai,counter for cups/glasses,n5,—,みずを ２はい のみました。,counters,p3,counter
+,～にん,にん,にん,nin,counter for people,n5,—,３にん で いきました。,counters,p3,counter
+,～つ,つ,つ,tsu,general counter,n5,—,りんごを ４つ たべました。,counters,p3,counter
+,あまい,あまい,あまい,amai,sweet,n5,—,この ケーキは あまいです。,taste,p3,adjective
+,からい,からい,からい,karai,"spicy, hot",n5,—,カレーは からいです。,taste,p3,adjective
+,にがい,にがい,にがい,nigai,bitter,n4,—,この コーヒーは にがいです。,taste,p3,adjective
+,しょっぱい,しょっぱい,しょっぱい,shoppai,salty,n4,—,この スープは しょっぱいです。,taste,p3,adjective
+,すっぱい,すっぱい,すっぱい,suppai,sour,n4,—,レモンは すっぱいです。,taste,p3,adjective
+,箱根,はこね,はこね,hakone,hakone (place),n/a,"箱 = box, 根 = root",はこねへ りょこうしました。,"place, travel",p4,noun
+,ケーブルカー,ケーブルカー,ケーブルカー,keeburukaa,cable car,n/a,—,ケーブルカーで のぼりました。,"transport, travel",p4,noun
+,ビジネスシューズ,びじねすしゅーず,ビジネスシューズ,bijinesu shuuzu,business shoes,—,—,ビジネスシューズを買いました。,clothing,p4,noun
+,スニーカー,すにーかー,スニーカー,suniikaa,sneakers,—,—,スニーカーをはきます。,clothing,p4,noun
+,セーター,せーたー,セーター,seetaa,sweater,n5,—,セーターをきます。,clothing,p4,noun
+,かばん,かばん,かばん,kaban,bag,n5,—,かばんをもちます。,clothing,p4,noun
+,ぼうし,ぼうし,帽子,boushi,hat,n5,"帽 = hat, 子 = child",帽子をかぶります。,clothing,p4,noun
+,ネクタイ,ねくたい,ネクタイ,nekutai,necktie,n5,—,ネクタイをしめます。,clothing,p4,noun
+,しょくひん,しょくひん,食品,shokuhin,food product,n4,"食 = eat, 品 = goods",食品うりばに行きます。,shopping,p4,noun
+,パイナップル,ぱいなっぷる,パイナップル,painappuru,pineapple,—,—,パイナップルをたべます。,fruit,p4,noun
+,ポップコーン,ぽっぷこーん,ポップコーン,poppukoon,popcorn,—,—,ポップコーンを食べます。,food,p4,noun
+,ドーナツ,どーなつ,ドーナツ,doonatsu,donut,—,—,ドーナツを一つください。,food,p4,noun
+,コロッケ,ころっけ,コロッケ,korokke,croquette,—,—,コロッケを買いました。,food,p4,noun
+,ラーメン,ラーメン,ラーメン,raamen,ramen,n5,—,ラーメンは にほんの たべものです。,food,p4,noun
+,カレーライス,カレーライス,カレーライス,karee raisu,curry rice,n5,—,カレーライスが すきです。,food,p4,noun
+,ピザ,ピザ,ピザ,piza,pizza,n5,—,ピザを ２まい ください。,food,p4,noun
+,ステーキ,ステーキ,ステーキ,suteeki,steak,n5,—,ステーキを ちゅうもんします。,food,p4,noun
+,とんかつ,とんかつ,とんかつ,tonkatsu,pork cutlet,n4,—,とんかつは にほんの りょうりです。,food,p4,noun
+,天ぷら,てんぷら,てんぷら,tenpura,tempura,n4,天 = heaven,てんぷらを たべた ことが ありますか。,food,p4,noun
+,焼き鳥,やきとり,やきとり,yakitori,grilled chicken skewers,n4,"焼 = grill, 鳥 = bird",やきとりを いっしょに たべましょう。,food,p4,noun
+,りょうり,りょうり,りょうり,ryouri,"cooking, cuisine",n5,"料 = fee, 理 = logic",にほんりょうりが すきです。,food,p4,noun
+,ごちそうさまでした,ごちそうさまでした,ごちそうさまでした,gochisousama deshita,thank you for the meal (after),n5,—,しょくじの あとに「ごちそうさまでした」と いいます。,"polite, food",p4,expression
+,いただきます,いただきます,いただきます,itadakimasu,said before eating,n5,—,しょくじの まえに「いただきます」と いいます。,"polite, food",p4,expression
+,レストラン,レストラン,レストラン,resutoran,restaurant,n5,—,あの レストランは おいしいです。,place,p4,noun
+,メニュー,メニュー,メニュー,menyuu,menu,n5,—,メニューを みせて ください。,restaurant,p4,noun
+,コーヒー,コーヒー,コーヒー,koohii,coffee,n5,—,あさ コーヒーを のみます。,drink,p4,noun
+,ワイン,ワイン,ワイン,wain,wine,n5,—,ワインを のみませんか。,drink,p4,noun
+,スパゲッティ,スパゲッティ,スパゲッティ,supagetti,spaghetti,n5,—,ひるごはんに スパゲッティを たべました。,food,p4,noun
+,パン,ぱん,パン,pan,bread,n5,—,パンをたべます。,food,p4,noun
+,連休,れんきゅう,れんきゅう,renkyuu,"long weekend, consecutive holidays",n4,"連 = connect, 休 = rest",連休はどこへ行きますか。,"holiday, time",p5,noun
+,台風,たいふう,たいふう,taifuu,typhoon,n4,"台 = platform, 風 = wind",台風で学校は休みでした。,weather,p5,noun
+,お寺,おてら,おてら,otera,temple,n5,寺 = temple,京都には有名なお寺があります。,"religion, place",p5,noun
+,としょかん,としょかん,としょかん,toshokan,library,n5,"図 = diagram, 書 = book, 館 = building",図書館で ほんを よみます。,place,p5,noun
+,友だち,ともだち,ともだち,tomodachi,friend,n5,"友 = friend, 達 = attain",ともだちと あそびます。,people,p5,noun
+,歩いて,あるいて,あるいて,aruite,on foot / walking,n5,歩 = walk,えきまで あるいて いきます。,transport,p5,adverb
+,トイレ,といれ,トイレ,toire,"toilet, restroom",n5,—,トイレはどこですか。,location,p5,noun
+,かいだん,かいだん,階段,kaidan,stairs,n4,"階 = floor, 段 = steps",階段をおります。,place,p5,noun
+,エレベーター,えれべーたー,エレベーター,erebeetaa,elevator,—,—,エレベーターにのります。,place,p5,noun
+,デパート,でぱーと,デパート,depaato,department store,n5,—,デパートでかいものします。,place,p5,noun
+,うりば,うりば,売り場,uriba,sales counter,n5,"売 = sell, 場 = place",くつうりばはどこですか。,shopping,p5,noun
+,ボール,ぼーる,ボール,booru,ball,n5,—,ボールであそびます。,object,p5,noun
+,めがね,めがね,眼鏡,megane,glasses,n5,"眼 = eye, 鏡 = mirror",めがねをかけます。,object,p5,noun
+,箱根,はこね,はこね,hakone,hakone,n/a,"箱 = box, 根 = root",はこねへ りょこうしました。,travel,p5,noun
+,京都,きょうと,きょうと,kyoto,kyoto,n5,"京 = capital, 都 = metropolis",京都はおてらがたくさんあります。,"japan, places",p5,noun
+,面接,めんせつ,めんせつ,mensetsu,job interview,n3,"面 = face, 接 = connect",来週、会社の面接があります。,career,p1,noun
+,企業,きぎょう,きぎょう,kigyou,"company, enterprise",n3,"企 = plan, 業 = business",大きな企業で働きたいです。,career,p1,noun
+,大手企業,おおてきぎょう,おおてきぎょう,oote kigyou,"big tech, major company",n2,"大手 = major, 企業 = company",大手企業に就職しました。,career,p1,noun
+,職歴,しょくれき,しょくれき,shokureki,work experience,n2,"職 = job, 歴 = history",職歴を履歴書に書きました。,career,p1,noun
+,専門,せんもん,せんもん,senmon,"specialty, expertise",n4,"専 = exclusive, 門 = field",私の専門は人工知能です。,career,p1,noun
+,研究者,けんきゅうしゃ,けんきゅうしゃ,kenkyuusha,researcher,n3,"研究 = research, 者 = person",彼は有名な研究者です。,academia,p1,noun
+,博士号,はくしごう,はくしごう,hakushigou,phd degree,n2,"博 = wide knowledge, 士 = scholar, 号 = title",博士号を取りました。,academia,p1,noun
+,学会,がっかい,がっかい,gakkai,"academic society, conference",n2,"学 = study, 会 = meeting",学会で発表しました。,academia,p2,noun
+,論文,ろんぶん,ろんぶん,ronbun,research paper,n2,"論 = argument, 文 = writing",論文を書いています。,academia,p2,noun
+,人工知能,じんこうちのう,じんこうちのう,jinkou chinou,artificial intelligence,n2,"人工 = artificial, 知能 = intelligence",人工知能を研究しています。,ai,p0,noun
+,機械学習,きかいがくしゅう,きかいがくしゅう,kikai gakushuu,machine learning,n2,"機械 = machine, 学習 = learning",機械学習のモデルを作りました。,ai,p0,noun
+,深層学習,しんそうがくしゅう,しんそうがくしゅう,shinsou gakushuu,deep learning,n2,"深層 = deep layer, 学習 = learning",深層学習を使っています。,ai,p0,noun
+,ニューラルネットワーク,ニューラルネットワーク,ニューラルネットワーク,nyūraru nettowāku,neural network,n2,—,ニューラルネットワークを訓練しました。,ai,p0,noun
+,ロボット工学,ロボットこうがく,ロボット工学,robotto kougaku,robotics,n2,"ロボット = robot, 工学 = engineering",ロボット工学を専攻しました。,ai,p1,noun
+,信頼性,しんらいせい,しんらいせい,shinraisei,"reliability, trust",n2,"信頼 = trust, 性 = nature",信頼性の高いシステムです。,safety,p1,noun
+,安全性,あんぜんせい,あんぜんせい,anzen sei,safety,n3,"安全 = safe, 性 = nature",安全性を確認してください。,safety,p1,noun
+,アルゴリズム,アルゴリズム,アルゴリズム,arugorizumu,algorithm,n2,—,新しいアルゴリズムを開発しました。,ai,p0,noun
+,コンテンツ管理,コンテンツかんり,コンテンツ管理,kontentsu kanri,content moderation,n2,"コンテンツ = content, 管理 = management",コンテンツ管理の仕組みを作りました。,safety,p1,noun
+,ソーシャルメディア,ソーシャルメディア,ソーシャルメディア,soosharu media,social media,n3,—,ソーシャルメディアで発信しています。,media,p1,noun
+,コンテンツ制作者,コンテンツせいさくしゃ,コンテンツ制作者,kontentsu seisakusha,content creator,n2,"コンテンツ = content, 制作 = create, 者 = person",コンテンツ制作者として活動しています。,media,p1,noun
+,指導,しどう,しどう,shidou,"guidance, mentorship",n2,"指 = point, 導 = guide",学生を指導しています。,mentorship,p1,noun
+,メンター,メンター,メンター,mentā,mentor,n2,—,彼は私のメンターです。,mentorship,p1,noun
