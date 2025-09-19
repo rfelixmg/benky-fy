@@ -667,18 +667,722 @@
     "category": "noun"
   },
   {
-    "english": "language (suffix)",
-    "kanji": "語",
-    "kana": "ご",
-    "hiragana": "ご",
-    "romaji": "go",
+    "english": "English",
+    "kanji": "英語",
+    "kana": "えいご",
+    "hiragana": "えいご",
+    "romaji": "eigo",
     "entity": "concept",
     "semantic": [
       "field",
       "subject"
     ],
     "tags": [
-      "language"
+      "language",
+      "study"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Japanese",
+    "kanji": "日本語",
+    "kana": "にほんご",
+    "hiragana": "にほんご",
+    "romaji": "nihongo",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "language",
+      "study"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Spanish",
+    "kanji": "スペイン語",
+    "kana": "すぺいんご",
+    "hiragana": "すぺいんご",
+    "romaji": "supeingo",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "language",
+      "study"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "French",
+    "kanji": "フランス語",
+    "kana": "ふらんすご",
+    "hiragana": "ふらんすご",
+    "romaji": "furansugo",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "language",
+      "study"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "Chinese",
+    "kanji": "中国語",
+    "kana": "ちゅうごくご",
+    "hiragana": "ちゅうごくご",
+    "romaji": "chuugokugo",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "language",
+      "study"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "Korean",
+    "kanji": "韓国語",
+    "kana": "かんこくご",
+    "hiragana": "かんこくご",
+    "romaji": "kankokugo",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "language",
+      "study"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "mathematics",
+    "kanji": "数学",
+    "kana": "すうがく",
+    "hiragana": "すうがく",
+    "romaji": "suugaku",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "study",
+      "academic"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "science",
+    "kanji": "科学",
+    "kana": "かがく",
+    "hiragana": "かがく",
+    "romaji": "kagaku",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "study",
+      "academic"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "history",
+    "kanji": "歴史",
+    "kana": "れきし",
+    "hiragana": "れきし",
+    "romaji": "rekishi",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "study",
+      "academic"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "art",
+    "kanji": "美術",
+    "kana": "びじゅつ",
+    "hiragana": "びじゅつ",
+    "romaji": "bijutsu",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "study",
+      "academic"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "music",
+    "kanji": "音楽",
+    "kana": "おんがく",
+    "hiragana": "おんがく",
+    "romaji": "ongaku",
+    "entity": "concept",
+    "semantic": [
+      "field",
+      "subject"
+    ],
+    "tags": [
+      "study",
+      "academic"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "noun"
+  },
+  {
+    "english": "I",
+    "kanji": "私",
+    "kana": "わたし",
+    "hiragana": "わたし",
+    "romaji": "watashi",
+    "entity": "person",
+    "semantic": [
+      "pronoun",
+      "self"
+    ],
+    "tags": [
+      "pronoun",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "pronoun"
+  },
+  {
+    "english": "you",
+    "kanji": "あなた",
+    "kana": "あなた",
+    "hiragana": "あなた",
+    "romaji": "anata",
+    "entity": "person",
+    "semantic": [
+      "pronoun",
+      "other"
+    ],
+    "tags": [
+      "pronoun",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "pronoun"
+  },
+  {
+    "english": "he",
+    "kanji": "彼",
+    "kana": "かれ",
+    "hiragana": "かれ",
+    "romaji": "kare",
+    "entity": "person",
+    "semantic": [
+      "pronoun",
+      "male"
+    ],
+    "tags": [
+      "pronoun",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "pronoun"
+  },
+  {
+    "english": "she",
+    "kanji": "彼女",
+    "kana": "かのじょ",
+    "hiragana": "かのじょ",
+    "romaji": "kanojo",
+    "entity": "person",
+    "semantic": [
+      "pronoun",
+      "female"
+    ],
+    "tags": [
+      "pronoun",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "pronoun"
+  },
+  {
+    "english": "we",
+    "kanji": "私たち",
+    "kana": "わたしたち",
+    "hiragana": "わたしたち",
+    "romaji": "watashitachi",
+    "entity": "group",
+    "semantic": [
+      "pronoun",
+      "group"
+    ],
+    "tags": [
+      "pronoun",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p0",
+    "category": "pronoun"
+  },
+  {
+    "english": "Takeshi",
+    "kanji": "健",
+    "kana": "たけし",
+    "hiragana": "たけし",
+    "romaji": "takeshi",
+    "entity": "person",
+    "semantic": [
+      "name",
+      "male"
+    ],
+    "tags": [
+      "name",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Yuki",
+    "kanji": "雪",
+    "kana": "ゆき",
+    "hiragana": "ゆき",
+    "romaji": "yuki",
+    "entity": "person",
+    "semantic": [
+      "name",
+      "female"
+    ],
+    "tags": [
+      "name",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Hiroshi",
+    "kanji": "博",
+    "kana": "ひろし",
+    "hiragana": "ひろし",
+    "romaji": "hiroshi",
+    "entity": "person",
+    "semantic": [
+      "name",
+      "male"
+    ],
+    "tags": [
+      "name",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Akiko",
+    "kanji": "明子",
+    "kana": "あきこ",
+    "hiragana": "あきこ",
+    "romaji": "akiko",
+    "entity": "person",
+    "semantic": [
+      "name",
+      "female"
+    ],
+    "tags": [
+      "name",
+      "people"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Tokyo",
+    "kanji": "東京",
+    "kana": "とうきょう",
+    "hiragana": "とうきょう",
+    "romaji": "toukyou",
+    "entity": "place",
+    "semantic": [
+      "city",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "city"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Osaka",
+    "kanji": "大阪",
+    "kana": "おおさか",
+    "hiragana": "おおさか",
+    "romaji": "oosaka",
+    "entity": "place",
+    "semantic": [
+      "city",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "city"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Kyoto",
+    "kanji": "京都",
+    "kana": "きょうと",
+    "hiragana": "きょうと",
+    "romaji": "kyouto",
+    "entity": "place",
+    "semantic": [
+      "city",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "city"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Ueno Park",
+    "kanji": "上野公園",
+    "kana": "うえのこうえん",
+    "hiragana": "うえのこうえん",
+    "romaji": "ueno kouen",
+    "entity": "place",
+    "semantic": [
+      "park",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "park"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Sensoji Temple",
+    "kanji": "浅草寺",
+    "kana": "せんそうじ",
+    "hiragana": "せんそうじ",
+    "romaji": "sensouji",
+    "entity": "place",
+    "semantic": [
+      "temple",
+      "location"
+    ],
+    "tags": [
+      "place",
+      "temple"
+    ],
+    "jlpt_level": "n4",
+    "priority_group": "p2",
+    "category": "proper_noun"
+  },
+  {
+    "english": "Monday",
+    "kanji": "月曜日",
+    "kana": "げつようび",
+    "hiragana": "げつようび",
+    "romaji": "getsuyoubi",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "day"
+    ],
+    "tags": [
+      "time",
+      "day"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Tuesday",
+    "kanji": "火曜日",
+    "kana": "かようび",
+    "hiragana": "かようび",
+    "romaji": "kayoubi",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "day"
+    ],
+    "tags": [
+      "time",
+      "day"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Wednesday",
+    "kanji": "水曜日",
+    "kana": "すいようび",
+    "hiragana": "すいようび",
+    "romaji": "suiyoubi",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "day"
+    ],
+    "tags": [
+      "time",
+      "day"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Thursday",
+    "kanji": "木曜日",
+    "kana": "もくようび",
+    "hiragana": "もくようび",
+    "romaji": "mokuyoubi",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "day"
+    ],
+    "tags": [
+      "time",
+      "day"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Friday",
+    "kanji": "金曜日",
+    "kana": "きんようび",
+    "hiragana": "きんようび",
+    "romaji": "kinyoubi",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "day"
+    ],
+    "tags": [
+      "time",
+      "day"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Saturday",
+    "kanji": "土曜日",
+    "kana": "どようび",
+    "hiragana": "どようび",
+    "romaji": "doyoubi",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "day"
+    ],
+    "tags": [
+      "time",
+      "day"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "Sunday",
+    "kanji": "日曜日",
+    "kana": "にちようび",
+    "hiragana": "にちようび",
+    "romaji": "nichiyoubi",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "day"
+    ],
+    "tags": [
+      "time",
+      "day"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "January",
+    "kanji": "一月",
+    "kana": "いちがつ",
+    "hiragana": "いちがつ",
+    "romaji": "ichigatsu",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "month"
+    ],
+    "tags": [
+      "time",
+      "month"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "February",
+    "kanji": "二月",
+    "kana": "にがつ",
+    "hiragana": "にがつ",
+    "romaji": "nigatsu",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "month"
+    ],
+    "tags": [
+      "time",
+      "month"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "March",
+    "kanji": "三月",
+    "kana": "さんがつ",
+    "hiragana": "さんがつ",
+    "romaji": "sangatsu",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "month"
+    ],
+    "tags": [
+      "time",
+      "month"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "April",
+    "kanji": "四月",
+    "kana": "しがつ",
+    "hiragana": "しがつ",
+    "romaji": "shigatsu",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "month"
+    ],
+    "tags": [
+      "time",
+      "month"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "May",
+    "kanji": "五月",
+    "kana": "ごがつ",
+    "hiragana": "ごがつ",
+    "romaji": "gogatsu",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "month"
+    ],
+    "tags": [
+      "time",
+      "month"
+    ],
+    "jlpt_level": "n5",
+    "priority_group": "p1",
+    "category": "noun"
+  },
+  {
+    "english": "June",
+    "kanji": "六月",
+    "kana": "ろくがつ",
+    "hiragana": "ろくがつ",
+    "romaji": "rokugatsu",
+    "entity": "concept",
+    "semantic": [
+      "time",
+      "month"
+    ],
+    "tags": [
+      "time",
+      "month"
     ],
     "jlpt_level": "n5",
     "priority_group": "p1",

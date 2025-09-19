@@ -50,7 +50,12 @@
 ,ベトナム,ベトナム,ベトナム,betonamu,Vietnam,Proper noun,N5,―,ベトナムからきました。,country,P1
 ,フランス,フランス,フランス,furansu,France,Proper noun,N5,―,フランスからきました。,country,P1
 ,ことば,ことば,ことば,kotoba,"Word, language",Noun,N5,"言 = word, 葉 = leaf",にほんごのことば。,vocabulary,P1
-,語,ご,ご,go,Language (suffix),Noun,N5,語 = language,にほんごをべんきょうします。,language,P1
+,日本語,にほんご,nihongo,Japanese (language),Noun,N5,日本 = Japan + 語 = language,にほんごをべんきょうします。,language,P1
+,英語,えいご,eigo,English (language),Noun,N5,英 = England + 語 = language,えいごをはなします。,language,P1
+,ポルトガル語,ポルトガルご,porutogaru-go,Portuguese (language),Noun,N5,ポルトガル + 語 = language,ポルトガルごをべんきょうしています。,language,P1
+,中国語,ちゅうごくご,chuugoku-go,Chinese (language),Noun,N5,中国 = China + 語 = language,ちゅうごくごはむずかしいです。,language,P1
+,スペイン語,スペインご,supein-go,Spanish (language),Noun,N5,スペイン + 語 = language,スペインごをならっています。,language,P1
+,フランス語,フランスご,furansu-go,French (language),Noun,N5,フランス + 語 = language,フランスごがすきです。,language,P1
 ,大学生,だいがくせい,だいがくせい,daigakusei,University student,Noun,N5,"大 = big, 学 = study, 生 = life",キムさんは だいがくせいです。,student,P1
 ,会社員,かいしゃいん,かいしゃいん,kaishain,Company employee,Noun,N5,"会社 = company, 員 = member",サラさんは かいしゃいんです。,occupation,P1
 ,教師,きょうし,きょうし,kyoushi,Teacher (formal),Noun,N4,"教 = teach, 師 = master",わたしは きょうしです。,occupation,P1
