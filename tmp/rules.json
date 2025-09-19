@@ -3,7 +3,7 @@
         "structure": "A は B です",
         "slots": {
           "A": ["person", "thing", "place", "concept"],
-          "B": { "depends_on": "A", "options": "[A].semantic_match" }
+          "B": ["person", "thing", "place", "concept"]
         },
         "particles": ["は"],
         "extensions": ["です"]
@@ -13,7 +13,7 @@
         "structure": "A は B です",
         "slots": {
           "A": ["thing", "concept", "person"],
-          "B": { "depends_on": "A", "options": "[A].semantic_match" }
+          "B": ["thing", "concept", "person"]
         },
         "particles": ["は"],
         "extensions": ["です"]

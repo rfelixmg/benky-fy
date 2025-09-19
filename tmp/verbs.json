@@ -1,2010 +1,1910 @@
 [
-    {
-        "english":"to do",
-        "tags":{
-            "conjugation":"irregular",
-            "semantic":[
-                "action"
-            ],
-            "usage":[
-                "daily",
-                "general"
-            ]
-        },
-        "kanji":"為る",
-        "hiragana":"する",
-        "romaji":"suru",
-        "grammatical_type":"irregular",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"為る",
-                "hiragana":"する",
-                "furigana":"為る"
-            },
-            "polite":{
-                "kanji":"するます",
-                "hiragana":"するます",
-                "furigana":"するます"
-            }
-        }
-    },
-    {
-        "english":"to know",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "stative",
-                "cognitive"
-            ],
-            "usage":[
-                "daily",
-                "conversation"
-            ]
-        },
-        "kanji":"知っている",
-        "hiragana":"しっている",
-        "romaji":"shitte iru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"知っている",
-                "hiragana":"しっている",
-                "furigana":"知っている"
-            },
-            "polite":{
-                "kanji":"しっているます",
-                "hiragana":"しっているます",
-                "furigana":"しっているます"
-            }
-        }
-    },
-    {
-        "english":"to think",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "cognitive"
-            ],
-            "usage":[
-                "daily",
-                "business"
-            ]
-        },
-        "kanji":"考える",
-        "hiragana":"かんがえる",
-        "romaji":"kangaeru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"考える",
-                "hiragana":"かんがえる",
-                "furigana":"考える"
-            },
-            "polite":{
-                "kanji":"かんがえます",
-                "hiragana":"かんがえます",
-                "furigana":"かんがえます"
-            },
-            "negative":{
-                "kanji":"かんがえない",
-                "hiragana":"かんがえない",
-                "furigana":"かんがえない"
-            },
-            "polite_negative":{
-                "kanji":"かんがえません",
-                "hiragana":"かんがえません",
-                "furigana":"かんがえません"
-            },
-            "past":{
-                "kanji":"かんがえた",
-                "hiragana":"かんがえた",
-                "furigana":"かんがえた"
-            },
-            "polite_past":{
-                "kanji":"かんがえました",
-                "hiragana":"かんがえました",
-                "furigana":"かんがえました"
-            },
-            "past_negative":{
-                "kanji":"かんがえなかった",
-                "hiragana":"かんがえなかった",
-                "furigana":"かんがえなかった"
-            },
-            "te_form":{
-                "kanji":"かんがえて",
-                "hiragana":"かんがえて",
-                "furigana":"かんがえて"
-            },
-            "potential":{
-                "kanji":"かんがえられる",
-                "hiragana":"かんがえられる",
-                "furigana":"かんがえられる"
-            },
-            "volitional":{
-                "kanji":"かんがえよう",
-                "hiragana":"かんがえよう",
-                "furigana":"かんがえよう"
-            }
-        }
-    },
-    {
-        "english":"to open",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "action"
-            ],
-            "usage":[
-                "daily",
-                "home",
-                "work"
-            ]
-        },
-        "kanji":"開ける",
-        "hiragana":"あける",
-        "romaji":"akeru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"開ける",
-                "hiragana":"あける",
-                "furigana":"開ける"
-            },
-            "polite":{
-                "kanji":"あけます",
-                "hiragana":"あけます",
-                "furigana":"あけます"
-            },
-            "negative":{
-                "kanji":"あけない",
-                "hiragana":"あけない",
-                "furigana":"あけない"
-            },
-            "polite_negative":{
-                "kanji":"あけません",
-                "hiragana":"あけません",
-                "furigana":"あけません"
-            },
-            "past":{
-                "kanji":"あけた",
-                "hiragana":"あけた",
-                "furigana":"あけた"
-            },
-            "polite_past":{
-                "kanji":"あけました",
-                "hiragana":"あけました",
-                "furigana":"あけました"
-            },
-            "past_negative":{
-                "kanji":"あけなかった",
-                "hiragana":"あけなかった",
-                "furigana":"あけなかった"
-            },
-            "te_form":{
-                "kanji":"あけて",
-                "hiragana":"あけて",
-                "furigana":"あけて"
-            },
-            "potential":{
-                "kanji":"あけられる",
-                "hiragana":"あけられる",
-                "furigana":"あけられる"
-            },
-            "volitional":{
-                "kanji":"あけよう",
-                "hiragana":"あけよう",
-                "furigana":"あけよう"
-            }
-        }
-    },
-    {
-        "english":"to close",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "action"
-            ],
-            "usage":[
-                "daily",
-                "home",
-                "work"
-            ]
-        },
-        "kanji":"閉める",
-        "hiragana":"しめる",
-        "romaji":"shimeru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"閉める",
-                "hiragana":"しめる",
-                "furigana":"閉める"
-            },
-            "polite":{
-                "kanji":"しめます",
-                "hiragana":"しめます",
-                "furigana":"しめます"
-            },
-            "negative":{
-                "kanji":"しめない",
-                "hiragana":"しめない",
-                "furigana":"しめない"
-            },
-            "polite_negative":{
-                "kanji":"しめません",
-                "hiragana":"しめません",
-                "furigana":"しめません"
-            },
-            "past":{
-                "kanji":"しめた",
-                "hiragana":"しめた",
-                "furigana":"しめた"
-            },
-            "polite_past":{
-                "kanji":"しめました",
-                "hiragana":"しめました",
-                "furigana":"しめました"
-            },
-            "past_negative":{
-                "kanji":"しめなかった",
-                "hiragana":"しめなかった",
-                "furigana":"しめなかった"
-            },
-            "te_form":{
-                "kanji":"しめて",
-                "hiragana":"しめて",
-                "furigana":"しめて"
-            },
-            "potential":{
-                "kanji":"しめられる",
-                "hiragana":"しめられる",
-                "furigana":"しめられる"
-            },
-            "volitional":{
-                "kanji":"しめよう",
-                "hiragana":"しめよう",
-                "furigana":"しめよう"
-            }
-        }
-    },
-    {
-        "english":"to sleep",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "stative",
-                "physiological"
-            ],
-            "usage":[
-                "daily",
-                "routine"
-            ]
-        },
-        "kanji":"寝る",
-        "hiragana":"ねる",
-        "romaji":"neru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"寝る",
-                "hiragana":"ねる",
-                "furigana":"寝る"
-            },
-            "polite":{
-                "kanji":"ねます",
-                "hiragana":"ねます",
-                "furigana":"ねます"
-            },
-            "negative":{
-                "kanji":"ねない",
-                "hiragana":"ねない",
-                "furigana":"ねない"
-            },
-            "polite_negative":{
-                "kanji":"ねません",
-                "hiragana":"ねません",
-                "furigana":"ねません"
-            },
-            "past":{
-                "kanji":"ねた",
-                "hiragana":"ねた",
-                "furigana":"ねた"
-            },
-            "polite_past":{
-                "kanji":"ねました",
-                "hiragana":"ねました",
-                "furigana":"ねました"
-            },
-            "past_negative":{
-                "kanji":"ねなかった",
-                "hiragana":"ねなかった",
-                "furigana":"ねなかった"
-            },
-            "te_form":{
-                "kanji":"ねて",
-                "hiragana":"ねて",
-                "furigana":"ねて"
-            },
-            "potential":{
-                "kanji":"ねられる",
-                "hiragana":"ねられる",
-                "furigana":"ねられる"
-            },
-            "volitional":{
-                "kanji":"ねよう",
-                "hiragana":"ねよう",
-                "furigana":"ねよう"
-            }
-        }
-    },
-    {
-        "english":"to wake up",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "stative",
-                "physiological"
-            ],
-            "usage":[
-                "daily",
-                "routine"
-            ]
-        },
-        "kanji":"起きる",
-        "hiragana":"おきる",
-        "romaji":"okiru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"起きる",
-                "hiragana":"おきる",
-                "furigana":"起きる"
-            },
-            "polite":{
-                "kanji":"おきます",
-                "hiragana":"おきます",
-                "furigana":"おきます"
-            },
-            "negative":{
-                "kanji":"おきない",
-                "hiragana":"おきない",
-                "furigana":"おきない"
-            },
-            "polite_negative":{
-                "kanji":"おきません",
-                "hiragana":"おきません",
-                "furigana":"おきません"
-            },
-            "past":{
-                "kanji":"おきた",
-                "hiragana":"おきた",
-                "furigana":"おきた"
-            },
-            "polite_past":{
-                "kanji":"おきました",
-                "hiragana":"おきました",
-                "furigana":"おきました"
-            },
-            "past_negative":{
-                "kanji":"おきなかった",
-                "hiragana":"おきなかった",
-                "furigana":"おきなかった"
-            },
-            "te_form":{
-                "kanji":"おきて",
-                "hiragana":"おきて",
-                "furigana":"おきて"
-            },
-            "potential":{
-                "kanji":"おきられる",
-                "hiragana":"おきられる",
-                "furigana":"おきられる"
-            },
-            "volitional":{
-                "kanji":"おきよう",
-                "hiragana":"おきよう",
-                "furigana":"おきよう"
-            }
-        }
-    },
-    {
-        "english":"to walk",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "motion"
-            ],
-            "usage":[
-                "daily",
-                "travel",
-                "health"
-            ]
-        },
-        "kanji":"歩く",
-        "hiragana":"あるく",
-        "romaji":"aruku",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"歩く",
-                "hiragana":"あるく",
-                "furigana":"歩く"
-            },
-            "polite":{
-                "kanji":"あるくます",
-                "hiragana":"あるくます",
-                "furigana":"あるくます"
-            }
-        }
-    },
-    {
-        "english":"to go",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "motion"
-            ],
-            "usage":[
-                "daily",
-                "travel"
-            ]
-        },
-        "kanji":"行く",
-        "hiragana":"いく",
-        "romaji":"iku",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"行く",
-                "hiragana":"いく",
-                "furigana":"行く"
-            },
-            "polite":{
-                "kanji":"いくます",
-                "hiragana":"いくます",
-                "furigana":"いくます"
-            }
-        }
-    },
-    {
-        "english":"to speak",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "communication"
-            ],
-            "usage":[
-                "daily",
-                "business",
-                "social"
-            ]
-        },
-        "kanji":"話す",
-        "hiragana":"はなす",
-        "romaji":"hanasu",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"話す",
-                "hiragana":"はなす",
-                "furigana":"話す"
-            },
-            "polite":{
-                "kanji":"はなすます",
-                "hiragana":"はなすます",
-                "furigana":"はなすます"
-            }
-        }
-    },
-    {
-        "english":"to say",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "communication"
-            ],
-            "usage":[
-                "daily",
-                "general"
-            ]
-        },
-        "kanji":"言う",
-        "hiragana":"いう",
-        "romaji":"iu",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"言う",
-                "hiragana":"いう",
-                "furigana":"言う"
-            },
-            "polite":{
-                "kanji":"いうます",
-                "hiragana":"いうます",
-                "furigana":"いうます"
-            }
-        }
-    },
-    {
-        "english":"to study",
-        "tags":{
-            "conjugation":"irregular",
-            "semantic":[
-                "learning",
-                "action"
-            ],
-            "usage":[
-                "daily",
-                "school"
-            ]
-        },
-        "kanji":"勉強する",
-        "hiragana":"べんきょうする",
-        "romaji":"benkyou suru",
-        "grammatical_type":"irregular",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"勉強する",
-                "hiragana":"べんきょうする",
-                "furigana":"勉強する"
-            },
-            "polite":{
-                "kanji":"べんきょうするます",
-                "hiragana":"べんきょうするます",
-                "furigana":"べんきょうするます"
-            }
-        }
-    },
-    {
-        "english":"to buy",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "transaction"
-            ],
-            "usage":[
-                "daily",
-                "shopping"
-            ]
-        },
-        "kanji":"買う",
-        "hiragana":"かう",
-        "romaji":"kau",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"買う",
-                "hiragana":"かう",
-                "furigana":"買う"
-            },
-            "polite":{
-                "kanji":"かうます",
-                "hiragana":"かうます",
-                "furigana":"かうます"
-            }
-        }
-    },
-    {
-        "english":"to sell",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "transaction"
-            ],
-            "usage":[
-                "business",
-                "market"
-            ]
-        },
-        "kanji":"売る",
-        "hiragana":"うる",
-        "romaji":"uru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"売る",
-                "hiragana":"うる",
-                "furigana":"売る"
-            },
-            "polite":{
-                "kanji":"うるます",
-                "hiragana":"うるます",
-                "furigana":"うるます"
-            }
-        }
-    },
-    {
-        "english":"to remember",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "cognitive"
-            ],
-            "usage":[
-                "learning",
-                "school"
-            ]
-        },
-        "kanji":"覚える",
-        "hiragana":"おぼえる",
-        "romaji":"oboeru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"覚える",
-                "hiragana":"おぼえる",
-                "furigana":"覚える"
-            },
-            "polite":{
-                "kanji":"おぼえます",
-                "hiragana":"おぼえます",
-                "furigana":"おぼえます"
-            },
-            "negative":{
-                "kanji":"おぼえない",
-                "hiragana":"おぼえない",
-                "furigana":"おぼえない"
-            },
-            "polite_negative":{
-                "kanji":"おぼえません",
-                "hiragana":"おぼえません",
-                "furigana":"おぼえません"
-            },
-            "past":{
-                "kanji":"おぼえた",
-                "hiragana":"おぼえた",
-                "furigana":"おぼえた"
-            },
-            "polite_past":{
-                "kanji":"おぼえました",
-                "hiragana":"おぼえました",
-                "furigana":"おぼえました"
-            },
-            "past_negative":{
-                "kanji":"おぼえなかった",
-                "hiragana":"おぼえなかった",
-                "furigana":"おぼえなかった"
-            },
-            "te_form":{
-                "kanji":"おぼえて",
-                "hiragana":"おぼえて",
-                "furigana":"おぼえて"
-            },
-            "potential":{
-                "kanji":"おぼえられる",
-                "hiragana":"おぼえられる",
-                "furigana":"おぼえられる"
-            },
-            "volitional":{
-                "kanji":"おぼえよう",
-                "hiragana":"おぼえよう",
-                "furigana":"おぼえよう"
-            }
-        }
-    },
-    {
-        "english":"to forget",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "cognitive"
-            ],
-            "usage":[
-                "learning",
-                "daily"
-            ]
-        },
-        "kanji":"忘れる",
-        "hiragana":"わすれる",
-        "romaji":"wasureru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"忘れる",
-                "hiragana":"わすれる",
-                "furigana":"忘れる"
-            },
-            "polite":{
-                "kanji":"わすれます",
-                "hiragana":"わすれます",
-                "furigana":"わすれます"
-            },
-            "negative":{
-                "kanji":"わすれない",
-                "hiragana":"わすれない",
-                "furigana":"わすれない"
-            },
-            "polite_negative":{
-                "kanji":"わすれません",
-                "hiragana":"わすれません",
-                "furigana":"わすれません"
-            },
-            "past":{
-                "kanji":"わすれた",
-                "hiragana":"わすれた",
-                "furigana":"わすれた"
-            },
-            "polite_past":{
-                "kanji":"わすれました",
-                "hiragana":"わすれました",
-                "furigana":"わすれました"
-            },
-            "past_negative":{
-                "kanji":"わすれなかった",
-                "hiragana":"わすれなかった",
-                "furigana":"わすれなかった"
-            },
-            "te_form":{
-                "kanji":"わすれて",
-                "hiragana":"わすれて",
-                "furigana":"わすれて"
-            },
-            "potential":{
-                "kanji":"わすれられる",
-                "hiragana":"わすれられる",
-                "furigana":"わすれられる"
-            },
-            "volitional":{
-                "kanji":"わすれよう",
-                "hiragana":"わすれよう",
-                "furigana":"わすれよう"
-            }
-        }
-    },
-    {
-        "english":"to see \/ to watch",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "perception"
-            ],
-            "usage":[
-                "daily",
-                "entertainment"
-            ]
-        },
-        "kanji":"見る",
-        "hiragana":"みる",
-        "romaji":"miru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"見る",
-                "hiragana":"みる",
-                "furigana":"見る"
-            },
-            "polite":{
-                "kanji":"みます",
-                "hiragana":"みます",
-                "furigana":"みます"
-            },
-            "negative":{
-                "kanji":"みない",
-                "hiragana":"みない",
-                "furigana":"みない"
-            },
-            "polite_negative":{
-                "kanji":"みません",
-                "hiragana":"みません",
-                "furigana":"みません"
-            },
-            "past":{
-                "kanji":"みた",
-                "hiragana":"みた",
-                "furigana":"みた"
-            },
-            "polite_past":{
-                "kanji":"みました",
-                "hiragana":"みました",
-                "furigana":"みました"
-            },
-            "past_negative":{
-                "kanji":"みなかった",
-                "hiragana":"みなかった",
-                "furigana":"みなかった"
-            },
-            "te_form":{
-                "kanji":"みて",
-                "hiragana":"みて",
-                "furigana":"みて"
-            },
-            "potential":{
-                "kanji":"みられる",
-                "hiragana":"みられる",
-                "furigana":"みられる"
-            },
-            "volitional":{
-                "kanji":"みよう",
-                "hiragana":"みよう",
-                "furigana":"みよう"
-            }
-        }
-    },
-    {
-        "english":"to eat",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "physiological"
-            ],
-            "usage":[
-                "daily",
-                "routine"
-            ]
-        },
-        "kanji":"食べる",
-        "hiragana":"たべる",
-        "romaji":"taberu",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"食べる",
-                "hiragana":"たべる",
-                "furigana":"食べる"
-            },
-            "polite":{
-                "kanji":"たべます",
-                "hiragana":"たべます",
-                "furigana":"たべます"
-            },
-            "negative":{
-                "kanji":"たべない",
-                "hiragana":"たべない",
-                "furigana":"たべない"
-            },
-            "polite_negative":{
-                "kanji":"たべません",
-                "hiragana":"たべません",
-                "furigana":"たべません"
-            },
-            "past":{
-                "kanji":"たべた",
-                "hiragana":"たべた",
-                "furigana":"たべた"
-            },
-            "polite_past":{
-                "kanji":"たべました",
-                "hiragana":"たべました",
-                "furigana":"たべました"
-            },
-            "past_negative":{
-                "kanji":"たべなかった",
-                "hiragana":"たべなかった",
-                "furigana":"たべなかった"
-            },
-            "te_form":{
-                "kanji":"たべて",
-                "hiragana":"たべて",
-                "furigana":"たべて"
-            },
-            "potential":{
-                "kanji":"たべられる",
-                "hiragana":"たべられる",
-                "furigana":"たべられる"
-            },
-            "volitional":{
-                "kanji":"たべよう",
-                "hiragana":"たべよう",
-                "furigana":"たべよう"
-            }
-        }
-    },
-    {
-        "english":"to drink",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "physiological"
-            ],
-            "usage":[
-                "daily",
-                "social"
-            ]
-        },
-        "kanji":"飲む",
-        "hiragana":"のむ",
-        "romaji":"nomu",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"飲む",
-                "hiragana":"のむ",
-                "furigana":"飲む"
-            },
-            "polite":{
-                "kanji":"のむます",
-                "hiragana":"のむます",
-                "furigana":"のむます"
-            }
-        }
-    },
-    {
-        "english":"to ask \/ to listen",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "communication",
-                "perception"
-            ],
-            "usage":[
-                "daily",
-                "learning"
-            ]
-        },
-        "kanji":"聞く",
-        "hiragana":"きく",
-        "romaji":"kiku",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"聞く",
-                "hiragana":"きく",
-                "furigana":"聞く"
-            },
-            "polite":{
-                "kanji":"きくます",
-                "hiragana":"きくます",
-                "furigana":"きくます"
-            }
-        }
-    },
-    {
-        "english":"to run",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "motion"
-            ],
-            "usage":[
-                "daily",
-                "health",
-                "travel"
-            ]
-        },
-        "kanji":"走る",
-        "hiragana":"はしる",
-        "romaji":"hashiru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"走る",
-                "hiragana":"はしる",
-                "furigana":"走る"
-            },
-            "polite":{
-                "kanji":"はしるます",
-                "hiragana":"はしるます",
-                "furigana":"はしるます"
-            }
-        }
-    },
-    {
-        "english":"to ride",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "motion"
-            ],
-            "usage":[
-                "daily",
-                "travel"
-            ]
-        },
-        "kanji":"乗る",
-        "hiragana":"のる",
-        "romaji":"noru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"乗る",
-                "hiragana":"のる",
-                "furigana":"乗る"
-            },
-            "polite":{
-                "kanji":"のるます",
-                "hiragana":"のるます",
-                "furigana":"のるます"
-            }
-        }
-    },
-    {
-        "english":"to work",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "action",
-                "occupation"
-            ],
-            "usage":[
-                "business",
-                "daily"
-            ]
-        },
-        "kanji":"働く",
-        "hiragana":"はたらく",
-        "romaji":"hataraku",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"働く",
-                "hiragana":"はたらく",
-                "furigana":"働く"
-            },
-            "polite":{
-                "kanji":"はたらくます",
-                "hiragana":"はたらくます",
-                "furigana":"はたらくます"
-            }
-        }
-    },
-    {
-        "english":"to give",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "transaction",
-                "social"
-            ],
-            "usage":[
-                "daily",
-                "social"
-            ]
-        },
-        "kanji":"あげる",
-        "hiragana":"あげる",
-        "romaji":"ageru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"あげる",
-                "hiragana":"あげる",
-                "furigana":"あげる"
-            },
-            "polite":{
-                "kanji":"あげます",
-                "hiragana":"あげます",
-                "furigana":"あげます"
-            },
-            "negative":{
-                "kanji":"あげない",
-                "hiragana":"あげない",
-                "furigana":"あげない"
-            },
-            "polite_negative":{
-                "kanji":"あげません",
-                "hiragana":"あげません",
-                "furigana":"あげません"
-            },
-            "past":{
-                "kanji":"あげた",
-                "hiragana":"あげた",
-                "furigana":"あげた"
-            },
-            "polite_past":{
-                "kanji":"あげました",
-                "hiragana":"あげました",
-                "furigana":"あげました"
-            },
-            "past_negative":{
-                "kanji":"あげなかった",
-                "hiragana":"あげなかった",
-                "furigana":"あげなかった"
-            },
-            "te_form":{
-                "kanji":"あげて",
-                "hiragana":"あげて",
-                "furigana":"あげて"
-            },
-            "potential":{
-                "kanji":"あげられる",
-                "hiragana":"あげられる",
-                "furigana":"あげられる"
-            },
-            "volitional":{
-                "kanji":"あげよう",
-                "hiragana":"あげよう",
-                "furigana":"あげよう"
-            }
-        }
-    },
-    {
-        "english":"to put \/ place",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "action",
-                "spatial"
-            ],
-            "usage":[
-                "daily",
-                "home"
-            ]
-        },
-        "kanji":"置く",
-        "hiragana":"おく",
-        "romaji":"oku",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"置く",
-                "hiragana":"おく",
-                "furigana":"置く"
-            },
-            "polite":{
-                "kanji":"おくます",
-                "hiragana":"おくます",
-                "furigana":"おくます"
-            }
-        }
-    },
-    {
-        "english":"to fall (rain\/snow)",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "nature",
-                "weather"
-            ],
-            "usage":[
-                "nature",
-                "weather"
-            ]
-        },
-        "kanji":"降る",
-        "hiragana":"ふる",
-        "romaji":"furu",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"降る",
-                "hiragana":"ふる",
-                "furigana":"降る"
-            },
-            "polite":{
-                "kanji":"ふるます",
-                "hiragana":"ふるます",
-                "furigana":"ふるます"
-            }
-        }
-    },
-    {
-        "english":"to sing",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "artistic",
-                "communication"
-            ],
-            "usage":[
-                "daily",
-                "entertainment"
-            ]
-        },
-        "kanji":"歌う",
-        "hiragana":"うたう",
-        "romaji":"utau",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"歌う",
-                "hiragana":"うたう",
-                "furigana":"歌う"
-            },
-            "polite":{
-                "kanji":"うたうます",
-                "hiragana":"うたうます",
-                "furigana":"うたうます"
-            }
-        }
-    },
-    {
-        "english":"to cry",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "emotion"
-            ],
-            "usage":[
-                "daily",
-                "emotion"
-            ]
-        },
-        "kanji":"泣く",
-        "hiragana":"なく",
-        "romaji":"naku",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"泣く",
-                "hiragana":"なく",
-                "furigana":"泣く"
-            },
-            "polite":{
-                "kanji":"なくます",
-                "hiragana":"なくます",
-                "furigana":"なくます"
-            }
-        }
-    },
-    {
-        "english":"to take",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "action"
-            ],
-            "usage":[
-                "daily",
-                "general"
-            ]
-        },
-        "kanji":"取る",
-        "hiragana":"とる",
-        "romaji":"toru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"取る",
-                "hiragana":"とる",
-                "furigana":"取る"
-            },
-            "polite":{
-                "kanji":"とるます",
-                "hiragana":"とるます",
-                "furigana":"とるます"
-            }
-        }
-    },
-    {
-        "english":"to call",
-        "tags":{
-            "conjugation":"irregular",
-            "semantic":[
-                "communication"
-            ],
-            "usage":[
-                "daily",
-                "business"
-            ]
-        },
-        "kanji":"電話する",
-        "hiragana":"でんわする",
-        "romaji":"denwa suru",
-        "grammatical_type":"irregular",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"電話する",
-                "hiragana":"でんわする",
-                "furigana":"電話する"
-            },
-            "polite":{
-                "kanji":"でんわするます",
-                "hiragana":"でんわするます",
-                "furigana":"でんわするます"
-            }
-        }
-    },
-    {
-        "english":"to scream",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "emotion",
-                "communication"
-            ],
-            "usage":[
-                "daily",
-                "emotion"
-            ]
-        },
-        "kanji":"叫ぶ",
-        "hiragana":"さけぶ",
-        "romaji":"sakebu",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"叫ぶ",
-                "hiragana":"さけぶ",
-                "furigana":"叫ぶ"
-            },
-            "polite":{
-                "kanji":"さけぶます",
-                "hiragana":"さけぶます",
-                "furigana":"さけぶます"
-            }
-        }
-    },
-    {
-        "english":"to stop \/ quit",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "action",
-                "termination"
-            ],
-            "usage":[
-                "daily",
-                "business",
-                "personal"
-            ]
-        },
-        "kanji":"止める",
-        "hiragana":"やめる",
-        "romaji":"yameru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"止める",
-                "hiragana":"やめる",
-                "furigana":"止める"
-            },
-            "polite":{
-                "kanji":"やめます",
-                "hiragana":"やめます",
-                "furigana":"やめます"
-            },
-            "negative":{
-                "kanji":"やめない",
-                "hiragana":"やめない",
-                "furigana":"やめない"
-            },
-            "polite_negative":{
-                "kanji":"やめません",
-                "hiragana":"やめません",
-                "furigana":"やめません"
-            },
-            "past":{
-                "kanji":"やめた",
-                "hiragana":"やめた",
-                "furigana":"やめた"
-            },
-            "polite_past":{
-                "kanji":"やめました",
-                "hiragana":"やめました",
-                "furigana":"やめました"
-            },
-            "past_negative":{
-                "kanji":"やめなかった",
-                "hiragana":"やめなかった",
-                "furigana":"やめなかった"
-            },
-            "te_form":{
-                "kanji":"やめて",
-                "hiragana":"やめて",
-                "furigana":"やめて"
-            },
-            "potential":{
-                "kanji":"やめられる",
-                "hiragana":"やめられる",
-                "furigana":"やめられる"
-            },
-            "volitional":{
-                "kanji":"やめよう",
-                "hiragana":"やめよう",
-                "furigana":"やめよう"
-            }
-        }
-    },
-    {
-        "english":"to start",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "action",
-                "initiation"
-            ],
-            "usage":[
-                "daily",
-                "business"
-            ]
-        },
-        "kanji":"始める",
-        "hiragana":"はじめる",
-        "romaji":"hajimeru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"始める",
-                "hiragana":"はじめる",
-                "furigana":"始める"
-            },
-            "polite":{
-                "kanji":"はじめます",
-                "hiragana":"はじめます",
-                "furigana":"はじめます"
-            },
-            "negative":{
-                "kanji":"はじめない",
-                "hiragana":"はじめない",
-                "furigana":"はじめない"
-            },
-            "polite_negative":{
-                "kanji":"はじめません",
-                "hiragana":"はじめません",
-                "furigana":"はじめません"
-            },
-            "past":{
-                "kanji":"はじめた",
-                "hiragana":"はじめた",
-                "furigana":"はじめた"
-            },
-            "polite_past":{
-                "kanji":"はじめました",
-                "hiragana":"はじめました",
-                "furigana":"はじめました"
-            },
-            "past_negative":{
-                "kanji":"はじめなかった",
-                "hiragana":"はじめなかった",
-                "furigana":"はじめなかった"
-            },
-            "te_form":{
-                "kanji":"はじめて",
-                "hiragana":"はじめて",
-                "furigana":"はじめて"
-            },
-            "potential":{
-                "kanji":"はじめられる",
-                "hiragana":"はじめられる",
-                "furigana":"はじめられる"
-            },
-            "volitional":{
-                "kanji":"はじめよう",
-                "hiragana":"はじめよう",
-                "furigana":"はじめよう"
-            }
-        }
-    },
-    {
-        "english":"to become",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "stative",
-                "change"
-            ],
-            "usage":[
-                "daily",
-                "general"
-            ]
-        },
-        "kanji":"なる",
-        "hiragana":"なる",
-        "romaji":"naru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"なる",
-                "hiragana":"なる",
-                "furigana":"なる"
-            },
-            "polite":{
-                "kanji":"なるます",
-                "hiragana":"なるます",
-                "furigana":"なるます"
-            }
-        }
-    },
-    {
-        "english":"to be born",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "stative",
-                "life"
-            ],
-            "usage":[
-                "nature",
-                "life"
-            ]
-        },
-        "kanji":"生まれる",
-        "hiragana":"うまれる",
-        "romaji":"umareru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"生まれる",
-                "hiragana":"うまれる",
-                "furigana":"生まれる"
-            },
-            "polite":{
-                "kanji":"うまれます",
-                "hiragana":"うまれます",
-                "furigana":"うまれます"
-            },
-            "negative":{
-                "kanji":"うまれない",
-                "hiragana":"うまれない",
-                "furigana":"うまれない"
-            },
-            "polite_negative":{
-                "kanji":"うまれません",
-                "hiragana":"うまれません",
-                "furigana":"うまれません"
-            },
-            "past":{
-                "kanji":"うまれた",
-                "hiragana":"うまれた",
-                "furigana":"うまれた"
-            },
-            "polite_past":{
-                "kanji":"うまれました",
-                "hiragana":"うまれました",
-                "furigana":"うまれました"
-            },
-            "past_negative":{
-                "kanji":"うまれなかった",
-                "hiragana":"うまれなかった",
-                "furigana":"うまれなかった"
-            },
-            "te_form":{
-                "kanji":"うまれて",
-                "hiragana":"うまれて",
-                "furigana":"うまれて"
-            },
-            "potential":{
-                "kanji":"うまれられる",
-                "hiragana":"うまれられる",
-                "furigana":"うまれられる"
-            },
-            "volitional":{
-                "kanji":"うまれよう",
-                "hiragana":"うまれよう",
-                "furigana":"うまれよう"
-            }
-        }
-    },
-    {
-        "english":"to exist (animate)",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "stative",
-                "existence"
-            ],
-            "usage":[
-                "daily",
-                "general"
-            ]
-        },
-        "kanji":"いる",
-        "hiragana":"いる",
-        "romaji":"iru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"いる",
-                "hiragana":"いる",
-                "furigana":"いる"
-            },
-            "polite":{
-                "kanji":"います",
-                "hiragana":"います",
-                "furigana":"います"
-            },
-            "negative":{
-                "kanji":"いない",
-                "hiragana":"いない",
-                "furigana":"いない"
-            },
-            "polite_negative":{
-                "kanji":"いません",
-                "hiragana":"いません",
-                "furigana":"いません"
-            },
-            "past":{
-                "kanji":"いた",
-                "hiragana":"いた",
-                "furigana":"いた"
-            },
-            "polite_past":{
-                "kanji":"いました",
-                "hiragana":"いました",
-                "furigana":"いました"
-            },
-            "past_negative":{
-                "kanji":"いなかった",
-                "hiragana":"いなかった",
-                "furigana":"いなかった"
-            },
-            "te_form":{
-                "kanji":"いて",
-                "hiragana":"いて",
-                "furigana":"いて"
-            },
-            "potential":{
-                "kanji":"いられる",
-                "hiragana":"いられる",
-                "furigana":"いられる"
-            },
-            "volitional":{
-                "kanji":"いよう",
-                "hiragana":"いよう",
-                "furigana":"いよう"
-            }
-        }
-    },
-    {
-        "english":"to exist (inanimate)",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "stative",
-                "existence"
-            ],
-            "usage":[
-                "daily",
-                "general"
-            ]
-        },
-        "kanji":"ある",
-        "hiragana":"ある",
-        "romaji":"aru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"ある",
-                "hiragana":"ある",
-                "furigana":"ある"
-            },
-            "polite":{
-                "kanji":"あるます",
-                "hiragana":"あるます",
-                "furigana":"あるます"
-            }
-        }
-    },
-    {
-        "english":"to pay",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "transaction"
-            ],
-            "usage":[
-                "business",
-                "shopping"
-            ]
-        },
-        "kanji":"支払う",
-        "hiragana":"しはらう",
-        "romaji":"shiharau",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"支払う",
-                "hiragana":"しはらう",
-                "furigana":"支払う"
-            },
-            "polite":{
-                "kanji":"しはらうます",
-                "hiragana":"しはらうます",
-                "furigana":"しはらうます"
-            }
-        }
-    },
-    {
-        "english":"to cut",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "action"
-            ],
-            "usage":[
-                "daily",
-                "cooking",
-                "craft"
-            ]
-        },
-        "kanji":"切る",
-        "hiragana":"きる",
-        "romaji":"kiru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"切る",
-                "hiragana":"きる",
-                "furigana":"切る"
-            },
-            "polite":{
-                "kanji":"きるます",
-                "hiragana":"きるます",
-                "furigana":"きるます"
-            }
-        }
-    },
-    {
-        "english":"to search \/ look up",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "cognitive",
-                "action"
-            ],
-            "usage":[
-                "learning",
-                "business"
-            ]
-        },
-        "kanji":"調べる",
-        "hiragana":"しらべる",
-        "romaji":"shiraberu",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"調べる",
-                "hiragana":"しらべる",
-                "furigana":"調べる"
-            },
-            "polite":{
-                "kanji":"しらべます",
-                "hiragana":"しらべます",
-                "furigana":"しらべます"
-            },
-            "negative":{
-                "kanji":"しらべない",
-                "hiragana":"しらべない",
-                "furigana":"しらべない"
-            },
-            "polite_negative":{
-                "kanji":"しらべません",
-                "hiragana":"しらべません",
-                "furigana":"しらべません"
-            },
-            "past":{
-                "kanji":"しらべた",
-                "hiragana":"しらべた",
-                "furigana":"しらべた"
-            },
-            "polite_past":{
-                "kanji":"しらべました",
-                "hiragana":"しらべました",
-                "furigana":"しらべました"
-            },
-            "past_negative":{
-                "kanji":"しらべなかった",
-                "hiragana":"しらべなかった",
-                "furigana":"しらべなかった"
-            },
-            "te_form":{
-                "kanji":"しらべて",
-                "hiragana":"しらべて",
-                "furigana":"しらべて"
-            },
-            "potential":{
-                "kanji":"しらべられる",
-                "hiragana":"しらべられる",
-                "furigana":"しらべられる"
-            },
-            "volitional":{
-                "kanji":"しらべよう",
-                "hiragana":"しらべよう",
-                "furigana":"しらべよう"
-            }
-        }
-    },
-    {
-        "english":"to find",
-        "tags":{
-            "conjugation":"ichidan",
-            "semantic":[
-                "cognitive",
-                "action"
-            ],
-            "usage":[
-                "daily",
-                "learning"
-            ]
-        },
-        "kanji":"見つける",
-        "hiragana":"みつける",
-        "romaji":"mitsukeru",
-        "grammatical_type":"ichidan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"見つける",
-                "hiragana":"みつける",
-                "furigana":"見つける"
-            },
-            "polite":{
-                "kanji":"みつけます",
-                "hiragana":"みつけます",
-                "furigana":"みつけます"
-            },
-            "negative":{
-                "kanji":"みつけない",
-                "hiragana":"みつけない",
-                "furigana":"みつけない"
-            },
-            "polite_negative":{
-                "kanji":"みつけません",
-                "hiragana":"みつけません",
-                "furigana":"みつけません"
-            },
-            "past":{
-                "kanji":"みつけた",
-                "hiragana":"みつけた",
-                "furigana":"みつけた"
-            },
-            "polite_past":{
-                "kanji":"みつけました",
-                "hiragana":"みつけました",
-                "furigana":"みつけました"
-            },
-            "past_negative":{
-                "kanji":"みつけなかった",
-                "hiragana":"みつけなかった",
-                "furigana":"みつけなかった"
-            },
-            "te_form":{
-                "kanji":"みつけて",
-                "hiragana":"みつけて",
-                "furigana":"みつけて"
-            },
-            "potential":{
-                "kanji":"みつけられる",
-                "hiragana":"みつけられる",
-                "furigana":"みつけられる"
-            },
-            "volitional":{
-                "kanji":"みつけよう",
-                "hiragana":"みつけよう",
-                "furigana":"みつけよう"
-            }
-        }
-    },
-    {
-        "english":"to meet",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "social",
-                "communication"
-            ],
-            "usage":[
-                "daily",
-                "social",
-                "business"
-            ]
-        },
-        "kanji":"会う",
-        "hiragana":"あう",
-        "romaji":"au",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"会う",
-                "hiragana":"あう",
-                "furigana":"会う"
-            },
-            "polite":{
-                "kanji":"あうます",
-                "hiragana":"あうます",
-                "furigana":"あうます"
-            }
-        }
-    },
-    {
-        "english":"to write",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "communication"
-            ],
-            "usage":[
-                "daily",
-                "school",
-                "business"
-            ]
-        },
-        "kanji":"書く",
-        "hiragana":"かく",
-        "romaji":"kaku",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"書く",
-                "hiragana":"かく",
-                "furigana":"書く"
-            },
-            "polite":{
-                "kanji":"かくます",
-                "hiragana":"かくます",
-                "furigana":"かくます"
-            }
-        }
-    },
-    {
-        "english":"to take (a photo)",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "action",
-                "artistic"
-            ],
-            "usage":[
-                "daily",
-                "travel",
-                "social"
-            ]
-        },
-        "kanji":"撮る",
-        "hiragana":"とる",
-        "romaji":"toru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"撮る",
-                "hiragana":"とる",
-                "furigana":"撮る"
-            },
-            "polite":{
-                "kanji":"とるます",
-                "hiragana":"とるます",
-                "furigana":"とるます"
-            }
-        }
-    },
-    {
-        "english":"to wait",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "stative",
-                "temporal"
-            ],
-            "usage":[
-                "daily",
-                "travel",
-                "social"
-            ]
-        },
-        "kanji":"待つ",
-        "hiragana":"まつ",
-        "romaji":"matsu",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"待つ",
-                "hiragana":"まつ",
-                "furigana":"待つ"
-            },
-            "polite":{
-                "kanji":"まつます",
-                "hiragana":"まつます",
-                "furigana":"まつます"
-            }
-        }
-    },
-    {
-        "english":"to understand",
-        "tags":{
-            "conjugation":"godan",
-            "semantic":[
-                "cognitive"
-            ],
-            "usage":[
-                "daily",
-                "learning",
-                "business"
-            ]
-        },
-        "kanji":"分かる",
-        "hiragana":"わかる",
-        "romaji":"wakaru",
-        "grammatical_type":"godan",
-        "conjugations":{
-            "dictionary":{
-                "kanji":"分かる",
-                "hiragana":"わかる",
-                "furigana":"分かる"
-            },
-            "polite":{
-                "kanji":"わかるます",
-                "hiragana":"わかるます",
-                "furigana":"わかるます"
-            }
-        }
+  {
+    "english": "to do",
+    "kanji": "為る",
+    "hiragana": "する",
+    "romaji": "suru",
+    "semantic": [
+      "action"
+    ],
+    "usage": [
+      "daily",
+      "general"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "irregular",
+    "grammatical_type": "irregular",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "為る",
+        "hiragana": "する"
+      },
+      "polite": {
+        "kanji": "するます",
+        "hiragana": "するます"
+      }
     }
+  },
+  {
+    "english": "to know",
+    "kanji": "知っている",
+    "hiragana": "しっている",
+    "romaji": "shitte iru",
+    "semantic": [
+      "stative",
+      "cognitive"
+    ],
+    "usage": [
+      "daily",
+      "conversation"
+    ],
+    "entity_tags": [
+      "place",
+      "concept",
+      "thing",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "知っている",
+        "hiragana": "しっている"
+      },
+      "polite": {
+        "kanji": "しっているます",
+        "hiragana": "しっているます"
+      }
+    }
+  },
+  {
+    "english": "to think",
+    "kanji": "考える",
+    "hiragana": "かんがえる",
+    "romaji": "kangaeru",
+    "semantic": [
+      "cognitive"
+    ],
+    "usage": [
+      "daily",
+      "business"
+    ],
+    "entity_tags": [
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "考える",
+        "hiragana": "かんがえる"
+      },
+      "polite": {
+        "kanji": "かんがえます",
+        "hiragana": "かんがえます"
+      },
+      "negative": {
+        "kanji": "かんがえない",
+        "hiragana": "かんがえない"
+      },
+      "polite_negative": {
+        "kanji": "かんがえません",
+        "hiragana": "かんがえません"
+      },
+      "past": {
+        "kanji": "かんがえた",
+        "hiragana": "かんがえた"
+      },
+      "polite_past": {
+        "kanji": "かんがえました",
+        "hiragana": "かんがえました"
+      },
+      "past_negative": {
+        "kanji": "かんがえなかった",
+        "hiragana": "かんがえなかった"
+      },
+      "te_form": {
+        "kanji": "かんがえて",
+        "hiragana": "かんがえて"
+      },
+      "potential": {
+        "kanji": "かんがえられる",
+        "hiragana": "かんがえられる"
+      },
+      "volitional": {
+        "kanji": "かんがえよう",
+        "hiragana": "かんがえよう"
+      }
+    }
+  },
+  {
+    "english": "to open",
+    "kanji": "開ける",
+    "hiragana": "あける",
+    "romaji": "akeru",
+    "semantic": [
+      "action"
+    ],
+    "usage": [
+      "daily",
+      "home",
+      "work"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "開ける",
+        "hiragana": "あける"
+      },
+      "polite": {
+        "kanji": "あけます",
+        "hiragana": "あけます"
+      },
+      "negative": {
+        "kanji": "あけない",
+        "hiragana": "あけない"
+      },
+      "polite_negative": {
+        "kanji": "あけません",
+        "hiragana": "あけません"
+      },
+      "past": {
+        "kanji": "あけた",
+        "hiragana": "あけた"
+      },
+      "polite_past": {
+        "kanji": "あけました",
+        "hiragana": "あけました"
+      },
+      "past_negative": {
+        "kanji": "あけなかった",
+        "hiragana": "あけなかった"
+      },
+      "te_form": {
+        "kanji": "あけて",
+        "hiragana": "あけて"
+      },
+      "potential": {
+        "kanji": "あけられる",
+        "hiragana": "あけられる"
+      },
+      "volitional": {
+        "kanji": "あけよう",
+        "hiragana": "あけよう"
+      }
+    }
+  },
+  {
+    "english": "to close",
+    "kanji": "閉める",
+    "hiragana": "しめる",
+    "romaji": "shimeru",
+    "semantic": [
+      "action"
+    ],
+    "usage": [
+      "daily",
+      "home",
+      "work"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "閉める",
+        "hiragana": "しめる"
+      },
+      "polite": {
+        "kanji": "しめます",
+        "hiragana": "しめます"
+      },
+      "negative": {
+        "kanji": "しめない",
+        "hiragana": "しめない"
+      },
+      "polite_negative": {
+        "kanji": "しめません",
+        "hiragana": "しめません"
+      },
+      "past": {
+        "kanji": "しめた",
+        "hiragana": "しめた"
+      },
+      "polite_past": {
+        "kanji": "しめました",
+        "hiragana": "しめました"
+      },
+      "past_negative": {
+        "kanji": "しめなかった",
+        "hiragana": "しめなかった"
+      },
+      "te_form": {
+        "kanji": "しめて",
+        "hiragana": "しめて"
+      },
+      "potential": {
+        "kanji": "しめられる",
+        "hiragana": "しめられる"
+      },
+      "volitional": {
+        "kanji": "しめよう",
+        "hiragana": "しめよう"
+      }
+    }
+  },
+  {
+    "english": "to sleep",
+    "kanji": "寝る",
+    "hiragana": "ねる",
+    "romaji": "neru",
+    "semantic": [
+      "stative",
+      "physiological"
+    ],
+    "usage": [
+      "daily",
+      "routine"
+    ],
+    "entity_tags": [
+      "thing",
+      "person",
+      "place",
+      "concept",
+      "animal"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "寝る",
+        "hiragana": "ねる"
+      },
+      "polite": {
+        "kanji": "ねます",
+        "hiragana": "ねます"
+      },
+      "negative": {
+        "kanji": "ねない",
+        "hiragana": "ねない"
+      },
+      "polite_negative": {
+        "kanji": "ねません",
+        "hiragana": "ねません"
+      },
+      "past": {
+        "kanji": "ねた",
+        "hiragana": "ねた"
+      },
+      "polite_past": {
+        "kanji": "ねました",
+        "hiragana": "ねました"
+      },
+      "past_negative": {
+        "kanji": "ねなかった",
+        "hiragana": "ねなかった"
+      },
+      "te_form": {
+        "kanji": "ねて",
+        "hiragana": "ねて"
+      },
+      "potential": {
+        "kanji": "ねられる",
+        "hiragana": "ねられる"
+      },
+      "volitional": {
+        "kanji": "ねよう",
+        "hiragana": "ねよう"
+      }
+    }
+  },
+  {
+    "english": "to wake up",
+    "kanji": "起きる",
+    "hiragana": "おきる",
+    "romaji": "okiru",
+    "semantic": [
+      "stative",
+      "physiological"
+    ],
+    "usage": [
+      "daily",
+      "routine"
+    ],
+    "entity_tags": [
+      "thing",
+      "person",
+      "place",
+      "concept",
+      "animal"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "起きる",
+        "hiragana": "おきる"
+      },
+      "polite": {
+        "kanji": "おきます",
+        "hiragana": "おきます"
+      },
+      "negative": {
+        "kanji": "おきない",
+        "hiragana": "おきない"
+      },
+      "polite_negative": {
+        "kanji": "おきません",
+        "hiragana": "おきません"
+      },
+      "past": {
+        "kanji": "おきた",
+        "hiragana": "おきた"
+      },
+      "polite_past": {
+        "kanji": "おきました",
+        "hiragana": "おきました"
+      },
+      "past_negative": {
+        "kanji": "おきなかった",
+        "hiragana": "おきなかった"
+      },
+      "te_form": {
+        "kanji": "おきて",
+        "hiragana": "おきて"
+      },
+      "potential": {
+        "kanji": "おきられる",
+        "hiragana": "おきられる"
+      },
+      "volitional": {
+        "kanji": "おきよう",
+        "hiragana": "おきよう"
+      }
+    }
+  },
+  {
+    "english": "to walk",
+    "kanji": "歩く",
+    "hiragana": "あるく",
+    "romaji": "aruku",
+    "semantic": [
+      "motion"
+    ],
+    "usage": [
+      "daily",
+      "travel",
+      "health"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "歩く",
+        "hiragana": "あるく"
+      },
+      "polite": {
+        "kanji": "あるくます",
+        "hiragana": "あるくます"
+      }
+    }
+  },
+  {
+    "english": "to go",
+    "kanji": "行く",
+    "hiragana": "いく",
+    "romaji": "iku",
+    "semantic": [
+      "motion"
+    ],
+    "usage": [
+      "daily",
+      "travel"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "行く",
+        "hiragana": "いく"
+      },
+      "polite": {
+        "kanji": "いくます",
+        "hiragana": "いくます"
+      }
+    }
+  },
+  {
+    "english": "to speak",
+    "kanji": "話す",
+    "hiragana": "はなす",
+    "romaji": "hanasu",
+    "semantic": [
+      "communication"
+    ],
+    "usage": [
+      "daily",
+      "business",
+      "social"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "話す",
+        "hiragana": "はなす"
+      },
+      "polite": {
+        "kanji": "はなすます",
+        "hiragana": "はなすます"
+      }
+    }
+  },
+  {
+    "english": "to say",
+    "kanji": "言う",
+    "hiragana": "いう",
+    "romaji": "iu",
+    "semantic": [
+      "communication"
+    ],
+    "usage": [
+      "daily",
+      "general"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "言う",
+        "hiragana": "いう"
+      },
+      "polite": {
+        "kanji": "いうます",
+        "hiragana": "いうます"
+      }
+    }
+  },
+  {
+    "english": "to study",
+    "kanji": "勉強する",
+    "hiragana": "べんきょうする",
+    "romaji": "benkyou suru",
+    "semantic": [
+      "learning",
+      "action"
+    ],
+    "usage": [
+      "daily",
+      "school"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "irregular",
+    "grammatical_type": "irregular",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "勉強する",
+        "hiragana": "べんきょうする"
+      },
+      "polite": {
+        "kanji": "べんきょうするます",
+        "hiragana": "べんきょうするます"
+      }
+    }
+  },
+  {
+    "english": "to buy",
+    "kanji": "買う",
+    "hiragana": "かう",
+    "romaji": "kau",
+    "semantic": [
+      "transaction"
+    ],
+    "usage": [
+      "daily",
+      "shopping"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "買う",
+        "hiragana": "かう"
+      },
+      "polite": {
+        "kanji": "かうます",
+        "hiragana": "かうます"
+      }
+    }
+  },
+  {
+    "english": "to sell",
+    "kanji": "売る",
+    "hiragana": "うる",
+    "romaji": "uru",
+    "semantic": [
+      "transaction"
+    ],
+    "usage": [
+      "business",
+      "market"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "売る",
+        "hiragana": "うる"
+      },
+      "polite": {
+        "kanji": "うるます",
+        "hiragana": "うるます"
+      }
+    }
+  },
+  {
+    "english": "to remember",
+    "kanji": "覚える",
+    "hiragana": "おぼえる",
+    "romaji": "oboeru",
+    "semantic": [
+      "cognitive"
+    ],
+    "usage": [
+      "learning",
+      "school"
+    ],
+    "entity_tags": [
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "覚える",
+        "hiragana": "おぼえる"
+      },
+      "polite": {
+        "kanji": "おぼえます",
+        "hiragana": "おぼえます"
+      },
+      "negative": {
+        "kanji": "おぼえない",
+        "hiragana": "おぼえない"
+      },
+      "polite_negative": {
+        "kanji": "おぼえません",
+        "hiragana": "おぼえません"
+      },
+      "past": {
+        "kanji": "おぼえた",
+        "hiragana": "おぼえた"
+      },
+      "polite_past": {
+        "kanji": "おぼえました",
+        "hiragana": "おぼえました"
+      },
+      "past_negative": {
+        "kanji": "おぼえなかった",
+        "hiragana": "おぼえなかった"
+      },
+      "te_form": {
+        "kanji": "おぼえて",
+        "hiragana": "おぼえて"
+      },
+      "potential": {
+        "kanji": "おぼえられる",
+        "hiragana": "おぼえられる"
+      },
+      "volitional": {
+        "kanji": "おぼえよう",
+        "hiragana": "おぼえよう"
+      }
+    }
+  },
+  {
+    "english": "to forget",
+    "kanji": "忘れる",
+    "hiragana": "わすれる",
+    "romaji": "wasureru",
+    "semantic": [
+      "cognitive"
+    ],
+    "usage": [
+      "learning",
+      "daily"
+    ],
+    "entity_tags": [
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "忘れる",
+        "hiragana": "わすれる"
+      },
+      "polite": {
+        "kanji": "わすれます",
+        "hiragana": "わすれます"
+      },
+      "negative": {
+        "kanji": "わすれない",
+        "hiragana": "わすれない"
+      },
+      "polite_negative": {
+        "kanji": "わすれません",
+        "hiragana": "わすれません"
+      },
+      "past": {
+        "kanji": "わすれた",
+        "hiragana": "わすれた"
+      },
+      "polite_past": {
+        "kanji": "わすれました",
+        "hiragana": "わすれました"
+      },
+      "past_negative": {
+        "kanji": "わすれなかった",
+        "hiragana": "わすれなかった"
+      },
+      "te_form": {
+        "kanji": "わすれて",
+        "hiragana": "わすれて"
+      },
+      "potential": {
+        "kanji": "わすれられる",
+        "hiragana": "わすれられる"
+      },
+      "volitional": {
+        "kanji": "わすれよう",
+        "hiragana": "わすれよう"
+      }
+    }
+  },
+  {
+    "english": "to see / to watch",
+    "kanji": "見る",
+    "hiragana": "みる",
+    "romaji": "miru",
+    "semantic": [
+      "perception"
+    ],
+    "usage": [
+      "daily",
+      "entertainment"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "見る",
+        "hiragana": "みる"
+      },
+      "polite": {
+        "kanji": "みます",
+        "hiragana": "みます"
+      },
+      "negative": {
+        "kanji": "みない",
+        "hiragana": "みない"
+      },
+      "polite_negative": {
+        "kanji": "みません",
+        "hiragana": "みません"
+      },
+      "past": {
+        "kanji": "みた",
+        "hiragana": "みた"
+      },
+      "polite_past": {
+        "kanji": "みました",
+        "hiragana": "みました"
+      },
+      "past_negative": {
+        "kanji": "みなかった",
+        "hiragana": "みなかった"
+      },
+      "te_form": {
+        "kanji": "みて",
+        "hiragana": "みて"
+      },
+      "potential": {
+        "kanji": "みられる",
+        "hiragana": "みられる"
+      },
+      "volitional": {
+        "kanji": "みよう",
+        "hiragana": "みよう"
+      }
+    }
+  },
+  {
+    "english": "to eat",
+    "kanji": "食べる",
+    "hiragana": "たべる",
+    "romaji": "taberu",
+    "semantic": [
+      "physiological"
+    ],
+    "usage": [
+      "daily",
+      "routine"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "食べる",
+        "hiragana": "たべる"
+      },
+      "polite": {
+        "kanji": "たべます",
+        "hiragana": "たべます"
+      },
+      "negative": {
+        "kanji": "たべない",
+        "hiragana": "たべない"
+      },
+      "polite_negative": {
+        "kanji": "たべません",
+        "hiragana": "たべません"
+      },
+      "past": {
+        "kanji": "たべた",
+        "hiragana": "たべた"
+      },
+      "polite_past": {
+        "kanji": "たべました",
+        "hiragana": "たべました"
+      },
+      "past_negative": {
+        "kanji": "たべなかった",
+        "hiragana": "たべなかった"
+      },
+      "te_form": {
+        "kanji": "たべて",
+        "hiragana": "たべて"
+      },
+      "potential": {
+        "kanji": "たべられる",
+        "hiragana": "たべられる"
+      },
+      "volitional": {
+        "kanji": "たべよう",
+        "hiragana": "たべよう"
+      }
+    }
+  },
+  {
+    "english": "to drink",
+    "kanji": "飲む",
+    "hiragana": "のむ",
+    "romaji": "nomu",
+    "semantic": [
+      "physiological"
+    ],
+    "usage": [
+      "daily",
+      "social"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "飲む",
+        "hiragana": "のむ"
+      },
+      "polite": {
+        "kanji": "のむます",
+        "hiragana": "のむます"
+      }
+    }
+  },
+  {
+    "english": "to ask / to listen",
+    "kanji": "聞く",
+    "hiragana": "きく",
+    "romaji": "kiku",
+    "semantic": [
+      "communication",
+      "perception"
+    ],
+    "usage": [
+      "daily",
+      "learning"
+    ],
+    "entity_tags": [
+      "animal",
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "聞く",
+        "hiragana": "きく"
+      },
+      "polite": {
+        "kanji": "きくます",
+        "hiragana": "きくます"
+      }
+    }
+  },
+  {
+    "english": "to run",
+    "kanji": "走る",
+    "hiragana": "はしる",
+    "romaji": "hashiru",
+    "semantic": [
+      "motion"
+    ],
+    "usage": [
+      "daily",
+      "health",
+      "travel"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "走る",
+        "hiragana": "はしる"
+      },
+      "polite": {
+        "kanji": "はしるます",
+        "hiragana": "はしるます"
+      }
+    }
+  },
+  {
+    "english": "to ride",
+    "kanji": "乗る",
+    "hiragana": "のる",
+    "romaji": "noru",
+    "semantic": [
+      "motion"
+    ],
+    "usage": [
+      "daily",
+      "travel"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "乗る",
+        "hiragana": "のる"
+      },
+      "polite": {
+        "kanji": "のるます",
+        "hiragana": "のるます"
+      }
+    }
+  },
+  {
+    "english": "to work",
+    "kanji": "働く",
+    "hiragana": "はたらく",
+    "romaji": "hataraku",
+    "semantic": [
+      "action",
+      "occupation"
+    ],
+    "usage": [
+      "business",
+      "daily"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "働く",
+        "hiragana": "はたらく"
+      },
+      "polite": {
+        "kanji": "はたらくます",
+        "hiragana": "はたらくます"
+      }
+    }
+  },
+  {
+    "english": "to give",
+    "kanji": "あげる",
+    "hiragana": "あげる",
+    "romaji": "ageru",
+    "semantic": [
+      "transaction",
+      "social"
+    ],
+    "usage": [
+      "daily",
+      "social"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "あげる",
+        "hiragana": "あげる"
+      },
+      "polite": {
+        "kanji": "あげます",
+        "hiragana": "あげます"
+      },
+      "negative": {
+        "kanji": "あげない",
+        "hiragana": "あげない"
+      },
+      "polite_negative": {
+        "kanji": "あげません",
+        "hiragana": "あげません"
+      },
+      "past": {
+        "kanji": "あげた",
+        "hiragana": "あげた"
+      },
+      "polite_past": {
+        "kanji": "あげました",
+        "hiragana": "あげました"
+      },
+      "past_negative": {
+        "kanji": "あげなかった",
+        "hiragana": "あげなかった"
+      },
+      "te_form": {
+        "kanji": "あげて",
+        "hiragana": "あげて"
+      },
+      "potential": {
+        "kanji": "あげられる",
+        "hiragana": "あげられる"
+      },
+      "volitional": {
+        "kanji": "あげよう",
+        "hiragana": "あげよう"
+      }
+    }
+  },
+  {
+    "english": "to put / place",
+    "kanji": "置く",
+    "hiragana": "おく",
+    "romaji": "oku",
+    "semantic": [
+      "action",
+      "spatial"
+    ],
+    "usage": [
+      "daily",
+      "home"
+    ],
+    "entity_tags": [
+      "place",
+      "animal",
+      "thing",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "置く",
+        "hiragana": "おく"
+      },
+      "polite": {
+        "kanji": "おくます",
+        "hiragana": "おくます"
+      }
+    }
+  },
+  {
+    "english": "to fall (rain/snow)",
+    "kanji": "降る",
+    "hiragana": "ふる",
+    "romaji": "furu",
+    "semantic": [
+      "nature",
+      "weather"
+    ],
+    "usage": [
+      "nature",
+      "weather"
+    ],
+    "entity_tags": [
+      "phenomenon"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "降る",
+        "hiragana": "ふる"
+      },
+      "polite": {
+        "kanji": "ふるます",
+        "hiragana": "ふるます"
+      }
+    }
+  },
+  {
+    "english": "to sing",
+    "kanji": "歌う",
+    "hiragana": "うたう",
+    "romaji": "utau",
+    "semantic": [
+      "artistic",
+      "communication"
+    ],
+    "usage": [
+      "daily",
+      "entertainment"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "歌う",
+        "hiragana": "うたう"
+      },
+      "polite": {
+        "kanji": "うたうます",
+        "hiragana": "うたうます"
+      }
+    }
+  },
+  {
+    "english": "to cry",
+    "kanji": "泣く",
+    "hiragana": "なく",
+    "romaji": "naku",
+    "semantic": [
+      "emotion"
+    ],
+    "usage": [
+      "daily",
+      "emotion"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "泣く",
+        "hiragana": "なく"
+      },
+      "polite": {
+        "kanji": "なくます",
+        "hiragana": "なくます"
+      }
+    }
+  },
+  {
+    "english": "to take",
+    "kanji": "取る",
+    "hiragana": "とる",
+    "romaji": "toru",
+    "semantic": [
+      "action"
+    ],
+    "usage": [
+      "daily",
+      "general"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "取る",
+        "hiragana": "とる"
+      },
+      "polite": {
+        "kanji": "とるます",
+        "hiragana": "とるます"
+      }
+    }
+  },
+  {
+    "english": "to call",
+    "kanji": "電話する",
+    "hiragana": "でんわする",
+    "romaji": "denwa suru",
+    "semantic": [
+      "communication"
+    ],
+    "usage": [
+      "daily",
+      "business"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "irregular",
+    "grammatical_type": "irregular",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "電話する",
+        "hiragana": "でんわする"
+      },
+      "polite": {
+        "kanji": "でんわするます",
+        "hiragana": "でんわするます"
+      }
+    }
+  },
+  {
+    "english": "to scream",
+    "kanji": "叫ぶ",
+    "hiragana": "さけぶ",
+    "romaji": "sakebu",
+    "semantic": [
+      "emotion",
+      "communication"
+    ],
+    "usage": [
+      "daily",
+      "emotion"
+    ],
+    "entity_tags": [
+      "animal",
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "叫ぶ",
+        "hiragana": "さけぶ"
+      },
+      "polite": {
+        "kanji": "さけぶます",
+        "hiragana": "さけぶます"
+      }
+    }
+  },
+  {
+    "english": "to stop / quit",
+    "kanji": "止める",
+    "hiragana": "やめる",
+    "romaji": "yameru",
+    "semantic": [
+      "action",
+      "termination"
+    ],
+    "usage": [
+      "daily",
+      "business",
+      "personal"
+    ],
+    "entity_tags": [
+      "animal",
+      "person",
+      "event"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "止める",
+        "hiragana": "やめる"
+      },
+      "polite": {
+        "kanji": "やめます",
+        "hiragana": "やめます"
+      },
+      "negative": {
+        "kanji": "やめない",
+        "hiragana": "やめない"
+      },
+      "polite_negative": {
+        "kanji": "やめません",
+        "hiragana": "やめません"
+      },
+      "past": {
+        "kanji": "やめた",
+        "hiragana": "やめた"
+      },
+      "polite_past": {
+        "kanji": "やめました",
+        "hiragana": "やめました"
+      },
+      "past_negative": {
+        "kanji": "やめなかった",
+        "hiragana": "やめなかった"
+      },
+      "te_form": {
+        "kanji": "やめて",
+        "hiragana": "やめて"
+      },
+      "potential": {
+        "kanji": "やめられる",
+        "hiragana": "やめられる"
+      },
+      "volitional": {
+        "kanji": "やめよう",
+        "hiragana": "やめよう"
+      }
+    }
+  },
+  {
+    "english": "to start",
+    "kanji": "始める",
+    "hiragana": "はじめる",
+    "romaji": "hajimeru",
+    "semantic": [
+      "action",
+      "initiation"
+    ],
+    "usage": [
+      "daily",
+      "business"
+    ],
+    "entity_tags": [
+      "animal",
+      "person",
+      "event"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "始める",
+        "hiragana": "はじめる"
+      },
+      "polite": {
+        "kanji": "はじめます",
+        "hiragana": "はじめます"
+      },
+      "negative": {
+        "kanji": "はじめない",
+        "hiragana": "はじめない"
+      },
+      "polite_negative": {
+        "kanji": "はじめません",
+        "hiragana": "はじめません"
+      },
+      "past": {
+        "kanji": "はじめた",
+        "hiragana": "はじめた"
+      },
+      "polite_past": {
+        "kanji": "はじめました",
+        "hiragana": "はじめました"
+      },
+      "past_negative": {
+        "kanji": "はじめなかった",
+        "hiragana": "はじめなかった"
+      },
+      "te_form": {
+        "kanji": "はじめて",
+        "hiragana": "はじめて"
+      },
+      "potential": {
+        "kanji": "はじめられる",
+        "hiragana": "はじめられる"
+      },
+      "volitional": {
+        "kanji": "はじめよう",
+        "hiragana": "はじめよう"
+      }
+    }
+  },
+  {
+    "english": "to become",
+    "kanji": "なる",
+    "hiragana": "なる",
+    "romaji": "naru",
+    "semantic": [
+      "stative",
+      "change"
+    ],
+    "usage": [
+      "daily",
+      "general"
+    ],
+    "entity_tags": [
+      "place",
+      "concept",
+      "thing",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "なる",
+        "hiragana": "なる"
+      },
+      "polite": {
+        "kanji": "なるます",
+        "hiragana": "なるます"
+      }
+    }
+  },
+  {
+    "english": "to be born",
+    "kanji": "生まれる",
+    "hiragana": "うまれる",
+    "romaji": "umareru",
+    "semantic": [
+      "stative",
+      "life"
+    ],
+    "usage": [
+      "nature",
+      "life"
+    ],
+    "entity_tags": [
+      "thing",
+      "person",
+      "place",
+      "concept",
+      "animal"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "生まれる",
+        "hiragana": "うまれる"
+      },
+      "polite": {
+        "kanji": "うまれます",
+        "hiragana": "うまれます"
+      },
+      "negative": {
+        "kanji": "うまれない",
+        "hiragana": "うまれない"
+      },
+      "polite_negative": {
+        "kanji": "うまれません",
+        "hiragana": "うまれません"
+      },
+      "past": {
+        "kanji": "うまれた",
+        "hiragana": "うまれた"
+      },
+      "polite_past": {
+        "kanji": "うまれました",
+        "hiragana": "うまれました"
+      },
+      "past_negative": {
+        "kanji": "うまれなかった",
+        "hiragana": "うまれなかった"
+      },
+      "te_form": {
+        "kanji": "うまれて",
+        "hiragana": "うまれて"
+      },
+      "potential": {
+        "kanji": "うまれられる",
+        "hiragana": "うまれられる"
+      },
+      "volitional": {
+        "kanji": "うまれよう",
+        "hiragana": "うまれよう"
+      }
+    }
+  },
+  {
+    "english": "to exist (animate)",
+    "kanji": "いる",
+    "hiragana": "いる",
+    "romaji": "iru",
+    "semantic": [
+      "stative",
+      "existence"
+    ],
+    "usage": [
+      "daily",
+      "general"
+    ],
+    "entity_tags": [
+      "phenomenon",
+      "group",
+      "thing",
+      "person",
+      "place",
+      "concept",
+      "event"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "いる",
+        "hiragana": "いる"
+      },
+      "polite": {
+        "kanji": "います",
+        "hiragana": "います"
+      },
+      "negative": {
+        "kanji": "いない",
+        "hiragana": "いない"
+      },
+      "polite_negative": {
+        "kanji": "いません",
+        "hiragana": "いません"
+      },
+      "past": {
+        "kanji": "いた",
+        "hiragana": "いた"
+      },
+      "polite_past": {
+        "kanji": "いました",
+        "hiragana": "いました"
+      },
+      "past_negative": {
+        "kanji": "いなかった",
+        "hiragana": "いなかった"
+      },
+      "te_form": {
+        "kanji": "いて",
+        "hiragana": "いて"
+      },
+      "potential": {
+        "kanji": "いられる",
+        "hiragana": "いられる"
+      },
+      "volitional": {
+        "kanji": "いよう",
+        "hiragana": "いよう"
+      }
+    }
+  },
+  {
+    "english": "to exist (inanimate)",
+    "kanji": "ある",
+    "hiragana": "ある",
+    "romaji": "aru",
+    "semantic": [
+      "stative",
+      "existence"
+    ],
+    "usage": [
+      "daily",
+      "general"
+    ],
+    "entity_tags": [
+      "phenomenon",
+      "group",
+      "thing",
+      "person",
+      "place",
+      "concept",
+      "event"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "ある",
+        "hiragana": "ある"
+      },
+      "polite": {
+        "kanji": "あるます",
+        "hiragana": "あるます"
+      }
+    }
+  },
+  {
+    "english": "to pay",
+    "kanji": "支払う",
+    "hiragana": "しはらう",
+    "romaji": "shiharau",
+    "semantic": [
+      "transaction"
+    ],
+    "usage": [
+      "business",
+      "shopping"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "支払う",
+        "hiragana": "しはらう"
+      },
+      "polite": {
+        "kanji": "しはらうます",
+        "hiragana": "しはらうます"
+      }
+    }
+  },
+  {
+    "english": "to cut",
+    "kanji": "切る",
+    "hiragana": "きる",
+    "romaji": "kiru",
+    "semantic": [
+      "action"
+    ],
+    "usage": [
+      "daily",
+      "cooking",
+      "craft"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "切る",
+        "hiragana": "きる"
+      },
+      "polite": {
+        "kanji": "きるます",
+        "hiragana": "きるます"
+      }
+    }
+  },
+  {
+    "english": "to search / look up",
+    "kanji": "調べる",
+    "hiragana": "しらべる",
+    "romaji": "shiraberu",
+    "semantic": [
+      "cognitive",
+      "action"
+    ],
+    "usage": [
+      "learning",
+      "business"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "調べる",
+        "hiragana": "しらべる"
+      },
+      "polite": {
+        "kanji": "しらべます",
+        "hiragana": "しらべます"
+      },
+      "negative": {
+        "kanji": "しらべない",
+        "hiragana": "しらべない"
+      },
+      "polite_negative": {
+        "kanji": "しらべません",
+        "hiragana": "しらべません"
+      },
+      "past": {
+        "kanji": "しらべた",
+        "hiragana": "しらべた"
+      },
+      "polite_past": {
+        "kanji": "しらべました",
+        "hiragana": "しらべました"
+      },
+      "past_negative": {
+        "kanji": "しらべなかった",
+        "hiragana": "しらべなかった"
+      },
+      "te_form": {
+        "kanji": "しらべて",
+        "hiragana": "しらべて"
+      },
+      "potential": {
+        "kanji": "しらべられる",
+        "hiragana": "しらべられる"
+      },
+      "volitional": {
+        "kanji": "しらべよう",
+        "hiragana": "しらべよう"
+      }
+    }
+  },
+  {
+    "english": "to find",
+    "kanji": "見つける",
+    "hiragana": "みつける",
+    "romaji": "mitsukeru",
+    "semantic": [
+      "cognitive",
+      "action"
+    ],
+    "usage": [
+      "daily",
+      "learning"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "ichidan",
+    "grammatical_type": "ichidan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "見つける",
+        "hiragana": "みつける"
+      },
+      "polite": {
+        "kanji": "みつけます",
+        "hiragana": "みつけます"
+      },
+      "negative": {
+        "kanji": "みつけない",
+        "hiragana": "みつけない"
+      },
+      "polite_negative": {
+        "kanji": "みつけません",
+        "hiragana": "みつけません"
+      },
+      "past": {
+        "kanji": "みつけた",
+        "hiragana": "みつけた"
+      },
+      "polite_past": {
+        "kanji": "みつけました",
+        "hiragana": "みつけました"
+      },
+      "past_negative": {
+        "kanji": "みつけなかった",
+        "hiragana": "みつけなかった"
+      },
+      "te_form": {
+        "kanji": "みつけて",
+        "hiragana": "みつけて"
+      },
+      "potential": {
+        "kanji": "みつけられる",
+        "hiragana": "みつけられる"
+      },
+      "volitional": {
+        "kanji": "みつけよう",
+        "hiragana": "みつけよう"
+      }
+    }
+  },
+  {
+    "english": "to meet",
+    "kanji": "会う",
+    "hiragana": "あう",
+    "romaji": "au",
+    "semantic": [
+      "social",
+      "communication"
+    ],
+    "usage": [
+      "daily",
+      "social",
+      "business"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "会う",
+        "hiragana": "あう"
+      },
+      "polite": {
+        "kanji": "あうます",
+        "hiragana": "あうます"
+      }
+    }
+  },
+  {
+    "english": "to write",
+    "kanji": "書く",
+    "hiragana": "かく",
+    "romaji": "kaku",
+    "semantic": [
+      "communication"
+    ],
+    "usage": [
+      "daily",
+      "school",
+      "business"
+    ],
+    "entity_tags": [
+      "group",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "書く",
+        "hiragana": "かく"
+      },
+      "polite": {
+        "kanji": "かくます",
+        "hiragana": "かくます"
+      }
+    }
+  },
+  {
+    "english": "to take (a photo)",
+    "kanji": "撮る",
+    "hiragana": "とる",
+    "romaji": "toru",
+    "semantic": [
+      "action",
+      "artistic"
+    ],
+    "usage": [
+      "daily",
+      "travel",
+      "social"
+    ],
+    "entity_tags": [
+      "animal",
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "撮る",
+        "hiragana": "とる"
+      },
+      "polite": {
+        "kanji": "とるます",
+        "hiragana": "とるます"
+      }
+    }
+  },
+  {
+    "english": "to wait",
+    "kanji": "待つ",
+    "hiragana": "まつ",
+    "romaji": "matsu",
+    "semantic": [
+      "stative",
+      "temporal"
+    ],
+    "usage": [
+      "daily",
+      "travel",
+      "social"
+    ],
+    "entity_tags": [
+      "phenomenon",
+      "thing",
+      "person",
+      "place",
+      "concept",
+      "event"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "待つ",
+        "hiragana": "まつ"
+      },
+      "polite": {
+        "kanji": "まつます",
+        "hiragana": "まつます"
+      }
+    }
+  },
+  {
+    "english": "to understand",
+    "kanji": "分かる",
+    "hiragana": "わかる",
+    "romaji": "wakaru",
+    "semantic": [
+      "cognitive"
+    ],
+    "usage": [
+      "daily",
+      "learning",
+      "business"
+    ],
+    "entity_tags": [
+      "person"
+    ],
+    "conjugation": "godan",
+    "grammatical_type": "godan",
+    "conjugations": {
+      "dictionary": {
+        "kanji": "分かる",
+        "hiragana": "わかる"
+      },
+      "polite": {
+        "kanji": "わかるます",
+        "hiragana": "わかるます"
+      }
+    }
+  }
 ]

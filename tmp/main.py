@@ -27,6 +27,7 @@ class JapaneseSentenceGenerator:
         self.rules = self._load_json("rules.json")
         self.verbs = self._load_json("verbs.json")
         self.vocab = self._load_json("vocab.json")
+        self.adjectives = self._load_json("adjectives.json")
         
     def _load_json(self, filename: str) -> Dict[str, Any]:
         """Load JSON data from file"""
@@ -43,29 +44,20 @@ class JapaneseSentenceGenerator:
         return []
     
     def pick_entity_sample(self, entity_type: str) -> Optional[Dict[str, Any]]:
-        """Pick actual vocab item for entity type with full metadata"""
-        # Map entity types to vocab categories/tags
-        entity_to_vocab_map = {
-            "person": ["people", "pronoun", "student", "teacher", "occupation"],
-            "thing": ["object", "food", "drink", "clothing", "furniture", "household"],
-            "place": ["place", "location", "country", "school", "transport"],
-            "concept": ["language", "vocabulary", "study", "time", "frequency"],
-            "animal": ["people"],  # Using people as fallback
-            "group": ["people", "occupation"],
-            "event": ["time", "event"],
-            "phenomenon": ["weather", "nature", "time"]
-        }
-        
-        if entity_type not in entity_to_vocab_map:
-            return None
-            
-        target_tags = entity_to_vocab_map[entity_type]
-        
-        # Find vocab items matching the entity type
+        """Pick actual vocab item for entity type with full metadata using new entity classification"""
+        # Find vocab items that match the entity type
         candidates = []
         for item in self.vocab:
-            if any(tag in item.get("tags", []) for tag in target_tags):
+            if item.get("entity") == entity_type:
                 candidates.append(item)
+        
+        if not candidates:
+            # Fallback: try to find items with matching tags
+            entity_semantic = self.resolve(entity_type, "semantic_match")
+            for item in self.vocab:
+                item_tags = item.get("tags", [])
+                if any(tag in item_tags for tag in entity_semantic):
+                    candidates.append(item)
         
         if not candidates:
             return None
@@ -126,22 +118,104 @@ class JapaneseSentenceGenerator:
         return verb.get("hiragana", "")
     
     def get_compatible_verb(self, entity_type: str) -> Optional[Dict[str, Any]]:
-        """Get a verb compatible with the entity type with full metadata"""
-        compatible_verbs = self.resolve(entity_type, "compatible_verbs")
-        if not compatible_verbs:
-            return None
-            
-        # Find verbs with matching semantic tags
+        """Get a verb compatible with the entity type using new entity_tags system"""
+        # Find verbs that are compatible with this entity type
         candidates = []
         for verb in self.verbs:
-            verb_semantics = verb.get("tags", {}).get("semantic", [])
-            if any(semantic in compatible_verbs for semantic in verb_semantics):
+            verb_entity_tags = verb.get("entity_tags", [])
+            if entity_type in verb_entity_tags:
                 candidates.append(verb)
+        
+        if not candidates:
+            # Fallback: use semantic matching
+            compatible_verbs = self.resolve(entity_type, "compatible_verbs")
+            for verb in self.verbs:
+                verb_semantics = verb.get("semantic", [])
+                if any(semantic in compatible_verbs for semantic in verb_semantics):
+                    candidates.append(verb)
         
         if not candidates:
             return None
             
         return random.choice(candidates)
+    
+    def get_compatible_adjective(self, entity_type: str) -> Optional[Dict[str, Any]]:
+        """Get an adjective compatible with the entity type using new entity_tags system"""
+        # Find adjectives that can modify this entity type
+        candidates = []
+        for adjective in self.adjectives:
+            adj_entity_tags = adjective.get("entity_tags", [])
+            if entity_type in adj_entity_tags:
+                candidates.append(adjective)
+        
+        if not candidates:
+            return None
+            
+        return random.choice(candidates)
+    
+    def generate_english_translation(self, theme: str, structure: str, components: Dict[str, Any]) -> str:
+        """Generate proper English translation based on structure and components"""
+        # Helper function to get English text from component
+        def get_english_text(component):
+            if isinstance(component, dict):
+                return component.get("english", "")
+            return str(component)
+        
+        # Generate translation based on structure
+        if "A は B です" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            b_text = get_english_text(components.get('B', ''))
+            return f"{a_text} is {b_text}"
+            
+        elif "A を Verb" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            verb_text = get_english_text(components.get('Verb', ''))
+            return f"{a_text} {verb_text}"
+            
+        elif "A で Verb" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            verb_text = get_english_text(components.get('Verb', ''))
+            return f"{verb_text} at {a_text}"
+            
+        elif "A へ/に Verb" in structure or "A は Place に Verb" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            verb_text = get_english_text(components.get('Verb', ''))
+            if "Place" in components:
+                place_text = get_english_text(components.get('Place', ''))
+                return f"{a_text} {verb_text} to {place_text}"
+            else:
+                return f"{a_text} {verb_text}"
+                
+        elif "A の B" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            b_text = get_english_text(components.get('B', ''))
+            return f"{a_text}'s {b_text}"
+            
+        elif "A は Adj です" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            adj_text = get_english_text(components.get('Adj', ''))
+            return f"{a_text} is {adj_text}"
+            
+        elif "Adj + Noun" in structure:
+            adj_text = get_english_text(components.get('Adj', ''))
+            noun_text = get_english_text(components.get('Noun', ''))
+            return f"{adj_text} {noun_text}"
+            
+        elif "A が Verb" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            verb_text = get_english_text(components.get('Verb', ''))
+            return f"{a_text} {verb_text}"
+            
+        elif "A は B が Adj" in structure:
+            a_text = get_english_text(components.get('A', ''))
+            b_text = get_english_text(components.get('B', ''))
+            adj_text = get_english_text(components.get('Adj', ''))
+            return f"{a_text}'s {b_text} is {adj_text}"
+            
+        else:
+            # Fallback: combine all components
+            parts = [get_english_text(comp) for comp in components.values()]
+            return " ".join(parts)
     
     def render(self, theme: str, structure: str, components: Dict[str, Any], 
                particles: List[str], extensions: List[str]) -> Sentence:
@@ -152,7 +226,7 @@ class JapaneseSentenceGenerator:
         # Helper function to extract display text from component
         def get_display_text(component):
             if isinstance(component, dict):
-                return component.get("kana", component.get("hiragana", component.get("kanji", component.get("english", ""))))
+                return component.get("hiragana", component.get("kana", component.get("kanji", component.get("english", ""))))
             return str(component)
         
         # Handle different structures
@@ -187,8 +261,8 @@ class JapaneseSentenceGenerator:
         
         japanese = " ".join(japanese_parts)
         
-        # Generate English translation (simplified)
-        english = f"This is a {theme} sentence: {japanese}"
+        # Generate proper English translation
+        english = self.generate_english_translation(theme, structure, components)
         
         return Sentence(
             japanese=japanese,
@@ -221,19 +295,34 @@ class JapaneseSentenceGenerator:
             if isinstance(slot_config, list):
                 # Direct entity type list
                 entity_type = random.choice(slot_config)
-                vocab_item = self.pick_entity_sample(entity_type)
-                if vocab_item:
-                    # Store the full vocab item with all metadata
-                    components[slot_name] = vocab_item
+                
+                # Handle special cases
+                if slot_name == "Adj":
+                    # Get compatible adjective
+                    adjective = self.get_compatible_adjective(entity_type)
+                    if adjective:
+                        components[slot_name] = adjective
+                    else:
+                        components[slot_name] = {"english": "good", "hiragana": "いい", "kanji": "いい"}
                 else:
-                    components[slot_name] = {"english": f"[{entity_type}]", "kana": f"[{entity_type}]"}
+                    # Get vocab item for entity type
+                    vocab_item = self.pick_entity_sample(entity_type)
+                    if vocab_item:
+                        # Store the full vocab item with all metadata
+                        components[slot_name] = vocab_item
+                    else:
+                        components[slot_name] = {"english": f"[{entity_type}]", "kana": f"[{entity_type}]"}
                     
             elif isinstance(slot_config, dict) and "depends_on" in slot_config:
                 # Dependent slot (e.g., verb compatibility)
                 depends_on = slot_config["depends_on"]
                 if depends_on in components:
+                    # Get entity type from the component it depends on
+                    dependent_component = components[depends_on]
+                    entity_type = dependent_component.get("entity", "person")
+                    
                     # Get compatible verb with full metadata
-                    verb = self.get_compatible_verb("person")  # Simplified
+                    verb = self.get_compatible_verb(entity_type)
                     if verb:
                         components[slot_name] = verb
                     else:
@@ -241,7 +330,9 @@ class JapaneseSentenceGenerator:
                             "english": "to do", 
                             "hiragana": "します",
                             "kanji": "します",
-                            "tags": {"semantic": ["action"], "usage": ["daily"]},
+                            "semantic": ["action"], 
+                            "usage": ["daily"],
+                            "entity_tags": ["person"],
                             "conjugations": {"polite": {"hiragana": "します"}}
                         }
                 else:
@@ -249,7 +340,9 @@ class JapaneseSentenceGenerator:
                         "english": "to do", 
                         "hiragana": "します",
                         "kanji": "します",
-                        "tags": {"semantic": ["action"], "usage": ["daily"]},
+                        "semantic": ["action"], 
+                        "usage": ["daily"],
+                        "entity_tags": ["person"],
                         "conjugations": {"polite": {"hiragana": "します"}}
                     }
         
