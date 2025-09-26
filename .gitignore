@@ -8,6 +8,7 @@ __pycache__/
 *.so
 *.env
 gcp.sh
+*.environment
 
 # Distribution / packaging
 .Python
