@@ -16,13 +16,22 @@ def create_app() -> Flask:
 	from .auth import auth_bp
 
 	# Import and create flashcard modules
-	from .flashcard import create_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module
+	from .flashcard import create_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module, create_vocab_flashcard_module
 	
 	# Create flashcard modules
 	hiragana_bp = create_flashcard_module("hiragana", "./datum/hiragana.csv")
 	katakana_bp = create_flashcard_module("katakana", "./datum/katakana.csv")
 	verbs_bp = create_verb_flashcard_module("verbs", "./datum/verbs.json")
 	adjectives_bp = create_adjective_flashcard_module("adjectives", "./datum/adjectives.json")
+	
+	# Create vocabulary modules
+	numbers_basic_bp = create_vocab_flashcard_module("numbers_basic", "./datum/numbers_basic.json")
+	numbers_extended_bp = create_vocab_flashcard_module("numbers_extended", "./datum/numbers_extended.json")
+	days_of_week_bp = create_vocab_flashcard_module("days_of_week", "./datum/days_of_week.json")
+	months_complete_bp = create_vocab_flashcard_module("months_complete", "./datum/months_complete.json")
+	colors_basic_bp = create_vocab_flashcard_module("colors_basic", "./datum/colors_basic.json")
+	greetings_essential_bp = create_vocab_flashcard_module("greetings_essential", "./datum/greetings_essential.json")
+	question_words_bp = create_vocab_flashcard_module("question_words", "./datum/question_words.json")
 
 	# Google OAuth with Flask-Dance
 	google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
@@ -45,6 +54,15 @@ def create_app() -> Flask:
 	app.register_blueprint(katakana_bp, url_prefix="/begginer/katakana")
 	app.register_blueprint(verbs_bp, url_prefix="/begginer/verbs")
 	app.register_blueprint(adjectives_bp, url_prefix="/begginer/adjectives")
+	
+	# Register vocabulary modules
+	app.register_blueprint(numbers_basic_bp, url_prefix="/begginer/numbers-basic")
+	app.register_blueprint(numbers_extended_bp, url_prefix="/begginer/numbers-extended")
+	app.register_blueprint(days_of_week_bp, url_prefix="/begginer/days-of-week")
+	app.register_blueprint(months_complete_bp, url_prefix="/begginer/months")
+	app.register_blueprint(colors_basic_bp, url_prefix="/begginer/colors")
+	app.register_blueprint(greetings_essential_bp, url_prefix="/begginer/greetings")
+	app.register_blueprint(question_words_bp, url_prefix="/begginer/question-words")
 	
 	# Register Google OAuth blueprint
 	app.register_blueprint(google_bp, url_prefix="/login")

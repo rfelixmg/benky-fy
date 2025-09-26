@@ -90,6 +90,10 @@ class FlashcardItem:
 	conjugation_type: Optional[str] = None
 	conjugations: Optional[Dict[str, Any]] = None
 	grammatical_type: Optional[str] = None
+	# Vocabulary support
+	priority: Optional[int] = None
+	learning_order: Optional[int] = None
+	category: Optional[str] = None
 
 
 class BaseFlashcardEngine:
@@ -155,7 +159,11 @@ class BaseFlashcardEngine:
                     # Conjugation support
                     conjugation_type=verb.get('conjugation_type'),
                     conjugations=verb.get('conjugations'),
-                    grammatical_type=verb.get('grammatical_type')
+                    grammatical_type=verb.get('grammatical_type'),
+                    # Vocabulary support
+                    priority=verb.get('priority'),
+                    learning_order=verb.get('learning_order'),
+                    category=verb.get('category')
                 )
                 flashcards.append(item)
         
@@ -676,6 +684,103 @@ def create_verb_flashcard_module(module_name: str, json_filename: str):
 def create_adjective_flashcard_module(module_name: str, json_filename: str):
     """Factory function to create an adjective flashcard module with conjugation support"""
     engine = AdjectiveFlashcardEngine(json_filename, module_name)
+    blueprint_creator = FlashcardBlueprint(module_name, engine)
+    return blueprint_creator.blueprint
+
+
+class VocabFlashcardEngine(BaseFlashcardEngine):
+    """Specialized engine for vocabulary flashcards with priority-based learning"""
+    
+    def __init__(self, json_filename: str, module_name: str = "vocab"):
+        self.filename = json_filename
+        self.module_name = module_name
+        self._data = self.load_flashcards_from_json(json_filename)
+    
+    def get_default_settings(self):
+        """Get default settings for vocabulary flashcards"""
+        return {
+            "flashcard_styles": ["hiragana"],
+            "checking_styles": ["english"],
+            "show_furigana": True,
+            "furigana_style": "html",  # "html" or "text"
+            "priority_filter": "all",  # "all", "0", "1", "2", "3+"
+            "learning_order": True  # Show items in learning order
+        }
+    
+    def get_user_settings(self):
+        """Get user settings from session with vocabulary defaults"""
+        default_settings = self.get_default_settings()
+        user_settings = session.get("settings", default_settings)
+        
+        # Ensure vocabulary-specific settings exist
+        if "show_furigana" not in user_settings:
+            user_settings["show_furigana"] = default_settings["show_furigana"]
+        if "furigana_style" not in user_settings:
+            user_settings["furigana_style"] = default_settings["furigana_style"]
+        if "priority_filter" not in user_settings:
+            user_settings["priority_filter"] = default_settings["priority_filter"]
+        if "learning_order" not in user_settings:
+            user_settings["learning_order"] = default_settings["learning_order"]
+        
+        return user_settings
+    
+    def get_filtered_data(self, priority_filter: str = "all") -> List[FlashcardItem]:
+        """Get filtered data based on priority"""
+        if priority_filter == "all":
+            return self._data
+        
+        try:
+            priority_num = int(priority_filter)
+            return [item for item in self._data if item.priority and item.priority == priority_num]
+        except (ValueError, TypeError):
+            # If priority_filter is not a number, return all data
+            return self._data
+    
+    def get_next(self, flashcard_styles: List[str] = None) -> FlashcardItem:
+        """Get next flashcard with priority filtering"""
+        settings = self.get_user_settings()
+        priority_filter = settings.get("priority_filter", "all")
+        learning_order = settings.get("learning_order", True)
+        
+        # Get filtered data
+        filtered_data = self.get_filtered_data(priority_filter)
+        
+        if not filtered_data:
+            # Fallback to all data if filtered data is empty
+            filtered_data = self._data
+        
+        # Sort by learning order if enabled
+        if learning_order:
+            filtered_data = sorted(filtered_data, key=lambda x: getattr(x, 'learning_order', 999) if hasattr(x, 'learning_order') and x.learning_order is not None else 999)
+        
+        # Get random item from filtered data
+        item = filtered_data[random.randint(0, len(filtered_data) - 1)]
+        
+        # Set prompt based on selected style
+        if not flashcard_styles:
+            flashcard_styles = ["hiragana"]
+        
+        selected_style = random.choice(flashcard_styles)
+        
+        if selected_style == "hiragana":
+            item.prompt = item.hiragana
+            item.prompt_script = "hiragana"
+        elif selected_style == "kanji":
+            item.prompt = item.kanji
+            item.prompt_script = "kanji"
+        elif selected_style == "katakana":
+            item.prompt = item.katakana
+            item.prompt_script = "katakana"
+        elif selected_style == "english":
+            item.prompt = item.english
+            item.prompt_script = "english"
+        
+        return item
+
+
+def create_vocab_flashcard_module(module_name: str, json_filename: str):
+    """Factory function to create a vocabulary flashcard module with priority-based learning"""
+    engine = VocabFlashcardEngine(json_filename, module_name)
     blueprint_creator = FlashcardBlueprint(module_name, engine)
     return blueprint_creator.blueprint
 
