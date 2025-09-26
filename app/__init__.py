@@ -34,6 +34,7 @@ def create_app() -> Flask:
 		client_id=google_client_id,
 		client_secret=google_client_secret,
 		scope=["profile", "email"],
+		redirect_to="main.home",
 		# Remove custom redirect_url - let Flask-Dance handle it
 	)
 
