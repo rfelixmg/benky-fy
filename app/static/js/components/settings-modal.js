@@ -2,7 +2,6 @@
  * Settings Modal Component - Handles settings modal UI and interactions
  * Manages the settings modal display and user interactions
  */
-import { SettingsManager } from '/static/js/core/settings-manager.js';
 export class SettingsModal {
     constructor() {
         this.modal = null;
