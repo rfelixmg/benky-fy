@@ -27,7 +27,7 @@
 							<label><input type="checkbox" name="checking_english" {% if 'english' in settings.checking_styles %}checked{% endif %}> English</label>
 						</div>
 					</div>
-					{% if module_name == 'verbs' %}
+					{% if module_name in ['verbs', 'adjectives'] %}
 					<div class="settings-section">
 						<h3>Furigana Display:</h3>
 						<div class="checkbox-group">
@@ -36,6 +36,38 @@
 						<div class="radio-group">
 							<label><input type="radio" name="furigana_style" value="html" {% if settings.furigana_style == 'html' %}checked{% endif %}> HTML ruby tags</label>
 							<label><input type="radio" name="furigana_style" value="text" {% if settings.furigana_style == 'text' %}checked{% endif %}> Text brackets</label>
+						</div>
+					</div>
+					{% endif %}
+					
+					{% if module_name in ['verbs', 'adjectives'] %}
+					<div class="settings-section">
+						<h3>Conjugation Practice:</h3>
+						<div class="checkbox-group">
+							<label><input type="checkbox" name="conjugation_mode" {% if settings.conjugation_mode %}checked{% endif %}> Enable conjugation practice</label>
+						</div>
+						{% if module_name == 'verbs' %}
+						<div class="checkbox-group">
+							<h4>Verb Forms:</h4>
+							<label><input type="checkbox" name="conjugation_forms" value="dictionary" {% if 'dictionary' in settings.conjugation_forms %}checked{% endif %}> Dictionary (辞書形)</label>
+							<label><input type="checkbox" name="conjugation_forms" value="polite" {% if 'polite' in settings.conjugation_forms %}checked{% endif %}> Polite (ます形)</label>
+							<label><input type="checkbox" name="conjugation_forms" value="negative" {% if 'negative' in settings.conjugation_forms %}checked{% endif %}> Negative (ない形)</label>
+							<label><input type="checkbox" name="conjugation_forms" value="past" {% if 'past' in settings.conjugation_forms %}checked{% endif %}> Past (た形)</label>
+							<label><input type="checkbox" name="conjugation_forms" value="te_form" {% if 'te_form' in settings.conjugation_forms %}checked{% endif %}> Te-form (て形)</label>
+						</div>
+						{% elif module_name == 'adjectives' %}
+						<div class="checkbox-group">
+							<h4>Adjective Forms:</h4>
+							<label><input type="checkbox" name="conjugation_forms" value="present" {% if 'present' in settings.conjugation_forms %}checked{% endif %}> Present (現在形)</label>
+							<label><input type="checkbox" name="conjugation_forms" value="past" {% if 'past' in settings.conjugation_forms %}checked{% endif %}> Past (過去形)</label>
+							<label><input type="checkbox" name="conjugation_forms" value="negative" {% if 'negative' in settings.conjugation_forms %}checked{% endif %}> Negative (否定形)</label>
+							<label><input type="checkbox" name="conjugation_forms" value="adverbial" {% if 'adverbial' in settings.conjugation_forms %}checked{% endif %}> Adverbial (連用形)</label>
+						</div>
+						{% endif %}
+						<div class="radio-group">
+							<h4>Prompt Style:</h4>
+							<label><input type="radio" name="conjugation_prompt_style" value="english" {% if settings.conjugation_prompt_style == 'english' %}checked{% endif %}> English prompts</label>
+							<label><input type="radio" name="conjugation_prompt_style" value="hiragana" {% if settings.conjugation_prompt_style == 'hiragana' %}checked{% endif %}> Hiragana prompts</label>
 						</div>
 					</div>
 					{% endif %}
@@ -49,7 +81,7 @@
 	<div class="prompt">
 		<p class="muted">Prompt ({{ item.prompt_script }})</p>
 		<div class="prompt-value">
-			{% if item.prompt_script == 'kanji' and module_name == 'verbs' and settings.show_furigana %}
+			{% if item.prompt_script == 'kanji' and module_name in ['verbs', 'adjectives'] and settings.show_furigana %}
 				{% if settings.furigana_style == 'html' and item.furigana_html %}
 					<div class="kanji-with-furigana">{{ item.furigana_html|safe }}</div>
 				{% elif settings.furigana_style == 'text' and item.furigana_text %}

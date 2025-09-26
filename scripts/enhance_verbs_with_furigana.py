@@ -66,7 +66,7 @@ KANJI_READINGS = {
     '支払': 'しはら',
     '切': 'き',
     '調': 'しら',
-    '見つ': 'みつ',
+    '見': 'み',
     '会': 'あ',
     '書': 'か',
     '撮': 'と',
@@ -207,7 +207,45 @@ def analyze_kanji_structure(kanji: str, hiragana: str, conjugation_type: str) ->
     
     # Handle godan verbs
     elif conjugation_type == "godan":
-        if len(kanji) >= 2:
+        # Check if kanji contains hiragana characters (like 見つける)
+        import re
+        kanji_parts = re.findall(r'[一-龯]+|[あ-ん]+', kanji)
+        
+        if len(kanji_parts) >= 2:
+            # Mixed kanji-hiragana case (e.g., 見つける)
+            kanji_part = kanji_parts[0]  # 見
+            hiragana_part = ''.join(kanji_parts[1:])  # つける
+            
+            # Find the reading for the kanji part
+            if kanji_part in KANJI_READINGS:
+                kanji_reading = KANJI_READINGS[kanji_part]
+            else:
+                # Extract reading from hiragana (match length of kanji part)
+                kanji_reading = hiragana[:len(kanji_part)]
+            
+            stems.append({
+                "kanji": kanji_part,
+                "reading": kanji_reading,
+                "type": "root",
+                "meaning": "verb root",
+                "position": 0,
+                "length": len(kanji_part)
+            })
+            
+            stems.append({
+                "kanji": hiragana_part,
+                "reading": hiragana_part,
+                "type": "suffix",
+                "meaning": "verb suffix",
+                "position": len(kanji_part),
+                "length": len(hiragana_part)
+            })
+            
+            furigana_html_parts.append(f'<ruby>{kanji_part}<rt>{kanji_reading}</rt></ruby>{hiragana_part}')
+            furigana_text_parts.append(f"{kanji_part}[{kanji_reading}]{hiragana_part}")
+            
+        elif len(kanji) >= 2:
+            # Pure kanji case (e.g., 食べる -> たべる)
             root_kanji = kanji[:-1]
             ending_kanji = kanji[-1]
             

@@ -6,6 +6,7 @@ from typing import Optional, Tuple, List, Dict, Any
 
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from app.auth import login_required, get_current_user
+from app.conjugation_checker import create_conjugation_checker
 
 
 # Romaji to Hiragana conversion mapping
@@ -85,6 +86,10 @@ class FlashcardItem:
 	kanji_analysis: Optional[Dict[str, Any]] = None
 	furigana_html: Optional[str] = None
 	furigana_text: Optional[str] = None
+	# Conjugation support
+	conjugation_type: Optional[str] = None
+	conjugations: Optional[Dict[str, Any]] = None
+	grammatical_type: Optional[str] = None
 
 
 class BaseFlashcardEngine:
@@ -146,7 +151,11 @@ class BaseFlashcardEngine:
                     # Enhanced furigana fields
                     kanji_analysis=kanji_analysis,
                     furigana_html=furigana_html,
-                    furigana_text=furigana_text
+                    furigana_text=furigana_text,
+                    # Conjugation support
+                    conjugation_type=verb.get('conjugation_type'),
+                    conjugations=verb.get('conjugations'),
+                    grammatical_type=verb.get('grammatical_type')
                 )
                 flashcards.append(item)
         
@@ -306,12 +315,27 @@ class FlashcardBlueprint:
                 "checking_styles": checking_styles
             }
             
-            # Handle furigana settings for verb modules
+            # Handle furigana and conjugation settings for verb/adjective modules
             if hasattr(self.engine, 'get_default_settings'):
                 default_settings = self.engine.get_default_settings()
+                
+                # Handle furigana settings
                 if "show_furigana" in default_settings:
                     settings_update["show_furigana"] = bool(request.form.get("show_furigana"))
                     settings_update["furigana_style"] = request.form.get("furigana_style", default_settings["furigana_style"])
+                
+                # Handle conjugation settings
+                if "conjugation_mode" in default_settings:
+                    settings_update["conjugation_mode"] = bool(request.form.get("conjugation_mode"))
+                    settings_update["conjugation_prompt_style"] = request.form.get("conjugation_prompt_style", default_settings["conjugation_prompt_style"])
+                    
+                    # Get conjugation forms (multiple checkboxes with same name)
+                    conjugation_forms = request.form.getlist("conjugation_forms")
+                    if conjugation_forms:
+                        settings_update["conjugation_forms"] = conjugation_forms
+                    else:
+                        # Use default forms if none selected
+                        settings_update["conjugation_forms"] = default_settings["conjugation_forms"]
             
             session["settings"] = settings_update
             
@@ -402,16 +426,20 @@ class VerbFlashcardEngine(BaseFlashcardEngine):
         self._data = self.load_flashcards_from_json(json_filename)
     
     def get_default_settings(self):
-        """Get default settings for verb flashcards with furigana options"""
+        """Get default settings for verb flashcards with furigana and conjugation options"""
         return {
             "flashcard_styles": ["hiragana"],
             "checking_styles": ["english"],
             "show_furigana": True,
-            "furigana_style": "html"  # "html" or "text"
+            "furigana_style": "html",  # "html" or "text"
+            # Conjugation settings
+            "conjugation_mode": False,
+            "conjugation_forms": ["polite", "negative"],
+            "conjugation_prompt_style": "english"  # "english" or "hiragana"
         }
     
     def get_user_settings(self):
-        """Get user settings from session with furigana defaults"""
+        """Get user settings from session with furigana and conjugation defaults"""
         default_settings = self.get_default_settings()
         user_settings = session.get("settings", default_settings)
         
@@ -421,7 +449,164 @@ class VerbFlashcardEngine(BaseFlashcardEngine):
         if "furigana_style" not in user_settings:
             user_settings["furigana_style"] = default_settings["furigana_style"]
         
+        # Ensure conjugation settings exist
+        if "conjugation_mode" not in user_settings:
+            user_settings["conjugation_mode"] = default_settings["conjugation_mode"]
+        if "conjugation_forms" not in user_settings:
+            user_settings["conjugation_forms"] = default_settings["conjugation_forms"]
+        if "conjugation_prompt_style" not in user_settings:
+            user_settings["conjugation_prompt_style"] = default_settings["conjugation_prompt_style"]
+        
         return user_settings
+    
+    def generate_conjugation_prompt(self, item: FlashcardItem, conjugation_form: str, prompt_style: str) -> Tuple[str, str]:
+        """Generate a conjugation prompt for the given item and form"""
+        if prompt_style == "english":
+            prompt = f"Conjugate '{item.english}' in {conjugation_form} form"
+            prompt_script = "conjugation_english"
+        else:  # hiragana
+            prompt = f"Conjugate '{item.hiragana}' in {conjugation_form} form"
+            prompt_script = "conjugation_hiragana"
+        
+        return prompt, prompt_script
+    
+    def get_next(self, flashcard_styles: List[str] = None) -> FlashcardItem:
+        """Get next flashcard with conjugation support"""
+        settings = self.get_user_settings()
+        
+        # Check if conjugation mode is enabled
+        if settings.get("conjugation_mode", False) and settings.get("conjugation_forms"):
+            # Generate conjugation prompt
+            item = self._data[random.randint(0, len(self._data) - 1)]
+            conjugation_form = random.choice(settings["conjugation_forms"])
+            prompt_style = settings.get("conjugation_prompt_style", "english")
+            
+            # Generate conjugation prompt
+            prompt, prompt_script = self.generate_conjugation_prompt(item, conjugation_form, prompt_style)
+            
+            # Set conjugation-specific fields
+            item.prompt = prompt
+            item.prompt_script = prompt_script
+            item.answer = conjugation_form  # Store the form for answer checking
+            
+            return item
+        else:
+            # Use parent class method for regular flashcards
+            return super().get_next(flashcard_styles)
+    
+    def check_conjugation_answer(self, user_input: str, item: FlashcardItem, conjugation_form: str) -> dict:
+        """Check conjugation answer using the conjugation checker"""
+        checker = create_conjugation_checker()
+        
+        # Determine grammatical type
+        grammatical_type = item.grammatical_type or item.conjugation_type or "verb"
+        
+        # Check the answer
+        result = checker.check_answer(user_input, item.__dict__, conjugation_form, grammatical_type)
+        
+        return {
+            "user_input": result.user_input,
+            "correct_answer": result.correct_answer,
+            "is_correct": result.is_correct,
+            "feedback": result.feedback,
+            "conjugation_form": result.conjugation_form
+        }
+
+
+class AdjectiveFlashcardEngine(BaseFlashcardEngine):
+    """Specialized engine for Japanese adjectives with conjugation support"""
+    
+    def __init__(self, json_filename: str, module_name: str = "adjectives"):
+        self.filename = json_filename
+        self.module_name = module_name
+        self._data = self.load_flashcards_from_json(json_filename)
+    
+    def get_default_settings(self):
+        """Get default settings for adjective flashcards with conjugation and furigana options"""
+        return {
+            "flashcard_styles": ["hiragana"],
+            "checking_styles": ["english"],
+            "show_furigana": True,
+            "furigana_style": "html",  # "html" or "text"
+            # Conjugation settings
+            "conjugation_mode": False,
+            "conjugation_forms": ["past", "negative"],
+            "conjugation_prompt_style": "english"  # "english" or "hiragana"
+        }
+    
+    def get_user_settings(self):
+        """Get user settings from session with conjugation and furigana defaults"""
+        default_settings = self.get_default_settings()
+        user_settings = session.get("settings", default_settings)
+        
+        # Ensure furigana settings exist
+        if "show_furigana" not in user_settings:
+            user_settings["show_furigana"] = default_settings["show_furigana"]
+        if "furigana_style" not in user_settings:
+            user_settings["furigana_style"] = default_settings["furigana_style"]
+        
+        # Ensure conjugation settings exist
+        if "conjugation_mode" not in user_settings:
+            user_settings["conjugation_mode"] = default_settings["conjugation_mode"]
+        if "conjugation_forms" not in user_settings:
+            user_settings["conjugation_forms"] = default_settings["conjugation_forms"]
+        if "conjugation_prompt_style" not in user_settings:
+            user_settings["conjugation_prompt_style"] = default_settings["conjugation_prompt_style"]
+        
+        return user_settings
+    
+    def generate_conjugation_prompt(self, item: FlashcardItem, conjugation_form: str, prompt_style: str) -> Tuple[str, str]:
+        """Generate a conjugation prompt for the given adjective and form"""
+        if prompt_style == "english":
+            prompt = f"Conjugate '{item.english}' in {conjugation_form} form"
+            prompt_script = "conjugation_english"
+        else:  # hiragana
+            prompt = f"Conjugate '{item.hiragana}' in {conjugation_form} form"
+            prompt_script = "conjugation_hiragana"
+        
+        return prompt, prompt_script
+    
+    def get_next(self, flashcard_styles: List[str] = None) -> FlashcardItem:
+        """Get next flashcard with conjugation support"""
+        settings = self.get_user_settings()
+        
+        # Check if conjugation mode is enabled
+        if settings.get("conjugation_mode", False) and settings.get("conjugation_forms"):
+            # Generate conjugation prompt
+            item = self._data[random.randint(0, len(self._data) - 1)]
+            conjugation_form = random.choice(settings["conjugation_forms"])
+            prompt_style = settings.get("conjugation_prompt_style", "english")
+            
+            # Generate conjugation prompt
+            prompt, prompt_script = self.generate_conjugation_prompt(item, conjugation_form, prompt_style)
+            
+            # Set conjugation-specific fields
+            item.prompt = prompt
+            item.prompt_script = prompt_script
+            item.answer = conjugation_form  # Store the form for answer checking
+            
+            return item
+        else:
+            # Use parent class method for regular flashcards
+            return super().get_next(flashcard_styles)
+    
+    def check_conjugation_answer(self, user_input: str, item: FlashcardItem, conjugation_form: str) -> dict:
+        """Check conjugation answer using the conjugation checker"""
+        checker = create_conjugation_checker()
+        
+        # Determine grammatical type
+        grammatical_type = item.conjugation_type or "i_adjective"
+        
+        # Check the answer
+        result = checker.check_answer(user_input, item.__dict__, conjugation_form, grammatical_type)
+        
+        return {
+            "user_input": result.user_input,
+            "correct_answer": result.correct_answer,
+            "is_correct": result.is_correct,
+            "feedback": result.feedback,
+            "conjugation_form": result.conjugation_form
+        }
 
 
 # Factory function to create flashcard modules
@@ -435,6 +620,13 @@ def create_flashcard_module(module_name: str, csv_filename: str):
 def create_verb_flashcard_module(module_name: str, json_filename: str):
     """Factory function to create a verb flashcard module with furigana support"""
     engine = VerbFlashcardEngine(json_filename, module_name)
+    blueprint_creator = FlashcardBlueprint(module_name, engine)
+    return blueprint_creator.blueprint
+
+
+def create_adjective_flashcard_module(module_name: str, json_filename: str):
+    """Factory function to create an adjective flashcard module with conjugation support"""
+    engine = AdjectiveFlashcardEngine(json_filename, module_name)
     blueprint_creator = FlashcardBlueprint(module_name, engine)
     return blueprint_creator.blueprint
 

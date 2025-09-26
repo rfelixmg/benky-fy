@@ -23,14 +23,14 @@
         "hiragana": "する"
       },
       "polite": {
-        "kanji": "するます",
+        "kanji": "為るます",
         "hiragana": "するます"
       }
     },
     "kanji_analysis": {
       "stems": [
         {
-          "kanji": "する",
+          "kanji": "為る",
           "reading": "する",
           "type": "irregular",
           "meaning": "to do",
@@ -69,31 +69,31 @@
         "hiragana": "しっている"
       },
       "polite": {
-        "kanji": "しっているます",
+        "kanji": "知っているます",
         "hiragana": "しっているます"
       }
     },
     "kanji_analysis": {
       "stems": [
         {
-          "kanji": "知ってい",
-          "reading": "しってい",
+          "kanji": "知",
+          "reading": "し",
           "type": "root",
           "meaning": "verb root",
           "position": 0,
-          "length": 4
+          "length": 1
         },
         {
-          "kanji": "る",
-          "reading": "る",
+          "kanji": "っている",
+          "reading": "っている",
           "type": "suffix",
-          "meaning": "godan verb ending",
-          "position": 4,
-          "length": 1
+          "meaning": "verb suffix",
+          "position": 1,
+          "length": 4
         }
       ],
-      "furigana_html": "<ruby>知ってい<rt>しってい</rt></ruby>る",
-      "furigana_text": "知ってい[しってい]る"
+      "furigana_html": "<ruby>知<rt>し</rt></ruby>っている",
+      "furigana_text": "知[し]っている"
     }
   },
   {
@@ -119,39 +119,39 @@
         "hiragana": "かんがえる"
       },
       "polite": {
-        "kanji": "かんがえます",
+        "kanji": "考えるます",
         "hiragana": "かんがえます"
       },
       "negative": {
-        "kanji": "かんがえない",
+        "kanji": "考えない",
         "hiragana": "かんがえない"
       },
       "polite_negative": {
-        "kanji": "かんがえません",
+        "kanji": "考えません",
         "hiragana": "かんがえません"
       },
       "past": {
-        "kanji": "かんがえた",
+        "kanji": "考えた",
         "hiragana": "かんがえた"
       },
       "polite_past": {
-        "kanji": "かんがえました",
+        "kanji": "考えました",
         "hiragana": "かんがえました"
       },
       "past_negative": {
-        "kanji": "かんがえなかった",
+        "kanji": "考えなかった",
         "hiragana": "かんがえなかった"
       },
       "te_form": {
-        "kanji": "かんがえて",
+        "kanji": "考えて",
         "hiragana": "かんがえて"
       },
       "potential": {
-        "kanji": "かんがえられる",
+        "kanji": "考えられる",
         "hiragana": "かんがえられる"
       },
       "volitional": {
-        "kanji": "かんがえよう",
+        "kanji": "考えよう",
         "hiragana": "かんがえよう"
       }
     },
@@ -203,39 +203,39 @@
         "hiragana": "あける"
       },
       "polite": {
-        "kanji": "あけます",
+        "kanji": "開けるます",
         "hiragana": "あけます"
       },
       "negative": {
-        "kanji": "あけない",
+        "kanji": "開けない",
         "hiragana": "あけない"
       },
       "polite_negative": {
-        "kanji": "あけません",
+        "kanji": "開けません",
         "hiragana": "あけません"
       },
       "past": {
-        "kanji": "あけた",
+        "kanji": "開けた",
         "hiragana": "あけた"
       },
       "polite_past": {
-        "kanji": "あけました",
+        "kanji": "開けました",
         "hiragana": "あけました"
       },
       "past_negative": {
-        "kanji": "あけなかった",
+        "kanji": "開けなかった",
         "hiragana": "あけなかった"
       },
       "te_form": {
-        "kanji": "あけて",
+        "kanji": "開けて",
         "hiragana": "あけて"
       },
       "potential": {
-        "kanji": "あけられる",
+        "kanji": "開けられる",
         "hiragana": "あけられる"
       },
       "volitional": {
-        "kanji": "あけよう",
+        "kanji": "開けよう",
         "hiragana": "あけよう"
       }
     },
@@ -287,23 +287,23 @@
         "hiragana": "しめる"
       },
       "polite": {
-        "kanji": "しめます",
+        "kanji": "閉めます",
         "hiragana": "しめます"
       },
       "negative": {
-        "kanji": "しめない",
+        "kanji": "閉めない",
         "hiragana": "しめない"
       },
       "polite_negative": {
-        "kanji": "しめません",
+        "kanji": "閉めません",
         "hiragana": "しめません"
       },
       "past": {
-        "kanji": "しめた",
+        "kanji": "閉めた",
         "hiragana": "しめた"
       },
       "polite_past": {
-        "kanji": "しめました",
+        "kanji": "閉めました",
         "hiragana": "しめました"
       },
       "past_negative": {
@@ -311,15 +311,15 @@
         "hiragana": "しめなかった"
       },
       "te_form": {
-        "kanji": "しめて",
+        "kanji": "閉めて",
         "hiragana": "しめて"
       },
       "potential": {
-        "kanji": "しめられる",
+        "kanji": "閉められる",
         "hiragana": "しめられる"
       },
       "volitional": {
-        "kanji": "しめよう",
+        "kanji": "閉めよう",
         "hiragana": "しめよう"
       }
     },
@@ -374,23 +374,23 @@
         "hiragana": "ねる"
       },
       "polite": {
-        "kanji": "ねます",
+        "kanji": "寝ます",
         "hiragana": "ねます"
       },
       "negative": {
-        "kanji": "ねない",
+        "kanji": "寝ない",
         "hiragana": "ねない"
       },
       "polite_negative": {
-        "kanji": "ねません",
+        "kanji": "寝ません",
         "hiragana": "ねません"
       },
       "past": {
-        "kanji": "ねた",
+        "kanji": "寝た",
         "hiragana": "ねた"
       },
       "polite_past": {
-        "kanji": "ねました",
+        "kanji": "寝ました",
         "hiragana": "ねました"
       },
       "past_negative": {
@@ -398,15 +398,15 @@
         "hiragana": "ねなかった"
       },
       "te_form": {
-        "kanji": "ねて",
+        "kanji": "寝て",
         "hiragana": "ねて"
       },
       "potential": {
-        "kanji": "ねられる",
+        "kanji": "寝られる",
         "hiragana": "ねられる"
       },
       "volitional": {
-        "kanji": "ねよう",
+        "kanji": "寝よう",
         "hiragana": "ねよう"
       }
     },
@@ -461,23 +461,23 @@
         "hiragana": "おきる"
       },
       "polite": {
-        "kanji": "おきます",
+        "kanji": "起きます",
         "hiragana": "おきます"
       },
       "negative": {
-        "kanji": "おきない",
+        "kanji": "起きない",
         "hiragana": "おきない"
       },
       "polite_negative": {
-        "kanji": "おきません",
+        "kanji": "起きません",
         "hiragana": "おきません"
       },
       "past": {
-        "kanji": "おきた",
+        "kanji": "起きた",
         "hiragana": "おきた"
       },
       "polite_past": {
-        "kanji": "おきました",
+        "kanji": "起きました",
         "hiragana": "おきました"
       },
       "past_negative": {
@@ -485,15 +485,15 @@
         "hiragana": "おきなかった"
       },
       "te_form": {
-        "kanji": "おきて",
+        "kanji": "起きて",
         "hiragana": "おきて"
       },
       "potential": {
-        "kanji": "おきられる",
+        "kanji": "起きられる",
         "hiragana": "おきられる"
       },
       "volitional": {
-        "kanji": "おきよう",
+        "kanji": "起きよう",
         "hiragana": "おきよう"
       }
     },
@@ -545,7 +545,7 @@
         "hiragana": "あるく"
       },
       "polite": {
-        "kanji": "あるくます",
+        "kanji": "歩くます",
         "hiragana": "あるくます"
       }
     },
@@ -563,7 +563,7 @@
           "kanji": "く",
           "reading": "く",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -596,7 +596,7 @@
         "hiragana": "いく"
       },
       "polite": {
-        "kanji": "いくます",
+        "kanji": "行くます",
         "hiragana": "いくます"
       }
     },
@@ -614,7 +614,7 @@
           "kanji": "く",
           "reading": "く",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -648,7 +648,7 @@
         "hiragana": "はなす"
       },
       "polite": {
-        "kanji": "はなすます",
+        "kanji": "話すます",
         "hiragana": "はなすます"
       }
     },
@@ -666,7 +666,7 @@
           "kanji": "す",
           "reading": "す",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -699,7 +699,7 @@
         "hiragana": "いう"
       },
       "polite": {
-        "kanji": "いうます",
+        "kanji": "言うます",
         "hiragana": "いうます"
       }
     },
@@ -717,7 +717,7 @@
           "kanji": "う",
           "reading": "う",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -766,7 +766,7 @@
           "length": 2
         },
         {
-          "kanji": "する",
+          "kanji": "為る",
           "reading": "する",
           "type": "suffix",
           "meaning": "irregular verb ending",
@@ -802,7 +802,7 @@
         "hiragana": "かう"
       },
       "polite": {
-        "kanji": "かうます",
+        "kanji": "買うます",
         "hiragana": "かうます"
       }
     },
@@ -820,7 +820,7 @@
           "kanji": "う",
           "reading": "う",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -853,7 +853,7 @@
         "hiragana": "うる"
       },
       "polite": {
-        "kanji": "うるます",
+        "kanji": "売るます",
         "hiragana": "うるます"
       }
     },
@@ -871,7 +871,7 @@
           "kanji": "る",
           "reading": "る",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -985,23 +985,23 @@
         "hiragana": "わすれる"
       },
       "polite": {
-        "kanji": "わすれます",
+        "kanji": "忘れます",
         "hiragana": "わすれます"
       },
       "negative": {
-        "kanji": "わすれない",
+        "kanji": "忘れない",
         "hiragana": "わすれない"
       },
       "polite_negative": {
-        "kanji": "わすれません",
+        "kanji": "忘れません",
         "hiragana": "わすれません"
       },
       "past": {
-        "kanji": "わすれた",
+        "kanji": "忘れた",
         "hiragana": "わすれた"
       },
       "polite_past": {
-        "kanji": "わすれました",
+        "kanji": "忘れました",
         "hiragana": "わすれました"
       },
       "past_negative": {
@@ -1009,15 +1009,15 @@
         "hiragana": "わすれなかった"
       },
       "te_form": {
-        "kanji": "わすれて",
+        "kanji": "忘れて",
         "hiragana": "わすれて"
       },
       "potential": {
-        "kanji": "わすれられる",
+        "kanji": "忘れられる",
         "hiragana": "わすれられる"
       },
       "volitional": {
-        "kanji": "わすれよう",
+        "kanji": "忘れよう",
         "hiragana": "わすれよう"
       }
     },
@@ -1068,23 +1068,23 @@
         "hiragana": "みる"
       },
       "polite": {
-        "kanji": "みます",
+        "kanji": "見ます",
         "hiragana": "みます"
       },
       "negative": {
-        "kanji": "みない",
+        "kanji": "見ない",
         "hiragana": "みない"
       },
       "polite_negative": {
-        "kanji": "みません",
+        "kanji": "見ません",
         "hiragana": "みません"
       },
       "past": {
-        "kanji": "みた",
+        "kanji": "見た",
         "hiragana": "みた"
       },
       "polite_past": {
-        "kanji": "みました",
+        "kanji": "見ました",
         "hiragana": "みました"
       },
       "past_negative": {
@@ -1092,15 +1092,15 @@
         "hiragana": "みなかった"
       },
       "te_form": {
-        "kanji": "みて",
+        "kanji": "見て",
         "hiragana": "みて"
       },
       "potential": {
-        "kanji": "みられる",
+        "kanji": "見られる",
         "hiragana": "みられる"
       },
       "volitional": {
-        "kanji": "みよう",
+        "kanji": "見よう",
         "hiragana": "みよう"
       }
     },
@@ -1234,7 +1234,7 @@
         "hiragana": "のむ"
       },
       "polite": {
-        "kanji": "のむます",
+        "kanji": "飲むます",
         "hiragana": "のむます"
       }
     },
@@ -1252,7 +1252,7 @@
           "kanji": "む",
           "reading": "む",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1287,7 +1287,7 @@
         "hiragana": "きく"
       },
       "polite": {
-        "kanji": "きくます",
+        "kanji": "聞くます",
         "hiragana": "きくます"
       }
     },
@@ -1305,7 +1305,7 @@
           "kanji": "く",
           "reading": "く",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1339,7 +1339,7 @@
         "hiragana": "はしる"
       },
       "polite": {
-        "kanji": "はしるます",
+        "kanji": "走るます",
         "hiragana": "はしるます"
       }
     },
@@ -1357,7 +1357,7 @@
           "kanji": "る",
           "reading": "る",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1390,7 +1390,7 @@
         "hiragana": "のる"
       },
       "polite": {
-        "kanji": "のるます",
+        "kanji": "乗るます",
         "hiragana": "のるます"
       }
     },
@@ -1408,7 +1408,7 @@
           "kanji": "る",
           "reading": "る",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1442,7 +1442,7 @@
         "hiragana": "はたらく"
       },
       "polite": {
-        "kanji": "はたらくます",
+        "kanji": "働くます",
         "hiragana": "はたらくます"
       }
     },
@@ -1460,7 +1460,7 @@
           "kanji": "く",
           "reading": "く",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1580,7 +1580,7 @@
         "hiragana": "おく"
       },
       "polite": {
-        "kanji": "おくます",
+        "kanji": "置くます",
         "hiragana": "おくます"
       }
     },
@@ -1598,7 +1598,7 @@
           "kanji": "く",
           "reading": "く",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1631,7 +1631,7 @@
         "hiragana": "ふる"
       },
       "polite": {
-        "kanji": "ふるます",
+        "kanji": "降るます",
         "hiragana": "ふるます"
       }
     },
@@ -1649,7 +1649,7 @@
           "kanji": "る",
           "reading": "る",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1683,7 +1683,7 @@
         "hiragana": "うたう"
       },
       "polite": {
-        "kanji": "うたうます",
+        "kanji": "歌うます",
         "hiragana": "うたうます"
       }
     },
@@ -1701,7 +1701,7 @@
           "kanji": "う",
           "reading": "う",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1734,7 +1734,7 @@
         "hiragana": "なく"
       },
       "polite": {
-        "kanji": "なくます",
+        "kanji": "泣くます",
         "hiragana": "なくます"
       }
     },
@@ -1752,7 +1752,7 @@
           "kanji": "く",
           "reading": "く",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1785,7 +1785,7 @@
         "hiragana": "とる"
       },
       "polite": {
-        "kanji": "とるます",
+        "kanji": "撮るます",
         "hiragana": "とるます"
       }
     },
@@ -1803,7 +1803,7 @@
           "kanji": "る",
           "reading": "る",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1851,7 +1851,7 @@
           "length": 2
         },
         {
-          "kanji": "する",
+          "kanji": "為る",
           "reading": "する",
           "type": "suffix",
           "meaning": "irregular verb ending",
@@ -1907,7 +1907,7 @@
           "kanji": "ぶ",
           "reading": "ぶ",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -1943,23 +1943,23 @@
         "hiragana": "やめる"
       },
       "polite": {
-        "kanji": "やめます",
+        "kanji": "止めます",
         "hiragana": "やめます"
       },
       "negative": {
-        "kanji": "やめない",
+        "kanji": "止めない",
         "hiragana": "やめない"
       },
       "polite_negative": {
-        "kanji": "やめません",
+        "kanji": "止めません",
         "hiragana": "やめません"
       },
       "past": {
-        "kanji": "やめた",
+        "kanji": "止めた",
         "hiragana": "やめた"
       },
       "polite_past": {
-        "kanji": "やめました",
+        "kanji": "止めました",
         "hiragana": "やめました"
       },
       "past_negative": {
@@ -1967,15 +1967,15 @@
         "hiragana": "やめなかった"
       },
       "te_form": {
-        "kanji": "やめて",
+        "kanji": "止めて",
         "hiragana": "やめて"
       },
       "potential": {
-        "kanji": "やめられる",
+        "kanji": "止められる",
         "hiragana": "やめられる"
       },
       "volitional": {
-        "kanji": "やめよう",
+        "kanji": "止めよう",
         "hiragana": "やめよう"
       }
     },
@@ -2169,23 +2169,23 @@
         "hiragana": "うまれる"
       },
       "polite": {
-        "kanji": "うまれます",
+        "kanji": "生まれます",
         "hiragana": "うまれます"
       },
       "negative": {
-        "kanji": "うまれない",
+        "kanji": "生まれない",
         "hiragana": "うまれない"
       },
       "polite_negative": {
-        "kanji": "うまれません",
+        "kanji": "生まれません",
         "hiragana": "うまれません"
       },
       "past": {
-        "kanji": "うまれた",
+        "kanji": "生まれた",
         "hiragana": "うまれた"
       },
       "polite_past": {
-        "kanji": "うまれました",
+        "kanji": "生まれました",
         "hiragana": "うまれました"
       },
       "past_negative": {
@@ -2193,15 +2193,15 @@
         "hiragana": "うまれなかった"
       },
       "te_form": {
-        "kanji": "うまれて",
+        "kanji": "生まれて",
         "hiragana": "うまれて"
       },
       "potential": {
-        "kanji": "うまれられる",
+        "kanji": "生まれられる",
         "hiragana": "うまれられる"
       },
       "volitional": {
-        "kanji": "うまれよう",
+        "kanji": "生まれよう",
         "hiragana": "うまれよう"
       }
     },
@@ -2398,7 +2398,7 @@
         "hiragana": "しはらう"
       },
       "polite": {
-        "kanji": "しはらうます",
+        "kanji": "支払うます",
         "hiragana": "しはらうます"
       }
     },
@@ -2416,7 +2416,7 @@
           "kanji": "う",
           "reading": "う",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 2,
           "length": 1
         }
@@ -2450,7 +2450,7 @@
         "hiragana": "きる"
       },
       "polite": {
-        "kanji": "きるます",
+        "kanji": "切るます",
         "hiragana": "きるます"
       }
     },
@@ -2468,7 +2468,7 @@
           "kanji": "る",
           "reading": "る",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -2586,23 +2586,23 @@
         "hiragana": "みつける"
       },
       "polite": {
-        "kanji": "みつけます",
+        "kanji": "見つけます",
         "hiragana": "みつけます"
       },
       "negative": {
-        "kanji": "みつけない",
+        "kanji": "見つけない",
         "hiragana": "みつけない"
       },
       "polite_negative": {
-        "kanji": "みつけません",
+        "kanji": "見つけません",
         "hiragana": "みつけません"
       },
       "past": {
-        "kanji": "みつけた",
+        "kanji": "見つけた",
         "hiragana": "みつけた"
       },
       "polite_past": {
-        "kanji": "みつけました",
+        "kanji": "見つけました",
         "hiragana": "みつけました"
       },
       "past_negative": {
@@ -2610,15 +2610,15 @@
         "hiragana": "みつけなかった"
       },
       "te_form": {
-        "kanji": "みつけて",
+        "kanji": "見つけて",
         "hiragana": "みつけて"
       },
       "potential": {
-        "kanji": "みつけられる",
+        "kanji": "見つけられる",
         "hiragana": "みつけられる"
       },
       "volitional": {
-        "kanji": "みつけよう",
+        "kanji": "見つけよう",
         "hiragana": "みつけよう"
       }
     },
@@ -2671,7 +2671,7 @@
         "hiragana": "あう"
       },
       "polite": {
-        "kanji": "あうます",
+        "kanji": "会うます",
         "hiragana": "あうます"
       }
     },
@@ -2689,7 +2689,7 @@
           "kanji": "う",
           "reading": "う",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -2723,7 +2723,7 @@
         "hiragana": "かく"
       },
       "polite": {
-        "kanji": "かくます",
+        "kanji": "書くます",
         "hiragana": "かくます"
       }
     },
@@ -2741,7 +2741,7 @@
           "kanji": "く",
           "reading": "く",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -2776,7 +2776,7 @@
         "hiragana": "とる"
       },
       "polite": {
-        "kanji": "とるます",
+        "kanji": "撮るます",
         "hiragana": "とるます"
       }
     },
@@ -2794,7 +2794,7 @@
           "kanji": "る",
           "reading": "る",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -2833,7 +2833,7 @@
         "hiragana": "まつ"
       },
       "polite": {
-        "kanji": "まつます",
+        "kanji": "待つます",
         "hiragana": "まつます"
       }
     },
@@ -2851,7 +2851,7 @@
           "kanji": "つ",
           "reading": "つ",
           "type": "suffix",
-          "meaning": "godan verb ending",
+          "meaning": "verb suffix",
           "position": 1,
           "length": 1
         }
@@ -2884,31 +2884,31 @@
         "hiragana": "わかる"
       },
       "polite": {
-        "kanji": "わかるます",
+        "kanji": "分かるます",
         "hiragana": "わかるます"
       }
     },
     "kanji_analysis": {
       "stems": [
         {
-          "kanji": "分か",
-          "reading": "わか",
+          "kanji": "分",
+          "reading": "わ",
           "type": "root",
           "meaning": "verb root",
           "position": 0,
-          "length": 2
+          "length": 1
         },
         {
-          "kanji": "る",
-          "reading": "る",
+          "kanji": "かる",
+          "reading": "かる",
           "type": "suffix",
-          "meaning": "godan verb ending",
-          "position": 2,
-          "length": 1
+          "meaning": "verb suffix",
+          "position": 1,
+          "length": 2
         }
       ],
-      "furigana_html": "<ruby>分か<rt>わか</rt></ruby>る",
-      "furigana_text": "分か[わか]る"
+      "furigana_html": "<ruby>分<rt>わ</rt></ruby>かる",
+      "furigana_text": "分[わ]かる"
     }
   }
 ]
