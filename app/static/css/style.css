@@ -912,6 +912,55 @@ body {
     text-align: center;
 }
 
+/* Enhanced display styling */
+.prompt-text[data-script="hiragana"] {
+    color: #2563eb;
+}
+
+.prompt-text[data-script="katakana"] {
+    color: #7c3aed;
+}
+
+.prompt-text.english-text {
+    color: #059669;
+    font-style: italic;
+}
+
+/* Furigana style variations */
+.kanji-hover {
+    cursor: help;
+    border-bottom: 1px dotted #666;
+    position: relative;
+}
+
+.kanji-hover:hover {
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 4px;
+}
+
+/* Display error styling */
+.display-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: rgba(245, 101, 101, 0.1);
+    border: 1px solid rgba(245, 101, 101, 0.3);
+    border-radius: 8px;
+    color: #9e3b50;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.error-icon {
+    font-size: 1.2rem;
+}
+
+.error-message {
+    font-weight: 500;
+}
+
 /* Radio group styling for furigana settings */
 .radio-group {
     display: flex;

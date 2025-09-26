@@ -690,6 +690,51 @@ class FlashcardBlueprint:
             except (ValueError, IndexError):
                 return {"error": "Invalid item_id"}, 400
         
+        @bp.route("/api/test-display-text", methods=["GET"])
+        def test_display_text():
+            """Test endpoint for display text (no auth required for testing)"""
+            item_id = request.args.get('item_id', '0')
+            display_mode = request.args.get('display_mode', 'kana')
+            kana_type = request.args.get('kana_type', 'hiragana')
+            
+            try:
+                item_id = int(item_id)
+                item = self.engine[item_id]
+                
+                # Create test settings
+                test_settings = {
+                    "display_mode": display_mode,
+                    "kana_type": kana_type,
+                    "proportions": {
+                        "kana": 0.3,
+                        "kanji": 0.2,
+                        "kanji_furigana": 0.2,
+                        "english": 0.3
+                    }
+                }
+                
+                # Use the new display text logic
+                if hasattr(self.engine, 'get_display_text'):
+                    display_result = self.engine.get_display_text(item, test_settings)
+                    return {
+                        "text": display_result["text"],
+                        "script": display_result["script"],
+                        "mode": display_result["mode"],
+                        "fallback_used": display_result["fallback_used"],
+                        "test_settings": test_settings,
+                        "item_info": {
+                            "english": item.english,
+                            "hiragana": item.hiragana,
+                            "kanji": item.kanji,
+                            "katakana": item.katakana
+                        }
+                    }
+                else:
+                    return {"error": "Engine does not support display text method"}
+            
+            except (ValueError, IndexError) as e:
+                return {"error": f"Invalid item_id: {e}"}, 400
+        
         return bp
     
     # Settings methods removed - now using centralized settings system

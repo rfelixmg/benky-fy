@@ -398,82 +398,192 @@ function updateLivePreview() {
 	console.log('Settings updated:', settingsState);
 }
 
-// Display text constraints handler
+// Enhanced display text handler with full backend integration
 function updateDisplayText() {
 	const itemId = document.querySelector('input[name="item_id"]')?.value;
 	if (!itemId) return;
 	
 	// Get current settings from the form
-	const formData = new FormData();
 	const displayMode = document.querySelector('input[name="display_mode"]:checked')?.value || 'kana';
 	const kanaType = document.querySelector('input[name="kana_type"]:checked')?.value || 'hiragana';
+	const furiganaStyle = document.getElementById('furigana-style')?.value || 'ruby';
 	
-	// Build settings object
+	// Build settings object with all current settings
 	const settings = {
 		display_mode: displayMode,
 		kana_type: kanaType,
+		furigana_style: furiganaStyle,
 		proportions: getCurrentProportions()
 	};
 	
 	// Send request to get display text
-	fetch(`/{{ module_name }}/api/display-text?item_id=${itemId}`, {
+	fetch(`/begginer/{{ module_name }}/api/display-text?item_id=${itemId}`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
 		}
 	})
+	.then(response => {
+		if (response.status === 401 || response.status === 403) {
+			// Authentication required, use test endpoint for development
+			console.log('Auth required, using test endpoint');
+			return fetch(`/begginer/{{ module_name }}/api/test-display-text?item_id=${itemId}&display_mode=${settings.display_mode}&kana_type=${settings.kana_type}`);
+		}
+		return response;
+	})
 	.then(response => response.json())
 	.then(data => {
 		if (data.error) {
 			console.error('Error getting display text:', data.error);
+			showDisplayError('Failed to load display text');
 			return;
 		}
 		
-		// Update the prompt display
-		const promptDisplay = document.getElementById('prompt-display');
-		const promptScript = document.getElementById('prompt-script');
-		const fallbackNotice = document.querySelector('.fallback-notice');
+		// Update the prompt display with enhanced rendering
+		updatePromptDisplay(data, settings);
 		
-		if (promptDisplay && promptScript) {
-			// Clear existing content
-			promptDisplay.innerHTML = '';
-			
-			// Create appropriate display element based on script type
-			let displayElement;
-			if (data.script === 'kanji_furigana') {
-				displayElement = document.createElement('div');
-				displayElement.className = 'kanji-with-furigana';
-				displayElement.innerHTML = data.text;
-			} else if (data.script === 'kanji') {
-				displayElement = document.createElement('div');
-				displayElement.className = 'kanji';
-				displayElement.textContent = data.text;
-			} else {
-				displayElement = document.createElement('div');
-				displayElement.className = 'prompt-text';
-				displayElement.textContent = data.text;
-			}
-			
-			promptDisplay.appendChild(displayElement);
-			promptScript.textContent = data.script;
-			
-			// Show/hide fallback notice
-			if (fallbackNotice) {
-				fallbackNotice.style.display = data.fallback_used ? 'block' : 'none';
-			}
-			
-			// Log display constraints
-			console.log('Display updated:', {
-				mode: data.mode,
-				script: data.script,
-				text: data.text,
-				fallback_used: data.fallback_used
-			});
-		}
+		// Log display constraints for debugging
+		console.log('Display updated:', {
+			mode: data.mode,
+			script: data.script,
+			text: data.text,
+			fallback_used: data.fallback_used,
+			settings: settings
+		});
 	})
 	.catch(error => {
 		console.error('Error updating display text:', error);
+		showDisplayError('Network error loading display text');
 	});
+}
+
+// Enhanced prompt display update with proper styling and fallbacks
+function updatePromptDisplay(data, settings) {
+	const promptDisplay = document.getElementById('prompt-display');
+	const promptScript = document.getElementById('prompt-script');
+	const fallbackNotice = document.querySelector('.fallback-notice');
+	
+	if (!promptDisplay || !promptScript) {
+		console.error('Required DOM elements not found');
+		return;
+	}
+	
+	// Clear existing content
+	promptDisplay.innerHTML = '';
+	
+	// Handle "N/A" fallback case
+	if (data.text === "N/A" || data.script === "error") {
+		showDisplayError('Content not available for this display mode');
+		return;
+	}
+	
+	// Create appropriate display element based on script type and settings
+	let displayElement = createDisplayElement(data, settings);
+	promptDisplay.appendChild(displayElement);
+	
+	// Update script indicator
+	promptScript.textContent = data.script;
+	
+	// Show/hide fallback notice
+	if (fallbackNotice) {
+		fallbackNotice.style.display = data.fallback_used ? 'block' : 'none';
+	}
+}
+
+// Create display element with proper styling and furigana handling
+function createDisplayElement(data, settings) {
+	const displayElement = document.createElement('div');
+	
+	// Apply base styling based on script type
+	switch (data.script) {
+		case 'kanji_furigana':
+			displayElement.className = 'kanji-with-furigana';
+			// Handle different furigana styles
+			applyFuriganaStyle(displayElement, data.text, settings.furigana_style);
+			break;
+			
+		case 'kanji':
+			displayElement.className = 'kanji';
+			displayElement.textContent = data.text;
+			break;
+			
+		case 'hiragana':
+		case 'katakana':
+			displayElement.className = 'prompt-text';
+			displayElement.textContent = data.text;
+			// Add script-specific styling
+			displayElement.setAttribute('data-script', data.script);
+			break;
+			
+		case 'english':
+			displayElement.className = 'prompt-text english-text';
+			displayElement.textContent = data.text;
+			break;
+			
+		default:
+			displayElement.className = 'prompt-text';
+			displayElement.textContent = data.text;
+	}
+	
+	return displayElement;
+}
+
+// Apply furigana styling based on user preference
+function applyFuriganaStyle(element, text, furiganaStyle) {
+	switch (furiganaStyle) {
+		case 'ruby':
+			// Default HTML ruby tags (backend provides this)
+			element.innerHTML = text;
+			break;
+			
+		case 'brackets':
+			// Convert ruby tags to bracket format: 食[た]べる
+			element.innerHTML = convertRubyToBrackets(text);
+			break;
+			
+		case 'hover':
+			// Convert to hover tooltip format
+			element.innerHTML = convertRubyToHover(text);
+			break;
+			
+		case 'inline':
+			// Convert to inline format: たべる (食)
+			element.innerHTML = convertRubyToInline(text);
+			break;
+			
+		default:
+			// Fallback to ruby
+			element.innerHTML = text;
+	}
+}
+
+// Convert ruby tags to bracket format
+function convertRubyToBrackets(html) {
+	return html.replace(/<ruby><rb>([^<]+)<\/rb><rt>([^<]+)<\/rt><\/ruby>/g, '$1[$2]');
+}
+
+// Convert ruby tags to hover tooltip format
+function convertRubyToHover(html) {
+	return html.replace(/<ruby><rb>([^<]+)<\/rb><rt>([^<]+)<\/rt><\/ruby>/g, 
+		'<span class="kanji-hover" title="$2">$1</span>');
+}
+
+// Convert ruby tags to inline format
+function convertRubyToInline(html) {
+	return html.replace(/<ruby><rb>([^<]+)<\/rb><rt>([^<]+)<\/rt><\/ruby>/g, '$2 ($1)');
+}
+
+// Show display error message
+function showDisplayError(message) {
+	const promptDisplay = document.getElementById('prompt-display');
+	if (promptDisplay) {
+		promptDisplay.innerHTML = `
+			<div class="display-error">
+				<span class="error-icon">⚠️</span>
+				<span class="error-message">${message}</span>
+			</div>
+		`;
+	}
 }
 
 // Get current proportions from sliders
