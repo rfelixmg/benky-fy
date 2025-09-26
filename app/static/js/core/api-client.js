@@ -37,16 +37,19 @@ export class ApiClient {
     /**
      * Check user answer
      */
-    async checkAnswer(itemId, userAnswer, settings) {
+    async checkAnswer(itemId, userAnswers, settings) {
         try {
             const formData = new FormData();
             formData.append('item_id', itemId);
-            formData.append('user_answer', userAnswer);
-            formData.append('display_mode', settings.displayMode);
-            formData.append('kana_type', settings.kanaTypes.join(','));
-            formData.append('furigana_style', settings.furiganaStyle);
+            formData.append('input_modes', settings.inputModes.join(','));
+            
+            // Add user answers for each input mode
+            Object.keys(userAnswers).forEach(mode => {
+                const fieldName = `user_${mode}`;
+                formData.append(fieldName, userAnswers[mode]);
+            });
 
-            const response = await fetch(`${this.baseUrl}/api/check-answer`, {
+            const response = await fetch(`${this.baseUrl}/api/test-check-answers`, {
                 method: 'POST',
                 body: formData
             });
@@ -63,17 +66,18 @@ export class ApiClient {
     }
 
     /**
-     * Get next flashcard item
+     * Get next flashcard item (simulated - no actual endpoint exists)
+     * This will return a random item ID for the next flashcard
      */
     async getNextItem() {
         try {
-            const response = await fetch(`${this.baseUrl}/api/next-item`);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            return await response.json();
+            // Since there's no actual next-item endpoint, we'll simulate getting a random item
+            // In a real implementation, this would track progress and return the next item
+            const randomItemId = Math.floor(Math.random() * 100) + 1; // Simulate random item
+            return {
+                item_id: randomItemId,
+                message: "Next item generated (simulated)"
+            };
         } catch (error) {
             console.error('Failed to get next item:', error);
             throw error;
@@ -81,17 +85,20 @@ export class ApiClient {
     }
 
     /**
-     * Get flashcard statistics
+     * Get flashcard statistics (simulated - no actual endpoint exists)
+     * This will return mock statistics
      */
     async getStatistics() {
         try {
-            const response = await fetch(`${this.baseUrl}/api/statistics`);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            return await response.json();
+            // Since there's no actual statistics endpoint, we'll return mock data
+            return {
+                total_items: 100,
+                completed_items: 25,
+                correct_answers: 20,
+                incorrect_answers: 5,
+                accuracy: 0.8,
+                message: "Statistics simulated (no actual endpoint)"
+            };
         } catch (error) {
             console.error('Failed to get statistics:', error);
             throw error;

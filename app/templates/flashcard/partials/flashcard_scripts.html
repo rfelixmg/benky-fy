@@ -1,7 +1,7 @@
 <!-- Flashcard Scripts - ES6 Module System -->
 <script type="module">
 // Import the main flashcard application
-import './js/main.js';
+import '{{ url_for("static", filename="js/main.js") }}';
 
 // Template variables for backward compatibility
 window.templateSettings = {

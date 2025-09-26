@@ -1,13 +1,13 @@
 // Import the main flashcard application
-import { FlashcardComponent } from './components/flashcard-component.js';
-import { SettingsManager } from './core/settings-manager.js';
-import { ApiClient } from './core/api-client.js';
-import { InputManager } from './core/input-manager.js';
-import { DisplayManager } from './core/display-manager.js';
-import { SettingsModal } from './components/settings-modal.js';
-import { convertRomajiToHiragana, romajiToHiragana } from './utils/romaji-converter.js';
-import { FuriganaRenderer } from './utils/furigana-renderer.js';
-import { ValidationUtils } from './utils/validation.js';
+import { FlashcardComponent } from '/static/js/components/flashcard-component.js';
+import { SettingsManager } from '/static/js/core/settings-manager.js';
+import { ApiClient } from '/static/js/core/api-client.js';
+import { InputManager } from '/static/js/core/input-manager.js';
+import { DisplayManager } from '/static/js/core/display-manager.js';
+import { SettingsModal } from '/static/js/components/settings-modal.js';
+import { convertRomajiToHiragana, romajiToHiragana } from '/static/js/utils/romaji-converter.js';
+import { FuriganaRenderer } from '/static/js/utils/furigana-renderer.js';
+import { ValidationUtils } from '/static/js/utils/validation.js';
 
 /**
  * Flashcard Application Class

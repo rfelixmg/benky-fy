@@ -2,6 +2,11 @@
  * Flashcard Component - Main flashcard logic and state management
  * Orchestrates all flashcard functionality
  */
+import { SettingsManager } from '/static/js/core/settings-manager.js';
+import { ApiClient } from '/static/js/core/api-client.js';
+import { InputManager } from '/static/js/core/input-manager.js';
+import { DisplayManager } from '/static/js/core/display-manager.js';
+import { SettingsModal } from '/static/js/components/settings-modal.js';
 export class FlashcardComponent {
     constructor(moduleName) {
         this.moduleName = moduleName;
@@ -155,17 +160,17 @@ export class FlashcardComponent {
             const userAnswers = this.inputManager.getInputValues();
             const settings = this.settingsManager.getAllSettings();
             
-            // Get the first non-empty answer
-            const userAnswer = Object.values(userAnswers).find(answer => answer.trim().length > 0);
+            // Check if any answer is provided
+            const hasAnswer = Object.values(userAnswers).some(answer => answer.trim().length > 0);
             
-            if (!userAnswer) {
+            if (!hasAnswer) {
                 console.warn('No answer provided');
                 return;
             }
 
             const response = await this.apiClient.checkAnswer(
                 this.currentItemId,
-                userAnswer,
+                userAnswers,  // Pass the full userAnswers object
                 settings
             );
 

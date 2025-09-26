@@ -2,6 +2,7 @@
  * Input Manager - Handles input field creation and management
  * Manages dynamic input fields based on settings
  */
+import { convertRomajiToHiragana } from '/static/js/utils/romaji-converter.js';
 export class InputManager {
     constructor(containerSelector) {
         this.container = document.querySelector(containerSelector);
@@ -218,11 +219,8 @@ export class InputManager {
      * Convert romaji to hiragana (basic implementation)
      */
     _convertRomajiToHiragana(romajiText) {
-        // This would use the romaji converter utility
-        if (window.convertRomajiToHiragana) {
-            return window.convertRomajiToHiragana(romajiText);
-        }
-        return romajiText;
+        // Use the imported romaji converter utility
+        return convertRomajiToHiragana(romajiText);
     }
 
     /**

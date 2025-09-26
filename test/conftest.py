@@ -32,8 +32,8 @@ def cleanup_temp_files():
 @pytest.fixture
 def mock_user_settings():
     """Mock user settings for testing."""
-    with patch('app.settings.utils.functions._user_settings', {}) as mock:
-        yield mock
+    with patch('app.settings.utils.functions.session', {}) as mock_session:
+        yield mock_session
 
 
 @pytest.fixture
@@ -71,6 +71,11 @@ def sample_verb_data():
             "hiragana": "たべる",
             "romaji": "taberu",
             "conjugation_type": "ichidan",
+            "conjugations": {
+                "polite": {"hiragana": "たべます", "kanji": "食べます"},
+                "casual": {"hiragana": "たべる", "kanji": "食べる"},
+                "past": {"hiragana": "たべた", "kanji": "食べた"}
+            },
             "priority": 1,
             "learning_order": 1
         },
@@ -80,6 +85,11 @@ def sample_verb_data():
             "hiragana": "のむ",
             "romaji": "nomu",
             "conjugation_type": "godan",
+            "conjugations": {
+                "polite": {"hiragana": "のみます", "kanji": "飲みます"},
+                "casual": {"hiragana": "のむ", "kanji": "飲む"},
+                "past": {"hiragana": "のんだ", "kanji": "飲んだ"}
+            },
             "priority": 1,
             "learning_order": 2
         }
@@ -96,6 +106,11 @@ def sample_adjective_data():
             "hiragana": "おおきい",
             "romaji": "ookii",
             "conjugation_type": "i-adjective",
+            "conjugations": {
+                "present": {"hiragana": "おおきい", "kanji": "大きい"},
+                "past": {"hiragana": "おおきかった", "kanji": "大きかった"},
+                "negative": {"hiragana": "おおきくない", "kanji": "大きくない"}
+            },
             "priority": 1,
             "learning_order": 1
         },
@@ -105,6 +120,11 @@ def sample_adjective_data():
             "hiragana": "うつくしい",
             "romaji": "utsukushii",
             "conjugation_type": "i-adjective",
+            "conjugations": {
+                "present": {"hiragana": "うつくしい", "kanji": "美しい"},
+                "past": {"hiragana": "うつくしかった", "kanji": "美しかった"},
+                "negative": {"hiragana": "うつくしくない", "kanji": "美しくない"}
+            },
             "priority": 1,
             "learning_order": 2
         }
