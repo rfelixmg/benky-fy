@@ -15,96 +15,133 @@
 				<h2>Settings</h2>
 				<button class="settings-close-btn" onclick="toggleSettings()" title="Close">✕</button>
 			</div>
-			<form method="POST" action="{{ url_for(module_name + '.update_settings') }}" id="settingsForm">
-				{% for group in settings_groups %}
-				<div class="settings-group">
-					<h3>{{ group.name }}</h3>
-					{% if group.description %}
-					<p class="settings-description">{{ group.description }}</p>
-					{% endif %}
-					
-					{% for setting in group.settings %}
-					<div class="setting-item" data-setting="{{ setting.key }}">
-						{% if setting.type == 'checkbox' %}
-						<label class="checkbox-label">
-							<input type="checkbox" 
-								   name="{{ setting.key }}" 
-								   value="1" 
-								   {% if settings[setting.key] %}checked{% endif %}
-								   onchange="handleSettingChange('{{ setting.key }}', this.checked)">
-							<span class="setting-name">{{ setting.name }}</span>
-							{% if setting.description %}
-							<span class="setting-description">{{ setting.description }}</span>
-							{% endif %}
-						</label>
-						
-						{% elif setting.type == 'radio' %}
+			<div class="settings-body">
+				<!-- Flashcard Display Mode Section -->
+				<div class="settings-section">
+					<div class="settings-section-header" onclick="toggleSection('flashcard-display')">
+						<h3>Flashcard Display Mode</h3>
+						<span class="section-toggle">▼</span>
+					</div>
+					<div class="settings-section-content" id="flashcard-display">
 						<div class="radio-group">
-							<label class="radio-group-label">{{ setting.name }}</label>
-							{% if setting.description %}
-							<p class="setting-description">{{ setting.description }}</p>
-							{% endif %}
-							{% for value, label in setting.options.items() %}
 							<label class="radio-option">
-								<input type="radio" 
-									   name="{{ setting.key }}" 
-									   value="{{ value }}"
-									   {% if settings[setting.key] == value %}checked{% endif %}
-									   onchange="handleSettingChange('{{ setting.key }}', '{{ value }}')">
-								<span>{{ label }}</span>
+								<input type="radio" name="display_mode" value="hiragana" checked onchange="handleDisplayModeChange('hiragana')">
+								<span>Hiragana</span>
 							</label>
-							{% endfor %}
+							<label class="radio-option">
+								<input type="radio" name="display_mode" value="katakana" onchange="handleDisplayModeChange('katakana')">
+								<span>Katakana</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="display_mode" value="kanji" onchange="handleDisplayModeChange('kanji')">
+								<span>Kanji</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="display_mode" value="english" onchange="handleDisplayModeChange('english')">
+								<span>English</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="display_mode" value="weighted" onchange="handleDisplayModeChange('weighted')">
+								<span>🔄 Weighted Display</span>
+							</label>
 						</div>
 						
-						{% elif setting.type == 'select' %}
-						<label class="select-label">
-							<span class="setting-name">{{ setting.name }}</span>
-							{% if setting.description %}
-							<span class="setting-description">{{ setting.description }}</span>
-							{% endif %}
-							<select name="{{ setting.key }}" onchange="handleSettingChange('{{ setting.key }}', this.value)">
-								{% for value, label in setting.options.items() %}
-								<option value="{{ value }}" {% if settings[setting.key] == value %}selected{% endif %}>
-									{{ label }}
-								</option>
-								{% endfor %}
-							</select>
-						</label>
-						
-						{% elif setting.type == 'text' %}
-						<label class="text-label">
-							<span class="setting-name">{{ setting.name }}</span>
-							{% if setting.description %}
-							<span class="setting-description">{{ setting.description }}</span>
-							{% endif %}
-							<input type="text" 
-								   name="{{ setting.key }}" 
-								   value="{{ settings[setting.key] }}"
-								   onchange="handleSettingChange('{{ setting.key }}', this.value)">
-						</label>
-						
-						{% elif setting.type == 'number' %}
-						<label class="number-label">
-							<span class="setting-name">{{ setting.name }}</span>
-							{% if setting.description %}
-							<span class="setting-description">{{ setting.description }}</span>
-							{% endif %}
-							<input type="number" 
-								   name="{{ setting.key }}" 
-								   value="{{ settings[setting.key] }}"
-								   onchange="handleSettingChange('{{ setting.key }}', this.value)">
-						</label>
-						{% endif %}
+						<!-- Weighted Display Sub-panel -->
+						<div class="weighted-panel" id="weighted-panel" style="display: none;">
+							<h4>Display Weights</h4>
+							<div class="slider-group">
+								<label class="slider-label">
+									<span>Hiragana</span>
+									<input type="range" min="0" max="1" step="0.1" value="0.3" class="weight-slider" data-type="hiragana">
+									<span class="slider-value">0.3</span>
+								</label>
+								<label class="slider-label">
+									<span>Katakana</span>
+									<input type="range" min="0" max="1" step="0.1" value="0.2" class="weight-slider" data-type="katakana">
+									<span class="slider-value">0.2</span>
+								</label>
+								<label class="slider-label">
+									<span>Kanji</span>
+									<input type="range" min="0" max="1" step="0.1" value="0.3" class="weight-slider" data-type="kanji">
+									<span class="slider-value">0.3</span>
+								</label>
+								<label class="slider-label">
+									<span>English</span>
+									<input type="range" min="0" max="1" step="0.1" value="0.2" class="weight-slider" data-type="english">
+									<span class="slider-value">0.2</span>
+								</label>
+							</div>
+						</div>
 					</div>
-					{% endfor %}
 				</div>
-				{% endfor %}
+
+				<!-- Answer Input Mode Section -->
+				<div class="settings-section">
+					<div class="settings-section-header" onclick="toggleSection('answer-input')">
+						<h3>Answer Input Mode</h3>
+						<span class="section-toggle">▼</span>
+					</div>
+					<div class="settings-section-content" id="answer-input">
+						<div class="radio-group">
+							<label class="radio-option">
+								<input type="radio" name="input_mode" value="hiragana" checked onchange="handleInputModeChange('hiragana')">
+								<span>Hiragana (romaji→hiragana)</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="input_mode" value="romaji" onchange="handleInputModeChange('romaji')">
+								<span>Romaji</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="input_mode" value="katakana" onchange="handleInputModeChange('katakana')">
+								<span>Katakana</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="input_mode" value="kanji" onchange="handleInputModeChange('kanji')">
+								<span>Kanji</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="input_mode" value="english" onchange="handleInputModeChange('english')">
+								<span>English</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<!-- Furigana Settings Section -->
+				<div class="settings-section">
+					<div class="settings-section-header" onclick="toggleSection('furigana-settings')">
+						<h3>Furigana Display</h3>
+						<span class="section-toggle">▼</span>
+					</div>
+					<div class="settings-section-content" id="furigana-settings">
+						<div class="toggle-group">
+							<label class="toggle-label">
+								<input type="checkbox" id="show-furigana" onchange="handleFuriganaToggle(this.checked)">
+								<span class="toggle-switch"></span>
+								<span>Show furigana</span>
+							</label>
+						</div>
+						
+						<div class="furigana-options" id="furigana-options" style="display: none;">
+							<label class="select-label">
+								<span>Furigana Style</span>
+								<select id="furigana-style" onchange="handleFuriganaStyleChange(this.value)">
+									<option value="above">Above Kanji</option>
+									<option value="hover">On hover</option>
+									<option value="inline">Always inline</option>
+									<option value="html">HTML format</option>
+									<option value="text">Text format</option>
+								</select>
+							</label>
+						</div>
+					</div>
+				</div>
 				
 				<div class="settings-actions">
-					<button type="submit" class="btn btn-primary">Save Settings</button>
+					<button type="button" class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
 					<button type="button" class="btn btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
 	
@@ -203,6 +240,13 @@
 <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 
 <script>
+// Template variables
+const templateSettings = {
+	checkingStyles: ["hiragana"]
+};
+</script>
+
+<script>
 // Settings management
 function toggleSettings() {
 	const settingsModal = document.getElementById('settingsModal');
@@ -223,88 +267,226 @@ document.addEventListener('click', function(event) {
 	}
 });
 
-function handleSettingChange(settingKey, value) {
-	// Handle dependencies - show/hide dependent settings
-	const settingItem = document.querySelector(`[data-setting="${settingKey}"]`);
-	if (!settingItem) return;
+// Settings state management
+let settingsState = {
+	displayMode: 'hiragana',
+	inputMode: 'hiragana',
+	showFurigana: false,
+	furiganaStyle: 'above',
+	weights: {
+		hiragana: 0.3,
+		katakana: 0.2,
+		kanji: 0.3,
+		english: 0.2
+	}
+};
+
+// Collapsible section management
+function toggleSection(sectionId) {
+	const content = document.getElementById(sectionId);
+	const header = content.previousElementSibling;
+	const toggle = header.querySelector('.section-toggle');
 	
-	// Find dependent settings
-	const dependentSettings = document.querySelectorAll(`[data-setting]`);
-	dependentSettings.forEach(item => {
-		const setting = item.querySelector('input, select');
-		if (setting && setting.name !== settingKey) {
-			// Check if this setting depends on the changed setting
-			const dependencies = getSettingDependencies(setting.name);
-			if (dependencies && dependencies.includes(settingKey)) {
-				const shouldShow = checkDependencyCondition(dependencies, settingKey, value);
-				item.style.display = shouldShow ? 'block' : 'none';
-			}
+	if (content.style.display === 'none' || content.style.display === '') {
+		content.style.display = 'block';
+		toggle.textContent = '▲';
+		header.classList.add('expanded');
+	} else {
+		content.style.display = 'none';
+		toggle.textContent = '▼';
+		header.classList.remove('expanded');
+	}
+}
+
+// Display mode change handler
+function handleDisplayModeChange(mode) {
+	settingsState.displayMode = mode;
+	const weightedPanel = document.getElementById('weighted-panel');
+	
+	if (mode === 'weighted') {
+		weightedPanel.style.display = 'block';
+	} else {
+		weightedPanel.style.display = 'none';
+	}
+	
+	// Update live preview if present
+	updateLivePreview();
+}
+
+// Input mode change handler
+function handleInputModeChange(mode) {
+	settingsState.inputMode = mode;
+	
+	// Update live preview if present
+	updateLivePreview();
+}
+
+// Furigana toggle handler
+function handleFuriganaToggle(enabled) {
+	settingsState.showFurigana = enabled;
+	const furiganaOptions = document.getElementById('furigana-options');
+	
+	if (enabled) {
+		furiganaOptions.style.display = 'block';
+	} else {
+		furiganaOptions.style.display = 'none';
+	}
+	
+	// Update live preview if present
+	updateLivePreview();
+}
+
+// Furigana style change handler
+function handleFuriganaStyleChange(style) {
+	settingsState.furiganaStyle = style;
+	
+	// Update live preview if present
+	updateLivePreview();
+}
+
+// Weight slider change handler
+function handleWeightChange(slider) {
+	const type = slider.dataset.type;
+	const value = parseFloat(slider.value);
+	
+	settingsState.weights[type] = value;
+	
+	// Update the displayed value
+	const valueSpan = slider.parentElement.querySelector('.slider-value');
+	valueSpan.textContent = value.toFixed(1);
+	
+	// Update live preview if present
+	updateLivePreview();
+}
+
+// Live preview update (placeholder for future implementation)
+function updateLivePreview() {
+	// This would update a live preview of the flashcard display
+	// For now, just log the current state
+	console.log('Settings updated:', settingsState);
+}
+
+// Save settings (frontend only for now)
+function saveSettings() {
+	// Store settings in localStorage for persistence
+	localStorage.setItem('flashcardSettings', JSON.stringify(settingsState));
+	
+	// Show success feedback
+	const saveButton = document.querySelector('.btn-primary');
+	const originalText = saveButton.textContent;
+	saveButton.textContent = 'Saved!';
+	saveButton.style.backgroundColor = '#10b981';
+	
+	setTimeout(() => {
+		saveButton.textContent = originalText;
+		saveButton.style.backgroundColor = '';
+	}, 2000);
+	
+	// Close modal
+	toggleSettings();
+}
+
+// Load settings from localStorage
+function loadSettings() {
+	const saved = localStorage.getItem('flashcardSettings');
+	if (saved) {
+		settingsState = { ...settingsState, ...JSON.parse(saved) };
+		applySettingsToUI();
+	}
+}
+
+// Apply loaded settings to UI
+function applySettingsToUI() {
+	// Apply display mode
+	const displayRadios = document.querySelectorAll('input[name="display_mode"]');
+	displayRadios.forEach(radio => {
+		if (radio.value === settingsState.displayMode) {
+			radio.checked = true;
+			handleDisplayModeChange(settingsState.displayMode);
+		}
+	});
+	
+	// Apply input mode
+	const inputRadios = document.querySelectorAll('input[name="input_mode"]');
+	inputRadios.forEach(radio => {
+		if (radio.value === settingsState.inputMode) {
+			radio.checked = true;
+		}
+	});
+	
+	// Apply furigana settings
+	const furiganaCheckbox = document.getElementById('show-furigana');
+	furiganaCheckbox.checked = settingsState.showFurigana;
+	handleFuriganaToggle(settingsState.showFurigana);
+	
+	const furiganaStyleSelect = document.getElementById('furigana-style');
+	furiganaStyleSelect.value = settingsState.furiganaStyle;
+	
+	// Apply weights
+	Object.keys(settingsState.weights).forEach(type => {
+		const slider = document.querySelector(`[data-type="${type}"]`);
+		if (slider) {
+			slider.value = settingsState.weights[type];
+			const valueSpan = slider.parentElement.querySelector('.slider-value');
+			valueSpan.textContent = settingsState.weights[type].toFixed(1);
 		}
 	});
 }
 
-function getSettingDependencies(settingName) {
-	// This would be populated from the server-side settings definitions
-	// For now, hardcode known dependencies
-	const dependencies = {
-		'furigana_style': ['show_furigana'],
-		'conjugation_prompt_style': ['conjugation_mode'],
-		'conjugation_forms_dictionary': ['conjugation_mode'],
-		'conjugation_forms_polite': ['conjugation_mode'],
-		'conjugation_forms_negative': ['conjugation_mode'],
-		'conjugation_forms_past': ['conjugation_mode'],
-		'conjugation_forms_te_form': ['conjugation_mode'],
-		'conjugation_forms_present': ['conjugation_mode'],
-		'conjugation_forms_adverbial': ['conjugation_mode']
-	};
-	return dependencies[settingName];
-}
-
-function checkDependencyCondition(dependencies, changedSetting, value) {
-	// Check if all dependencies are satisfied
-	for (const dep of dependencies) {
-		if (dep === changedSetting) {
-			// This is the setting that just changed
-			if (dep === 'show_furigana' || dep === 'conjugation_mode') {
-				return value === true || value === '1';
-			}
-		} else {
-			// Check other dependencies
-			const depElement = document.querySelector(`[name="${dep}"]`);
-			if (depElement) {
-				if (depElement.type === 'checkbox') {
-					if (!depElement.checked) return false;
-				} else if (depElement.type === 'radio') {
-					// Radio buttons are handled by the form, just check if any are checked
-					const radioGroup = document.querySelectorAll(`[name="${dep}"]`);
-					let anyChecked = false;
-					radioGroup.forEach(radio => {
-						if (radio.checked) anyChecked = true;
-					});
-					if (!anyChecked) return false;
-				}
-			}
-		}
-	}
-	return true;
-}
-
 function resetToDefaults() {
 	if (confirm('Are you sure you want to reset all settings to their default values?')) {
-		// This would need to be implemented to reset to server defaults
-		// For now, just reload the page
-		window.location.reload();
+		// Reset to default state
+		settingsState = {
+			displayMode: 'hiragana',
+			inputMode: 'hiragana',
+			showFurigana: false,
+			furiganaStyle: 'above',
+			weights: {
+				hiragana: 0.3,
+				katakana: 0.2,
+				kanji: 0.3,
+				english: 0.2
+			}
+		};
+		
+		// Apply defaults to UI
+		applySettingsToUI();
+		
+		// Clear localStorage
+		localStorage.removeItem('flashcardSettings');
+		
+		// Show feedback
+		const resetButton = document.querySelector('.btn-secondary');
+		const originalText = resetButton.textContent;
+		resetButton.textContent = 'Reset!';
+		resetButton.style.backgroundColor = '#f59e0b';
+		
+		setTimeout(() => {
+			resetButton.textContent = originalText;
+			resetButton.style.backgroundColor = '';
+		}, 2000);
 	}
 }
 
-// Initialize settings visibility on page load
+// Initialize settings on page load
 document.addEventListener('DOMContentLoaded', function() {
-	// Apply dependency rules on page load
-	const allSettings = document.querySelectorAll('[data-setting]');
-	allSettings.forEach(item => {
-		const setting = item.querySelector('input, select');
-		if (setting) {
-			handleSettingChange(setting.name, setting.value || setting.checked);
+	// Load saved settings
+	loadSettings();
+	
+	// Add event listeners for weight sliders
+	const weightSliders = document.querySelectorAll('.weight-slider');
+	weightSliders.forEach(slider => {
+		slider.addEventListener('input', function() {
+			handleWeightChange(this);
+		});
+	});
+	
+	// Initialize all sections as collapsed
+	const sections = ['flashcard-display', 'answer-input', 'furigana-settings'];
+	sections.forEach(sectionId => {
+		const content = document.getElementById(sectionId);
+		if (content) {
+			content.style.display = 'none';
 		}
 	});
 });
@@ -580,8 +762,8 @@ document.addEventListener('DOMContentLoaded', function() {
             hideFeedback();
             
             // Show feedback message
-            const checkingStyles = {{ settings.checking_styles | tojson | safe }};
-            const primaryStyle = checkingStyles[0]; // Get the primary checking style
+            const checkingStyles = templateSettings.checkingStyles;
+            const primaryStyle = checkingStyles && checkingStyles[0] ? checkingStyles[0] : 'hiragana'; // Get the primary checking style
             const primaryResult = results[`user_${primaryStyle}`] || results[Object.keys(results)[0]];
             const correctAnswer = primaryResult ? primaryResult.correct_answer : '';
             
@@ -676,8 +858,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Setup real-time conversion for hiragana input
 document.addEventListener('DOMContentLoaded', function() {
 	const hiraganaRomajiInput = document.getElementById('user_hiragana_romaji');
-	const checkingStyles = {{ settings.checking_styles | tojson | safe }};
-	const hasHiraganaChecking = checkingStyles.includes('hiragana');
+	const checkingStyles = templateSettings.checkingStyles;
+	const hasHiraganaChecking = checkingStyles && checkingStyles.includes('hiragana');
 
 	
 	if (hiraganaRomajiInput) {
