@@ -49,13 +49,13 @@
 						<!-- Kana Sub-toggle -->
 						<div class="kana-toggle-panel" id="kana-toggle-panel" style="display: block;">
 							<h4>Kana Type</h4>
-							<div class="checkbox-group kana-sub-group">
-								<label class="checkbox-option">
-									<input type="checkbox" name="kana_types" value="hiragana" checked onchange="handleKanaTypesChange()">
+							<div class="radio-group kana-sub-group">
+								<label class="radio-option">
+									<input type="radio" name="kana_type" value="hiragana" checked onchange="handleKanaTypeChange('hiragana')">
 									<span>Hiragana</span>
 								</label>
-								<label class="checkbox-option">
-									<input type="checkbox" name="kana_types" value="katakana" onchange="handleKanaTypesChange()">
+								<label class="radio-option">
+									<input type="radio" name="kana_type" value="katakana" onchange="handleKanaTypeChange('katakana')">
 									<span>Katakana</span>
 								</label>
 							</div>
@@ -150,8 +150,8 @@
 	
 		<div class="flashcard-content">
 			<div class="prompt-section">
-				<p class="prompt-label">Prompt ({{ item.prompt_script }})</p>
-				<div class="prompt-value">
+				<p class="prompt-label">Prompt (<span id="prompt-script">{{ item.prompt_script }}</span>)</p>
+				<div class="prompt-value" id="prompt-display">
 					{% if item.prompt_script == 'kanji' and settings.show_furigana %}
 						{% if settings.furigana_style == 'html' and item.furigana_html %}
 							<div class="kanji-with-furigana">{{ item.furigana_html|safe }}</div>
@@ -164,6 +164,11 @@
 						<div class="prompt-text">{{ item.prompt }}</div>
 					{% endif %}
 				</div>
+				{% if item.fallback_used %}
+					<div class="fallback-notice" style="font-size: 0.8em; color: #666; margin-top: 5px;">
+						⚠️ Fallback content used
+					</div>
+				{% endif %}
 			</div>
 			
 			<div class="answer-section">
@@ -378,6 +383,12 @@ function handleWeightChange(slider) {
 	
 	// Update live preview if present
 	updateLivePreview();
+	
+	// Update display text if in weighted mode
+	const currentMode = document.querySelector('input[name="display_mode"]:checked')?.value;
+	if (currentMode === 'weighted') {
+		updateDisplayText();
+	}
 }
 
 // Live preview update (placeholder for future implementation)
@@ -385,6 +396,137 @@ function updateLivePreview() {
 	// This would update a live preview of the flashcard display
 	// For now, just log the current state
 	console.log('Settings updated:', settingsState);
+}
+
+// Display text constraints handler
+function updateDisplayText() {
+	const itemId = document.querySelector('input[name="item_id"]')?.value;
+	if (!itemId) return;
+	
+	// Get current settings from the form
+	const formData = new FormData();
+	const displayMode = document.querySelector('input[name="display_mode"]:checked')?.value || 'kana';
+	const kanaType = document.querySelector('input[name="kana_type"]:checked')?.value || 'hiragana';
+	
+	// Build settings object
+	const settings = {
+		display_mode: displayMode,
+		kana_type: kanaType,
+		proportions: getCurrentProportions()
+	};
+	
+	// Send request to get display text
+	fetch(`/{{ module_name }}/api/display-text?item_id=${itemId}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.error) {
+			console.error('Error getting display text:', data.error);
+			return;
+		}
+		
+		// Update the prompt display
+		const promptDisplay = document.getElementById('prompt-display');
+		const promptScript = document.getElementById('prompt-script');
+		const fallbackNotice = document.querySelector('.fallback-notice');
+		
+		if (promptDisplay && promptScript) {
+			// Clear existing content
+			promptDisplay.innerHTML = '';
+			
+			// Create appropriate display element based on script type
+			let displayElement;
+			if (data.script === 'kanji_furigana') {
+				displayElement = document.createElement('div');
+				displayElement.className = 'kanji-with-furigana';
+				displayElement.innerHTML = data.text;
+			} else if (data.script === 'kanji') {
+				displayElement = document.createElement('div');
+				displayElement.className = 'kanji';
+				displayElement.textContent = data.text;
+			} else {
+				displayElement = document.createElement('div');
+				displayElement.className = 'prompt-text';
+				displayElement.textContent = data.text;
+			}
+			
+			promptDisplay.appendChild(displayElement);
+			promptScript.textContent = data.script;
+			
+			// Show/hide fallback notice
+			if (fallbackNotice) {
+				fallbackNotice.style.display = data.fallback_used ? 'block' : 'none';
+			}
+			
+			// Log display constraints
+			console.log('Display updated:', {
+				mode: data.mode,
+				script: data.script,
+				text: data.text,
+				fallback_used: data.fallback_used
+			});
+		}
+	})
+	.catch(error => {
+		console.error('Error updating display text:', error);
+	});
+}
+
+// Get current proportions from sliders
+function getCurrentProportions() {
+	const proportions = {};
+	const sliders = document.querySelectorAll('.slider-group input[type="range"]');
+	sliders.forEach(slider => {
+		const type = slider.getAttribute('data-type');
+		if (type) {
+			proportions[type] = parseFloat(slider.value);
+		}
+	});
+	return proportions;
+}
+
+// Enhanced display mode change handler with live preview
+function handleDisplayModeChange(mode) {
+	settingsState.displayMode = mode;
+	const weightedPanel = document.getElementById('weighted-panel');
+	const kanaTogglePanel = document.getElementById('kana-toggle-panel');
+	const furiganaStylePanel = document.getElementById('furigana-style-panel');
+	
+	if (mode === 'weighted') {
+		weightedPanel.style.display = 'block';
+		kanaTogglePanel.style.display = 'none';
+		furiganaStylePanel.style.display = 'none';
+	} else if (mode === 'kana') {
+		weightedPanel.style.display = 'none';
+		kanaTogglePanel.style.display = 'block';
+		furiganaStylePanel.style.display = 'none';
+	} else if (mode === 'kanji_furigana') {
+		weightedPanel.style.display = 'none';
+		kanaTogglePanel.style.display = 'none';
+		furiganaStylePanel.style.display = 'block';
+	} else {
+		weightedPanel.style.display = 'none';
+		kanaTogglePanel.style.display = 'none';
+		furiganaStylePanel.style.display = 'none';
+	}
+	
+	// Update display text with new constraints
+	updateDisplayText();
+}
+
+// Kana type change handler
+function handleKanaTypeChange(type) {
+	settingsState.kanaTypes = [type];
+	
+	// Update display text if in kana mode
+	const currentMode = document.querySelector('input[name="display_mode"]:checked')?.value;
+	if (currentMode === 'kana') {
+		updateDisplayText();
+	}
 }
 
 // Save settings (frontend only for now)

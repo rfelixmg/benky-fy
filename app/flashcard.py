@@ -199,6 +199,149 @@ class BaseFlashcardEngine:
         
         return item
     
+    def get_next_with_display_mode(self, settings: Dict[str, Any]) -> FlashcardItem:
+        """Get next flashcard using the new display mode system"""
+        # Get random card
+        item = self._data[random.randint(0, len(self._data) - 1)]
+        
+        # Use the new display text logic
+        display_result = self.get_display_text(item, settings)
+        
+        # Set prompt based on display result
+        item.prompt = display_result["text"]
+        item.prompt_script = display_result["script"]
+        
+        # Store display metadata for frontend use
+        item.display_mode = display_result["mode"]
+        item.fallback_used = display_result["fallback_used"]
+        
+        return item
+    
+    def _select_weighted_display_mode(self, proportions: Dict[str, float]) -> str:
+        """Select display mode based on weighted proportions"""
+        import random
+        
+        # Create weighted list
+        weighted_modes = []
+        for mode, weight in proportions.items():
+            weighted_modes.extend([mode] * int(weight * 100))  # Scale to integers
+        
+        # Select random mode from weighted list
+        if weighted_modes:
+            return random.choice(weighted_modes)
+        else:
+            return "kana"  # Fallback
+    
+    def get_display_text(self, item: FlashcardItem, settings: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Get display text based on display mode constraints.
+        Returns dict with 'text', 'script', 'mode', and 'fallback_used' keys.
+        """
+        display_mode = settings.get("display_mode", "kana")
+        kana_type = settings.get("kana_type", "hiragana")
+        proportions = settings.get("proportions", {})
+        
+        # Handle weighted mode by selecting a specific mode first
+        if display_mode == "weighted" and proportions:
+            display_mode = self._select_weighted_display_mode(proportions)
+        
+        result = {
+            "text": "",
+            "script": "",
+            "mode": display_mode,
+            "fallback_used": False
+        }
+        
+        if display_mode == "kanji":
+            # Show kanji only, fallback to hiragana if no kanji
+            if item.kanji and item.kanji.strip():
+                result["text"] = item.kanji
+                result["script"] = "kanji"
+            elif item.hiragana and item.hiragana.strip():
+                result["text"] = item.hiragana
+                result["script"] = "hiragana"
+                result["fallback_used"] = True
+            else:
+                result["text"] = "N/A"
+                result["script"] = "error"
+                print(f"Warning: Missing display content for kanji mode: {item}")
+        
+        elif display_mode == "kana":
+            # Show kana based on kana_type setting
+            if kana_type == "hiragana":
+                if item.hiragana and item.hiragana.strip():
+                    result["text"] = item.hiragana
+                    result["script"] = "hiragana"
+                else:
+                    result["text"] = "N/A"
+                    result["script"] = "error"
+                    print(f"Warning: Missing hiragana content: {item}")
+            elif kana_type == "katakana":
+                if item.katakana and item.katakana.strip() and item.katakana.strip() not in ['–', '']:
+                    result["text"] = item.katakana
+                    result["script"] = "katakana"
+                else:
+                    # Fallback to hiragana if no katakana
+                    if item.hiragana and item.hiragana.strip():
+                        result["text"] = item.hiragana
+                        result["script"] = "hiragana"
+                        result["fallback_used"] = True
+                    else:
+                        result["text"] = "N/A"
+                        result["script"] = "error"
+                        print(f"Warning: Missing katakana content: {item}")
+            else:  # mixed (future)
+                # For now, default to hiragana
+                if item.hiragana and item.hiragana.strip():
+                    result["text"] = item.hiragana
+                    result["script"] = "hiragana"
+                else:
+                    result["text"] = "N/A"
+                    result["script"] = "error"
+                    print(f"Warning: Missing hiragana content for mixed mode: {item}")
+        
+        elif display_mode == "kanji_furigana":
+            # Show kanji with furigana, fallback to hiragana if no kanji
+            if item.kanji and item.kanji.strip():
+                if item.furigana_html and item.furigana_html.strip():
+                    result["text"] = item.furigana_html
+                    result["script"] = "kanji_furigana"
+                else:
+                    # Kanji without furigana - just show kanji
+                    result["text"] = item.kanji
+                    result["script"] = "kanji"
+            elif item.hiragana and item.hiragana.strip():
+                result["text"] = item.hiragana
+                result["script"] = "hiragana"
+                result["fallback_used"] = True
+            else:
+                result["text"] = "N/A"
+                result["script"] = "error"
+                print(f"Warning: Missing display content for kanji_furigana mode: {item}")
+        
+        elif display_mode == "english":
+            # Show English only
+            if item.english and item.english.strip():
+                result["text"] = item.english
+                result["script"] = "english"
+            else:
+                result["text"] = "N/A"
+                result["script"] = "error"
+                print(f"Warning: Missing English content: {item}")
+        
+        else:
+            # Unknown mode, fallback to hiragana
+            if item.hiragana and item.hiragana.strip():
+                result["text"] = item.hiragana
+                result["script"] = "hiragana"
+                result["fallback_used"] = True
+            else:
+                result["text"] = "N/A"
+                result["script"] = "error"
+                print(f"Warning: Unknown display mode '{display_mode}' and missing fallback content: {item}")
+        
+        return result
+    
     def check_answers(self, user_inputs: dict, item: FlashcardItem, checking_styles: List[str]) -> dict:
         """Check multiple answers against different checking styles - can be overridden"""
         results = {}
@@ -262,6 +405,70 @@ class BaseFlashcardEngine:
                 results[style] = {
                     "user_input": user_input_raw,
                     "correct_answer": correct_answers_text,  # Show all possible answers
+                    "is_correct": is_correct
+                }
+        
+        return results
+    
+    def check_answers_with_input_modes(self, user_inputs: dict, item: FlashcardItem, input_modes: List[str]) -> dict:
+        """Check answers using the new input modes system"""
+        results = {}
+        
+        for mode in input_modes:
+            user_input_raw = user_inputs.get(f"user_{mode}", "").strip()
+            
+            if mode == "hiragana":
+                correct_answer = item.hiragana
+                is_correct = user_input_raw.lower() == correct_answer.lower() if user_input_raw else False
+                
+                results[mode] = {
+                    "user_input": user_input_raw,
+                    "correct_answer": correct_answer,
+                    "is_correct": is_correct
+                }
+            elif mode == "romaji":
+                user_input = user_input_raw.lower()
+                correct_answer = item.romaji.lower() if item.romaji else ""
+                is_correct = user_input == correct_answer if user_input_raw else False
+                
+                results[mode] = {
+                    "user_input": user_input_raw,
+                    "correct_answer": item.romaji if item.romaji else "",
+                    "is_correct": is_correct
+                }
+            elif mode == "kanji":
+                user_input = user_input_raw.lower()
+                correct_answer = item.kanji.lower()
+                is_correct = user_input == correct_answer if user_input_raw else False
+                
+                results[mode] = {
+                    "user_input": user_input_raw,
+                    "correct_answer": item.kanji,
+                    "is_correct": is_correct
+                }
+            elif mode == "katakana":
+                # Skip if katakana is not available
+                if not item.katakana or item.katakana.strip() in ['–', '']:
+                    continue
+                    
+                user_input = user_input_raw.lower()
+                correct_answer = item.katakana.lower()
+                is_correct = user_input == correct_answer if user_input_raw else False
+                
+                results[mode] = {
+                    "user_input": user_input_raw,
+                    "correct_answer": item.katakana,
+                    "is_correct": is_correct
+                }
+            elif mode == "english":
+                user_input = user_input_raw.lower().strip()
+                correct_answers_text = item.english
+                
+                is_correct = self._check_english_answer(user_input, correct_answers_text)
+                
+                results[mode] = {
+                    "user_input": user_input_raw,
+                    "correct_answer": correct_answers_text,
                     "is_correct": is_correct
                 }
         
@@ -337,7 +544,15 @@ class FlashcardBlueprint:
         def index():
             settings = get_user_settings(self.module_name)
             settings_groups = settings_registry.get_settings_groups(get_module_settings_config(self.module_name))
-            item = self.engine.get_next(settings["flashcard_styles"])
+            
+            # Use new display mode system if available, otherwise fallback to old system
+            if hasattr(self.engine, 'get_next_with_display_mode'):
+                item = self.engine.get_next_with_display_mode(settings)
+            else:
+                # Fallback to old system for backward compatibility
+                flashcard_styles = settings.get("flashcard_styles", ["hiragana"])
+                item = self.engine.get_next(flashcard_styles)
+            
             return render_template("flashcard_new.html",  # Use new template with persistent settings
                                 item=item, 
                                 results=None, 
@@ -371,16 +586,29 @@ class FlashcardBlueprint:
             settings = get_user_settings(self.module_name)
             settings_groups = settings_registry.get_settings_groups(get_module_settings_config(self.module_name))
             
-            # Collect user inputs for all checking styles
-            user_inputs = {}
-            for style in settings["checking_styles"]:
-                if style in ["hiragana", "romaji"]:
-                    # Both hiragana and romaji use the same input field
-                    user_inputs[f"user_{style}"] = request.form.get("user_hiragana_romaji", "")
-                else:
-                    user_inputs[f"user_{style}"] = request.form.get(f"user_{style}", "")
-            
-            results = self.engine.check_answers(user_inputs, item, settings["checking_styles"])
+            # Use new input modes system if available, otherwise fallback to old system
+            if "input_modes" in settings and hasattr(self.engine, 'check_answers_with_input_modes'):
+                # New system: collect user inputs for all input modes
+                user_inputs = {}
+                for mode in settings["input_modes"]:
+                    if mode in ["hiragana", "romaji"]:
+                        # Both hiragana and romaji use the same input field
+                        user_inputs[f"user_{mode}"] = request.form.get("user_hiragana_romaji", "")
+                    else:
+                        user_inputs[f"user_{mode}"] = request.form.get(f"user_{mode}", "")
+                
+                results = self.engine.check_answers_with_input_modes(user_inputs, item, settings["input_modes"])
+            else:
+                # Fallback to old system for backward compatibility
+                user_inputs = {}
+                checking_styles = settings.get("checking_styles", ["english"])
+                for style in checking_styles:
+                    if style in ["hiragana", "romaji"]:
+                        user_inputs[f"user_{style}"] = request.form.get("user_hiragana_romaji", "")
+                    else:
+                        user_inputs[f"user_{style}"] = request.form.get(f"user_{style}", "")
+                
+                results = self.engine.check_answers(user_inputs, item, checking_styles)
             
             # Check if all answers are correct
             all_correct = all(result["is_correct"] for result in results.values())
@@ -424,6 +652,40 @@ class FlashcardBlueprint:
                         correct_answers["user_english"] = item.english
                 
                 return correct_answers
+            
+            except (ValueError, IndexError):
+                return {"error": "Invalid item_id"}, 400
+        
+        @bp.route("/api/display-text", methods=["GET"])
+        @login_required
+        def get_display_text():
+            """API endpoint to get display text for an item based on current settings"""
+            item_id = request.args.get('item_id')
+            if not item_id:
+                return {"error": "item_id parameter is required"}, 400
+            
+            try:
+                item_id = int(item_id)
+                item = self.engine[item_id]
+                settings = get_user_settings(self.module_name)
+                
+                # Use the new display text logic
+                if hasattr(self.engine, 'get_display_text'):
+                    display_result = self.engine.get_display_text(item, settings)
+                    return {
+                        "text": display_result["text"],
+                        "script": display_result["script"],
+                        "mode": display_result["mode"],
+                        "fallback_used": display_result["fallback_used"]
+                    }
+                else:
+                    # Fallback for engines without display text method
+                    return {
+                        "text": item.prompt,
+                        "script": item.prompt_script,
+                        "mode": "legacy",
+                        "fallback_used": False
+                    }
             
             except (ValueError, IndexError):
                 return {"error": "Invalid item_id"}, 400
@@ -477,6 +739,28 @@ class VerbFlashcardEngine(BaseFlashcardEngine):
         else:
             # Use parent class method for regular flashcards
             return super().get_next(flashcard_styles)
+    
+    def get_next_with_display_mode(self, settings: Dict[str, Any]) -> FlashcardItem:
+        """Get next flashcard with conjugation support and new display modes"""
+        # Check if conjugation mode is enabled
+        if settings.get("conjugation_mode", False) and settings.get("conjugation_forms"):
+            # Generate conjugation prompt
+            item = self._data[random.randint(0, len(self._data) - 1)]
+            conjugation_form = random.choice(settings["conjugation_forms"])
+            prompt_style = settings.get("conjugation_prompt_style", "english")
+            
+            # Generate conjugation prompt
+            prompt, prompt_script = self.generate_conjugation_prompt(item, conjugation_form, prompt_style)
+            
+            # Set conjugation-specific fields
+            item.prompt = prompt
+            item.prompt_script = prompt_script
+            item.answer = conjugation_form  # Store the form for answer checking
+            
+            return item
+        else:
+            # Use parent class method for regular flashcards
+            return super().get_next_with_display_mode(settings)
     
     def check_conjugation_answer(self, user_input: str, item: FlashcardItem, conjugation_form: str) -> dict:
         """Check conjugation answer using the conjugation checker"""
@@ -541,6 +825,28 @@ class AdjectiveFlashcardEngine(BaseFlashcardEngine):
         else:
             # Use parent class method for regular flashcards
             return super().get_next(flashcard_styles)
+    
+    def get_next_with_display_mode(self, settings: Dict[str, Any]) -> FlashcardItem:
+        """Get next flashcard with conjugation support and new display modes"""
+        # Check if conjugation mode is enabled
+        if settings.get("conjugation_mode", False) and settings.get("conjugation_forms"):
+            # Generate conjugation prompt
+            item = self._data[random.randint(0, len(self._data) - 1)]
+            conjugation_form = random.choice(settings["conjugation_forms"])
+            prompt_style = settings.get("conjugation_prompt_style", "english")
+            
+            # Generate conjugation prompt
+            prompt, prompt_script = self.generate_conjugation_prompt(item, conjugation_form, prompt_style)
+            
+            # Set conjugation-specific fields
+            item.prompt = prompt
+            item.prompt_script = prompt_script
+            item.answer = conjugation_form  # Store the form for answer checking
+            
+            return item
+        else:
+            # Use parent class method for regular flashcards
+            return super().get_next_with_display_mode(settings)
     
     def check_conjugation_answer(self, user_input: str, item: FlashcardItem, conjugation_form: str) -> dict:
         """Check conjugation answer using the conjugation checker"""
@@ -645,6 +951,28 @@ class VocabFlashcardEngine(BaseFlashcardEngine):
             item.prompt_script = "english"
         
         return item
+    
+    def get_next_with_display_mode(self, settings: Dict[str, Any]) -> FlashcardItem:
+        """Get next flashcard with priority filtering and new display modes"""
+        priority_filter = settings.get("priority_filter", "all")
+        learning_order = settings.get("learning_order", True)
+        
+        # Get filtered data
+        filtered_data = self.get_filtered_data(priority_filter)
+        
+        if not filtered_data:
+            # Fallback to all data if filtered data is empty
+            filtered_data = self._data
+        
+        # Sort by learning order if enabled
+        if learning_order:
+            filtered_data = sorted(filtered_data, key=lambda x: getattr(x, 'learning_order', 999) if hasattr(x, 'learning_order') and x.learning_order is not None else 999)
+        
+        # Get random item from filtered data
+        item = filtered_data[random.randint(0, len(filtered_data) - 1)]
+        
+        # Use parent class display mode logic
+        return super().get_next_with_display_mode(settings)
 
 
 def create_vocab_flashcard_module(module_name: str, json_filename: str):

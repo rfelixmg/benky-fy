@@ -59,117 +59,188 @@ class CoreSettingsPlugin(SettingsPlugin):
     def get_settings_groups(self) -> List[SettingsGroup]:
         return [
             SettingsGroup(
-                name="Flashcard Style",
-                description="Choose what appears on the front of flashcards",
+                name="Flashcard Type",
+                description="Choose the type of flashcard practice",
                 settings=[
                     SettingDefinition(
-                        key="flashcard_hiragana",
-                        name="Hiragana",
-                        description="Show hiragana characters",
-                        type="checkbox",
-                        default_value=True
-                    ),
-                    SettingDefinition(
-                        key="flashcard_kanji",
-                        name="Kanji",
-                        description="Show kanji characters",
-                        type="checkbox",
-                        default_value=False
-                    ),
-                    SettingDefinition(
-                        key="flashcard_katakana",
-                        name="Katakana",
-                        description="Show katakana characters",
-                        type="checkbox",
-                        default_value=False
-                    ),
-                    SettingDefinition(
-                        key="flashcard_english",
-                        name="English",
-                        description="Show English translations",
-                        type="checkbox",
-                        default_value=False
+                        key="flashcard_type",
+                        name="Flashcard type",
+                        description="Translation or conjugation practice",
+                        type="radio",
+                        default_value="translation",
+                        options={
+                            "translation": "Translation (word → meaning)",
+                            "conjugation": "Conjugation (word → conjugated form)"
+                        }
                     )
                 ]
             ),
             SettingsGroup(
-                name="Answer Checking",
-                description="Choose what you want to practice typing",
+                name="Display Mode",
+                description="How flashcards are displayed",
                 settings=[
                     SettingDefinition(
-                        key="checking_hiragana",
+                        key="display_mode",
+                        name="Display mode",
+                        description="How to show the flashcard content",
+                        type="radio",
+                        default_value="kana",
+                        options={
+                            "kana": "Kana only (hiragana/katakana)",
+                            "kanji": "Kanji only",
+                            "kanji_furigana": "Kanji with furigana",
+                            "english": "English only",
+                            "weighted": "Mixed display (weighted)"
+                        }
+                    ),
+                    SettingDefinition(
+                        key="kana_type",
+                        name="Kana type",
+                        description="Which kana script to use",
+                        type="radio",
+                        default_value="hiragana",
+                        options={
+                            "hiragana": "Hiragana (ひらがな)",
+                            "katakana": "Katakana (カタカナ)"
+                        },
+                        dependencies=["display_mode"]
+                    )
+                ]
+            ),
+            SettingsGroup(
+                name="Input Modes",
+                description="What you want to practice typing",
+                settings=[
+                    SettingDefinition(
+                        key="input_hiragana",
                         name="Hiragana",
-                        description="Practice typing hiragana (converts romaji → hiragana as you type)",
+                        description="Practice typing hiragana",
                         type="checkbox",
                         default_value=False
                     ),
                     SettingDefinition(
-                        key="checking_romaji",
+                        key="input_romaji",
                         name="Romaji",
-                        description="Practice typing romaji (keeps romaji as you type)",
+                        description="Practice typing romaji",
                         type="checkbox",
                         default_value=False
                     ),
                     SettingDefinition(
-                        key="checking_kanji",
-                        name="Kanji",
-                        description="Practice typing kanji characters",
-                        type="checkbox",
-                        default_value=False
-                    ),
-                    SettingDefinition(
-                        key="checking_katakana",
+                        key="input_katakana",
                         name="Katakana",
-                        description="Practice typing katakana characters",
+                        description="Practice typing katakana",
                         type="checkbox",
                         default_value=False
                     ),
                     SettingDefinition(
-                        key="checking_english",
+                        key="input_kanji",
+                        name="Kanji",
+                        description="Practice typing kanji",
+                        type="checkbox",
+                        default_value=False
+                    ),
+                    SettingDefinition(
+                        key="input_english",
                         name="English",
-                        description="Practice typing English translations",
+                        description="Practice typing English",
                         type="checkbox",
                         default_value=True
                     )
                 ]
+            ),
+            SettingsGroup(
+                name="Weighted Display",
+                description="Control mixed display proportions",
+                settings=[
+                    SettingDefinition(
+                        key="proportion_kana",
+                        name="Kana proportion",
+                        description="Proportion of kana-only cards",
+                        type="number",
+                        default_value=0.3
+                    ),
+                    SettingDefinition(
+                        key="proportion_kanji",
+                        name="Kanji proportion",
+                        description="Proportion of kanji-only cards",
+                        type="number",
+                        default_value=0.2
+                    ),
+                    SettingDefinition(
+                        key="proportion_kanji_furigana",
+                        name="Kanji+furigana proportion",
+                        description="Proportion of kanji with furigana cards",
+                        type="number",
+                        default_value=0.2
+                    ),
+                    SettingDefinition(
+                        key="proportion_english",
+                        name="English proportion",
+                        description="Proportion of English-only cards",
+                        type="number",
+                        default_value=0.3
+                    )
+                ],
+                condition=lambda settings: settings.get("display_mode") == "weighted"
             )
         ]
     
     def process_settings(self, settings: Dict[str, Any]) -> Dict[str, Any]:
-        # Convert individual checkboxes to lists
-        flashcard_styles = []
-        checking_styles = []
-        
+        # Process input modes
+        input_modes = []
         for key, value in settings.items():
-            if key.startswith("flashcard_") and value:
-                flashcard_styles.append(key.replace("flashcard_", ""))
-            elif key.startswith("checking_") and value:
-                checking_styles.append(key.replace("checking_", ""))
+            if key.startswith("input_") and value:
+                input_modes.append(key.replace("input_", ""))
         
-        # Ensure at least one option is selected
-        if not flashcard_styles:
-            flashcard_styles = ["hiragana"]
-        if not checking_styles:
-            checking_styles = ["english"]
+        # Ensure at least one input mode is selected
+        if not input_modes:
+            input_modes = ["english"]
+        
+        # Process proportions for weighted mode
+        proportions = {}
+        if settings.get("display_mode") == "weighted":
+            proportions = {
+                "kana": float(settings.get("proportion_kana", 0.3)),
+                "kanji": float(settings.get("proportion_kanji", 0.2)),
+                "kanji_furigana": float(settings.get("proportion_kanji_furigana", 0.2)),
+                "english": float(settings.get("proportion_english", 0.3))
+            }
+            
+            # Normalize proportions to sum to 1.0
+            total = sum(proportions.values())
+            if total > 0:
+                for key in proportions:
+                    proportions[key] = proportions[key] / total
         
         return {
-            "flashcard_styles": flashcard_styles,
-            "checking_styles": checking_styles
+            "flashcard_type": settings.get("flashcard_type", "translation"),
+            "display_mode": settings.get("display_mode", "kana"),
+            "kana_type": settings.get("kana_type", "hiragana"),
+            "input_modes": input_modes,
+            "proportions": proportions
         }
     
     def get_default_settings(self) -> Dict[str, Any]:
         return {
-            "flashcard_hiragana": True,
-            "flashcard_kanji": False,
-            "flashcard_katakana": False,
-            "flashcard_english": False,
-            "checking_hiragana": False,
-            "checking_romaji": False,
-            "checking_kanji": False,
-            "checking_katakana": False,
-            "checking_english": True,
-            "flashcard_styles": ["hiragana"],
-            "checking_styles": ["english"]
+            "flashcard_type": "translation",
+            "display_mode": "kana",
+            "kana_type": "hiragana",
+            "input_hiragana": False,
+            "input_romaji": False,
+            "input_katakana": False,
+            "input_kanji": False,
+            "input_english": True,
+            "proportion_kana": 0.3,
+            "proportion_kanji": 0.2,
+            "proportion_kanji_furigana": 0.2,
+            "proportion_english": 0.3,
+            "input_modes": ["english"],
+            "proportions": {
+                "kana": 0.3,
+                "kanji": 0.2,
+                "kanji_furigana": 0.2,
+                "english": 0.3
+            }
         }
 
 
