@@ -247,11 +247,8 @@ class BaseFlashcardEngine:
                 user_input = user_input_raw.lower().strip()
                 correct_answers_text = item.english
                 
-                # Split by " / " to get multiple correct answers
-                correct_answers = [answer.strip().lower() for answer in correct_answers_text.split(" / ")]
-                
-                # Check if user input matches any of the correct answers
-                is_correct = user_input in correct_answers if user_input_raw else False
+                # Enhanced English answer checking with multiple formats
+                is_correct = self._check_english_answer(user_input, correct_answers_text)
                 
                 results[style] = {
                     "user_input": user_input_raw,
@@ -260,6 +257,58 @@ class BaseFlashcardEngine:
                 }
         
         return results
+    
+    def _check_english_answer(self, user_input: str, correct_answers_text: str) -> bool:
+        """
+        Enhanced English answer checking that handles multiple formats:
+        1. Multiple meanings separated by " / " (e.g., "simple / easy")
+        2. Comma-separated meanings (e.g., "tough, serious")
+        3. Verb variations with/without "to" (e.g., "to look" accepts "look")
+        4. Flexible matching for common variations
+        """
+        if not user_input:
+            return False
+        
+        # First, try the original " / " format
+        if " / " in correct_answers_text:
+            correct_answers = [answer.strip().lower() for answer in correct_answers_text.split(" / ")]
+            if user_input in correct_answers:
+                return True
+        
+        # Handle comma-separated meanings (e.g., "tough, serious")
+        if "," in correct_answers_text and " / " not in correct_answers_text:
+            correct_answers = [answer.strip().lower() for answer in correct_answers_text.split(",")]
+            if user_input in correct_answers:
+                return True
+        
+        # Handle verb variations (with/without "to")
+        # Check if the correct answer starts with "to " and user input doesn't
+        if correct_answers_text.lower().startswith("to "):
+            verb_without_to = correct_answers_text[3:].strip().lower()  # Remove "to " prefix
+            if user_input == verb_without_to:
+                return True
+        
+        # Check if user input starts with "to " but correct answer doesn't
+        if user_input.startswith("to "):
+            verb_without_to = user_input[3:].strip()  # Remove "to " prefix
+            if verb_without_to == correct_answers_text.lower():
+                return True
+        
+        # Handle multiple verb forms in comma-separated format
+        if "," in correct_answers_text:
+            answers = [answer.strip().lower() for answer in correct_answers_text.split(",")]
+            for answer in answers:
+                # Check exact match
+                if user_input == answer:
+                    return True
+                # Check verb variations
+                if answer.startswith("to ") and user_input == answer[3:].strip():
+                    return True
+                if user_input.startswith("to ") and answer == user_input[3:].strip():
+                    return True
+        
+        # Fallback: exact match (case-insensitive)
+        return user_input == correct_answers_text.lower()
 
 
 class FlashcardBlueprint:

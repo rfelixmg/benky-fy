@@ -13,7 +13,6 @@ def create_app() -> Flask:
 
 	# Register blueprints
 	from .routes import main_bp
-	from .module1 import module1_bp
 	from .auth import auth_bp
 
 	# Import and create flashcard modules
@@ -41,7 +40,6 @@ def create_app() -> Flask:
 	)
 
 	app.register_blueprint(main_bp)
-	app.register_blueprint(module1_bp, url_prefix="/module1")
 	app.register_blueprint(auth_bp, url_prefix="/auth")  # Add URL prefix for auth routes
 	app.register_blueprint(hiragana_bp, url_prefix="/begginer/hiragana")
 	app.register_blueprint(katakana_bp, url_prefix="/begginer/katakana")

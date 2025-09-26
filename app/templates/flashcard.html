@@ -178,6 +178,73 @@
 <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 
 <script>
+function checkEnglishAnswer(userInput, correctAnswersText) {
+    /**
+     * Enhanced English answer checking that handles multiple formats:
+     * 1. Multiple meanings separated by " / " (e.g., "simple / easy")
+     * 2. Comma-separated meanings (e.g., "tough, serious")
+     * 3. Verb variations with/without "to" (e.g., "to look" accepts "look")
+     * 4. Flexible matching for common variations
+     */
+    if (!userInput) {
+        return false;
+    }
+    
+    // First, try the original " / " format
+    if (correctAnswersText.includes(" / ")) {
+        const correctAnswers = correctAnswersText.split(" / ").map(answer => answer.trim().toLowerCase());
+        if (correctAnswers.includes(userInput)) {
+            return true;
+        }
+    }
+    
+    // Handle comma-separated meanings (e.g., "tough, serious")
+    if (correctAnswersText.includes(",") && !correctAnswersText.includes(" / ")) {
+        const correctAnswers = correctAnswersText.split(",").map(answer => answer.trim().toLowerCase());
+        if (correctAnswers.includes(userInput)) {
+            return true;
+        }
+    }
+    
+    // Handle verb variations (with/without "to")
+    // Check if the correct answer starts with "to " and user input doesn't
+    if (correctAnswersText.toLowerCase().startsWith("to ")) {
+        const verbWithoutTo = correctAnswersText.substring(3).trim().toLowerCase(); // Remove "to " prefix
+        if (userInput === verbWithoutTo) {
+            return true;
+        }
+    }
+    
+    // Check if user input starts with "to " but correct answer doesn't
+    if (userInput.startsWith("to ")) {
+        const verbWithoutTo = userInput.substring(3).trim(); // Remove "to " prefix
+        if (verbWithoutTo === correctAnswersText.toLowerCase()) {
+            return true;
+        }
+    }
+    
+    // Handle multiple verb forms in comma-separated format
+    if (correctAnswersText.includes(",")) {
+        const answers = correctAnswersText.split(",").map(answer => answer.trim().toLowerCase());
+        for (const answer of answers) {
+            // Check exact match
+            if (userInput === answer) {
+                return true;
+            }
+            // Check verb variations
+            if (answer.startsWith("to ") && userInput === answer.substring(3).trim()) {
+                return true;
+            }
+            if (userInput.startsWith("to ") && answer === userInput.substring(3).trim()) {
+                return true;
+            }
+        }
+    }
+    
+    // Fallback: exact match (case-insensitive)
+    return userInput === correctAnswersText.toLowerCase();
+}
+
 function toggleSettings() {
 	const panel = document.getElementById('settingsPanel');
 	const isVisible = panel.style.display === 'block';
@@ -311,10 +378,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const correctAnswerText = correctAnswers[key];
                 let isCorrect = false;
                 
-                // Handle multiple correct answers for English (separated by " / ")
+                // Enhanced English answer checking
                 if (key === "user_english" && correctAnswerText) {
-                    const correctAnswersArray = correctAnswerText.split(" / ").map(answer => answer.trim().toLowerCase());
-                    isCorrect = correctAnswersArray.includes(userInput.toLowerCase());
+                    isCorrect = checkEnglishAnswer(userInput.toLowerCase(), correctAnswerText);
                 } else {
                     // Simple exact match for other types
                     isCorrect = userInput === correctAnswerText;

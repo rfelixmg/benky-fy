@@ -118,7 +118,7 @@
     "furigana_text": "楽しい[たのしい]"
   },
   {
-    "english": "difficult",
+    "english": "difficult, hard",
     "kanji": "難しい",
     "kana": "むずかしい",
     "hiragana": "むずかしい",
@@ -831,7 +831,7 @@
     "furigana_text": "新しい[あたらしい]"
   },
   {
-    "english": "old (not for people)",
+    "english": "old",
     "kanji": "古い",
     "kana": "ふるい",
     "hiragana": "ふるい",
