@@ -1,53 +1,28 @@
-<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<!-- Flashcard Scripts - ES6 Module System -->
+<script type="module">
+// Import the main flashcard application
+import './js/main.js';
 
-<script>
-// Template variables
-const templateSettings = {
-	inputModes: ["hiragana"],
-	checkingStyles: ["hiragana"] // fallback for compatibility
+// Template variables for backward compatibility
+window.templateSettings = {
+    inputModes: ["hiragana"],
+    checkingStyles: ["hiragana"] // fallback for compatibility
 };
 
-// Settings management
-function toggleSettings() {
-	const settingsModal = document.getElementById('settingsModal');
-	if (settingsModal) {
-		settingsModal.classList.toggle('show');
-	}
+// Module name meta tag for the application
+const moduleName = '{{ module_name }}';
+if (!document.querySelector('meta[name="module-name"]')) {
+    const meta = document.createElement('meta');
+    meta.name = 'module-name';
+    meta.content = moduleName;
+    document.head.appendChild(meta);
 }
 
-// Close modal when clicking outside
-document.addEventListener('click', function(event) {
-	const settingsModal = document.getElementById('settingsModal');
-	const settingsModalContent = document.querySelector('.settings-modal-content');
-	
-	if (settingsModal && settingsModal.classList.contains('show')) {
-		if (!settingsModalContent.contains(event.target) && !event.target.closest('.settings-toggle-btn')) {
-			settingsModal.classList.remove('show');
-		}
-	}
-});
+console.log(`Flashcard page loaded for module: ${moduleName}`);
+</script>
 
-// Settings state management
-let settingsState = {
-	displayMode: 'kana',
-	kanaTypes: ['hiragana'],
-	inputModes: ['hiragana'],
-	furiganaStyle: 'ruby',
-	weights: {
-		kana: 0.3,
-		kanji: 0.3,
-		kanji_furigana: 0.2,
-		english: 0.2
-	}
-};
-
-// Track user interactions to prevent API calls on page load
-let isUserInteraction = false;
-let isPageLoaded = false;
-
-// Basic functionality - more complex JavaScript will be added
-document.addEventListener('DOMContentLoaded', function() {
-	isPageLoaded = true;
-	console.log('Flashcard page loaded');
-});
+<!-- Fallback for browsers that don't support ES6 modules -->
+<script nomodule>
+console.warn('ES6 modules not supported. Please use a modern browser.');
+document.body.innerHTML = '<div class="error">This application requires a modern browser with ES6 module support.</div>';
 </script>

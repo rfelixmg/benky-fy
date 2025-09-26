@@ -1,5 +1,8 @@
-// Romaji to Hiragana conversion mapping
-const romajiToHiragana = {
+/**
+ * Romaji Converter - Enhanced romaji to hiragana conversion
+ * ES6 module version of the existing utils.js functionality
+ */
+export const romajiToHiragana = {
     'a': 'あ', 'i': 'い', 'u': 'う', 'e': 'え', 'o': 'お',
     'ka': 'か', 'ki': 'き', 'ku': 'く', 'ke': 'け', 'ko': 'こ',
     'ga': 'が', 'gi': 'ぎ', 'gu': 'ぐ', 'ge': 'げ', 'go': 'ご',
@@ -33,7 +36,12 @@ const romajiToHiragana = {
     'xtsu': 'っ', 'xtu': 'っ', 'ltsu': 'っ', 'ltu': 'っ'
 };
 
-function convertRomajiToHiragana(romajiText) {
+/**
+ * Convert romaji text to hiragana
+ * @param {string} romajiText - The romaji text to convert
+ * @returns {string} - The converted hiragana text
+ */
+export function convertRomajiToHiragana(romajiText) {
     if (!romajiText) return "";
 
     romajiText = romajiText.toLowerCase().trim();
@@ -117,6 +125,8 @@ function convertRomajiToHiragana(romajiText) {
     return result;
 }
 
-// Make functions available globally
-window.convertRomajiToHiragana = convertRomajiToHiragana;
-window.romajiToHiragana = romajiToHiragana;
+// Make functions available globally for backward compatibility
+if (typeof window !== 'undefined') {
+    window.convertRomajiToHiragana = convertRomajiToHiragana;
+    window.romajiToHiragana = romajiToHiragana;
+}

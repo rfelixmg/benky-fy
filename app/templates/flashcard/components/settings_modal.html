@@ -3,35 +3,35 @@
 	<div class="settings-modal-content">
 		<div class="settings-modal-header">
 			<h2>Settings</h2>
-			<button class="settings-close-btn" onclick="toggleSettings()" title="Close">✕</button>
+			<button class="settings-close-btn" title="Close">✕</button>
 		</div>
 		<div class="settings-body">
 			<!-- Flashcard Display Mode Section -->
 			<div class="settings-section">
-				<div class="settings-section-header" onclick="toggleSection('flashcard-display')">
+				<div class="settings-section-header">
 					<h3>Flashcard Display Mode</h3>
 					<span class="section-toggle">▼</span>
 				</div>
 				<div class="settings-section-content" id="flashcard-display">
 					<div class="radio-group">
 						<label class="radio-option">
-							<input type="radio" name="display_mode" value="kana" checked onchange="handleDisplayModeChange('kana')">
+							<input type="radio" name="display_mode" value="kana" checked>
 							<span>Kana</span>
 						</label>
 						<label class="radio-option">
-							<input type="radio" name="display_mode" value="kanji" onchange="handleDisplayModeChange('kanji')">
+							<input type="radio" name="display_mode" value="kanji">
 							<span>Kanji</span>
 						</label>
 						<label class="radio-option">
-							<input type="radio" name="display_mode" value="kanji_furigana" onchange="handleDisplayModeChange('kanji_furigana')">
+							<input type="radio" name="display_mode" value="kanji_furigana">
 							<span>Kanji + Furigana</span>
 						</label>
 						<label class="radio-option">
-							<input type="radio" name="display_mode" value="english" onchange="handleDisplayModeChange('english')">
+							<input type="radio" name="display_mode" value="english">
 							<span>English</span>
 						</label>
 						<label class="radio-option">
-							<input type="radio" name="display_mode" value="weighted" onchange="handleDisplayModeChange('weighted')">
+							<input type="radio" name="display_mode" value="weighted">
 							<span>🔄 Weighted Display</span>
 						</label>
 					</div>
@@ -41,11 +41,11 @@
 						<h4>Kana Type</h4>
 						<div class="radio-group kana-sub-group">
 							<label class="radio-option">
-								<input type="radio" name="kana_type" value="hiragana" checked onchange="handleKanaTypeChange('hiragana')">
+								<input type="radio" name="kana_type" value="hiragana" checked>
 								<span>Hiragana</span>
 							</label>
 							<label class="radio-option">
-								<input type="radio" name="kana_type" value="katakana" onchange="handleKanaTypeChange('katakana')">
+								<input type="radio" name="kana_type" value="katakana">
 								<span>Katakana</span>
 							</label>
 						</div>
@@ -56,7 +56,7 @@
 						<h4>Furigana Style</h4>
 					<label class="select-label">
 							<span>Furigana Style</span>
-							<select id="furigana-style" onchange="handleFuriganaStyleChange(this.value)">
+							<select id="furigana-style">
 								<option value="hover">Hover (tooltip on kanji)</option>
 								<option value="inline">Inline (above or beside)</option>
 								<option value="brackets">Brackets (e.g., 食[た]べる)</option>
@@ -96,30 +96,30 @@
 
 			<!-- Answer Input Mode Section -->
 			<div class="settings-section">
-				<div class="settings-section-header" onclick="toggleSection('answer-input')">
+				<div class="settings-section-header">
 					<h3>Answer Input Mode</h3>
 					<span class="section-toggle">▼</span>
 				</div>
 				<div class="settings-section-content" id="answer-input">
 					<div class="checkbox-group">
 						<label class="checkbox-option">
-							<input type="checkbox" name="input_modes" value="hiragana" checked onchange="handleInputModeChange()">
+							<input type="checkbox" name="input_modes" value="hiragana" checked>
 							<span>Hiragana (romaji input → auto-converts to kana)</span>
 						</label>
 						<label class="checkbox-option">
-							<input type="checkbox" name="input_modes" value="romaji" onchange="handleInputModeChange()">
+							<input type="checkbox" name="input_modes" value="romaji">
 							<span>Romaji (as typed)</span>
 						</label>
 						<label class="checkbox-option">
-							<input type="checkbox" name="input_modes" value="katakana" onchange="handleInputModeChange()">
+							<input type="checkbox" name="input_modes" value="katakana">
 							<span>Katakana</span>
 						</label>
 						<label class="checkbox-option">
-							<input type="checkbox" name="input_modes" value="kanji" onchange="handleInputModeChange()">
+							<input type="checkbox" name="input_modes" value="kanji">
 							<span>Kanji</span>
 						</label>
 						<label class="checkbox-option">
-							<input type="checkbox" name="input_modes" value="english" onchange="handleInputModeChange()">
+							<input type="checkbox" name="input_modes" value="english">
 							<span>English</span>
 					</label>
 					</div>
@@ -131,8 +131,8 @@
 
 			
 			<div class="settings-actions">
-				<button type="button" class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
-				<button type="button" class="btn btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
+				<button type="button" class="btn btn-primary">Save Settings</button>
+				<button type="button" class="btn btn-secondary">Reset to Defaults</button>
 			</div>
 		</div>
 	</div>
