@@ -7,6 +7,7 @@ from typing import Optional, Tuple, List, Dict, Any
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from app.auth import login_required, get_current_user
 from app.conjugation_checker import create_conjugation_checker
+from app.settings import settings_registry, get_user_settings, update_user_settings, get_module_settings_config
 
 
 # Romaji to Hiragana conversion mapping
@@ -334,67 +335,32 @@ class FlashcardBlueprint:
         @bp.route("/", methods=["GET"])
         @login_required
         def index():
-            settings = self.get_user_settings()
+            settings = get_user_settings(self.module_name)
+            settings_groups = settings_registry.get_settings_groups(get_module_settings_config(self.module_name))
             item = self.engine.get_next(settings["flashcard_styles"])
-            return render_template("flashcard.html",  # Use generic template instead of f"{self.module_name}.html"
+            return render_template("flashcard_new.html",  # Use new template with persistent settings
                                 item=item, 
                                 results=None, 
                                 settings=settings,
+                                settings_groups=settings_groups,
                                 module_name=self.module_name)
         
         @bp.route("/settings", methods=["POST"])
         @login_required
         def update_settings():
-            """Update user settings"""
-            # Get flashcard styles
-            flashcard_styles = []
-            for style in ["hiragana", "kanji", "katakana", "english"]:
-                if request.form.get(f"flashcard_{style}"):
-                    flashcard_styles.append(style)
+            """Update user settings using the new centralized system"""
+            # Convert form data to dict
+            form_data = {}
+            for key, value in request.form.items():
+                if value == "1":  # Checkbox checked
+                    form_data[key] = True
+                elif value == "0":  # Checkbox unchecked
+                    form_data[key] = False
+                else:
+                    form_data[key] = value
             
-            # Get checking styles
-            checking_styles = []
-            for style in ["hiragana", "kanji", "katakana", "english", "romaji"]:
-                if request.form.get(f"checking_{style}"):
-                    checking_styles.append(style)
-            
-            # Ensure at least one option is selected
-            if not flashcard_styles:
-                flashcard_styles = ["hiragana"]
-            if not checking_styles:
-                checking_styles = ["english"]
-            
-            # Get current settings to preserve furigana settings if they exist
-            current_settings = self.get_user_settings()
-            
-            settings_update = {
-                "flashcard_styles": flashcard_styles,
-                "checking_styles": checking_styles
-            }
-            
-            # Handle furigana and conjugation settings for verb/adjective modules
-            if hasattr(self.engine, 'get_default_settings'):
-                default_settings = self.engine.get_default_settings()
-                
-                # Handle furigana settings
-                if "show_furigana" in default_settings:
-                    settings_update["show_furigana"] = bool(request.form.get("show_furigana"))
-                    settings_update["furigana_style"] = request.form.get("furigana_style", default_settings["furigana_style"])
-                
-                # Handle conjugation settings
-                if "conjugation_mode" in default_settings:
-                    settings_update["conjugation_mode"] = bool(request.form.get("conjugation_mode"))
-                    settings_update["conjugation_prompt_style"] = request.form.get("conjugation_prompt_style", default_settings["conjugation_prompt_style"])
-                    
-                    # Get conjugation forms (multiple checkboxes with same name)
-                    conjugation_forms = request.form.getlist("conjugation_forms")
-                    if conjugation_forms:
-                        settings_update["conjugation_forms"] = conjugation_forms
-                    else:
-                        # Use default forms if none selected
-                        settings_update["conjugation_forms"] = default_settings["conjugation_forms"]
-            
-            session["settings"] = settings_update
+            # Process settings through the centralized system
+            update_user_settings(self.module_name, form_data)
             
             return redirect(url_for(f"{self.module_name}.index"))
         
@@ -402,7 +368,8 @@ class FlashcardBlueprint:
         @login_required
         def check():
             item = self.engine[int(request.form["item_id"])]
-            settings = self.get_user_settings()
+            settings = get_user_settings(self.module_name)
+            settings_groups = settings_registry.get_settings_groups(get_module_settings_config(self.module_name))
             
             # Collect user inputs for all checking styles
             user_inputs = {}
@@ -418,11 +385,12 @@ class FlashcardBlueprint:
             # Check if all answers are correct
             all_correct = all(result["is_correct"] for result in results.values())
             
-            return render_template("flashcard.html",  # Use generic template here too
+            return render_template("flashcard_new.html",  # Use new template
                                 item=item, 
                                 results=results, 
                                 all_correct=all_correct, 
                                 settings=settings,
+                                settings_groups=settings_groups,
                                 module_name=self.module_name)
         
         @bp.route("/api/correct-answers", methods=["GET"])
@@ -436,7 +404,7 @@ class FlashcardBlueprint:
             try:
                 item_id = int(item_id)
                 item = self.engine[item_id]
-                settings = self.get_user_settings()
+                settings = get_user_settings(self.module_name)
                 
                 # Build correct answers based on checking styles
                 correct_answers = {}
@@ -462,16 +430,7 @@ class FlashcardBlueprint:
         
         return bp
     
-    def get_user_settings(self):
-        """Get user settings from session with defaults - can be overridden"""
-        return session.get("settings", self.get_default_settings())
-    
-    def get_default_settings(self):
-        """Get default settings for flashcards - can be overridden"""
-        return {
-            "flashcard_styles": ["hiragana"],
-            "checking_styles": ["english"]
-        }
+    # Settings methods removed - now using centralized settings system
 
 
 class VerbFlashcardEngine(BaseFlashcardEngine):
@@ -482,39 +441,7 @@ class VerbFlashcardEngine(BaseFlashcardEngine):
         self.module_name = module_name
         self._data = self.load_flashcards_from_json(json_filename)
     
-    def get_default_settings(self):
-        """Get default settings for verb flashcards with furigana and conjugation options"""
-        return {
-            "flashcard_styles": ["hiragana"],
-            "checking_styles": ["english"],
-            "show_furigana": True,
-            "furigana_style": "html",  # "html" or "text"
-            # Conjugation settings
-            "conjugation_mode": False,
-            "conjugation_forms": ["polite", "negative"],
-            "conjugation_prompt_style": "english"  # "english" or "hiragana"
-        }
-    
-    def get_user_settings(self):
-        """Get user settings from session with furigana and conjugation defaults"""
-        default_settings = self.get_default_settings()
-        user_settings = session.get("settings", default_settings)
-        
-        # Ensure furigana settings exist
-        if "show_furigana" not in user_settings:
-            user_settings["show_furigana"] = default_settings["show_furigana"]
-        if "furigana_style" not in user_settings:
-            user_settings["furigana_style"] = default_settings["furigana_style"]
-        
-        # Ensure conjugation settings exist
-        if "conjugation_mode" not in user_settings:
-            user_settings["conjugation_mode"] = default_settings["conjugation_mode"]
-        if "conjugation_forms" not in user_settings:
-            user_settings["conjugation_forms"] = default_settings["conjugation_forms"]
-        if "conjugation_prompt_style" not in user_settings:
-            user_settings["conjugation_prompt_style"] = default_settings["conjugation_prompt_style"]
-        
-        return user_settings
+    # Settings methods removed - now using centralized settings system
     
     def generate_conjugation_prompt(self, item: FlashcardItem, conjugation_form: str, prompt_style: str) -> Tuple[str, str]:
         """Generate a conjugation prompt for the given item and form"""
@@ -529,7 +456,7 @@ class VerbFlashcardEngine(BaseFlashcardEngine):
     
     def get_next(self, flashcard_styles: List[str] = None) -> FlashcardItem:
         """Get next flashcard with conjugation support"""
-        settings = self.get_user_settings()
+        settings = get_user_settings(self.module_name)
         
         # Check if conjugation mode is enabled
         if settings.get("conjugation_mode", False) and settings.get("conjugation_forms"):
@@ -578,39 +505,7 @@ class AdjectiveFlashcardEngine(BaseFlashcardEngine):
         self.module_name = module_name
         self._data = self.load_flashcards_from_json(json_filename)
     
-    def get_default_settings(self):
-        """Get default settings for adjective flashcards with conjugation and furigana options"""
-        return {
-            "flashcard_styles": ["hiragana"],
-            "checking_styles": ["english"],
-            "show_furigana": True,
-            "furigana_style": "html",  # "html" or "text"
-            # Conjugation settings
-            "conjugation_mode": False,
-            "conjugation_forms": ["past", "negative"],
-            "conjugation_prompt_style": "english"  # "english" or "hiragana"
-        }
-    
-    def get_user_settings(self):
-        """Get user settings from session with conjugation and furigana defaults"""
-        default_settings = self.get_default_settings()
-        user_settings = session.get("settings", default_settings)
-        
-        # Ensure furigana settings exist
-        if "show_furigana" not in user_settings:
-            user_settings["show_furigana"] = default_settings["show_furigana"]
-        if "furigana_style" not in user_settings:
-            user_settings["furigana_style"] = default_settings["furigana_style"]
-        
-        # Ensure conjugation settings exist
-        if "conjugation_mode" not in user_settings:
-            user_settings["conjugation_mode"] = default_settings["conjugation_mode"]
-        if "conjugation_forms" not in user_settings:
-            user_settings["conjugation_forms"] = default_settings["conjugation_forms"]
-        if "conjugation_prompt_style" not in user_settings:
-            user_settings["conjugation_prompt_style"] = default_settings["conjugation_prompt_style"]
-        
-        return user_settings
+    # Settings methods removed - now using centralized settings system
     
     def generate_conjugation_prompt(self, item: FlashcardItem, conjugation_form: str, prompt_style: str) -> Tuple[str, str]:
         """Generate a conjugation prompt for the given adjective and form"""
@@ -625,7 +520,7 @@ class AdjectiveFlashcardEngine(BaseFlashcardEngine):
     
     def get_next(self, flashcard_styles: List[str] = None) -> FlashcardItem:
         """Get next flashcard with conjugation support"""
-        settings = self.get_user_settings()
+        settings = get_user_settings(self.module_name)
         
         # Check if conjugation mode is enabled
         if settings.get("conjugation_mode", False) and settings.get("conjugation_forms"):
@@ -696,33 +591,7 @@ class VocabFlashcardEngine(BaseFlashcardEngine):
         self.module_name = module_name
         self._data = self.load_flashcards_from_json(json_filename)
     
-    def get_default_settings(self):
-        """Get default settings for vocabulary flashcards"""
-        return {
-            "flashcard_styles": ["hiragana"],
-            "checking_styles": ["english"],
-            "show_furigana": True,
-            "furigana_style": "html",  # "html" or "text"
-            "priority_filter": "all",  # "all", "0", "1", "2", "3+"
-            "learning_order": True  # Show items in learning order
-        }
-    
-    def get_user_settings(self):
-        """Get user settings from session with vocabulary defaults"""
-        default_settings = self.get_default_settings()
-        user_settings = session.get("settings", default_settings)
-        
-        # Ensure vocabulary-specific settings exist
-        if "show_furigana" not in user_settings:
-            user_settings["show_furigana"] = default_settings["show_furigana"]
-        if "furigana_style" not in user_settings:
-            user_settings["furigana_style"] = default_settings["furigana_style"]
-        if "priority_filter" not in user_settings:
-            user_settings["priority_filter"] = default_settings["priority_filter"]
-        if "learning_order" not in user_settings:
-            user_settings["learning_order"] = default_settings["learning_order"]
-        
-        return user_settings
+    # Settings methods removed - now using centralized settings system
     
     def get_filtered_data(self, priority_filter: str = "all") -> List[FlashcardItem]:
         """Get filtered data based on priority"""
@@ -738,7 +607,7 @@ class VocabFlashcardEngine(BaseFlashcardEngine):
     
     def get_next(self, flashcard_styles: List[str] = None) -> FlashcardItem:
         """Get next flashcard with priority filtering"""
-        settings = self.get_user_settings()
+        settings = get_user_settings(self.module_name)
         priority_filter = settings.get("priority_filter", "all")
         learning_order = settings.get("learning_order", True)
         

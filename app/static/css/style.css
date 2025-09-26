@@ -178,6 +178,15 @@ body {
 	transition: all 0.3s ease; /* Add smooth transition for color changes */
 }
 
+/* Flashcard-specific grid layout */
+.panel.flashcard-layout {
+	max-width: 1400px;
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 2rem;
+	align-items: start;
+}
+
 /* Panel color states */
 .panel.waiting {
 	background: rgba(255, 255, 255, 0.95);
@@ -199,6 +208,198 @@ body {
 .panel h1, .panel h2, .panel h3 { color: #2d3748; }
 .panel p { color: #4a5568; }
 
+/* Settings Panel Styles */
+.settings-panel {
+	background: rgba(248, 250, 252, 0.8);
+	border-radius: 15px;
+	padding: 1.5rem;
+	border: 1px solid rgba(226, 232, 240, 0.8);
+	height: fit-content;
+	position: sticky;
+	top: 2rem;
+	display: none; /* Hidden by default */
+}
+
+.settings-panel.show {
+	display: block; /* Show when toggled */
+}
+
+/* Settings Toggle Button */
+.settings-toggle-btn {
+	background: rgba(102, 126, 234, 0.1);
+	border: 1px solid rgba(102, 126, 234, 0.3);
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	font-size: 1.2rem;
+	color: #3b82f6;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+.settings-toggle-btn:hover {
+	background: rgba(102, 126, 234, 0.2);
+	border-color: rgba(102, 126, 234, 0.5);
+	transform: scale(1.05);
+	box-shadow: 0 4px 12px rgba(102, 126, 234, 0.25);
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+	padding-bottom: 1rem;
+	border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.settings-panel h2 {
+	color: #1e293b;
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	border-bottom: 2px solid #e2e8f0;
+	padding-bottom: 0.5rem;
+}
+
+.settings-group {
+	margin-bottom: 1.5rem;
+}
+
+.settings-group h3 {
+	color: #374151;
+	font-size: 1rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.settings-description {
+	color: #6b7280;
+	font-size: 0.875rem;
+	margin-bottom: 0.75rem;
+	line-height: 1.4;
+}
+
+.setting-item {
+	margin-bottom: 0.75rem;
+}
+
+.checkbox-label, .radio-option, .select-label, .text-label, .number-label {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+	cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+	margin-top: 0.125rem;
+}
+
+.radio-group {
+	margin-bottom: 0.5rem;
+}
+
+.radio-group-label {
+	display: block;
+	font-weight: 500;
+	color: #374151;
+	margin-bottom: 0.25rem;
+}
+
+.radio-option {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.25rem;
+}
+
+.radio-option input[type="radio"] {
+	margin: 0;
+}
+
+.setting-name {
+	font-weight: 500;
+	color: #374151;
+}
+
+.setting-description {
+	color: #6b7280;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	margin-top: 0.125rem;
+}
+
+.select-label select {
+	background: white;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	padding: 0.5rem;
+	font-size: 0.875rem;
+	color: #374151;
+	min-width: 150px;
+}
+
+.text-label input, .number-label input {
+	background: white;
+	border: 1px solid #d1d5db;
+	border-radius: 6px;
+	padding: 0.5rem;
+	font-size: 0.875rem;
+	color: #374151;
+	min-width: 150px;
+}
+
+.settings-actions {
+	margin-top: 1.5rem;
+	padding-top: 1rem;
+	border-top: 1px solid #e2e8f0;
+	display: flex;
+	gap: 0.75rem;
+}
+
+.settings-actions .btn {
+	padding: 0.5rem 1rem;
+	font-size: 0.875rem;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.btn-primary {
+	background: #3b82f6;
+	color: white;
+}
+
+.btn-primary:hover {
+	background: #2563eb;
+}
+
+.btn-secondary {
+	background: #6b7280;
+	color: white;
+}
+
+.btn-secondary:hover {
+	background: #4b5563;
+}
+
+/* Flashcard Content */
+.flashcard-content {
+	background: rgba(255, 255, 255, 0.6);
+	border-radius: 15px;
+	padding: 2rem;
+	border: 1px solid rgba(226, 232, 240, 0.6);
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
 .btn {
 	background: linear-gradient(135deg, #667eea, #764ba2);
 	color: white;
@@ -218,7 +419,16 @@ body {
 }
 
 .muted { color: #718096; }
-.prompt-value { font-size: 2.5rem; line-height: 1.2; margin: 0.25rem 0 0.75rem; }
+.prompt-value { 
+	font-size: 2.5rem; 
+	line-height: 1.2; 
+	margin: 0.5rem 0 1rem; 
+	text-align: center;
+	padding: 1rem;
+	background: rgba(102, 126, 234, 0.05);
+	border-radius: 12px;
+	border: 1px solid rgba(102, 126, 234, 0.1);
+}
 
 /* Furigana Styling */
 .kanji-with-furigana {
@@ -281,7 +491,18 @@ body {
     margin: 0;
 }
 
-.answer-form { display: grid; gap: 0.5rem; }
+.answer-form { 
+	display: flex; 
+	flex-direction: column; 
+	gap: 1rem; 
+	margin-bottom: 1rem;
+}
+
+.actions {
+	display: flex;
+	justify-content: center;
+	margin-top: 1rem;
+}
 .result { margin-top: 1rem; padding: 1rem; border-radius: 12px; }
 .result.correct { background: rgba(72,187,120,0.1); border: 1px solid #48bb78; }
 .result.incorrect { background: rgba(245,101,101,0.1); border: 1px solid #f56565; }
@@ -1034,6 +1255,13 @@ body {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.input-group label {
+	font-weight: 500;
+	color: #4a5568;
+	font-size: 0.9rem;
 }
 
 .answer-input {
@@ -1093,30 +1321,9 @@ body {
 	border-color: rgba(102, 126, 234, 0.5);
 }
 
-.settings-panel {
-	display: none;
-	position: relative;
-	top: 0;
-	right: 0;
-	background: white;
-	border: 1px solid #e2e8f0;
-	border-radius: 12px;
-	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-	padding: 1.5rem;
-	min-width: 280px;
-	z-index: 9999;
-	margin-top: 0.5rem;
-	margin-left: auto;
-	width: fit-content;
-	transition: all 0.3s ease;
-	opacity: 0;
-	transform: translateY(-10px);
-}
+/* Old dropdown settings panel - removed to fix conflict */
 
-.settings-panel[style*="block"] {
-	opacity: 1;
-	transform: translateY(0);
-}
+/* Old dropdown settings panel rules - removed */
 
 .settings-section {
 	margin-bottom: 1rem;
@@ -1317,7 +1524,25 @@ body {
 	color: #742a2a;
 }
 
+/* Large screen optimizations */
+@media (min-width: 1200px) {
+	.panel.flashcard-layout {
+		max-width: 1600px;
+		grid-template-columns: 1fr 2.5fr;
+	}
+	
+	.flashcard-content {
+		padding: 2.5rem;
+	}
+}
+
 @media (max-width: 768px) {
+	.panel.flashcard-layout {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		max-width: 100%;
+	}
+	
 	.header-with-settings {
 		flex-direction: column;
 		gap: 1rem;
@@ -1338,6 +1563,16 @@ body {
 		top: auto;
 		z-index: 9999;
 		margin-left: 0;
+	}
+	
+	.flashcard-content {
+		padding: 1.5rem;
+	}
+	
+	.settings-toggle-btn {
+		width: 36px;
+		height: 36px;
+		font-size: 1rem;
 	}
 }
 

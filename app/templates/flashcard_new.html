@@ -1,0 +1,632 @@
+{% extends 'base.html' %}
+{% block title %}{{ module_name|title }} | Benky-Fy{% endblock %}
+{% block content %}
+<section class="panel flashcard-layout">
+	<div class="header">
+		<h1>Spaced repetition flashcards (SRF) - {{ module_name|title }}</h1>
+		<button class="settings-toggle-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+	</div>
+	
+	<!-- Persistent Settings Panel -->
+	<div class="settings-panel">
+		<h2>Settings</h2>
+		<form method="POST" action="{{ url_for(module_name + '.update_settings') }}" id="settingsForm">
+			{% for group in settings_groups %}
+			<div class="settings-group">
+				<h3>{{ group.name }}</h3>
+				{% if group.description %}
+				<p class="settings-description">{{ group.description }}</p>
+				{% endif %}
+				
+				{% for setting in group.settings %}
+				<div class="setting-item" data-setting="{{ setting.key }}">
+					{% if setting.type == 'checkbox' %}
+					<label class="checkbox-label">
+						<input type="checkbox" 
+							   name="{{ setting.key }}" 
+							   value="1" 
+							   {% if settings[setting.key] %}checked{% endif %}
+							   onchange="handleSettingChange('{{ setting.key }}', this.checked)">
+						<span class="setting-name">{{ setting.name }}</span>
+						{% if setting.description %}
+						<span class="setting-description">{{ setting.description }}</span>
+						{% endif %}
+					</label>
+					
+					{% elif setting.type == 'radio' %}
+					<div class="radio-group">
+						<label class="radio-group-label">{{ setting.name }}</label>
+						{% if setting.description %}
+						<p class="setting-description">{{ setting.description }}</p>
+						{% endif %}
+						{% for value, label in setting.options.items() %}
+						<label class="radio-option">
+							<input type="radio" 
+								   name="{{ setting.key }}" 
+								   value="{{ value }}"
+								   {% if settings[setting.key] == value %}checked{% endif %}
+								   onchange="handleSettingChange('{{ setting.key }}', '{{ value }}')">
+							<span>{{ label }}</span>
+						</label>
+						{% endfor %}
+					</div>
+					
+					{% elif setting.type == 'select' %}
+					<label class="select-label">
+						<span class="setting-name">{{ setting.name }}</span>
+						{% if setting.description %}
+						<span class="setting-description">{{ setting.description }}</span>
+						{% endif %}
+						<select name="{{ setting.key }}" onchange="handleSettingChange('{{ setting.key }}', this.value)">
+							{% for value, label in setting.options.items() %}
+							<option value="{{ value }}" {% if settings[setting.key] == value %}selected{% endif %}>
+								{{ label }}
+							</option>
+							{% endfor %}
+						</select>
+					</label>
+					
+					{% elif setting.type == 'text' %}
+					<label class="text-label">
+						<span class="setting-name">{{ setting.name }}</span>
+						{% if setting.description %}
+						<span class="setting-description">{{ setting.description }}</span>
+						{% endif %}
+						<input type="text" 
+							   name="{{ setting.key }}" 
+							   value="{{ settings[setting.key] }}"
+							   onchange="handleSettingChange('{{ setting.key }}', this.value)">
+					</label>
+					
+					{% elif setting.type == 'number' %}
+					<label class="number-label">
+						<span class="setting-name">{{ setting.name }}</span>
+						{% if setting.description %}
+						<span class="setting-description">{{ setting.description }}</span>
+						{% endif %}
+						<input type="number" 
+							   name="{{ setting.key }}" 
+							   value="{{ settings[setting.key] }}"
+							   onchange="handleSettingChange('{{ setting.key }}', this.value)">
+					</label>
+					{% endif %}
+				</div>
+				{% endfor %}
+			</div>
+			{% endfor %}
+			
+			<div class="settings-actions">
+				<button type="submit" class="btn btn-primary">Save Settings</button>
+				<button type="button" class="btn btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
+			</div>
+		</form>
+	</div>
+	
+	<!-- Flashcard Content -->
+	<div class="flashcard-content">
+		<div class="prompt">
+			<p class="muted">Prompt ({{ item.prompt_script }})</p>
+			<div class="prompt-value">
+				{% if item.prompt_script == 'kanji' and settings.show_furigana %}
+					{% if settings.furigana_style == 'html' and item.furigana_html %}
+						<div class="kanji-with-furigana">{{ item.furigana_html|safe }}</div>
+					{% elif settings.furigana_style == 'text' and item.furigana_text %}
+						<div class="kanji-with-furigana-text">{{ item.furigana_text }}</div>
+					{% else %}
+						<div class="kanji">{{ item.prompt }}</div>
+					{% endif %}
+				{% else %}
+					<div class="prompt-text">{{ item.prompt }}</div>
+				{% endif %}
+			</div>
+		</div>
+		
+		<div class="answer-form">
+			{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
+			{% set other_styles = settings.checking_styles | reject('in', ['hiragana', 'romaji']) | list %}
+			
+			{% if has_hiragana_romaji %}
+			<div class="input-group">
+				{% set hiragana_label = 'hiragana' in settings.checking_styles %}
+				{% set romaji_label = 'romaji' in settings.checking_styles %}
+				<label for="user_hiragana_romaji">
+					Your answer (
+					{%- if hiragana_label and romaji_label -%}
+						hiragana/romaji
+					{%- elif hiragana_label -%}
+						hiragana
+					{%- else -%}
+						romaji
+					{%- endif -%}
+					):
+				</label>
+				<input type="text" 
+					   id="user_hiragana_romaji" 
+					   name="user_hiragana_romaji" 
+					   class="answer-input" 
+					   placeholder="Type in romaji..." 
+					   autofocus 
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false" />
+			</div>
+			{% endif %}
+			
+			{% for style in other_styles %}
+			<div class="input-group">
+				<label for="user_{{ style }}">Your answer ({{ style }}):</label>
+				<input type="text" 
+					   id="user_{{ style }}" 
+					   name="user_{{ style }}" 
+					   class="answer-input" 
+					   placeholder="Type {{ style }}..." 
+					   autocomplete="off" 
+					   autocorrect="off" 
+					   autocapitalize="off" 
+					   spellcheck="false" />
+			</div>
+			{% endfor %}
+		</div>
+		
+		<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
+
+		<div class="actions">
+			<button type="button" class="btn" onclick="handleCheckAnswers()">benkyfy</button>
+		</div>
+		
+		<!-- Always render the results container -->
+		<div class="results-container">
+			<!-- Initial content can be empty or a placeholder -->
+		</div>
+
+		{% if results is not none %}
+		<div class="overall-result {{ 'correct' if all_correct else 'incorrect' }}">
+			<p><strong>{{ 'All Correct!' if all_correct else 'Some Incorrect' }}</strong></p>
+		</div>
+			
+		{% for style, result in results.items() %}
+		<div class="result {{ 'correct' if result.is_correct else 'incorrect' }}">
+			<h4>{{ style.title() }}</h4>
+			<p>Your answer: <code>{{ result.user_input or '(empty)' }}</code></p>
+			<p>Correct answer: <code>{{ result.correct_answer }}</code></p>
+			<p class="result-status">{{ '✓ Correct' if result.is_correct else '✗ Incorrect' }}</p>
+		</div>
+		{% endfor %}
+
+		<button class="btn" onclick="goToNext()">
+			Next ➡️
+		</button>
+
+		{% endif %}
+	</div>
+</section>
+
+<script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+
+<script>
+// Settings management
+function toggleSettings() {
+	const settingsPanel = document.querySelector('.settings-panel');
+	if (settingsPanel) {
+		settingsPanel.classList.toggle('show');
+	}
+}
+
+function handleSettingChange(settingKey, value) {
+	// Handle dependencies - show/hide dependent settings
+	const settingItem = document.querySelector(`[data-setting="${settingKey}"]`);
+	if (!settingItem) return;
+	
+	// Find dependent settings
+	const dependentSettings = document.querySelectorAll(`[data-setting]`);
+	dependentSettings.forEach(item => {
+		const setting = item.querySelector('input, select');
+		if (setting && setting.name !== settingKey) {
+			// Check if this setting depends on the changed setting
+			const dependencies = getSettingDependencies(setting.name);
+			if (dependencies && dependencies.includes(settingKey)) {
+				const shouldShow = checkDependencyCondition(dependencies, settingKey, value);
+				item.style.display = shouldShow ? 'block' : 'none';
+			}
+		}
+	});
+}
+
+function getSettingDependencies(settingName) {
+	// This would be populated from the server-side settings definitions
+	// For now, hardcode known dependencies
+	const dependencies = {
+		'furigana_style': ['show_furigana'],
+		'conjugation_prompt_style': ['conjugation_mode'],
+		'conjugation_forms_dictionary': ['conjugation_mode'],
+		'conjugation_forms_polite': ['conjugation_mode'],
+		'conjugation_forms_negative': ['conjugation_mode'],
+		'conjugation_forms_past': ['conjugation_mode'],
+		'conjugation_forms_te_form': ['conjugation_mode'],
+		'conjugation_forms_present': ['conjugation_mode'],
+		'conjugation_forms_adverbial': ['conjugation_mode']
+	};
+	return dependencies[settingName];
+}
+
+function checkDependencyCondition(dependencies, changedSetting, value) {
+	// Check if all dependencies are satisfied
+	for (const dep of dependencies) {
+		if (dep === changedSetting) {
+			// This is the setting that just changed
+			if (dep === 'show_furigana' || dep === 'conjugation_mode') {
+				return value === true || value === '1';
+			}
+		} else {
+			// Check other dependencies
+			const depElement = document.querySelector(`[name="${dep}"]`);
+			if (depElement) {
+				if (depElement.type === 'checkbox') {
+					if (!depElement.checked) return false;
+				} else if (depElement.type === 'radio') {
+					// Radio buttons are handled by the form, just check if any are checked
+					const radioGroup = document.querySelectorAll(`[name="${dep}"]`);
+					let anyChecked = false;
+					radioGroup.forEach(radio => {
+						if (radio.checked) anyChecked = true;
+					});
+					if (!anyChecked) return false;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+function resetToDefaults() {
+	if (confirm('Are you sure you want to reset all settings to their default values?')) {
+		// This would need to be implemented to reset to server defaults
+		// For now, just reload the page
+		window.location.reload();
+	}
+}
+
+// Initialize settings visibility on page load
+document.addEventListener('DOMContentLoaded', function() {
+	// Apply dependency rules on page load
+	const allSettings = document.querySelectorAll('[data-setting]');
+	allSettings.forEach(item => {
+		const setting = item.querySelector('input, select');
+		if (setting) {
+			handleSettingChange(setting.name, setting.value || setting.checked);
+		}
+	});
+});
+
+// Rest of the existing JavaScript functions...
+function checkEnglishAnswer(userInput, correctAnswersText) {
+    /**
+     * Enhanced English answer checking that handles multiple formats:
+     * 1. Multiple meanings separated by " / " (e.g., "simple / easy")
+     * 2. Comma-separated meanings (e.g., "tough, serious")
+     * 3. Verb variations with/without "to" (e.g., "to look" accepts "look")
+     * 4. Flexible matching for common variations
+     */
+    if (!userInput) {
+        return false;
+    }
+    
+    // First, try the original " / " format
+    if (correctAnswersText.includes(" / ")) {
+        const correctAnswers = correctAnswersText.split(" / ").map(answer => answer.trim().toLowerCase());
+        if (correctAnswers.includes(userInput)) {
+            return true;
+        }
+    }
+    
+    // Handle comma-separated meanings (e.g., "tough, serious")
+    if (correctAnswersText.includes(",") && !correctAnswersText.includes(" / ")) {
+        const correctAnswers = correctAnswersText.split(",").map(answer => answer.trim().toLowerCase());
+        if (correctAnswers.includes(userInput)) {
+            return true;
+        }
+    }
+    
+    // Handle verb variations (with/without "to")
+    // Check if the correct answer starts with "to " and user input doesn't
+    if (correctAnswersText.toLowerCase().startsWith("to ")) {
+        const verbWithoutTo = correctAnswersText.substring(3).trim().toLowerCase(); // Remove "to " prefix
+        if (userInput === verbWithoutTo) {
+            return true;
+        }
+    }
+    
+    // Check if user input starts with "to " but correct answer doesn't
+    if (userInput.startsWith("to ")) {
+        const verbWithoutTo = userInput.substring(3).trim(); // Remove "to " prefix
+        if (verbWithoutTo === correctAnswersText.toLowerCase()) {
+            return true;
+        }
+    }
+    
+    // Handle multiple verb forms in comma-separated format
+    if (correctAnswersText.includes(",")) {
+        const answers = correctAnswersText.split(",").map(answer => answer.trim().toLowerCase());
+        for (const answer of answers) {
+            // Check exact match
+            if (userInput === answer) {
+                return true;
+            }
+            // Check verb variations
+            if (answer.startsWith("to ") && userInput === answer.substring(3).trim()) {
+                return true;
+            }
+            if (userInput.startsWith("to ") && answer === userInput.substring(3).trim()) {
+                return true;
+            }
+        }
+    }
+    
+    // Fallback: exact match (case-insensitive)
+    return userInput === correctAnswersText.toLowerCase();
+}
+
+function goToNext() {
+	window.location.href = "{{ url_for(module_name + '.index') }}";
+}
+
+function getFriendlyStyleName(style) {
+    const styleMap = {
+        'hiragana_romaji': 'Hiragana/Romaji',
+        'hiragana': 'Hiragana',
+        'romaji': 'Romaji',
+        'kanji': 'Kanji',
+        'katakana': 'Katakana',
+        'english': 'English'
+    };
+    return styleMap[style] || style.charAt(0).toUpperCase() + style.slice(1);
+}
+
+function fetchCorrectAnswers() {
+    // Get the item ID from the hidden input
+    const itemId = document.getElementById('item_id').value;
+    
+    // Define the API endpoint with item_id parameter
+    const apiUrl = `{{ url_for(module_name + '.get_correct_answers') }}?item_id=${itemId}`;
+
+    // Make the API request
+    return fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Return the data directly since it's already in the correct format
+            return data;
+        })
+        .catch(error => {
+            console.error('Error fetching correct answers:', error);
+            return null;
+        });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    let resultsShown = false; // Define resultsShown in the correct scope
+
+    // Initialize panel color to waiting state
+    const panel = document.querySelector('.panel');
+    if (panel) {
+        panel.classList.add('waiting'); // White for waiting answer
+    }
+
+    function updateButton() {
+        const button = document.querySelector('button[onclick="handleCheckAnswers()"]');
+        if (button) {
+            if (resultsShown) {
+                button.textContent = '+1';
+                button.classList.add('next-button');
+                button.classList.remove('check-button');
+            } else {
+                button.textContent = 'benkyfy';
+                button.classList.add('check-button');
+                button.classList.remove('next-button');
+            }
+        }
+    }
+
+    function resetPanelColor() {
+        const panel = document.querySelector('.panel');
+        if (panel) {
+            panel.classList.remove('waiting', 'correct', 'incorrect');
+            panel.classList.add('waiting'); // Reset to white waiting state
+        }
+    }
+
+    function handleCheckAnswers(event) {
+        if (event) {
+            event.preventDefault(); // Prevent default behavior
+        }
+
+        if (resultsShown) {
+            resetOrNext();
+            return;
+        }
+
+        // Retrieve user inputs
+        const userInputs = {};
+        const inputElements = document.querySelectorAll('.answer-input');
+        inputElements.forEach(input => {
+            userInputs[input.name] = input.value.trim();
+        });
+
+        // Fetch correct answers
+        fetchCorrectAnswers().then(correctAnswers => {
+            if (!correctAnswers) {
+                console.error('Failed to fetch correct answers');
+                return;
+            }
+
+            // Compare user inputs with correct answers
+            const results = {};
+            let allCorrect = true;
+            
+            console.log('=== Answer Check Results ===');
+            
+            for (const [key, userInput] of Object.entries(userInputs)) {
+                const correctAnswerText = correctAnswers[key];
+                let isCorrect = false;
+                
+                // Enhanced English answer checking
+                if (key === "user_english" && correctAnswerText) {
+                    isCorrect = checkEnglishAnswer(userInput.toLowerCase(), correctAnswerText);
+                } else {
+                    // Simple exact match for other types
+                    isCorrect = userInput === correctAnswerText;
+                }
+                
+                results[key] = {
+                    user_input: userInput,
+                    correct_answer: correctAnswerText,
+                    is_correct: isCorrect
+                };
+                
+                // Log each result
+                const style = key.replace('user_', '');
+                console.log(`${style.toUpperCase()}:`);
+                console.log(`  Your answer: "${userInput}"`);
+                console.log(`  Correct answer: "${correctAnswerText}"`);
+                console.log(`  Result: ${isCorrect ? '✅ CORRECT' : '❌ INCORRECT'}`);
+                console.log('---');
+                
+                if (!isCorrect) {
+                    allCorrect = false;
+                }
+            }
+            
+            console.log(`Overall Result: ${allCorrect ? '🎉 ALL CORRECT!' : '📝 Some answers need work'}`);
+            console.log('=============================');
+
+            // Update the UI with results
+            const resultsContainer = document.querySelector('.results-container');
+            if (!resultsContainer) {
+                console.error('Results container not found!');
+                return;
+            }
+            resultsContainer.style.display = 'block'; // Ensure it's visible
+            resultsContainer.innerHTML = ''; // Clear previous results
+            
+            // Change panel color based on results
+            const panel = document.querySelector('.panel');
+            if (panel) {
+                // Remove any existing color classes
+                panel.classList.remove('waiting', 'correct', 'incorrect');
+                
+                if (allCorrect) {
+                    panel.classList.add('correct'); // Green for all correct
+                } else {
+                    panel.classList.add('incorrect'); // Red for some incorrect
+                }
+            }
+            
+            // Create a single unified results box
+            const unifiedResultsBox = document.createElement('div');
+            unifiedResultsBox.className = 'unified-results';
+            
+            // Build the content for the unified box (removed overall-status div)
+            let resultsHTML = '<div class="results-list">';
+            
+            // Add individual results to the same container
+            for (const [style, result] of Object.entries(results)) {
+                // Skip if the correct answer is empty or just a dash (like katakana when not available)
+                if (!result.correct_answer || result.correct_answer === '–' || result.correct_answer.trim() === '') {
+                    continue;
+                }
+                
+                // Clean style name for display with user-friendly labels
+                const styleName = getFriendlyStyleName(style.replace('user_', ''));
+                
+                resultsHTML += `
+                    <div class="result-item ${result.is_correct ? 'correct' : 'incorrect'}">
+                        <span class="style-name">${styleName}</span>
+                        <span class="result-status">${result.is_correct ? '✓' : '✗'}</span>
+                        <span class="user-answer">Your answer: <code>${result.user_input || '(empty)'}</code></span>
+                        ${!result.is_correct ? `<span class="correct-answer">Correct: <code>${result.correct_answer}</code></span>` : ''}
+                    </div>
+                `;
+            }
+            
+            resultsHTML += '</div>';
+            unifiedResultsBox.innerHTML = resultsHTML;
+            resultsContainer.appendChild(unifiedResultsBox);
+
+            resultsShown = true; // Set flag to true after showing results
+            updateButton(); // Update button text and style
+        });
+    }
+
+    function resetOrNext() {
+        console.log('Moving to next question');
+        // Reset panel color before navigating
+        resetPanelColor();
+        // Navigate to next question instead of just resetting inputs
+        window.location.href = "{{ url_for(module_name + '.index') }}";
+    }
+
+    // Attach the function to the button click
+    const button = document.querySelector('button[onclick="handleCheckAnswers()"]');
+    if (button) {
+        button.onclick = handleCheckAnswers;
+        // Initialize button state
+        updateButton();
+    } else {
+        console.error('Button not found!');
+    }
+
+    // Add event listener for the "Enter" key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            handleCheckAnswers(event); // Call the handleCheckAnswers function
+        }
+    });
+});
+
+// Setup real-time conversion for hiragana input
+document.addEventListener('DOMContentLoaded', function() {
+	const hiraganaRomajiInput = document.getElementById('user_hiragana_romaji');
+	const checkingStyles = {{ settings.checking_styles | tojson }};
+	const hasHiraganaChecking = checkingStyles.includes('hiragana');
+
+	
+	if (hiraganaRomajiInput) {
+		// console.log('Test conversion: ka =', convertRomajiToHiragana('ka'));
+		
+		hiraganaRomajiInput.addEventListener('input', function(e) {
+			// Only convert if hiragana checking is enabled
+			if (!hasHiraganaChecking) {
+				return;
+			}
+			
+			// Clear any existing timeout
+			if (window.conversionTimeout) {
+				clearTimeout(window.conversionTimeout);
+			}
+			
+			// Set a short delay before converting to allow for complete syllable input
+			window.conversionTimeout = setTimeout(() => {
+				const cursorPos = e.target.selectionStart;
+				const originalValue = e.target.value;
+				const convertedValue = convertRomajiToHiragana(originalValue);
+				
+				if (convertedValue !== originalValue) {
+					e.target.value = convertedValue;
+					
+					// Try to maintain cursor position
+					const newCursorPos = Math.min(cursorPos, convertedValue.length);
+					setTimeout(() => {
+						e.target.setSelectionRange(newCursorPos, newCursorPos);
+					}, 0);
+				}
+			}, 300); // 300ms delay - adjust as needed
+		});
+	}
+});
+</script>
+{% endblock %}
