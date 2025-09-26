@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{ module_name|title }} | Benky-Fy{% endblock %}
 {% block content %}
+<meta name="user-authenticated" content="{% if current_user %}true{% else %}false{% endif %}">
 <div class="flashcard-container">
 	<section class="flashcard-module">
 		<button class="settings-toggle-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
@@ -172,8 +173,9 @@
 			</div>
 			
 			<div class="answer-section">
-				{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
-				{% set other_styles = settings.checking_styles | reject('in', ['hiragana', 'romaji']) | list %}
+				{% set input_modes = settings.get('input_modes', settings.get('checking_styles', ['hiragana'])) %}
+				{% set has_hiragana_romaji = 'hiragana' in input_modes or 'romaji' in input_modes %}
+				{% set other_styles = input_modes | reject('in', ['hiragana', 'romaji']) | list %}
 				
 				{% if has_hiragana_romaji %}
 				<div class="input-group">
@@ -250,7 +252,8 @@
 <script>
 // Template variables
 const templateSettings = {
-	checkingStyles: ["hiragana"]
+	inputModes: ["hiragana"],
+	checkingStyles: ["hiragana"] // fallback for compatibility
 };
 </script>
 
@@ -288,6 +291,10 @@ let settingsState = {
 		english: 0.2
 	}
 };
+
+// Track user interactions to prevent API calls on page load
+let isUserInteraction = false;
+let isPageLoaded = false;
 
 // Collapsible section management
 function toggleSection(sectionId) {
@@ -345,6 +352,7 @@ function handleKanaTypesChange() {
 
 // Furigana style change handler
 function handleFuriganaStyleChange(style) {
+	isUserInteraction = true;
 	settingsState.furiganaStyle = style;
 	updateLivePreview();
 }
@@ -372,6 +380,7 @@ function updateCheckButtonState() {
 
 // Weight slider change handler
 function handleWeightChange(slider) {
+	isUserInteraction = true;
 	const type = slider.dataset.type;
 	const value = parseFloat(slider.value);
 	
@@ -398,10 +407,34 @@ function updateLivePreview() {
 	console.log('Settings updated:', settingsState);
 }
 
+// Check if user is authenticated
+function checkAuthenticationStatus() {
+	// Check for common authentication indicators
+	const hasUserSession = document.querySelector('meta[name="user-authenticated"]')?.content === 'true';
+	const hasAuthCookie = document.cookie.includes('session=') || document.cookie.includes('flask-session=');
+	const isOnAuthPage = window.location.pathname.includes('/auth/') || window.location.pathname.includes('/login');
+	
+	// If we're on an auth page, definitely not authenticated
+	if (isOnAuthPage) {
+		return false;
+	}
+	
+	// If we have explicit session indicators, we're authenticated
+	if (hasUserSession || hasAuthCookie) {
+		return true;
+	}
+	
+	// Default to false for safety
+	return false;
+}
+
 // Enhanced display text handler with full backend integration
 function updateDisplayText() {
 	const itemId = document.querySelector('input[name="item_id"]')?.value;
-	if (!itemId) return;
+	if (!itemId) {
+		console.log('No item_id found, skipping display text update');
+		return;
+	}
 	
 	// Get current settings from the form
 	const displayMode = document.querySelector('input[name="display_mode"]:checked')?.value || 'kana';
@@ -601,6 +634,9 @@ function getCurrentProportions() {
 
 // Enhanced display mode change handler with live preview
 function handleDisplayModeChange(mode) {
+	// Mark as user interaction
+	isUserInteraction = true;
+	
 	settingsState.displayMode = mode;
 	const weightedPanel = document.getElementById('weighted-panel');
 	const kanaTogglePanel = document.getElementById('kana-toggle-panel');
@@ -628,8 +664,15 @@ function handleDisplayModeChange(mode) {
 	updateDisplayText();
 }
 
+// Force display text update (for user interactions)
+function forceUpdateDisplayText() {
+	console.log('Force updating display text...');
+	updateDisplayText();
+}
+
 // Kana type change handler
 function handleKanaTypeChange(type) {
+	isUserInteraction = true;
 	settingsState.kanaTypes = [type];
 	
 	// Update display text if in kana mode
@@ -748,6 +791,9 @@ function resetToDefaults() {
 
 // Initialize settings on page load
 document.addEventListener('DOMContentLoaded', function() {
+	// Mark page as loaded
+	isPageLoaded = true;
+	
 	// Load saved settings
 	loadSettings();
 	
@@ -1040,8 +1086,8 @@ document.addEventListener('DOMContentLoaded', function() {
             hideFeedback();
             
             // Show feedback message
-            const checkingStyles = templateSettings.checkingStyles;
-            const primaryStyle = checkingStyles && checkingStyles[0] ? checkingStyles[0] : 'hiragana'; // Get the primary checking style
+            const inputModes = templateSettings.inputModes || templateSettings.checkingStyles;
+            const primaryStyle = inputModes && inputModes[0] ? inputModes[0] : 'hiragana'; // Get the primary input mode
             const primaryResult = results[`user_${primaryStyle}`] || results[Object.keys(results)[0]];
             const correctAnswer = primaryResult ? primaryResult.correct_answer : '';
             
@@ -1136,8 +1182,8 @@ document.addEventListener('DOMContentLoaded', function() {
 // Setup real-time conversion for hiragana input
 document.addEventListener('DOMContentLoaded', function() {
 	const hiraganaRomajiInput = document.getElementById('user_hiragana_romaji');
-	const checkingStyles = templateSettings.checkingStyles;
-	const hasHiraganaChecking = checkingStyles && checkingStyles.includes('hiragana');
+	const inputModes = templateSettings.inputModes || templateSettings.checkingStyles;
+	const hasHiraganaChecking = inputModes && inputModes.includes('hiragana');
 
 	
 	if (hiraganaRomajiInput) {

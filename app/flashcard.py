@@ -349,7 +349,7 @@ class BaseFlashcardEngine:
         for style in checking_styles:
             user_input_raw = user_inputs.get(f"user_{style}", "").strip()
             
-            if style == "hiragana":
+            if mode == "hiragana":
                 # For hiragana checking: JavaScript converts romaji to hiragana in real-time
                 # So user_input_raw should already be hiragana characters
                 correct_answer = item.hiragana
@@ -360,7 +360,7 @@ class BaseFlashcardEngine:
                     "correct_answer": correct_answer,
                     "is_correct": is_correct
                 }
-            elif style == "romaji":
+            elif mode == "romaji":
                 # For romaji checking: compare romaji directly
                 user_input = user_input_raw.lower()
                 correct_answer = item.romaji.lower() if item.romaji else ""
@@ -371,7 +371,7 @@ class BaseFlashcardEngine:
                     "correct_answer": item.romaji if item.romaji else "",
                     "is_correct": is_correct
                 }
-            elif style == "kanji":
+            elif mode == "kanji":
                 user_input = user_input_raw.lower()
                 correct_answer = item.kanji.lower()
                 is_correct = user_input == correct_answer if user_input_raw else False
@@ -381,7 +381,7 @@ class BaseFlashcardEngine:
                     "correct_answer": item.kanji,
                     "is_correct": is_correct
                 }
-            elif style == "katakana":
+            elif mode == "katakana":
                 # Skip if katakana is not available (marked with "–" or empty)
                 if not item.katakana or item.katakana.strip() in ['–', '']:
                     continue
@@ -395,7 +395,7 @@ class BaseFlashcardEngine:
                     "correct_answer": item.katakana,
                     "is_correct": is_correct
                 }
-            elif style == "english":
+            elif mode == "english":
                 user_input = user_input_raw.lower().strip()
                 correct_answers_text = item.english
                 
@@ -636,18 +636,18 @@ class FlashcardBlueprint:
                 
                 # Build correct answers based on checking styles
                 correct_answers = {}
-                for style in settings["checking_styles"]:
-                    if style == "hiragana":
+                for mode in settings.get("input_modes", settings.get("checking_styles", ["english"])):
+                    if mode == "hiragana":
                         correct_answers["user_hiragana_romaji"] = item.hiragana
-                    elif style == "romaji":
+                    elif mode == "romaji":
                         correct_answers["user_hiragana_romaji"] = item.romaji
-                    elif style == "kanji":
+                    elif mode == "kanji":
                         correct_answers["user_kanji"] = item.kanji
-                    elif style == "katakana":
+                    elif mode == "katakana":
                         # Only include if katakana is available (not "–" or empty)
                         if item.katakana and item.katakana.strip() not in ['–', '']:
                             correct_answers["user_katakana"] = item.katakana
-                    elif style == "english":
+                    elif mode == "english":
                         # Return the full string for display, but we'll handle multiple answers in frontend
                         correct_answers["user_english"] = item.english
                 
