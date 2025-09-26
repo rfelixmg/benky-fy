@@ -95,6 +95,10 @@ class BaseFlashcardEngine:
         self.module_name = module_name
         self._data = self.load_flashcards_from_csv(filename)
     
+    def __getitem__(self, index: int) -> FlashcardItem:
+        """Allow direct indexing like engine[index]"""
+        return self._data[index]
+    
     def load_flashcards_from_csv(self, path: str) -> list[FlashcardItem]:
         """Load flashcards from CSV file - can be overridden by subclasses"""
         flashcards = []
