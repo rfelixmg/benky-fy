@@ -174,17 +174,16 @@
 			
 			<div class="answer-section">
 				{% set input_modes = settings.get('input_modes', settings.get('checking_styles', ['hiragana'])) %}
-				{% set has_hiragana_romaji = 'hiragana' in input_modes or 'romaji' in input_modes %}
-				{% set other_styles = input_modes | reject('in', ['hiragana', 'romaji']) | list %}
 				
-				{% if has_hiragana_romaji %}
+				{% for mode in input_modes %}
 				<div class="input-group">
-					<label for="user_hiragana_romaji" class="input-label">
+					{% if mode == 'hiragana' %}
+					<label for="user_hiragana" class="input-label">
 						Type in romaji (auto-converts to hiragana)
 					</label>
 					<input type="text" 
-						   id="user_hiragana_romaji" 
-						   name="user_hiragana_romaji" 
+						   id="user_hiragana" 
+						   name="user_hiragana" 
 						   class="answer-input" 
 						   placeholder="Type in romaji..." 
 						   autofocus 
@@ -192,21 +191,31 @@
 						   autocorrect="off" 
 						   autocapitalize="off" 
 						   spellcheck="false" />
-				</div>
-				{% endif %}
-				
-				{% for style in other_styles %}
-				<div class="input-group">
-					<label for="user_{{ style }}" class="input-label">Your answer ({{ style }}):</label>
+					{% elif mode == 'romaji' %}
+					<label for="user_romaji" class="input-label">
+						Type in romaji
+					</label>
 					<input type="text" 
-						   id="user_{{ style }}" 
-						   name="user_{{ style }}" 
+						   id="user_romaji" 
+						   name="user_romaji" 
 						   class="answer-input" 
-						   placeholder="Type {{ style }}..." 
+						   placeholder="Type in romaji..." 
 						   autocomplete="off" 
 						   autocorrect="off" 
 						   autocapitalize="off" 
 						   spellcheck="false" />
+					{% else %}
+					<label for="user_{{ mode }}" class="input-label">Your answer ({{ mode }}):</label>
+					<input type="text" 
+						   id="user_{{ mode }}" 
+						   name="user_{{ mode }}" 
+						   class="answer-input" 
+						   placeholder="Type {{ mode }}..." 
+						   autocomplete="off" 
+						   autocorrect="off" 
+						   autocapitalize="off" 
+						   spellcheck="false" />
+					{% endif %}
 				</div>
 				{% endfor %}
 			</div>
@@ -954,21 +963,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize button state and input monitoring
     const checkButton = document.getElementById('checkButton');
-    const answerInput = document.getElementById('user_hiragana_romaji');
     
     function updateButtonState() {
-        if (checkButton && answerInput) {
-            const hasInput = answerInput.value.trim().length > 0;
+        if (checkButton) {
+            const inputElements = document.querySelectorAll('.answer-input');
+            const hasInput = Array.from(inputElements).some(input => input.value.trim().length > 0);
             checkButton.disabled = !hasInput || resultsShown;
             console.log('Button state updated:', { hasInput, resultsShown, disabled: checkButton.disabled });
         }
     }
     
-    // Monitor input changes
-    if (answerInput) {
-        answerInput.addEventListener('input', updateButtonState);
-        answerInput.addEventListener('keyup', updateButtonState);
-    }
+    // Monitor input changes for all fields
+    const inputElements = document.querySelectorAll('.answer-input');
+    inputElements.forEach(input => {
+        input.addEventListener('input', updateButtonState);
+        input.addEventListener('keyup', updateButtonState);
+    });
     
     // Initial button state
     updateButtonState();
@@ -1050,51 +1060,51 @@ document.addEventListener('DOMContentLoaded', function() {
         const userInputs = {};
         const inputElements = document.querySelectorAll('.answer-input');
         inputElements.forEach(input => {
-            userInputs[input.name] = input.value.trim();
+            const value = input.value.trim();
+            if (value) { // Only include non-empty inputs
+                userInputs[input.name] = value;
+            }
         });
 
-        // Fetch correct answers
-        fetchCorrectAnswers().then(correctAnswers => {
-            if (!correctAnswers) {
-                console.error('Failed to fetch correct answers');
+        // Get current input modes for the request
+        const inputModes = templateSettings.inputModes || templateSettings.checkingStyles || ['hiragana'];
+        
+        // Submit to backend for validation
+        const itemId = document.getElementById('item_id').value;
+        const formData = new FormData();
+        formData.append('item_id', itemId);
+        formData.append('input_modes', inputModes.join(','));
+        
+        // Add all filled user inputs
+        Object.entries(userInputs).forEach(([key, value]) => {
+            formData.append(key, value);
+        });
+
+        // Use test endpoint for development
+        fetch('/begginer/{{ module_name }}/api/test-check-answers', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error('Error checking answers:', data.error);
                 return;
             }
 
-            // Compare user inputs with correct answers
-            const results = {};
-            let allCorrect = true;
+            const results = data.results || {};
+            const allCorrect = data.all_correct || false;
             
             console.log('=== Answer Check Results ===');
+            console.log('Backend response:', data);
             
-            for (const [key, userInput] of Object.entries(userInputs)) {
-                const correctAnswerText = correctAnswers[key];
-                let isCorrect = false;
-                
-                // Enhanced English answer checking
-                if (key === "user_english" && correctAnswerText) {
-                    isCorrect = checkEnglishAnswer(userInput.toLowerCase(), correctAnswerText);
-                } else {
-                    // Simple exact match for other types
-                    isCorrect = userInput === correctAnswerText;
-                }
-                
-                results[key] = {
-                    user_input: userInput,
-                    correct_answer: correctAnswerText,
-                    is_correct: isCorrect
-                };
-                
-                // Log each result
-                const style = key.replace('user_', '');
-                console.log(`${style.toUpperCase()}:`);
-                console.log(`  Your answer: "${userInput}"`);
-                console.log(`  Correct answer: "${correctAnswerText}"`);
-                console.log(`  Result: ${isCorrect ? '✅ CORRECT' : '❌ INCORRECT'}`);
+            // Log each result
+            for (const [mode, result] of Object.entries(results)) {
+                console.log(`${mode.toUpperCase()}:`);
+                console.log(`  Your answer: "${result.user_input}"`);
+                console.log(`  Correct answer: "${result.correct_answer}"`);
+                console.log(`  Result: ${result.is_correct ? '✅ CORRECT' : '❌ INCORRECT'}`);
                 console.log('---');
-                
-                if (!isCorrect) {
-                    allCorrect = false;
-                }
             }
             
             console.log(`Overall Result: ${allCorrect ? '🎉 ALL CORRECT!' : '📝 Some answers need work'}`);
@@ -1104,9 +1114,8 @@ document.addEventListener('DOMContentLoaded', function() {
             hideFeedback();
             
             // Show feedback message
-            const inputModes = templateSettings.inputModes || templateSettings.checkingStyles;
-            const primaryStyle = inputModes && inputModes[0] ? inputModes[0] : 'hiragana'; // Get the primary input mode
-            const primaryResult = results[`user_${primaryStyle}`] || results[Object.keys(results)[0]];
+            const primaryMode = inputModes[0] || 'hiragana';
+            const primaryResult = results[primaryMode];
             const correctAnswer = primaryResult ? primaryResult.correct_answer : '';
             
             showFeedback(allCorrect, correctAnswer);
@@ -1137,22 +1146,22 @@ document.addEventListener('DOMContentLoaded', function() {
             const unifiedResultsBox = document.createElement('div');
             unifiedResultsBox.className = 'unified-results';
             
-            // Build the content for the unified box (removed overall-status div)
+            // Build the content for the unified box
             let resultsHTML = '<div class="results-list">';
             
             // Add individual results to the same container
-            for (const [style, result] of Object.entries(results)) {
-                // Skip if the correct answer is empty or just a dash (like katakana when not available)
+            for (const [mode, result] of Object.entries(results)) {
+                // Skip if the correct answer is empty or just a dash
                 if (!result.correct_answer || result.correct_answer === '–' || result.correct_answer.trim() === '') {
                     continue;
                 }
                 
-                // Clean style name for display with user-friendly labels
-                const styleName = getFriendlyStyleName(style.replace('user_', ''));
+                // Clean mode name for display with user-friendly labels
+                const modeName = getFriendlyStyleName(mode);
                 
                 resultsHTML += `
                     <div class="result-item ${result.is_correct ? 'correct' : 'incorrect'}">
-                        <span class="style-name">${styleName}</span>
+                        <span class="style-name">${modeName}</span>
                         <span class="result-status">${result.is_correct ? '✓' : '✗'}</span>
                         <span class="user-answer">Your answer: <code>${result.user_input || '(empty)'}</code></span>
                         ${!result.is_correct ? `<span class="correct-answer">Correct: <code>${result.correct_answer}</code></span>` : ''}
@@ -1166,6 +1175,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             resultsShown = true; // Set flag to true after showing results
             updateButton(); // Update button text and style
+        })
+        .catch(error => {
+            console.error('Error submitting answers:', error);
+            showFeedback(false, 'Network error occurred');
         });
     }
 
@@ -1199,15 +1212,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Setup real-time conversion for hiragana input
 document.addEventListener('DOMContentLoaded', function() {
-	const hiraganaRomajiInput = document.getElementById('user_hiragana_romaji');
+	const hiraganaInput = document.getElementById('user_hiragana');
 	const inputModes = templateSettings.inputModes || templateSettings.checkingStyles;
 	const hasHiraganaChecking = inputModes && inputModes.includes('hiragana');
 
 	
-	if (hiraganaRomajiInput) {
+	if (hiraganaInput) {
 		// console.log('Test conversion: ka =', convertRomajiToHiragana('ka'));
 		
-		hiraganaRomajiInput.addEventListener('input', function(e) {
+		hiraganaInput.addEventListener('input', function(e) {
 			// Only convert if hiragana checking is enabled
 			if (!hasHiraganaChecking) {
 				return;

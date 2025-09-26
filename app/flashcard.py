@@ -414,12 +414,27 @@ class BaseFlashcardEngine:
         """Check answers using the new input modes system"""
         results = {}
         
+        # Handle case where input_modes is empty or None
+        if not input_modes:
+            input_modes = ["english"]  # Default fallback
+        
         for mode in input_modes:
             user_input_raw = user_inputs.get(f"user_{mode}", "").strip()
             
+            # Skip validation if no input provided
+            if not user_input_raw:
+                results[mode] = {
+                    "user_input": "",
+                    "correct_answer": "",
+                    "is_correct": False,
+                    "skipped": True
+                }
+                continue
+            
             if mode == "hiragana":
                 correct_answer = item.hiragana
-                is_correct = user_input_raw.lower() == correct_answer.lower() if user_input_raw else False
+                # Check if input is hiragana or if it's romaji that needs conversion
+                is_correct = self._check_hiragana_input(user_input_raw, correct_answer)
                 
                 results[mode] = {
                     "user_input": user_input_raw,
@@ -429,7 +444,8 @@ class BaseFlashcardEngine:
             elif mode == "romaji":
                 user_input = user_input_raw.lower()
                 correct_answer = item.romaji.lower() if item.romaji else ""
-                is_correct = user_input == correct_answer if user_input_raw else False
+                # Check if input is romaji or if it's hiragana that needs conversion
+                is_correct = self._check_romaji_input(user_input_raw, item.romaji if item.romaji else "")
                 
                 results[mode] = {
                     "user_input": user_input_raw,
@@ -473,6 +489,37 @@ class BaseFlashcardEngine:
                 }
         
         return results
+    
+    def _check_hiragana_input(self, user_input: str, correct_hiragana: str) -> bool:
+        """Check hiragana input, handling both hiragana and romaji inputs"""
+        if not user_input or not correct_hiragana:
+            return False
+        
+        # Direct hiragana comparison
+        if user_input == correct_hiragana:
+            return True
+        
+        # Try romaji to hiragana conversion
+        try:
+            from .utils import romaji_to_hiragana
+            converted_hiragana = romaji_to_hiragana(user_input.lower())
+            return converted_hiragana == correct_hiragana
+        except ImportError:
+            # Fallback if conversion not available
+            return False
+    
+    def _check_romaji_input(self, user_input: str, correct_romaji: str) -> bool:
+        """Check romaji input, handling both romaji and hiragana inputs"""
+        if not user_input or not correct_romaji:
+            return False
+        
+        # Direct romaji comparison
+        if user_input.lower() == correct_romaji.lower():
+            return True
+        
+        # Try hiragana to romaji conversion (if needed)
+        # For now, just do direct comparison
+        return False
     
     def _check_english_answer(self, user_input: str, correct_answers_text: str) -> bool:
         """
@@ -591,11 +638,13 @@ class FlashcardBlueprint:
                 # New system: collect user inputs for all input modes
                 user_inputs = {}
                 for mode in settings["input_modes"]:
-                    if mode in ["hiragana", "romaji"]:
-                        # Both hiragana and romaji use the same input field
-                        user_inputs[f"user_{mode}"] = request.form.get("user_hiragana_romaji", "")
-                    else:
-                        user_inputs[f"user_{mode}"] = request.form.get(f"user_{mode}", "")
+                    # Try individual field first, then fallback to shared field for backward compatibility
+                    individual_field = request.form.get(f"user_{mode}", "")
+                    if not individual_field and mode in ["hiragana", "romaji"]:
+                        # Fallback to shared field for backward compatibility
+                        individual_field = request.form.get("user_hiragana_romaji", "")
+                    
+                    user_inputs[f"user_{mode}"] = individual_field
                 
                 results = self.engine.check_answers_with_input_modes(user_inputs, item, settings["input_modes"])
             else:
@@ -634,12 +683,18 @@ class FlashcardBlueprint:
                 item = self.engine[item_id]
                 settings = get_user_settings(self.module_name)
                 
-                # Build correct answers based on checking styles
+                # Build correct answers based on input modes
                 correct_answers = {}
-                for mode in settings.get("input_modes", settings.get("checking_styles", ["english"])):
+                input_modes = settings.get("input_modes", settings.get("checking_styles", ["english"]))
+                
+                for mode in input_modes:
                     if mode == "hiragana":
+                        correct_answers["user_hiragana"] = item.hiragana
+                        # Also provide shared field for backward compatibility
                         correct_answers["user_hiragana_romaji"] = item.hiragana
                     elif mode == "romaji":
+                        correct_answers["user_romaji"] = item.romaji
+                        # Also provide shared field for backward compatibility
                         correct_answers["user_hiragana_romaji"] = item.romaji
                     elif mode == "kanji":
                         correct_answers["user_kanji"] = item.kanji
@@ -648,7 +703,6 @@ class FlashcardBlueprint:
                         if item.katakana and item.katakana.strip() not in ['–', '']:
                             correct_answers["user_katakana"] = item.katakana
                     elif mode == "english":
-                        # Return the full string for display, but we'll handle multiple answers in frontend
                         correct_answers["user_english"] = item.english
                 
                 return correct_answers
@@ -755,6 +809,89 @@ class FlashcardBlueprint:
             
             except (ValueError, IndexError) as e:
                 return {"error": f"Invalid item_id: {e}"}, 400
+        
+        @bp.route("/api/test-correct-answers", methods=["GET"])
+        def test_correct_answers():
+            """Test endpoint for correct answers without authentication"""
+            item_id = request.args.get('item_id', '0')
+            input_modes = request.args.get('input_modes', 'hiragana,romaji,english').split(',')
+            
+            try:
+                item_id = int(item_id)
+                item = self.engine[item_id]
+                
+                # Build correct answers based on input modes
+                correct_answers = {}
+                for mode in input_modes:
+                    mode = mode.strip()
+                    if mode == "hiragana":
+                        correct_answers["user_hiragana"] = item.hiragana
+                        correct_answers["user_hiragana_romaji"] = item.hiragana
+                    elif mode == "romaji":
+                        correct_answers["user_romaji"] = item.romaji
+                        correct_answers["user_hiragana_romaji"] = item.romaji
+                    elif mode == "kanji":
+                        correct_answers["user_kanji"] = item.kanji
+                    elif mode == "katakana":
+                        if item.katakana and item.katakana.strip() not in ['–', '']:
+                            correct_answers["user_katakana"] = item.katakana
+                    elif mode == "english":
+                        correct_answers["user_english"] = item.english
+                
+                return {
+                    "correct_answers": correct_answers,
+                    "input_modes": input_modes,
+                    "item_info": {
+                        "hiragana": item.hiragana,
+                        "kanji": item.kanji,
+                        "katakana": item.katakana,
+                        "english": item.english,
+                        "romaji": item.romaji
+                    }
+                }
+                
+            except (ValueError, IndexError) as e:
+                return {"error": f"Invalid item_id: {e}"}, 400
+            except Exception as e:
+                return {"error": f"Error processing request: {str(e)}"}, 500
+        
+        @bp.route("/api/test-check-answers", methods=["POST"])
+        def test_check_answers():
+            """Test endpoint for answer checking without authentication"""
+            try:
+                item_id = int(request.form.get('item_id', 0))
+                item = self.engine[item_id]
+                
+                # Get test input modes
+                input_modes = request.form.get('input_modes', 'hiragana,romaji,english').split(',')
+                
+                # Collect user inputs
+                user_inputs = {}
+                for mode in input_modes:
+                    mode = mode.strip()
+                    # Try individual field first, then fallback to shared field
+                    individual_field = request.form.get(f"user_{mode}", "")
+                    if not individual_field and mode in ["hiragana", "romaji"]:
+                        individual_field = request.form.get("user_hiragana_romaji", "")
+                    user_inputs[f"user_{mode}"] = individual_field
+                
+                # Use the new answer checking logic
+                if hasattr(self.engine, 'check_answers_with_input_modes'):
+                    results = self.engine.check_answers_with_input_modes(user_inputs, item, input_modes)
+                else:
+                    results = {"error": "Engine does not support new answer checking"}
+                
+                return {
+                    "results": results,
+                    "user_inputs": user_inputs,
+                    "input_modes": input_modes,
+                    "all_correct": all(result.get("is_correct", False) for result in results.values() if not result.get("skipped", False))
+                }
+                
+            except (ValueError, IndexError) as e:
+                return {"error": f"Invalid item_id: {e}"}, 400
+            except Exception as e:
+                return {"error": f"Error processing request: {str(e)}"}, 500
         
         return bp
     
