@@ -371,6 +371,9 @@ function handleInputModeChange() {
 	const checkboxes = document.querySelectorAll('input[name="input_modes"]:checked');
 	settingsState.inputModes = Array.from(checkboxes).map(cb => cb.value);
 	
+	// Update input fields immediately
+	updateInputFields();
+	
 	// Update check button state
 	updateCheckButtonState();
 	
@@ -383,6 +386,121 @@ function updateCheckButtonState() {
 	const checkButton = document.getElementById('checkButton');
 	if (checkButton) {
 		checkButton.disabled = settingsState.inputModes.length === 0;
+	}
+}
+
+// Update input fields based on current settings
+function updateInputFields() {
+	try {
+		const answerSection = document.querySelector('.answer-section');
+		if (!answerSection) {
+			console.warn('Answer section not found, skipping input field update');
+			return;
+		}
+	
+	// Clear existing input fields
+	const existingInputs = answerSection.querySelectorAll('.input-group');
+	existingInputs.forEach(input => input.remove());
+	
+	// Create new input fields based on current settings
+	const inputModes = settingsState.inputModes || ['hiragana'];
+	
+	inputModes.forEach((mode, index) => {
+		const inputGroup = document.createElement('div');
+		inputGroup.className = 'input-group';
+		
+		let label, input;
+		
+		if (mode === 'hiragana') {
+			label = document.createElement('label');
+			label.className = 'input-label';
+			label.setAttribute('for', 'user_hiragana');
+			label.textContent = 'Type in romaji (auto-converts to hiragana)';
+			
+			input = document.createElement('input');
+			input.type = 'text';
+			input.id = 'user_hiragana';
+			input.name = 'user_hiragana';
+			input.className = 'answer-input';
+			input.placeholder = 'Type in romaji...';
+			if (index === 0) input.autofocus = true;
+		} else if (mode === 'romaji') {
+			label = document.createElement('label');
+			label.className = 'input-label';
+			label.setAttribute('for', 'user_romaji');
+			label.textContent = 'Type in romaji';
+			
+			input = document.createElement('input');
+			input.type = 'text';
+			input.id = 'user_romaji';
+			input.name = 'user_romaji';
+			input.className = 'answer-input';
+			input.placeholder = 'Type in romaji...';
+			if (index === 0) input.autofocus = true;
+		} else {
+			label = document.createElement('label');
+			label.className = 'input-label';
+			label.setAttribute('for', `user_${mode}`);
+			label.textContent = `Your answer (${mode}):`;
+			
+			input = document.createElement('input');
+			input.type = 'text';
+			input.id = `user_${mode}`;
+			input.name = `user_${mode}`;
+			input.className = 'answer-input';
+			input.placeholder = `Type ${mode}...`;
+			if (index === 0) input.autofocus = true;
+		}
+		
+		// Add common attributes
+		input.autocomplete = 'off';
+		input.autocorrect = 'off';
+		input.autocapitalize = 'off';
+		input.spellcheck = false;
+		
+		inputGroup.appendChild(label);
+		inputGroup.appendChild(input);
+		answerSection.appendChild(inputGroup);
+	});
+	
+	// Re-initialize input monitoring
+	const newInputElements = document.querySelectorAll('.answer-input');
+	newInputElements.forEach(input => {
+		input.addEventListener('input', updateButtonState);
+		input.addEventListener('keyup', updateButtonState);
+	});
+	
+	// Re-initialize Romaji conversion for hiragana field
+	const hiraganaInput = document.getElementById('user_hiragana');
+	if (hiraganaInput) {
+		hiraganaInput.addEventListener('input', function(e) {
+			if (!settingsState.inputModes.includes('hiragana')) return;
+			
+			if (window.conversionTimeout) {
+				clearTimeout(window.conversionTimeout);
+			}
+			
+			window.conversionTimeout = setTimeout(() => {
+				const cursorPos = e.target.selectionStart;
+				const originalValue = e.target.value;
+				const convertedValue = convertRomajiToHiragana(originalValue);
+				
+				if (convertedValue !== originalValue) {
+					e.target.value = convertedValue;
+					const newCursorPos = Math.min(cursorPos, convertedValue.length);
+					setTimeout(() => {
+						e.target.setSelectionRange(newCursorPos, newCursorPos);
+					}, 0);
+				}
+			}, 300);
+		});
+	}
+	
+	// Update button state
+	updateButtonState();
+	
+	} catch (error) {
+		console.error('Error updating input fields:', error);
 	}
 }
 
@@ -709,32 +827,111 @@ function handleKanaTypeChange(type) {
 	}
 }
 
-// Save settings (frontend only for now)
+// Save settings and update input fields
 function saveSettings() {
-	// Store settings in localStorage for persistence
-	localStorage.setItem('flashcardSettings', JSON.stringify(settingsState));
-	
-	// Show success feedback
-	const saveButton = document.querySelector('.btn-primary');
-	const originalText = saveButton.textContent;
-	saveButton.textContent = 'Saved!';
-	saveButton.style.backgroundColor = '#10b981';
-	
-	setTimeout(() => {
-		saveButton.textContent = originalText;
-		saveButton.style.backgroundColor = '';
-	}, 2000);
-	
-	// Close modal
-	toggleSettings();
+	try {
+		console.log('Saving settings:', settingsState);
+		
+		// Prepare settings data for backend API
+		const settingsData = {
+			flashcard_type: "translation",
+			display_mode: settingsState.displayMode,
+			kana_type: settingsState.kanaTypes[0] || 'hiragana',
+			input_modes: settingsState.inputModes,
+			proportions: settingsState.weights,
+			furigana_style: settingsState.furiganaStyle
+		};
+		
+		// Call backend API to save settings
+		fetch(`/begginer/{{ module_name }}/settings`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams(settingsData)
+		})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log('Settings saved to backend:', data);
+			
+			// Also store in localStorage as backup
+			localStorage.setItem('flashcardSettings', JSON.stringify(settingsState));
+			console.log('Settings saved to localStorage as backup');
+			
+			// Update input fields based on current settings
+			updateInputFields();
+			console.log('Input fields updated');
+			
+			// Show success feedback
+			const saveButton = document.querySelector('.btn-primary');
+			if (saveButton) {
+				const originalText = saveButton.textContent;
+				saveButton.textContent = 'Saved!';
+				saveButton.style.backgroundColor = '#10b981';
+				
+				setTimeout(() => {
+					saveButton.textContent = originalText;
+					saveButton.style.backgroundColor = '';
+				}, 2000);
+			}
+			
+			// Close modal
+			toggleSettings();
+			console.log('Settings saved successfully');
+		})
+		.catch(error => {
+			console.error('Error saving settings to backend:', error);
+			
+			// Fallback to localStorage only
+			localStorage.setItem('flashcardSettings', JSON.stringify(settingsState));
+			console.log('Settings saved to localStorage only (backend failed)');
+			
+			// Update input fields
+			updateInputFields();
+			
+			// Show error feedback
+			const saveButton = document.querySelector('.btn-primary');
+			if (saveButton) {
+				const originalText = saveButton.textContent;
+				saveButton.textContent = 'Saved (Local Only)';
+				saveButton.style.backgroundColor = '#f59e0b';
+				
+				setTimeout(() => {
+					saveButton.textContent = originalText;
+					saveButton.style.backgroundColor = '';
+				}, 2000);
+			}
+			
+			// Close modal
+			toggleSettings();
+		});
+		
+	} catch (error) {
+		console.error('Error saving settings:', error);
+		alert('Error saving settings: ' + error.message);
+	}
 }
 
-// Load settings from localStorage
+// Load settings from localStorage (backend settings are loaded via template)
 function loadSettings() {
+	// Load from localStorage since backend settings are provided via template
 	const saved = localStorage.getItem('flashcardSettings');
 	if (saved) {
-		settingsState = { ...settingsState, ...JSON.parse(saved) };
-		applySettingsToUI();
+		try {
+			settingsState = { ...settingsState, ...JSON.parse(saved) };
+			applySettingsToUI();
+			console.log('Settings loaded from localStorage');
+		} catch (parseError) {
+			console.error('Error parsing localStorage settings:', parseError);
+			console.log('Using default settings');
+		}
+	} else {
+		console.log('No saved settings found, using defaults');
 	}
 }
 
@@ -779,6 +976,9 @@ function applySettingsToUI() {
 	
 	// Update check button state
 	updateCheckButtonState();
+	
+	// Update input fields based on loaded settings
+	updateInputFields();
 }
 
 function resetToDefaults() {

@@ -659,8 +659,8 @@ class FlashcardBlueprint:
                 
                 results = self.engine.check_answers(user_inputs, item, checking_styles)
             
-            # Check if all answers are correct
-            all_correct = all(result["is_correct"] for result in results.values())
+            # Check if all answers are correct (ignore skipped fields)
+            all_correct = all_correct_logic(results)
             
             return render_template("flashcard_new.html",  # Use new template
                                 item=item, 
@@ -885,7 +885,7 @@ class FlashcardBlueprint:
                     "results": results,
                     "user_inputs": user_inputs,
                     "input_modes": input_modes,
-                    "all_correct": all(result.get("is_correct", False) for result in results.values() if not result.get("skipped", False))
+                    "all_correct": all_correct_logic(results)
                 }
                 
             except (ValueError, IndexError) as e:
@@ -896,6 +896,15 @@ class FlashcardBlueprint:
         return bp
     
     # Settings methods removed - now using centralized settings system
+
+
+def all_correct_logic(results: dict) -> bool:
+    """Helper function to determine if all non-skipped answers are correct"""
+    non_skipped_results = [result for result in results.values() if not result.get("skipped", False)]
+    if not non_skipped_results:
+        return False  # All fields empty
+    else:
+        return all(result.get("is_correct", False) for result in non_skipped_results)
 
 
 class VerbFlashcardEngine(BaseFlashcardEngine):
