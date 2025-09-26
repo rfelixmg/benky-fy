@@ -219,6 +219,68 @@ body {
 
 .muted { color: #718096; }
 .prompt-value { font-size: 2.5rem; line-height: 1.2; margin: 0.25rem 0 0.75rem; }
+
+/* Furigana Styling */
+.kanji-with-furigana {
+    font-size: 2.5rem;
+    line-height: 1.4;
+    margin: 0.25rem 0 0.75rem;
+    text-align: center;
+}
+
+.kanji-with-furigana ruby {
+    ruby-align: center;
+    ruby-position: over;
+}
+
+.kanji-with-furigana rt {
+    font-size: 0.4em;
+    color: #666;
+    font-weight: normal;
+    margin-top: 0.2em;
+}
+
+.kanji-with-furigana-text {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin: 0.25rem 0 0.75rem;
+    text-align: center;
+    color: #333;
+}
+
+.kanji {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin: 0.25rem 0 0.75rem;
+    text-align: center;
+}
+
+.prompt-text {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin: 0.25rem 0 0.75rem;
+    text-align: center;
+}
+
+/* Radio group styling for furigana settings */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.radio-group input[type="radio"] {
+    margin: 0;
+}
+
 .answer-form { display: grid; gap: 0.5rem; }
 .result { margin-top: 1rem; padding: 1rem; border-radius: 12px; }
 .result.correct { background: rgba(72,187,120,0.1); border: 1px solid #48bb78; }
@@ -1002,12 +1064,17 @@ body {
 .header-with-settings {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: flex-start;
 	margin-bottom: 1.5rem;
+	flex-wrap: wrap;
+	gap: 1rem;
 }
 
 .settings-dropdown {
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
 }
 
 .settings-btn {
@@ -1028,8 +1095,8 @@ body {
 
 .settings-panel {
 	display: none;
-	position: absolute;
-	top: 100%;
+	position: relative;
+	top: 0;
 	right: 0;
 	background: white;
 	border: 1px solid #e2e8f0;
@@ -1037,8 +1104,10 @@ body {
 	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 	padding: 1.5rem;
 	min-width: 280px;
-	z-index: 1000;
+	z-index: 9999;
 	margin-top: 0.5rem;
+	margin-left: auto;
+	width: fit-content;
 }
 
 .settings-section {
@@ -1247,14 +1316,20 @@ body {
 		align-items: stretch;
 	}
 	
+	.settings-dropdown {
+		align-items: stretch;
+	}
+	
 	.settings-panel {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		width: 90%;
-		max-width: 320px;
+		position: relative;
+		width: 100%;
+		max-width: none;
 		right: auto;
+		left: auto;
+		transform: none;
+		top: auto;
+		z-index: 9999;
+		margin-left: 0;
 	}
 }
 

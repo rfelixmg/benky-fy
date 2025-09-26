@@ -7,7 +7,9 @@ It combines the power of spaced repetition flashcards, active recall through typ
 - Smart flashcards that repeat common mistakes more often  
 - Typing-based answers for real recall (not just multiple choice)  
 - AI-driven learning path that expands with your progress  
-- Tracks your progress and adjusts difficulty automatically  
+- Tracks your progress and adjusts difficulty automatically
+- **Furigana support** for Japanese verbs with reading annotations
+- Multiple learning modules: Hiragana, Katakana, and Japanese Verbs  
 
 ## Getting Started
 
@@ -33,15 +35,38 @@ It combines the power of spaced repetition flashcards, active recall through typ
 
 #### Development Mode (Recommended)
 ```bash
+# Using virtual environment
+.env/bin/python run.py
+
+# Or if you have the virtual environment activated
 python run.py
 ```
-The server will start on `http://localhost:8080` in debug mode.
+The server will start on `http://localhost:8081` in debug mode.
 
 #### Alternative Methods
 ```bash
 # Using Flask command
-flask --app app run --debug --host=localhost --port=8080
+flask --app app run --debug --host=localhost --port=8081
 
 # Using Gunicorn (production-like)
-gunicorn -w 4 -b localhost:8080 run:app
+gunicorn -w 4 -b localhost:8081 run:app
 ```
+
+## Available Learning Modules
+
+### Japanese Verbs (`/begginer/verbs`)
+- **46 essential Japanese verbs** with comprehensive conjugations
+- **Furigana support** - toggle reading annotations on/off
+- **Smart kanji analysis** - breaks down verbs into meaningful stems
+- **Multiple display formats**:
+  - HTML ruby tags: 考[かんが]える (semantic accessibility)
+  - Text brackets: 考[かんが]える (compatibility)
+  - Plain kanji: 考える (traditional)
+
+### Hiragana (`/begginer/hiragana`)
+- Learn the fundamental Japanese phonetic writing system
+- Spaced repetition flashcards for efficient memorization
+
+### Katakana (`/begginer/katakana`)  
+- Master the second phonetic system used for foreign words
+- Interactive typing-based learning

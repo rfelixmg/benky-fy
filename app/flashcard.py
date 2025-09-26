@@ -1,7 +1,8 @@
 import csv
+import json
 import random
 from dataclasses import dataclass
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict, Any
 
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from app.auth import login_required, get_current_user
@@ -70,16 +71,20 @@ def romaji_to_hiragana(romaji_text: str) -> str:
 
 @dataclass
 class FlashcardItem:
-    index: int
-    kanji: str
-    hiragana: str
-    katakana: str
-    romaji: str
-    english: str
-    prompt: str
-    answer: str
-    prompt_script: str  # e.g., hiragana, katakana, kanji, romaji, english
-    answer_script: str
+	index: int
+	kanji: str
+	hiragana: str
+	katakana: str
+	romaji: str
+	english: str
+	prompt: str
+	answer: str
+	prompt_script: str  # e.g., hiragana, katakana, kanji, romaji, english
+	answer_script: str
+	# Enhanced fields for furigana support
+	kanji_analysis: Optional[Dict[str, Any]] = None
+	furigana_html: Optional[str] = None
+	furigana_text: Optional[str] = None
 
 
 class BaseFlashcardEngine:
@@ -109,6 +114,38 @@ class BaseFlashcardEngine:
                     answer_script="english"
                 )
                 flashcards.append(item)
+        return flashcards
+    
+    def load_flashcards_from_json(self, path: str) -> list[FlashcardItem]:
+        """Load flashcards from enhanced JSON format with furigana support"""
+        flashcards = []
+        with open(path, 'r', encoding='utf-8') as jsonfile:
+            verbs = json.load(jsonfile)
+            
+            for idx, verb in enumerate(verbs):
+                # Extract furigana data if available
+                kanji_analysis = verb.get('kanji_analysis', {})
+                furigana_html = kanji_analysis.get('furigana_html', '')
+                furigana_text = kanji_analysis.get('furigana_text', '')
+                
+                item = FlashcardItem(
+                    index=idx,
+                    kanji=verb.get('kanji', ''),
+                    hiragana=verb.get('hiragana', ''),
+                    katakana=verb.get('katakana', ''),  # May not exist in verbs.json
+                    romaji=verb.get('romaji', ''),
+                    english=verb.get('english', ''),
+                    prompt=verb.get('hiragana', ''),    # default prompt
+                    answer=verb.get('english', ''),     # default answer
+                    prompt_script="hiragana",           # default script
+                    answer_script="english",
+                    # Enhanced furigana fields
+                    kanji_analysis=kanji_analysis,
+                    furigana_html=furigana_html,
+                    furigana_text=furigana_text
+                )
+                flashcards.append(item)
+        
         return flashcards
     
     def __getitem__(self, index: int) -> FlashcardItem:
@@ -257,10 +294,22 @@ class FlashcardBlueprint:
             if not checking_styles:
                 checking_styles = ["english"]
             
-            session["settings"] = {
+            # Get current settings to preserve furigana settings if they exist
+            current_settings = self.get_user_settings()
+            
+            settings_update = {
                 "flashcard_styles": flashcard_styles,
                 "checking_styles": checking_styles
             }
+            
+            # Handle furigana settings for verb modules
+            if hasattr(self.engine, 'get_default_settings'):
+                default_settings = self.engine.get_default_settings()
+                if "show_furigana" in default_settings:
+                    settings_update["show_furigana"] = bool(request.form.get("show_furigana"))
+                    settings_update["furigana_style"] = request.form.get("furigana_style", default_settings["furigana_style"])
+            
+            session["settings"] = settings_update
             
             return redirect(url_for(f"{self.module_name}.index"))
         
@@ -340,10 +389,48 @@ class FlashcardBlueprint:
         }
 
 
+class VerbFlashcardEngine(BaseFlashcardEngine):
+    """Specialized engine for Japanese verbs with furigana support"""
+    
+    def __init__(self, json_filename: str, module_name: str = "verbs"):
+        self.filename = json_filename
+        self.module_name = module_name
+        self._data = self.load_flashcards_from_json(json_filename)
+    
+    def get_default_settings(self):
+        """Get default settings for verb flashcards with furigana options"""
+        return {
+            "flashcard_styles": ["hiragana"],
+            "checking_styles": ["english"],
+            "show_furigana": True,
+            "furigana_style": "html"  # "html" or "text"
+        }
+    
+    def get_user_settings(self):
+        """Get user settings from session with furigana defaults"""
+        default_settings = self.get_default_settings()
+        user_settings = session.get("settings", default_settings)
+        
+        # Ensure furigana settings exist
+        if "show_furigana" not in user_settings:
+            user_settings["show_furigana"] = default_settings["show_furigana"]
+        if "furigana_style" not in user_settings:
+            user_settings["furigana_style"] = default_settings["furigana_style"]
+        
+        return user_settings
+
+
 # Factory function to create flashcard modules
 def create_flashcard_module(module_name: str, csv_filename: str):
     """Factory function to create a complete flashcard module"""
     engine = BaseFlashcardEngine(csv_filename, module_name)
+    blueprint_creator = FlashcardBlueprint(module_name, engine)
+    return blueprint_creator.blueprint
+
+
+def create_verb_flashcard_module(module_name: str, json_filename: str):
+    """Factory function to create a verb flashcard module with furigana support"""
+    engine = VerbFlashcardEngine(json_filename, module_name)
     blueprint_creator = FlashcardBlueprint(module_name, engine)
     return blueprint_creator.blueprint
 

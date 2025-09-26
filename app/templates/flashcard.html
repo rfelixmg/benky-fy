@@ -27,6 +27,18 @@
 							<label><input type="checkbox" name="checking_english" {% if 'english' in settings.checking_styles %}checked{% endif %}> English</label>
 						</div>
 					</div>
+					{% if module_name == 'verbs' %}
+					<div class="settings-section">
+						<h3>Furigana Display:</h3>
+						<div class="checkbox-group">
+							<label><input type="checkbox" name="show_furigana" {% if settings.show_furigana %}checked{% endif %}> Show furigana</label>
+						</div>
+						<div class="radio-group">
+							<label><input type="radio" name="furigana_style" value="html" {% if settings.furigana_style == 'html' %}checked{% endif %}> HTML ruby tags</label>
+							<label><input type="radio" name="furigana_style" value="text" {% if settings.furigana_style == 'text' %}checked{% endif %}> Text brackets</label>
+						</div>
+					</div>
+					{% endif %}
 					<div class="settings-actions">
 						<button type="submit" class="btn btn-small">Save Settings</button>
 					</div>
@@ -36,7 +48,19 @@
 	</div>
 	<div class="prompt">
 		<p class="muted">Prompt ({{ item.prompt_script }})</p>
-		<div class="prompt-value">{{ item.prompt }}</div>
+		<div class="prompt-value">
+			{% if item.prompt_script == 'kanji' and module_name == 'verbs' and settings.show_furigana %}
+				{% if settings.furigana_style == 'html' and item.furigana_html %}
+					<div class="kanji-with-furigana">{{ item.furigana_html|safe }}</div>
+				{% elif settings.furigana_style == 'text' and item.furigana_text %}
+					<div class="kanji-with-furigana-text">{{ item.furigana_text }}</div>
+				{% else %}
+					<div class="kanji">{{ item.prompt }}</div>
+				{% endif %}
+			{% else %}
+				<div class="prompt-text">{{ item.prompt }}</div>
+			{% endif %}
+		</div>
 	</div>
 	<div class="answer-form">
 		{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
