@@ -466,8 +466,20 @@ function updateInputFields() {
 	// Re-initialize input monitoring
 	const newInputElements = document.querySelectorAll('.answer-input');
 	newInputElements.forEach(input => {
-		input.addEventListener('input', updateButtonState);
-		input.addEventListener('keyup', updateButtonState);
+		input.addEventListener('input', function() {
+			const btn = document.getElementById('checkButton');
+			if (btn) {
+				const hasInput = Array.from(document.querySelectorAll('.answer-input')).some(input => input.value.trim().length > 0);
+				btn.disabled = !hasInput;
+			}
+		});
+		input.addEventListener('keyup', function() {
+			const btn = document.getElementById('checkButton');
+			if (btn) {
+				const hasInput = Array.from(document.querySelectorAll('.answer-input')).some(input => input.value.trim().length > 0);
+				btn.disabled = !hasInput;
+			}
+		});
 	});
 	
 	// Re-initialize Romaji conversion for hiragana field
@@ -497,7 +509,11 @@ function updateInputFields() {
 	}
 	
 	// Update button state
-	updateButtonState();
+	const btn = document.getElementById('checkButton');
+	if (btn) {
+		const hasInput = Array.from(document.querySelectorAll('.answer-input')).some(input => input.value.trim().length > 0);
+		btn.disabled = !hasInput;
+	}
 	
 	} catch (error) {
 		console.error('Error updating input fields:', error);
@@ -833,22 +849,26 @@ function saveSettings() {
 		console.log('Saving settings:', settingsState);
 		
 		// Prepare settings data for backend API
-		const settingsData = {
-			flashcard_type: "translation",
-			display_mode: settingsState.displayMode,
-			kana_type: settingsState.kanaTypes[0] || 'hiragana',
-			input_modes: settingsState.inputModes,
-			proportions: settingsState.weights,
-			furigana_style: settingsState.furiganaStyle
-		};
+		const formData = new FormData();
+		formData.append('flashcard_type', 'translation');
+		formData.append('display_mode', settingsState.displayMode);
+		formData.append('kana_type', settingsState.kanaTypes[0] || 'hiragana');
+		formData.append('furigana_style', settingsState.furiganaStyle);
+		
+		// Add each input mode as separate field
+		settingsState.inputModes.forEach(mode => {
+			formData.append('input_modes', mode);
+		});
+		
+		// Add proportions
+		Object.keys(settingsState.weights).forEach(key => {
+			formData.append(`proportion_${key}`, settingsState.weights[key]);
+		});
 		
 		// Call backend API to save settings
 		fetch(`/begginer/{{ module_name }}/settings`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			body: new URLSearchParams(settingsData)
+			body: formData
 		})
 		.then(response => {
 			if (!response.ok) {
@@ -958,6 +978,9 @@ function applySettingsToUI() {
 		checkbox.checked = settingsState.inputModes.includes(checkbox.value);
 	});
 	
+	// CRITICAL: Update input fields based on selected modes
+	updateInputFields();
+	
 	// Apply furigana style
 	const furiganaStyleSelect = document.getElementById('furigana-style');
 	if (furiganaStyleSelect) {
@@ -1023,6 +1046,15 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	// Load saved settings
 	loadSettings();
+	
+	// Sync JavaScript state with HTML checkboxes (in case HTML has different defaults)
+	const checkedInputModes = Array.from(document.querySelectorAll('input[name="input_modes"]:checked')).map(cb => cb.value);
+	if (checkedInputModes.length > 0) {
+		settingsState.inputModes = checkedInputModes;
+	}
+	
+	// Ensure input fields are created based on current settings
+	updateInputFields();
 	
 	// Add event listeners for weight sliders
 	const weightSliders = document.querySelectorAll('.weight-slider');
@@ -1162,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Initialize button state and input monitoring
-    const checkButton = document.getElementById('checkButton');
+    let checkButton = document.getElementById('checkButton');
     
     function updateButtonState() {
         if (checkButton) {
@@ -1176,12 +1208,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Monitor input changes for all fields
     const inputElements = document.querySelectorAll('.answer-input');
     inputElements.forEach(input => {
-        input.addEventListener('input', updateButtonState);
-        input.addEventListener('keyup', updateButtonState);
+        input.addEventListener('input', function() {
+            if (checkButton) {
+                const hasInput = Array.from(document.querySelectorAll('.answer-input')).some(input => input.value.trim().length > 0);
+                checkButton.disabled = !hasInput || resultsShown;
+            }
+        });
+        input.addEventListener('keyup', function() {
+            if (checkButton) {
+                const hasInput = Array.from(document.querySelectorAll('.answer-input')).some(input => input.value.trim().length > 0);
+                checkButton.disabled = !hasInput || resultsShown;
+            }
+        });
     });
     
     // Initial button state
-    updateButtonState();
+    if (checkButton) {
+        const hasInput = Array.from(document.querySelectorAll('.answer-input')).some(input => input.value.trim().length > 0);
+        checkButton.disabled = !hasInput || resultsShown;
+    }
 
     function showFeedback(isCorrect, correctAnswer = '') {
         const feedbackMessage = document.getElementById('feedbackMessage');
@@ -1231,7 +1276,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.textContent = 'Check Answer';
                 button.classList.add('check-button');
                 button.classList.remove('next-button');
-                updateButtonState(); // Re-evaluate button state
+                // Re-evaluate button state
+                const hasInput = Array.from(document.querySelectorAll('.answer-input')).some(input => input.value.trim().length > 0);
+                button.disabled = !hasInput || resultsShown;
             }
         }
     }
@@ -1256,18 +1303,23 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Retrieve user inputs
+        // Retrieve user inputs - send ALL selected input modes (even empty ones)
         const userInputs = {};
         const inputElements = document.querySelectorAll('.answer-input');
         inputElements.forEach(input => {
-            const value = input.value.trim();
-            if (value) { // Only include non-empty inputs
-                userInputs[input.name] = value;
-            }
+            userInputs[input.name] = input.value.trim(); // Send all fields, even empty
         });
 
+        // Frontend validation: Check if any input is provided
+        const hasAnyInput = Object.values(userInputs).some(value => value.length > 0);
+        if (!hasAnyInput) {
+            console.log('No input provided - showing validation message');
+            showFeedback(false, 'Please provide at least one answer before checking');
+            return;
+        }
+
         // Get current input modes for the request
-        const inputModes = templateSettings.inputModes || templateSettings.checkingStyles || ['hiragana'];
+        const inputModes = settingsState.inputModes || ['hiragana'];
         
         // Submit to backend for validation
         const itemId = document.getElementById('item_id').value;
