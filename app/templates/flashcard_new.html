@@ -436,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (checkButton && answerInput) {
             const hasInput = answerInput.value.trim().length > 0;
             checkButton.disabled = !hasInput || resultsShown;
+            console.log('Button state updated:', { hasInput, resultsShown, disabled: checkButton.disabled });
         }
     }
     
@@ -502,14 +503,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function resetPanelColor() {
-        const flashcardModule = document.querySelector('.flashcard-module');
-        if (flashcardModule) {
-            flashcardModule.classList.remove('waiting', 'correct', 'incorrect');
-            flashcardModule.classList.add('waiting'); // Reset to white waiting state
+        const flashcardModuleElement = document.querySelector('.flashcard-module');
+        if (flashcardModuleElement) {
+            flashcardModuleElement.classList.remove('waiting', 'correct', 'incorrect');
+            flashcardModuleElement.classList.add('waiting'); // Reset to white waiting state
         }
     }
 
     function handleCheckAnswers(event) {
+        console.log('handleCheckAnswers called', { event, resultsShown });
+        
         if (event) {
             event.preventDefault(); // Prevent default behavior
         }
@@ -577,7 +580,8 @@ document.addEventListener('DOMContentLoaded', function() {
             hideFeedback();
             
             // Show feedback message
-            const primaryStyle = settings["checking_styles"][0]; // Get the primary checking style
+            const checkingStyles = {{ settings.checking_styles | tojson | safe }};
+            const primaryStyle = checkingStyles[0]; // Get the primary checking style
             const primaryResult = results[`user_${primaryStyle}`] || results[Object.keys(results)[0]];
             const correctAnswer = primaryResult ? primaryResult.correct_answer : '';
             
@@ -593,15 +597,15 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsContainer.innerHTML = ''; // Clear previous results
             
             // Change flashcard module color based on results
-            const flashcardModule = document.querySelector('.flashcard-module');
-            if (flashcardModule) {
+            const flashcardModuleElement = document.querySelector('.flashcard-module');
+            if (flashcardModuleElement) {
                 // Remove any existing color classes
-                flashcardModule.classList.remove('waiting', 'correct', 'incorrect');
+                flashcardModuleElement.classList.remove('waiting', 'correct', 'incorrect');
                 
                 if (allCorrect) {
-                    flashcardModule.classList.add('correct'); // Green for all correct
+                    flashcardModuleElement.classList.add('correct'); // Green for all correct
                 } else {
-                    flashcardModule.classList.add('incorrect'); // Red for some incorrect
+                    flashcardModuleElement.classList.add('incorrect'); // Red for some incorrect
                 }
             }
             
