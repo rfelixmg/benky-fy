@@ -869,16 +869,17 @@ function saveSettings() {
 		// Call backend API to save settings
 		fetch(`/begginer/{{ module_name }}/settings`, {
 			method: 'POST',
-			body: formData
+			body: formData,
+			redirect: 'manual' // Prevent automatic redirect following
 		})
 		.then(response => {
-			if (response.status === 401 || response.status === 403) {
-				// Authentication required, use test endpoint for development
+			if (response.status === 401 || response.status === 403 || response.status === 302) {
+				// Authentication required or redirect to login, use test endpoint for development
 				console.log('Auth required, using test endpoint');
 				return fetch(`/begginer/{{ module_name }}/api/test-settings`, {
 					method: 'POST',
 					body: formData
-				});
+				}).then(testResponse => testResponse.json());
 			}
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);

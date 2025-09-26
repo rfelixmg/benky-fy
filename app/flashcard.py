@@ -640,8 +640,8 @@ class FlashcardBlueprint:
             
             # Process settings through the centralized system
             update_user_settings(self.module_name, form_data)
-            
-            return redirect(url_for(f"{self.module_name}.index"))
+            return {"status": "success", "message": "Settings saved successfully", "settings": form_data}
+            # return redirect(url_for(f"{self.module_name}.index"))
         
         @bp.route("/api/test-settings", methods=["POST"])
         def test_update_settings():
