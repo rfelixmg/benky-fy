@@ -1,179 +1,176 @@
 {% extends 'base.html' %}
 {% block title %}{{ module_name|title }} | Benky-Fy{% endblock %}
 {% block content %}
-<section class="panel flashcard-layout">
-	<div class="header">
-		<h1>Spaced repetition flashcards (SRF) - {{ module_name|title }}</h1>
+<div class="flashcard-container">
+	<section class="flashcard-module">
 		<button class="settings-toggle-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+		<header class="flashcard-header">
+			<h1>{{ module_name|title }} Flashcards</h1>
+		</header>
+	
+	<!-- Floating Settings Modal -->
+	<div class="settings-modal" id="settingsModal">
+		<div class="settings-modal-content">
+			<div class="settings-modal-header">
+				<h2>Settings</h2>
+				<button class="settings-close-btn" onclick="toggleSettings()" title="Close">✕</button>
+			</div>
+			<form method="POST" action="{{ url_for(module_name + '.update_settings') }}" id="settingsForm">
+				{% for group in settings_groups %}
+				<div class="settings-group">
+					<h3>{{ group.name }}</h3>
+					{% if group.description %}
+					<p class="settings-description">{{ group.description }}</p>
+					{% endif %}
+					
+					{% for setting in group.settings %}
+					<div class="setting-item" data-setting="{{ setting.key }}">
+						{% if setting.type == 'checkbox' %}
+						<label class="checkbox-label">
+							<input type="checkbox" 
+								   name="{{ setting.key }}" 
+								   value="1" 
+								   {% if settings[setting.key] %}checked{% endif %}
+								   onchange="handleSettingChange('{{ setting.key }}', this.checked)">
+							<span class="setting-name">{{ setting.name }}</span>
+							{% if setting.description %}
+							<span class="setting-description">{{ setting.description }}</span>
+							{% endif %}
+						</label>
+						
+						{% elif setting.type == 'radio' %}
+						<div class="radio-group">
+							<label class="radio-group-label">{{ setting.name }}</label>
+							{% if setting.description %}
+							<p class="setting-description">{{ setting.description }}</p>
+							{% endif %}
+							{% for value, label in setting.options.items() %}
+							<label class="radio-option">
+								<input type="radio" 
+									   name="{{ setting.key }}" 
+									   value="{{ value }}"
+									   {% if settings[setting.key] == value %}checked{% endif %}
+									   onchange="handleSettingChange('{{ setting.key }}', '{{ value }}')">
+								<span>{{ label }}</span>
+							</label>
+							{% endfor %}
+						</div>
+						
+						{% elif setting.type == 'select' %}
+						<label class="select-label">
+							<span class="setting-name">{{ setting.name }}</span>
+							{% if setting.description %}
+							<span class="setting-description">{{ setting.description }}</span>
+							{% endif %}
+							<select name="{{ setting.key }}" onchange="handleSettingChange('{{ setting.key }}', this.value)">
+								{% for value, label in setting.options.items() %}
+								<option value="{{ value }}" {% if settings[setting.key] == value %}selected{% endif %}>
+									{{ label }}
+								</option>
+								{% endfor %}
+							</select>
+						</label>
+						
+						{% elif setting.type == 'text' %}
+						<label class="text-label">
+							<span class="setting-name">{{ setting.name }}</span>
+							{% if setting.description %}
+							<span class="setting-description">{{ setting.description }}</span>
+							{% endif %}
+							<input type="text" 
+								   name="{{ setting.key }}" 
+								   value="{{ settings[setting.key] }}"
+								   onchange="handleSettingChange('{{ setting.key }}', this.value)">
+						</label>
+						
+						{% elif setting.type == 'number' %}
+						<label class="number-label">
+							<span class="setting-name">{{ setting.name }}</span>
+							{% if setting.description %}
+							<span class="setting-description">{{ setting.description }}</span>
+							{% endif %}
+							<input type="number" 
+								   name="{{ setting.key }}" 
+								   value="{{ settings[setting.key] }}"
+								   onchange="handleSettingChange('{{ setting.key }}', this.value)">
+						</label>
+						{% endif %}
+					</div>
+					{% endfor %}
+				</div>
+				{% endfor %}
+				
+				<div class="settings-actions">
+					<button type="submit" class="btn btn-primary">Save Settings</button>
+					<button type="button" class="btn btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
+				</div>
+			</form>
+		</div>
 	</div>
 	
-	<!-- Persistent Settings Panel -->
-	<div class="settings-panel">
-		<h2>Settings</h2>
-		<form method="POST" action="{{ url_for(module_name + '.update_settings') }}" id="settingsForm">
-			{% for group in settings_groups %}
-			<div class="settings-group">
-				<h3>{{ group.name }}</h3>
-				{% if group.description %}
-				<p class="settings-description">{{ group.description }}</p>
+		<div class="flashcard-content">
+			<div class="prompt-section">
+				<p class="prompt-label">Prompt ({{ item.prompt_script }})</p>
+				<div class="prompt-value">
+					{% if item.prompt_script == 'kanji' and settings.show_furigana %}
+						{% if settings.furigana_style == 'html' and item.furigana_html %}
+							<div class="kanji-with-furigana">{{ item.furigana_html|safe }}</div>
+						{% elif settings.furigana_style == 'text' and item.furigana_text %}
+							<div class="kanji-with-furigana-text">{{ item.furigana_text }}</div>
+						{% else %}
+							<div class="kanji">{{ item.prompt }}</div>
+						{% endif %}
+					{% else %}
+						<div class="prompt-text">{{ item.prompt }}</div>
+					{% endif %}
+				</div>
+			</div>
+			
+			<div class="answer-section">
+				{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
+				{% set other_styles = settings.checking_styles | reject('in', ['hiragana', 'romaji']) | list %}
+				
+				{% if has_hiragana_romaji %}
+				<div class="input-group">
+					<label for="user_hiragana_romaji" class="input-label">
+						Type in romaji (auto-converts to hiragana)
+					</label>
+					<input type="text" 
+						   id="user_hiragana_romaji" 
+						   name="user_hiragana_romaji" 
+						   class="answer-input" 
+						   placeholder="Type in romaji..." 
+						   autofocus 
+						   autocomplete="off" 
+						   autocorrect="off" 
+						   autocapitalize="off" 
+						   spellcheck="false" />
+				</div>
 				{% endif %}
 				
-				{% for setting in group.settings %}
-				<div class="setting-item" data-setting="{{ setting.key }}">
-					{% if setting.type == 'checkbox' %}
-					<label class="checkbox-label">
-						<input type="checkbox" 
-							   name="{{ setting.key }}" 
-							   value="1" 
-							   {% if settings[setting.key] %}checked{% endif %}
-							   onchange="handleSettingChange('{{ setting.key }}', this.checked)">
-						<span class="setting-name">{{ setting.name }}</span>
-						{% if setting.description %}
-						<span class="setting-description">{{ setting.description }}</span>
-						{% endif %}
-					</label>
-					
-					{% elif setting.type == 'radio' %}
-					<div class="radio-group">
-						<label class="radio-group-label">{{ setting.name }}</label>
-						{% if setting.description %}
-						<p class="setting-description">{{ setting.description }}</p>
-						{% endif %}
-						{% for value, label in setting.options.items() %}
-						<label class="radio-option">
-							<input type="radio" 
-								   name="{{ setting.key }}" 
-								   value="{{ value }}"
-								   {% if settings[setting.key] == value %}checked{% endif %}
-								   onchange="handleSettingChange('{{ setting.key }}', '{{ value }}')">
-							<span>{{ label }}</span>
-						</label>
-						{% endfor %}
-					</div>
-					
-					{% elif setting.type == 'select' %}
-					<label class="select-label">
-						<span class="setting-name">{{ setting.name }}</span>
-						{% if setting.description %}
-						<span class="setting-description">{{ setting.description }}</span>
-						{% endif %}
-						<select name="{{ setting.key }}" onchange="handleSettingChange('{{ setting.key }}', this.value)">
-							{% for value, label in setting.options.items() %}
-							<option value="{{ value }}" {% if settings[setting.key] == value %}selected{% endif %}>
-								{{ label }}
-							</option>
-							{% endfor %}
-						</select>
-					</label>
-					
-					{% elif setting.type == 'text' %}
-					<label class="text-label">
-						<span class="setting-name">{{ setting.name }}</span>
-						{% if setting.description %}
-						<span class="setting-description">{{ setting.description }}</span>
-						{% endif %}
-						<input type="text" 
-							   name="{{ setting.key }}" 
-							   value="{{ settings[setting.key] }}"
-							   onchange="handleSettingChange('{{ setting.key }}', this.value)">
-					</label>
-					
-					{% elif setting.type == 'number' %}
-					<label class="number-label">
-						<span class="setting-name">{{ setting.name }}</span>
-						{% if setting.description %}
-						<span class="setting-description">{{ setting.description }}</span>
-						{% endif %}
-						<input type="number" 
-							   name="{{ setting.key }}" 
-							   value="{{ settings[setting.key] }}"
-							   onchange="handleSettingChange('{{ setting.key }}', this.value)">
-					</label>
-					{% endif %}
+				{% for style in other_styles %}
+				<div class="input-group">
+					<label for="user_{{ style }}" class="input-label">Your answer ({{ style }}):</label>
+					<input type="text" 
+						   id="user_{{ style }}" 
+						   name="user_{{ style }}" 
+						   class="answer-input" 
+						   placeholder="Type {{ style }}..." 
+						   autocomplete="off" 
+						   autocorrect="off" 
+						   autocapitalize="off" 
+						   spellcheck="false" />
 				</div>
 				{% endfor %}
 			</div>
-			{% endfor %}
 			
-			<div class="settings-actions">
-				<button type="submit" class="btn btn-primary">Save Settings</button>
-				<button type="button" class="btn btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
-			</div>
-		</form>
-	</div>
-	
-	<!-- Flashcard Content -->
-	<div class="flashcard-content">
-		<div class="prompt">
-			<p class="muted">Prompt ({{ item.prompt_script }})</p>
-			<div class="prompt-value">
-				{% if item.prompt_script == 'kanji' and settings.show_furigana %}
-					{% if settings.furigana_style == 'html' and item.furigana_html %}
-						<div class="kanji-with-furigana">{{ item.furigana_html|safe }}</div>
-					{% elif settings.furigana_style == 'text' and item.furigana_text %}
-						<div class="kanji-with-furigana-text">{{ item.furigana_text }}</div>
-					{% else %}
-						<div class="kanji">{{ item.prompt }}</div>
-					{% endif %}
-				{% else %}
-					<div class="prompt-text">{{ item.prompt }}</div>
-				{% endif %}
-			</div>
-		</div>
-		
-		<div class="answer-form">
-			{% set has_hiragana_romaji = 'hiragana' in settings.checking_styles or 'romaji' in settings.checking_styles %}
-			{% set other_styles = settings.checking_styles | reject('in', ['hiragana', 'romaji']) | list %}
-			
-			{% if has_hiragana_romaji %}
-			<div class="input-group">
-				{% set hiragana_label = 'hiragana' in settings.checking_styles %}
-				{% set romaji_label = 'romaji' in settings.checking_styles %}
-				<label for="user_hiragana_romaji">
-					Your answer (
-					{%- if hiragana_label and romaji_label -%}
-						hiragana/romaji
-					{%- elif hiragana_label -%}
-						hiragana
-					{%- else -%}
-						romaji
-					{%- endif -%}
-					):
-				</label>
-				<input type="text" 
-					   id="user_hiragana_romaji" 
-					   name="user_hiragana_romaji" 
-					   class="answer-input" 
-					   placeholder="Type in romaji..." 
-					   autofocus 
-					   autocomplete="off" 
-					   autocorrect="off" 
-					   autocapitalize="off" 
-					   spellcheck="false" />
-			</div>
-			{% endif %}
-			
-			{% for style in other_styles %}
-			<div class="input-group">
-				<label for="user_{{ style }}">Your answer ({{ style }}):</label>
-				<input type="text" 
-					   id="user_{{ style }}" 
-					   name="user_{{ style }}" 
-					   class="answer-input" 
-					   placeholder="Type {{ style }}..." 
-					   autocomplete="off" 
-					   autocorrect="off" 
-					   autocapitalize="off" 
-					   spellcheck="false" />
-			</div>
-			{% endfor %}
-		</div>
-		
-		<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
+			<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
 
-		<div class="actions">
-			<button type="button" class="btn" onclick="handleCheckAnswers()">benkyfy</button>
-		</div>
+			<div class="actions-section">
+				<button type="button" class="check-button" id="checkButton" onclick="handleCheckAnswers()" disabled>Check Answer</button>
+				<div class="branding-tooltip">powered by Benky-fy</div>
+				<div class="feedback-message" id="feedbackMessage" style="display: none;"></div>
+			</div>
 		
 		<!-- Always render the results container -->
 		<div class="results-container">
@@ -199,19 +196,32 @@
 		</button>
 
 		{% endif %}
-	</div>
-</section>
+		</div>
+	</section>
+</div>
 
 <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 
 <script>
 // Settings management
 function toggleSettings() {
-	const settingsPanel = document.querySelector('.settings-panel');
-	if (settingsPanel) {
-		settingsPanel.classList.toggle('show');
+	const settingsModal = document.getElementById('settingsModal');
+	if (settingsModal) {
+		settingsModal.classList.toggle('show');
 	}
 }
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+	const settingsModal = document.getElementById('settingsModal');
+	const settingsModalContent = document.querySelector('.settings-modal-content');
+	
+	if (settingsModal && settingsModal.classList.contains('show')) {
+		if (!settingsModalContent.contains(event.target) && !event.target.closest('.settings-toggle-btn')) {
+			settingsModal.classList.remove('show');
+		}
+	}
+});
 
 function handleSettingChange(settingKey, value) {
 	// Handle dependencies - show/hide dependent settings
@@ -410,33 +420,92 @@ function fetchCorrectAnswers() {
 
 document.addEventListener('DOMContentLoaded', function() {
     let resultsShown = false; // Define resultsShown in the correct scope
+    let feedbackTimeout = null; // For managing feedback persistence
 
-    // Initialize panel color to waiting state
-    const panel = document.querySelector('.panel');
-    if (panel) {
-        panel.classList.add('waiting'); // White for waiting answer
+    // Initialize flashcard module color to waiting state
+    const flashcardModule = document.querySelector('.flashcard-module');
+    if (flashcardModule) {
+        flashcardModule.classList.add('waiting'); // White for waiting answer
+    }
+
+    // Initialize button state and input monitoring
+    const checkButton = document.getElementById('checkButton');
+    const answerInput = document.getElementById('user_hiragana_romaji');
+    
+    function updateButtonState() {
+        if (checkButton && answerInput) {
+            const hasInput = answerInput.value.trim().length > 0;
+            checkButton.disabled = !hasInput || resultsShown;
+        }
+    }
+    
+    // Monitor input changes
+    if (answerInput) {
+        answerInput.addEventListener('input', updateButtonState);
+        answerInput.addEventListener('keyup', updateButtonState);
+    }
+    
+    // Initial button state
+    updateButtonState();
+
+    function showFeedback(isCorrect, correctAnswer = '') {
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        if (!feedbackMessage) return;
+        
+        // Clear any existing timeout
+        if (feedbackTimeout) {
+            clearTimeout(feedbackTimeout);
+        }
+        
+        // Show feedback
+        feedbackMessage.style.display = 'flex';
+        feedbackMessage.className = 'feedback-message ' + (isCorrect ? 'correct' : 'incorrect');
+        
+        if (isCorrect) {
+            feedbackMessage.innerHTML = '✅ Correct!';
+        } else {
+            feedbackMessage.innerHTML = `❌ Incorrect. The answer was: <strong>${correctAnswer}</strong>`;
+        }
+        
+        // Auto-hide after 3 seconds
+        feedbackTimeout = setTimeout(() => {
+            feedbackMessage.style.display = 'none';
+        }, 3000);
+    }
+    
+    function hideFeedback() {
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        if (feedbackMessage) {
+            feedbackMessage.style.display = 'none';
+        }
+        if (feedbackTimeout) {
+            clearTimeout(feedbackTimeout);
+            feedbackTimeout = null;
+        }
     }
 
     function updateButton() {
         const button = document.querySelector('button[onclick="handleCheckAnswers()"]');
         if (button) {
             if (resultsShown) {
-                button.textContent = '+1';
+                button.textContent = 'Next ➡️';
                 button.classList.add('next-button');
                 button.classList.remove('check-button');
+                button.disabled = false;
             } else {
-                button.textContent = 'benkyfy';
+                button.textContent = 'Check Answer';
                 button.classList.add('check-button');
                 button.classList.remove('next-button');
+                updateButtonState(); // Re-evaluate button state
             }
         }
     }
 
     function resetPanelColor() {
-        const panel = document.querySelector('.panel');
-        if (panel) {
-            panel.classList.remove('waiting', 'correct', 'incorrect');
-            panel.classList.add('waiting'); // Reset to white waiting state
+        const flashcardModule = document.querySelector('.flashcard-module');
+        if (flashcardModule) {
+            flashcardModule.classList.remove('waiting', 'correct', 'incorrect');
+            flashcardModule.classList.add('waiting'); // Reset to white waiting state
         }
     }
 
@@ -504,6 +573,16 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`Overall Result: ${allCorrect ? '🎉 ALL CORRECT!' : '📝 Some answers need work'}`);
             console.log('=============================');
 
+            // Hide any existing feedback
+            hideFeedback();
+            
+            // Show feedback message
+            const primaryStyle = settings["checking_styles"][0]; // Get the primary checking style
+            const primaryResult = results[`user_${primaryStyle}`] || results[Object.keys(results)[0]];
+            const correctAnswer = primaryResult ? primaryResult.correct_answer : '';
+            
+            showFeedback(allCorrect, correctAnswer);
+            
             // Update the UI with results
             const resultsContainer = document.querySelector('.results-container');
             if (!resultsContainer) {
@@ -513,16 +592,16 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsContainer.style.display = 'block'; // Ensure it's visible
             resultsContainer.innerHTML = ''; // Clear previous results
             
-            // Change panel color based on results
-            const panel = document.querySelector('.panel');
-            if (panel) {
+            // Change flashcard module color based on results
+            const flashcardModule = document.querySelector('.flashcard-module');
+            if (flashcardModule) {
                 // Remove any existing color classes
-                panel.classList.remove('waiting', 'correct', 'incorrect');
+                flashcardModule.classList.remove('waiting', 'correct', 'incorrect');
                 
                 if (allCorrect) {
-                    panel.classList.add('correct'); // Green for all correct
+                    flashcardModule.classList.add('correct'); // Green for all correct
                 } else {
-                    panel.classList.add('incorrect'); // Red for some incorrect
+                    flashcardModule.classList.add('incorrect'); // Red for some incorrect
                 }
             }
             
@@ -564,6 +643,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetOrNext() {
         console.log('Moving to next question');
+        // Hide feedback before navigating
+        hideFeedback();
         // Reset panel color before navigating
         resetPanelColor();
         // Navigate to next question instead of just resetting inputs
@@ -591,7 +672,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Setup real-time conversion for hiragana input
 document.addEventListener('DOMContentLoaded', function() {
 	const hiraganaRomajiInput = document.getElementById('user_hiragana_romaji');
-	const checkingStyles = {{ settings.checking_styles | tojson }};
+	const checkingStyles = {{ settings.checking_styles | tojson | safe }};
 	const hasHiraganaChecking = checkingStyles.includes('hiragana');
 
 	
