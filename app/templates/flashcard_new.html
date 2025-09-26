@@ -449,8 +449,21 @@ function updateDisplayText() {
 		proportions: getCurrentProportions()
 	};
 	
-	// Send request to get display text
-	fetch(`/begginer/{{ module_name }}/api/display-text?item_id=${itemId}`, {
+	// Send request to get display text with settings as URL parameters
+	const params = new URLSearchParams({
+		item_id: itemId,
+		display_mode: displayMode,
+		kana_type: kanaType,
+		furigana_style: furiganaStyle
+	});
+	
+	// Add proportions if available
+	const proportions = getCurrentProportions();
+	Object.keys(proportions).forEach(key => {
+		params.append(`proportions.${key}`, proportions[key]);
+	});
+	
+	fetch(`/begginer/{{ module_name }}/api/display-text?${params}`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
@@ -460,7 +473,12 @@ function updateDisplayText() {
 		if (response.status === 401 || response.status === 403) {
 			// Authentication required, use test endpoint for development
 			console.log('Auth required, using test endpoint');
-			return fetch(`/begginer/{{ module_name }}/api/test-display-text?item_id=${itemId}&display_mode=${settings.display_mode}&kana_type=${settings.kana_type}`);
+			const testParams = new URLSearchParams({
+				item_id: itemId,
+				display_mode: displayMode,
+				kana_type: kanaType
+			});
+			return fetch(`/begginer/{{ module_name }}/api/test-display-text?${testParams}`);
 		}
 		return response;
 	})

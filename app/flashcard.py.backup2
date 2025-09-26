@@ -667,28 +667,7 @@ class FlashcardBlueprint:
             try:
                 item_id = int(item_id)
                 item = self.engine[item_id]
-                
-                # Get settings from URL parameters (real-time) or fallback to session settings
-                display_mode = request.args.get('display_mode')
-                kana_type = request.args.get('kana_type')
-                furigana_style = request.args.get('furigana_style')
-                
-                if display_mode and kana_type:
-                    # Use real-time settings from frontend
-                    settings = {
-                        "display_mode": display_mode,
-                        "kana_type": kana_type,
-                        "furigana_style": furigana_style or "ruby",
-                        "proportions": {
-                            "kana": float(request.args.get('proportions.kana', 0.3)),
-                            "kanji": float(request.args.get('proportions.kanji', 0.2)),
-                            "kanji_furigana": float(request.args.get('proportions.kanji_furigana', 0.2)),
-                            "english": float(request.args.get('proportions.english', 0.3))
-                        }
-                    }
-                else:
-                    # Fallback to session settings (existing behavior)
-                    settings = get_user_settings(self.module_name)
+                settings = get_user_settings(self.module_name)
                 
                 # Use the new display text logic
                 if hasattr(self.engine, 'get_display_text'):
