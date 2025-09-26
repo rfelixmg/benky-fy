@@ -113,6 +113,14 @@ export class SettingsModal {
                 this._saveSettings();
             });
         }
+
+        // Reset button
+        const resetButton = document.querySelector('#resetSettingsBtn');
+        if (resetButton) {
+            resetButton.addEventListener('click', () => {
+                this._resetSettings();
+            });
+        }
     }
 
     /**
