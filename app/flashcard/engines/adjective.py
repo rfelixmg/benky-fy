@@ -4,7 +4,7 @@ import random
 from typing import List, Dict, Any, Tuple
 
 from app.settings import get_user_settings
-from app.conjugation_checker import create_conjugation_checker
+from app.conjugation import create_conjugation_checker
 from .base import BaseFlashcardEngine
 from ..models.item import FlashcardItem
 
