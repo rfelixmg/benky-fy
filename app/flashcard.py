@@ -421,13 +421,15 @@ class BaseFlashcardEngine:
         for mode in input_modes:
             user_input_raw = user_inputs.get(f"user_{mode}", "").strip()
             
-            # Skip validation if no input provided
+            # Handle empty input - treat as incorrect for mixed feedback system
             if not user_input_raw:
+                # Get the correct answer for this mode
+                correct_answer = self._get_correct_answer_for_mode(mode, item)
                 results[mode] = {
                     "user_input": "",
-                    "correct_answer": "",
+                    "correct_answer": correct_answer,
                     "is_correct": False,
-                    "skipped": True
+                    "skipped": False  # Changed: empty fields are not skipped, they're incorrect
                 }
                 continue
             
@@ -489,6 +491,21 @@ class BaseFlashcardEngine:
                 }
         
         return results
+    
+    def _get_correct_answer_for_mode(self, mode: str, item: FlashcardItem) -> str:
+        """Get the correct answer for a specific input mode"""
+        if mode == "hiragana":
+            return item.hiragana
+        elif mode == "romaji":
+            return item.romaji if item.romaji else ""
+        elif mode == "kanji":
+            return item.kanji
+        elif mode == "katakana":
+            return item.katakana if item.katakana and item.katakana.strip() not in ['–', ''] else ""
+        elif mode == "english":
+            return item.english
+        else:
+            return ""
     
     def _check_hiragana_input(self, user_input: str, correct_hiragana: str) -> bool:
         """Check hiragana input, handling both hiragana and romaji inputs"""

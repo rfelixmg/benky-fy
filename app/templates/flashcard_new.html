@@ -1228,6 +1228,78 @@ document.addEventListener('DOMContentLoaded', function() {
         checkButton.disabled = !hasInput || resultsShown;
     }
 
+    // Mixed Input Feedback System
+    function applyMixedInputFeedback(data) {
+        const { all_correct, results, input_modes } = data;
+        
+        // Calculate overall state
+        const correctCount = Object.values(results).filter(r => r.is_correct).length;
+        const totalCount = Object.keys(results).length;
+        const hasMixedResults = correctCount > 0 && correctCount < totalCount;
+        
+        // Apply individual field colors
+        Object.entries(results).forEach(([mode, result]) => {
+            const inputElement = document.getElementById(`user_${mode}`);
+            if (inputElement) {
+                // Remove existing classes
+                inputElement.classList.remove('field-correct', 'field-incorrect');
+                
+                // Add appropriate class
+                if (result.is_correct) {
+                    inputElement.classList.add('field-correct');
+                } else {
+                    inputElement.classList.add('field-incorrect');
+                }
+            }
+        });
+        
+        // Apply overall container state
+        const flashcardModuleElement = document.querySelector('.flashcard-module');
+        if (flashcardModuleElement) {
+            // Remove existing color classes
+            flashcardModuleElement.classList.remove('waiting', 'correct', 'incorrect', 'mixed');
+            
+            if (all_correct) {
+                flashcardModuleElement.classList.add('correct'); // Green: Perfect! All correct
+            } else if (hasMixedResults) {
+                flashcardModuleElement.classList.add('mixed'); // Orange: Great progress! Fix the red fields
+            } else {
+                flashcardModuleElement.classList.add('incorrect'); // Red: Try again, you've got this!
+            }
+        }
+        
+        // Update submit button state
+        const checkButton = document.getElementById('checkButton');
+        if (checkButton) {
+            if (all_correct) {
+                checkButton.textContent = 'Perfect! Next ➡️';
+                checkButton.classList.add('success-button');
+            } else if (hasMixedResults) {
+                checkButton.textContent = 'Great Progress! Next ➡️';
+                checkButton.classList.add('progress-button');
+            } else {
+                checkButton.textContent = 'Try Again!';
+                checkButton.classList.add('retry-button');
+            }
+        }
+        
+        // Focus guidance to incorrect fields
+        if (hasMixedResults) {
+            const firstIncorrectField = Object.entries(results)
+                .find(([mode, result]) => !result.is_correct);
+            if (firstIncorrectField) {
+                const [mode] = firstIncorrectField;
+                const inputElement = document.getElementById(`user_${mode}`);
+                if (inputElement) {
+                    // Add focus indicator
+                    inputElement.classList.add('needs-attention');
+                    // Scroll to field if needed
+                    inputElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+    }
+
     function showFeedback(isCorrect, correctAnswer = '') {
         const feedbackMessage = document.getElementById('feedbackMessage');
         if (!feedbackMessage) return;
@@ -1303,6 +1375,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Get current input modes for the request
+        const inputModes = settingsState.inputModes || ['hiragana'];
+        
         // Retrieve user inputs - send ALL selected input modes (even empty ones)
         const userInputs = {};
         const inputElements = document.querySelectorAll('.answer-input');
@@ -1318,18 +1393,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Get current input modes for the request
-        const inputModes = settingsState.inputModes || ['hiragana'];
-        
         // Submit to backend for validation
         const itemId = document.getElementById('item_id').value;
         const formData = new FormData();
         formData.append('item_id', itemId);
         formData.append('input_modes', inputModes.join(','));
         
-        // Add all filled user inputs
-        Object.entries(userInputs).forEach(([key, value]) => {
-            formData.append(key, value);
+        // CRITICAL: Add ALL selected input modes as form fields (even if empty)
+        inputModes.forEach(mode => {
+            const fieldName = `user_${mode}`;
+            const fieldValue = userInputs[fieldName] || ''; // Use empty string if not found
+            formData.append(fieldName, fieldValue);
         });
 
         // Use test endpoint for development
@@ -1381,18 +1455,8 @@ document.addEventListener('DOMContentLoaded', function() {
             resultsContainer.style.display = 'block'; // Ensure it's visible
             resultsContainer.innerHTML = ''; // Clear previous results
             
-            // Change flashcard module color based on results
-            const flashcardModuleElement = document.querySelector('.flashcard-module');
-            if (flashcardModuleElement) {
-                // Remove any existing color classes
-                flashcardModuleElement.classList.remove('waiting', 'correct', 'incorrect');
-                
-                if (allCorrect) {
-                    flashcardModuleElement.classList.add('correct'); // Green for all correct
-                } else {
-                    flashcardModuleElement.classList.add('incorrect'); // Red for some incorrect
-                }
-            }
+            // Apply mixed input feedback system
+            applyMixedInputFeedback(data);
             
             // Create a single unified results box
             const unifiedResultsBox = document.createElement('div');
