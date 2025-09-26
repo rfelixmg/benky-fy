@@ -480,6 +480,75 @@ body {
 	color: #374151;
 }
 
+/* Checkbox Groups */
+.checkbox-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.checkbox-option {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	cursor: pointer;
+	padding: 0.5rem;
+	border-radius: 8px;
+	transition: background-color 0.2s ease;
+}
+
+.checkbox-option:hover {
+	background: #f8fafc;
+}
+
+.checkbox-option input[type="checkbox"] {
+	margin: 0;
+	width: 16px;
+	height: 16px;
+	accent-color: #3b82f6;
+}
+
+.checkbox-option span {
+	font-size: 0.95rem;
+	color: #374151;
+}
+
+/* Helper Text */
+.helper-text {
+	margin-top: 1rem;
+	padding: 0.75rem;
+	background: #f0f9ff;
+	border: 1px solid #bae6fd;
+	border-radius: 6px;
+}
+
+.helper-text p {
+	margin: 0;
+	font-size: 0.875rem;
+	color: #0369a1;
+	line-height: 1.4;
+}
+
+/* Kana Toggle Panel */
+.kana-toggle-panel {
+	margin-top: 1.5rem;
+	padding: 1.5rem;
+	background: #f8fafc;
+	border-radius: 8px;
+	border: 1px solid #e2e8f0;
+}
+
+.kana-toggle-panel h4 {
+	margin: 0 0 1rem 0;
+	color: #374151;
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.kana-sub-group {
+	gap: 0.5rem;
+}
+
 /* Weighted Display Panel */
 .weighted-panel {
 	margin-top: 1.5rem;

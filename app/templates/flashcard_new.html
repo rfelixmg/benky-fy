@@ -25,16 +25,16 @@
 					<div class="settings-section-content" id="flashcard-display">
 						<div class="radio-group">
 							<label class="radio-option">
-								<input type="radio" name="display_mode" value="hiragana" checked onchange="handleDisplayModeChange('hiragana')">
-								<span>Hiragana</span>
-							</label>
-							<label class="radio-option">
-								<input type="radio" name="display_mode" value="katakana" onchange="handleDisplayModeChange('katakana')">
-								<span>Katakana</span>
+								<input type="radio" name="display_mode" value="kana" checked onchange="handleDisplayModeChange('kana')">
+								<span>Kana</span>
 							</label>
 							<label class="radio-option">
 								<input type="radio" name="display_mode" value="kanji" onchange="handleDisplayModeChange('kanji')">
 								<span>Kanji</span>
+							</label>
+							<label class="radio-option">
+								<input type="radio" name="display_mode" value="kanji_furigana" onchange="handleDisplayModeChange('kanji_furigana')">
+								<span>Kanji + Furigana</span>
 							</label>
 							<label class="radio-option">
 								<input type="radio" name="display_mode" value="english" onchange="handleDisplayModeChange('english')">
@@ -46,19 +46,43 @@
 							</label>
 						</div>
 						
+						<!-- Kana Sub-toggle -->
+						<div class="kana-toggle-panel" id="kana-toggle-panel" style="display: block;">
+							<h4>Kana Type</h4>
+							<div class="checkbox-group kana-sub-group">
+								<label class="checkbox-option">
+									<input type="checkbox" name="kana_types" value="hiragana" checked onchange="handleKanaTypesChange()">
+									<span>Hiragana</span>
+								</label>
+								<label class="checkbox-option">
+									<input type="checkbox" name="kana_types" value="katakana" onchange="handleKanaTypesChange()">
+									<span>Katakana</span>
+								</label>
+							</div>
+						</div>
+						
+						<!-- Furigana Style Sub-panel (for Kanji + Furigana) -->
+						<div class="weighted-panel" id="furigana-style-panel" style="display: none;">
+							<h4>Furigana Style</h4>
+						<label class="select-label">
+								<span>Furigana Style</span>
+								<select id="furigana-style" onchange="handleFuriganaStyleChange(this.value)">
+									<option value="hover">Hover (tooltip on kanji)</option>
+									<option value="inline">Inline (above or beside)</option>
+									<option value="brackets">Brackets (e.g., 食[た]べる)</option>
+									<option value="ruby" selected>Ruby (default browser <ruby>)</option>
+							</select>
+						</label>
+						</div>
+						
 						<!-- Weighted Display Sub-panel -->
 						<div class="weighted-panel" id="weighted-panel" style="display: none;">
 							<h4>Display Weights</h4>
 							<div class="slider-group">
 								<label class="slider-label">
-									<span>Hiragana</span>
-									<input type="range" min="0" max="1" step="0.1" value="0.3" class="weight-slider" data-type="hiragana">
+									<span>Kana</span>
+									<input type="range" min="0" max="1" step="0.1" value="0.3" class="weight-slider" data-type="kana">
 									<span class="slider-value">0.3</span>
-								</label>
-								<label class="slider-label">
-									<span>Katakana</span>
-									<input type="range" min="0" max="1" step="0.1" value="0.2" class="weight-slider" data-type="katakana">
-									<span class="slider-value">0.2</span>
 								</label>
 								<label class="slider-label">
 									<span>Kanji</span>
@@ -66,10 +90,15 @@
 									<span class="slider-value">0.3</span>
 								</label>
 								<label class="slider-label">
+									<span>Kanji + Furigana</span>
+									<input type="range" min="0" max="1" step="0.1" value="0.2" class="weight-slider" data-type="kanji_furigana">
+									<span class="slider-value">0.2</span>
+								</label>
+								<label class="slider-label">
 									<span>English</span>
 									<input type="range" min="0" max="1" step="0.1" value="0.2" class="weight-slider" data-type="english">
 									<span class="slider-value">0.2</span>
-								</label>
+						</label>
 							</div>
 						</div>
 					</div>
@@ -82,60 +111,34 @@
 						<span class="section-toggle">▼</span>
 					</div>
 					<div class="settings-section-content" id="answer-input">
-						<div class="radio-group">
-							<label class="radio-option">
-								<input type="radio" name="input_mode" value="hiragana" checked onchange="handleInputModeChange('hiragana')">
-								<span>Hiragana (romaji→hiragana)</span>
+						<div class="checkbox-group">
+							<label class="checkbox-option">
+								<input type="checkbox" name="input_modes" value="hiragana" checked onchange="handleInputModeChange()">
+								<span>Hiragana (romaji input → auto-converts to kana)</span>
 							</label>
-							<label class="radio-option">
-								<input type="radio" name="input_mode" value="romaji" onchange="handleInputModeChange('romaji')">
-								<span>Romaji</span>
+							<label class="checkbox-option">
+								<input type="checkbox" name="input_modes" value="romaji" onchange="handleInputModeChange()">
+								<span>Romaji (as typed)</span>
 							</label>
-							<label class="radio-option">
-								<input type="radio" name="input_mode" value="katakana" onchange="handleInputModeChange('katakana')">
+							<label class="checkbox-option">
+								<input type="checkbox" name="input_modes" value="katakana" onchange="handleInputModeChange()">
 								<span>Katakana</span>
 							</label>
-							<label class="radio-option">
-								<input type="radio" name="input_mode" value="kanji" onchange="handleInputModeChange('kanji')">
+							<label class="checkbox-option">
+								<input type="checkbox" name="input_modes" value="kanji" onchange="handleInputModeChange()">
 								<span>Kanji</span>
 							</label>
-							<label class="radio-option">
-								<input type="radio" name="input_mode" value="english" onchange="handleInputModeChange('english')">
+							<label class="checkbox-option">
+								<input type="checkbox" name="input_modes" value="english" onchange="handleInputModeChange()">
 								<span>English</span>
-							</label>
+						</label>
+						</div>
+						<div class="helper-text">
+							<p>You can select more than one. Your answer will be accepted if it matches any selected type.</p>
 						</div>
 					</div>
 				</div>
 
-				<!-- Furigana Settings Section -->
-				<div class="settings-section">
-					<div class="settings-section-header" onclick="toggleSection('furigana-settings')">
-						<h3>Furigana Display</h3>
-						<span class="section-toggle">▼</span>
-					</div>
-					<div class="settings-section-content" id="furigana-settings">
-						<div class="toggle-group">
-							<label class="toggle-label">
-								<input type="checkbox" id="show-furigana" onchange="handleFuriganaToggle(this.checked)">
-								<span class="toggle-switch"></span>
-								<span>Show furigana</span>
-							</label>
-						</div>
-						
-						<div class="furigana-options" id="furigana-options" style="display: none;">
-							<label class="select-label">
-								<span>Furigana Style</span>
-								<select id="furigana-style" onchange="handleFuriganaStyleChange(this.value)">
-									<option value="above">Above Kanji</option>
-									<option value="hover">On hover</option>
-									<option value="inline">Always inline</option>
-									<option value="html">HTML format</option>
-									<option value="text">Text format</option>
-								</select>
-							</label>
-						</div>
-					</div>
-				</div>
 				
 				<div class="settings-actions">
 					<button type="button" class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
@@ -269,14 +272,14 @@ document.addEventListener('click', function(event) {
 
 // Settings state management
 let settingsState = {
-	displayMode: 'hiragana',
-	inputMode: 'hiragana',
-	showFurigana: false,
-	furiganaStyle: 'above',
+	displayMode: 'kana',
+	kanaTypes: ['hiragana'],
+	inputModes: ['hiragana'],
+	furiganaStyle: 'ruby',
 	weights: {
-		hiragana: 0.3,
-		katakana: 0.2,
+		kana: 0.3,
 		kanji: 0.3,
+		kanji_furigana: 0.2,
 		english: 0.2
 	}
 };
@@ -302,47 +305,65 @@ function toggleSection(sectionId) {
 function handleDisplayModeChange(mode) {
 	settingsState.displayMode = mode;
 	const weightedPanel = document.getElementById('weighted-panel');
+	const kanaTogglePanel = document.getElementById('kana-toggle-panel');
+	const furiganaStylePanel = document.getElementById('furigana-style-panel');
 	
 	if (mode === 'weighted') {
 		weightedPanel.style.display = 'block';
+		kanaTogglePanel.style.display = 'none';
+		furiganaStylePanel.style.display = 'none';
+	} else if (mode === 'kana') {
+		weightedPanel.style.display = 'none';
+		kanaTogglePanel.style.display = 'block';
+		furiganaStylePanel.style.display = 'none';
+	} else if (mode === 'kanji_furigana') {
+		weightedPanel.style.display = 'none';
+		kanaTogglePanel.style.display = 'none';
+		furiganaStylePanel.style.display = 'block';
 	} else {
 		weightedPanel.style.display = 'none';
+		kanaTogglePanel.style.display = 'none';
+		furiganaStylePanel.style.display = 'none';
 	}
 	
 	// Update live preview if present
 	updateLivePreview();
 }
 
-// Input mode change handler
-function handleInputModeChange(mode) {
-	settingsState.inputMode = mode;
-	
-	// Update live preview if present
-	updateLivePreview();
-}
-
-// Furigana toggle handler
-function handleFuriganaToggle(enabled) {
-	settingsState.showFurigana = enabled;
-	const furiganaOptions = document.getElementById('furigana-options');
-	
-	if (enabled) {
-		furiganaOptions.style.display = 'block';
-	} else {
-		furiganaOptions.style.display = 'none';
-	}
-	
-	// Update live preview if present
+// Kana types change handler (multi-select)
+function handleKanaTypesChange() {
+	const kanaCheckboxes = document.querySelectorAll('input[name="kana_types"]:checked');
+	settingsState.kanaTypes = Array.from(kanaCheckboxes).map(cb => cb.value);
+	// In the future, alternate or randomize if both are selected
 	updateLivePreview();
 }
 
 // Furigana style change handler
 function handleFuriganaStyleChange(style) {
 	settingsState.furiganaStyle = style;
+	updateLivePreview();
+}
+
+// Input mode change handler
+function handleInputModeChange() {
+	const checkboxes = document.querySelectorAll('input[name="input_modes"]:checked');
+	settingsState.inputModes = Array.from(checkboxes).map(cb => cb.value);
+	
+	// Update check button state
+	updateCheckButtonState();
 	
 	// Update live preview if present
 	updateLivePreview();
 }
+
+// Update check button state based on input modes
+function updateCheckButtonState() {
+	const checkButton = document.getElementById('checkButton');
+	if (checkButton) {
+		checkButton.disabled = settingsState.inputModes.length === 0;
+	}
+}
+
 
 // Weight slider change handler
 function handleWeightChange(slider) {
@@ -406,21 +427,23 @@ function applySettingsToUI() {
 		}
 	});
 	
-	// Apply input mode
-	const inputRadios = document.querySelectorAll('input[name="input_mode"]');
-	inputRadios.forEach(radio => {
-		if (radio.value === settingsState.inputMode) {
-			radio.checked = true;
-		}
+	// Apply kana types (checkboxes)
+	const kanaCheckboxesAll = document.querySelectorAll('input[name="kana_types"]');
+	kanaCheckboxesAll.forEach(cb => {
+		cb.checked = settingsState.kanaTypes.includes(cb.value);
 	});
 	
-	// Apply furigana settings
-	const furiganaCheckbox = document.getElementById('show-furigana');
-	furiganaCheckbox.checked = settingsState.showFurigana;
-	handleFuriganaToggle(settingsState.showFurigana);
+	// Apply input modes
+	const inputCheckboxes = document.querySelectorAll('input[name="input_modes"]');
+	inputCheckboxes.forEach(checkbox => {
+		checkbox.checked = settingsState.inputModes.includes(checkbox.value);
+	});
 	
+	// Apply furigana style
 	const furiganaStyleSelect = document.getElementById('furigana-style');
-	furiganaStyleSelect.value = settingsState.furiganaStyle;
+	if (furiganaStyleSelect) {
+		furiganaStyleSelect.value = settingsState.furiganaStyle;
+	}
 	
 	// Apply weights
 	Object.keys(settingsState.weights).forEach(type => {
@@ -431,20 +454,23 @@ function applySettingsToUI() {
 			valueSpan.textContent = settingsState.weights[type].toFixed(1);
 		}
 	});
+	
+	// Update check button state
+	updateCheckButtonState();
 }
 
 function resetToDefaults() {
 	if (confirm('Are you sure you want to reset all settings to their default values?')) {
 		// Reset to default state
 		settingsState = {
-			displayMode: 'hiragana',
-			inputMode: 'hiragana',
-			showFurigana: false,
-			furiganaStyle: 'above',
+			displayMode: 'kana',
+			kanaTypes: ['hiragana'],
+			inputModes: ['hiragana'],
+			furiganaStyle: 'ruby',
 			weights: {
-				hiragana: 0.3,
-				katakana: 0.2,
+				kana: 0.3,
 				kanji: 0.3,
+				kanji_furigana: 0.2,
 				english: 0.2
 			}
 		};
@@ -482,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	});
 	
 	// Initialize all sections as collapsed
-	const sections = ['flashcard-display', 'answer-input', 'furigana-settings'];
+	const sections = ['flashcard-display', 'answer-input'];
 	sections.forEach(sectionId => {
 		const content = document.getElementById(sectionId);
 		if (content) {
@@ -896,4 +922,5 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 });
 </script>
+
 {% endblock %}
