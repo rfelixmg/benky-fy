@@ -96,14 +96,13 @@
 		</article>
 	</a>
 
-	<article class="panel module-card module-card--locked" aria-disabled="true">
-		<div class="module-card__badge" title="Locked">
-			<span aria-hidden="true">🔒</span>
-		</div>
-		<h3 class="module-card__title">Base Nouns</h3>
-		<p>Learn fundamental Japanese nouns for everyday use.</p>
-		<p style="margin-top: .75rem;"><button class="btn" disabled>Locked</button></p>
-	</article>
+	<a href="{{ url_for('base_nouns.index') }}" class="module-card-link">
+		<article class="panel module-card">
+			<h3 class="module-card__title">Base Nouns</h3>
+			<p>Learn fundamental Japanese nouns for everyday use.</p>
+			<span class="btn module-btn">Benky-Fy</span>
+		</article>
+	</a>
 </div>
 
 <section class="panel" style="margin-bottom: 1rem; margin-top: 2rem;">

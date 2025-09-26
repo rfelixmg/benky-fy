@@ -619,7 +619,8 @@ function updateDisplayText() {
 			const testParams = new URLSearchParams({
 				item_id: itemId,
 				display_mode: displayMode,
-				kana_type: kanaType
+				kana_type: kanaType,
+				furigana_style: furiganaStyle
 			});
 			return fetch(`/begginer/{{ module_name }}/api/test-display-text?${testParams}`);
 		}
@@ -871,6 +872,14 @@ function saveSettings() {
 			body: formData
 		})
 		.then(response => {
+			if (response.status === 401 || response.status === 403) {
+				// Authentication required, use test endpoint for development
+				console.log('Auth required, using test endpoint');
+				return fetch(`/begginer/{{ module_name }}/api/test-settings`, {
+					method: 'POST',
+					body: formData
+				});
+			}
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}

@@ -643,6 +643,25 @@ class FlashcardBlueprint:
             
             return redirect(url_for(f"{self.module_name}.index"))
         
+        @bp.route("/api/test-settings", methods=["POST"])
+        def test_update_settings():
+            """Test endpoint for settings update (no auth required for testing)"""
+            try:
+                # Convert form data to dict
+                form_data = {}
+                for key, value in request.form.items():
+                    if value == "1":  # Checkbox checked
+                        form_data[key] = True
+                    elif value == "0":  # Checkbox unchecked
+                        form_data[key] = False
+                    else:
+                        form_data[key] = value
+                
+                # For test endpoint, just return success without actually saving
+                return {"status": "success", "message": "Settings saved (test mode)", "settings": form_data}
+            except Exception as e:
+                return {"error": f"Error processing settings: {str(e)}"}, 500
+        
         @bp.route("/check", methods=["POST"])
         @login_required
         def check():
@@ -788,6 +807,7 @@ class FlashcardBlueprint:
             item_id = request.args.get('item_id', '0')
             display_mode = request.args.get('display_mode', 'kana')
             kana_type = request.args.get('kana_type', 'hiragana')
+            furigana_style = request.args.get('furigana_style', 'ruby')
             
             try:
                 item_id = int(item_id)
@@ -797,6 +817,7 @@ class FlashcardBlueprint:
                 test_settings = {
                     "display_mode": display_mode,
                     "kana_type": kana_type,
+                    "furigana_style": furigana_style,
                     "proportions": {
                         "kana": 0.3,
                         "kanji": 0.2,

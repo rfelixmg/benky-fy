@@ -32,6 +32,7 @@ def create_app() -> Flask:
 	colors_basic_bp = create_vocab_flashcard_module("colors_basic", "./datum/colors_basic.json")
 	greetings_essential_bp = create_vocab_flashcard_module("greetings_essential", "./datum/greetings_essential.json")
 	question_words_bp = create_vocab_flashcard_module("question_words", "./datum/question_words.json")
+	base_nouns_bp = create_vocab_flashcard_module("base_nouns", "./datum/base_nouns.json")
 
 	# Google OAuth with Flask-Dance
 	google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
@@ -63,6 +64,7 @@ def create_app() -> Flask:
 	app.register_blueprint(colors_basic_bp, url_prefix="/begginer/colors")
 	app.register_blueprint(greetings_essential_bp, url_prefix="/begginer/greetings")
 	app.register_blueprint(question_words_bp, url_prefix="/begginer/question-words")
+	app.register_blueprint(base_nouns_bp, url_prefix="/begginer/base_nouns")
 	
 	# Register Google OAuth blueprint
 	app.register_blueprint(google_bp, url_prefix="/login")
