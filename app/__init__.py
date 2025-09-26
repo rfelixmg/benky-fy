@@ -16,11 +16,9 @@ def create_app() -> Flask:
 	from .auth import auth_bp
 
 	# Import and create flashcard modules
-	from .flashcard import create_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module, create_vocab_flashcard_module
+	from .flashcard import create_verb_flashcard_module, create_adjective_flashcard_module, create_vocab_flashcard_module
 	
-	# Create flashcard modules
-	hiragana_bp = create_flashcard_module("hiragana", "./datum/hiragana.csv")
-	katakana_bp = create_flashcard_module("katakana", "./datum/katakana.csv")
+	# Create flashcard modules (only for existing data files)
 	verbs_bp = create_verb_flashcard_module("verbs", "./datum/verbs.json")
 	adjectives_bp = create_adjective_flashcard_module("adjectives", "./datum/adjectives.json")
 	
@@ -51,8 +49,6 @@ def create_app() -> Flask:
 
 	app.register_blueprint(main_bp)
 	app.register_blueprint(auth_bp, url_prefix="/auth")  # Add URL prefix for auth routes
-	app.register_blueprint(hiragana_bp, url_prefix="/begginer/hiragana")
-	app.register_blueprint(katakana_bp, url_prefix="/begginer/katakana")
 	app.register_blueprint(verbs_bp, url_prefix="/begginer/verbs")
 	app.register_blueprint(adjectives_bp, url_prefix="/begginer/adjectives")
 	
