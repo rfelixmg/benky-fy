@@ -1,0 +1,90 @@
+<div class="flashcard-content">
+	<div class="prompt-section">
+		<p class="prompt-label">Prompt (<span id="prompt-script">{{ item.prompt_script }}</span>)</p>
+		<div class="prompt-value" id="prompt-display">
+			{% if item.prompt_script == 'kanji' and settings.show_furigana %}
+				{% if settings.furigana_style == 'html' and item.furigana_html %}
+					<div class="kanji-with-furigana">{{ item.furigana_html|safe }}</div>
+				{% elif settings.furigana_style == 'text' and item.furigana_text %}
+					<div class="kanji-with-furigana-text">{{ item.furigana_text }}</div>
+				{% else %}
+					<div class="kanji">{{ item.prompt }}</div>
+				{% endif %}
+			{% else %}
+				<div class="prompt-text">{{ item.prompt }}</div>
+			{% endif %}
+		</div>
+		{% if item.fallback_used %}
+			<div class="fallback-notice" style="font-size: 0.8em; color: #666; margin-top: 5px;">
+				⚠️ Fallback content used
+			</div>
+		{% endif %}
+	</div>
+	
+	<div class="answer-section">
+		{% set input_modes = settings.get('input_modes', settings.get('checking_styles', ['hiragana'])) %}
+		
+		{% for mode in input_modes %}
+		<div class="input-group">
+			{% if mode == 'hiragana' %}
+			<label for="user_hiragana" class="input-label">
+				Type in romaji (auto-converts to hiragana)
+			</label>
+			<input type="text" 
+				   id="user_hiragana" 
+				   name="user_hiragana" 
+				   class="answer-input" 
+				   placeholder="Type in romaji..." 
+				   autofocus 
+				   autocomplete="off" 
+				   autocorrect="off" 
+				   autocapitalize="off" 
+				   spellcheck="false" />
+			{% elif mode == 'romaji' %}
+			<label for="user_romaji" class="input-label">
+				Type in romaji
+			</label>
+			<input type="text" 
+				   id="user_romaji" 
+				   name="user_romaji" 
+				   class="answer-input" 
+				   placeholder="Type in romaji..." 
+				   autocomplete="off" 
+				   autocorrect="off" 
+				   autocapitalize="off" 
+				   spellcheck="false" />
+			{% else %}
+			<label for="user_{{ mode }}" class="input-label">Your answer ({{ mode }}):</label>
+			<input type="text" 
+				   id="user_{{ mode }}" 
+				   name="user_{{ mode }}" 
+				   class="answer-input" 
+				   placeholder="Type {{ mode }}..." 
+				   autocomplete="off" 
+				   autocorrect="off" 
+				   autocapitalize="off" 
+				   spellcheck="false" />
+			{% endif %}
+		</div>
+		{% endfor %}
+	</div>
+	
+	<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">
+
+	<div class="actions-section">
+		<button type="button" class="check-button" id="checkButton" onclick="handleCheckAnswers()" disabled>Check Answer</button>
+		<div class="branding-tooltip">powered by Benky-fy</div>
+		<div class="feedback-message" id="feedbackMessage" style="display: none;"></div>
+	</div>
+
+	<!-- Always render the results container -->
+	<div class="results-container">
+		<!-- Initial content can be empty or a placeholder -->
+	</div>
+
+	{% if results is not none %}
+	<div class="overall-result {{ 'correct' if all_correct else 'incorrect' }}">
+		<p><strong>{{ 'All Correct!' if all_correct else 'Some Incorrect' }}</strong></p>
+	</div>
+	{% endif %}
+</div>

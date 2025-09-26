@@ -163,7 +163,7 @@ def profile():
 		}
 	}
 	
-	return render_template("profile.html", user=user, profile=dummy_profile)
+	return render_template("pages/profile.html", user=user, profile=dummy_profile)
 
 
 @auth_bp.route("/dashboard")
@@ -196,7 +196,7 @@ def dashboard():
 		]
 	}
 	
-	return render_template("dashboard.html", user=user, dashboard=dummy_dashboard)
+	return render_template("pages/dashboard.html", user=user, dashboard=dummy_dashboard)
 
 
 @auth_bp.route("/settings")
@@ -231,7 +231,7 @@ def settings():
 		}
 	}
 	
-	return render_template("settings.html", user=user, settings=dummy_settings)
+	return render_template("pages/settings.html", user=user, settings=dummy_settings)
 
 
 @auth_bp.route("/check-auth")

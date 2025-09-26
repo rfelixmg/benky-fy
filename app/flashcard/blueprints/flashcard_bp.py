@@ -34,7 +34,7 @@ class FlashcardBlueprint:
                 flashcard_styles = settings.get("flashcard_styles", ["hiragana"])
                 item = self.engine.get_next(flashcard_styles)
             
-            return render_template("flashcard_new.html",  # Use new template with persistent settings
+            return render_template("flashcard/flashcard.html",  # Use new template with persistent settings
                                 item=item, 
                                 results=None, 
                                 settings=settings,
@@ -119,7 +119,7 @@ class FlashcardBlueprint:
             # Check if all answers are correct (ignore skipped fields)
             all_correct = all_correct_logic(results)
             
-            return render_template("flashcard_new.html",  # Use new template
+            return render_template("flashcard/flashcard.html",  # Use new template
                                 item=item, 
                                 results=results, 
                                 all_correct=all_correct, 

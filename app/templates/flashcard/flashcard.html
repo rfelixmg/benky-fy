@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ module_name|title }} | Benky-Fy{% endblock %}
+{% block content %}
+<meta name="user-authenticated" content="{% if current_user %}true{% else %}false{% endif %}">
+<div class="flashcard-container">
+	<section class="flashcard-module">
+		<button class="settings-toggle-btn" onclick="toggleSettings()" title="Settings">⚙️</button>
+		<header class="flashcard-header">
+			<h1>{{ module_name|title }} Flashcards</h1>
+		</header>
+	
+		<!-- Include Settings Modal -->
+		{% include 'flashcard/components/settings_modal.html' %}
+		
+		<!-- Include Flashcard Display -->
+		{% include 'flashcard/components/flashcard_display.html' %}
+		
+		<!-- Include Progress Section -->
+		{% include 'flashcard/components/progress_section.html' %}
+		
+		<!-- Include Answer Input -->
+		{% include 'flashcard/components/answer_input.html' %}
+		
+		<!-- Include Action Buttons -->
+		{% include 'flashcard/components/action_buttons.html' %}
+		
+		<!-- Include Statistics -->
+		{% include 'flashcard/components/statistics.html' %}
+		
+	</section>
+</div>
+
+<!-- Include JavaScript -->
+{% include 'flashcard/partials/flashcard_scripts.html' %}
+{% endblock %}
