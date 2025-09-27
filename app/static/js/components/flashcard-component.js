@@ -289,7 +289,7 @@ export class FlashcardComponent {
         // Hide feedback after delay
         setTimeout(() => {
             feedbackElement.style.display = 'none';
-        }, 4000); // Increased to 4 seconds to read the table
+        }, 8000); // 8 seconds to review the table
     }
 
     /**
