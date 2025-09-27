@@ -67,13 +67,33 @@ class HelpBlueprint:
     def _get_flashcard_engine(self, module_name: str) -> Optional[BaseFlashcardEngine]:
         """Get the flashcard engine for a given module."""
         try:
-            # Import here to avoid circular imports
-            from ..flashcard.engines import get_engine_for_module
+            # Create engine directly from data file
+            from ...flashcard.engines.vocab import VocabFlashcardEngine
+            from ...flashcard.engines.verb import VerbFlashcardEngine
+            from ...flashcard.engines.adjective import AdjectiveFlashcardEngine
             
-            return get_engine_for_module(module_name)
-        except ImportError:
-            # Fallback: try to get engine from app context
-            from flask import current_app
-            if hasattr(current_app, 'flashcard_engines'):
-                return current_app.flashcard_engines.get(module_name)
+            # Map module names to their data files and engine types
+            module_config = {
+                'hiragana': ('./datum/hiragana.json', VocabFlashcardEngine),
+                'katakana': ('./datum/katakana.json', VocabFlashcardEngine),
+                'verbs': ('./datum/verbs.json', VerbFlashcardEngine),
+                'adjectives': ('./datum/adjectives.json', AdjectiveFlashcardEngine),
+                'numbers_basic': ('./datum/numbers_basic.json', VocabFlashcardEngine),
+                'numbers_extended': ('./datum/numbers_extended.json', VocabFlashcardEngine),
+                'days_of_week': ('./datum/days_of_week.json', VocabFlashcardEngine),
+                'months_complete': ('./datum/months_complete.json', VocabFlashcardEngine),
+                'colors_basic': ('./datum/colors_basic.json', VocabFlashcardEngine),
+                'greetings_essential': ('./datum/greetings_essential.json', VocabFlashcardEngine),
+                'question_words': ('./datum/question_words.json', VocabFlashcardEngine),
+                'base_nouns': ('./datum/base_nouns.json', VocabFlashcardEngine),
+            }
+            
+            if module_name not in module_config:
+                return None
+                
+            data_file, engine_class = module_config[module_name]
+            return engine_class(data_file, module_name)
+            
+        except Exception as e:
+            print(f"Error creating engine for {module_name}: {e}")
             return None
