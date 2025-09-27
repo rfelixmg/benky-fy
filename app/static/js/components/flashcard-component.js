@@ -56,9 +56,7 @@ export class FlashcardComponent {
             this.helpModal.initialize(this.moduleName, this.apiClient);
 
             // Initialize conjugation component
-            console.log('Initializing conjugation component...');
             await this.conjugationComponent.initialize();
-            console.log('Conjugation component initialized');
 
             // Setup help toggle button
             this._setupHelpToggleButton();
@@ -72,7 +70,6 @@ export class FlashcardComponent {
             // Mark page as loaded
             this.isPageLoaded = true;
 
-            console.log('Flashcard component initialized successfully');
         } catch (error) {
             console.error('Failed to initialize flashcard component:', error);
         }
@@ -109,17 +106,13 @@ export class FlashcardComponent {
         try {
             // Determine current mode first
             const settings = this.settingsManager.getAllSettings();
-            console.log('Initial settings loaded:', settings);
             this.currentMode = settings.practiceMode || 'flashcard';
-            console.log('Initial mode set to:', this.currentMode);
 
             // Check if conjugation is supported for this module
             const conjugationSupported = this.settingsManager.isConjugationSupported();
-            console.log('Conjugation supported:', conjugationSupported);
 
             // If conjugation mode is selected but not supported, fallback to flashcard mode
             if (this.currentMode === 'conjugation' && !conjugationSupported) {
-                console.log('Conjugation not supported for this module, falling back to flashcard mode');
                 this.currentMode = 'flashcard';
                 this.settingsManager.updateSetting('practiceMode', 'flashcard');
             }
@@ -129,10 +122,11 @@ export class FlashcardComponent {
 
             // Load content based on mode
             if (this.currentMode === 'conjugation' && conjugationSupported) {
-                console.log('Loading conjugation item on initial load');
                 await this._loadConjugationItem();
             } else {
-                console.log('Loading regular flashcard on initial load');
+                // Get a random item for initial load
+                const response = await this.apiClient.getNextItem();
+                this.currentItemId = response.item_id;
                 await this._loadFlashcard();
             }
 
@@ -559,7 +553,7 @@ export class FlashcardComponent {
         const settings = this.settingsManager.getAllSettings();
         const newMode = settings.practiceMode || 'flashcard';
         
-        console.log('Settings changed. Current mode:', this.currentMode, 'New mode:', newMode);
+        console.log('Settings changed. Mode:', newMode);
         
         // Check if conjugation is supported for this module
         const conjugationSupported = this.settingsManager.isConjugationSupported();
@@ -1181,11 +1175,12 @@ export class FlashcardComponent {
         const headerTitle = document.getElementById('headerTitle');
         if (headerTitle) {
             const moduleName = this.moduleName || 'Verbs'; // Fallback to 'Verbs' if moduleName not available
+            const formattedModuleName = moduleName.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
             
             if (mode === 'conjugation') {
-                headerTitle.textContent = `${moduleName} Conjugation`;
+                headerTitle.textContent = `${formattedModuleName} Conjugation`;
             } else {
-                headerTitle.textContent = `${moduleName} Flashcards`;
+                headerTitle.textContent = `${formattedModuleName} Flashcards`;
             }
         }
     }

@@ -43,6 +43,14 @@ export class SettingsManager {
                 inputModes: ['hiragana', 'romaji'],
                 kanaTypes: moduleName === 'hiragana' ? ['hiragana'] : ['katakana']
             };
+        } else if (moduleName === 'katakana_words') {
+            // Katakana words module - vocabulary with katakana focus
+            return {
+                ...baseSettings,
+                displayMode: 'kana',
+                inputModes: ['katakana', 'romaji', 'english'],
+                kanaTypes: ['katakana']
+            };
         } else if (moduleName.includes('numbers') || moduleName.includes('colors') || moduleName.includes('greetings')) {
             // Vocabulary modules with specific needs
             return {
@@ -63,7 +71,16 @@ export class SettingsManager {
             const stored = localStorage.getItem(`settings-${this.moduleName}`);
             if (stored) {
                 const parsed = JSON.parse(stored);
-                return { ...this.defaultSettings, ...parsed };
+                
+                // Merge settings but preserve critical defaults for specific modules
+                const merged = { ...this.defaultSettings, ...parsed };
+                
+                // Ensure katakana_words always has correct kanaTypes
+                if (this.moduleName === 'katakana_words') {
+                    merged.kanaTypes = ['katakana'];
+                }
+                
+                return merged;
             }
         } catch (error) {
             console.warn('Failed to load settings from localStorage:', error);
@@ -186,7 +203,8 @@ export class SettingsManager {
             'colors_basic': '/begginer/colors',
             'greetings_essential': '/begginer/greetings',
             'question_words': '/begginer/question-words',
-            'base_nouns': '/begginer/base-nouns'
+            'base_nouns': '/begginer/base_nouns',
+            'katakana_words': '/begginer/katakana-words'
         };
         
         return urlMappings[moduleName] || `/begginer/${moduleName}`;

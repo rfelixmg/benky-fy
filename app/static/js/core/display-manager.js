@@ -54,22 +54,10 @@ export class DisplayManager {
             let processedText = text;
             if (settings && settings.furiganaStyle && settings.furiganaStyle !== 'ruby') {
                 processedText = this._applyFuriganaStyle(text, settings.furiganaStyle);
-                console.log(`Applied furigana style '${settings.furiganaStyle}':`, processedText);
             }
             
             displayElement.innerHTML = processedText;
             
-            // Add debugging for hover elements
-            if (settings && settings.furiganaStyle === 'hover') {
-                const hoverElements = displayElement.querySelectorAll('.furigana-hover');
-                hoverElements.forEach((element, index) => {
-                    console.log(`Hover element ${index}:`, {
-                        title: element.getAttribute('title'),
-                        text: element.textContent,
-                        html: element.outerHTML
-                    });
-                });
-            }
         }
     }
 
@@ -121,7 +109,6 @@ export class DisplayManager {
             
             const scriptName = scriptNames[mode] || mode;
             promptScriptElement.textContent = scriptName;
-            console.log(`Updated prompt script indicator to: ${scriptName}`);
         }
     }
 

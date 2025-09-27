@@ -121,6 +121,10 @@ class KatakanaFlashcardEngine(BaseFlashcardEngine):
                 print(f"Warning: Missing katakana content for kanji mode: {item}")
         
         elif display_mode == "kana":
+            print(f"Display mode: {display_mode}")
+            print(f"Kana type: {kana_type}")
+            print(f"Proportions: {proportions}")
+            print(f"Item: {item}")
             # For katakana module, always show katakana regardless of kana_type setting
             if item.katakana and item.katakana.strip():
                 result["text"] = item.katakana

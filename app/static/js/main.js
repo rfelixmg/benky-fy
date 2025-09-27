@@ -4,8 +4,6 @@
  */
 export async function initializeFlashcardApp(moduleName) {
     try {
-        console.log(`Initializing flashcard app for module: ${moduleName}`);
-
         // Dynamic imports to avoid top-level import issues
         const [
             { FlashcardComponent },

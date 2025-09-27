@@ -15,7 +15,7 @@ TEST_HASH = hashlib.sha256(TEST_MODE_SECRET).hexdigest()
 TEST_USER = {
     "name": "Test User",
     "email": "test@benky-fy.com",
-    "picture": "https://via.placeholder.com/150/4285f4/ffffff?text=T",
+    "picture": "",
     "is_test_user": True
 }
 

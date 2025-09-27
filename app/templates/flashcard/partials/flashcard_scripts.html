@@ -3,12 +3,6 @@
 // Import the main flashcard application
 import { initializeFlashcardApp } from '/static/js/main.js';
 
-// Template variables for backward compatibility
-window.templateSettings = {
-    inputModes: ["hiragana"],
-    checkingStyles: ["hiragana"] // fallback for compatibility
-};
-
 // Module name meta tag for the application
 const moduleName = '{{ module_name }}';
 if (!document.querySelector('meta[name="module-name"]')) {
@@ -18,16 +12,14 @@ if (!document.querySelector('meta[name="module-name"]')) {
     document.head.appendChild(meta);
 }
 
-// Initialize the application when DOM is ready
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        await initializeFlashcardApp(moduleName);
-    } catch (error) {
-        console.error('Failed to start flashcard application:', error);
-    }
-});
-
-console.log(`Flashcard page loaded for module: ${moduleName}`);
+   // Initialize the application when DOM is ready
+   document.addEventListener('DOMContentLoaded', async () => {
+       try {
+           await initializeFlashcardApp(moduleName);
+       } catch (error) {
+           console.error('Failed to start flashcard application:', error);
+       }
+   });
 </script>
 
 <!-- Fallback for browsers that don't support ES6 modules -->

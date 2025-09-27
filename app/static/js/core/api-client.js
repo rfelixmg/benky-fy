@@ -23,7 +23,8 @@ export class ApiClient {
             'colors_basic': '/begginer/colors',
             'greetings_essential': '/begginer/greetings',
             'question_words': '/begginer/question-words',
-            'base_nouns': '/begginer/base-nouns'
+            'base_nouns': '/begginer/base_nouns',
+            'katakana_words': '/begginer/katakana-words'
         };
         
         return urlMappings[moduleName] || `/begginer/${moduleName}`;

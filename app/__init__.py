@@ -43,6 +43,7 @@ def create_app() -> Flask:
 	greetings_essential_bp = create_vocab_flashcard_module("greetings_essential", "./datum/greetings_essential.json")
 	question_words_bp = create_vocab_flashcard_module("question_words", "./datum/question_words.json")
 	base_nouns_bp = create_vocab_flashcard_module("base_nouns", "./datum/base_nouns.json")
+	katakana_words_bp = create_vocab_flashcard_module("katakana_words", "./datum/katakana_words.json")
 
 	# Google OAuth with Flask-Dance (only if not in test mode)
 	from app.auth import is_test_mode
@@ -83,6 +84,7 @@ def create_app() -> Flask:
 	app.register_blueprint(greetings_essential_bp, url_prefix="/begginer/greetings")
 	app.register_blueprint(question_words_bp, url_prefix="/begginer/question-words")
 	app.register_blueprint(base_nouns_bp, url_prefix="/begginer/base_nouns")
+	app.register_blueprint(katakana_words_bp, url_prefix="/begginer/katakana-words")
 
 	# Make session user available in all templates as `current_user`
 	@app.context_processor

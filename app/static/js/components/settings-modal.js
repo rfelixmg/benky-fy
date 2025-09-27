@@ -204,16 +204,20 @@ export class SettingsModal {
             this._updateAnswerInputModesForPracticeMode(settings.practiceMode);
         }
 
-        // Set conjugation forms
+        // Set conjugation forms (only if conjugation settings exist)
         const conjugationFormInputs = document.querySelectorAll('input[name="conjugation_forms"]');
-        conjugationFormInputs.forEach(input => {
-            input.checked = settings.conjugationForms.includes(input.value);
-        });
+        if (settings.conjugationForms && Array.isArray(settings.conjugationForms)) {
+            conjugationFormInputs.forEach(input => {
+                input.checked = settings.conjugationForms.includes(input.value);
+            });
+        }
 
-        // Set conjugation prompt style
-        const conjugationPromptStyleInput = document.querySelector(`input[name="conjugation_prompt_style"][value="${settings.conjugationPromptStyle}"]`);
-        if (conjugationPromptStyleInput) {
-            conjugationPromptStyleInput.checked = true;
+        // Set conjugation prompt style (only if conjugation settings exist)
+        if (settings.conjugationPromptStyle) {
+            const conjugationPromptStyleInput = document.querySelector(`input[name="conjugation_prompt_style"][value="${settings.conjugationPromptStyle}"]`);
+            if (conjugationPromptStyleInput) {
+                conjugationPromptStyleInput.checked = true;
+            }
         }
     }
 

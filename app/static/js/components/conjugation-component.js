@@ -18,7 +18,6 @@ export class ConjugationComponent {
         try {
             // Load available conjugation forms for the module
             await this._loadAvailableForms();
-            console.log('Conjugation component initialized successfully');
         } catch (error) {
             console.error('Failed to initialize conjugation component:', error);
         }

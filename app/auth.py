@@ -78,7 +78,7 @@ def get_test_user():
 	return {
 		"name": "Test User",
 		"email": "test@benky-fy.com",
-		"picture": "https://via.placeholder.com/150/4285f4/ffffff?text=T",
+		"picture": "",
 		"is_test_user": True
 	}
 
