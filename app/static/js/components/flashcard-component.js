@@ -260,20 +260,26 @@ export class FlashcardComponent {
                 <tbody>
         `;
         
-        // Add table rows for each input mode
-        Object.keys(results).forEach(mode => {
+        // Add table rows in the same order as input modes
+        const inputModes = this.settingsManager.getAllSettings().inputModes;
+        console.log('Input modes order:', inputModes);
+        console.log('Backend results order:', Object.keys(results));
+        
+        inputModes.forEach(mode => {
             const result = results[mode];
-            const isCorrect = result.is_correct;
-            const statusIcon = isCorrect ? '✅' : '❌';
-            const statusText = isCorrect ? 'Correct' : 'Incorrect';
-            
-            tableHTML += `
-                <tr>
-                    <td>${mode}</td>
-                    <td>${result.correct_answer}</td>
-                    <td>${statusIcon} ${statusText}</td>
-                </tr>
-            `;
+            if (result) {
+                const isCorrect = result.is_correct;
+                const statusIcon = isCorrect ? '✅' : '❌';
+                const statusText = isCorrect ? 'Correct' : 'Incorrect';
+                
+                tableHTML += `
+                    <tr>
+                        <td>${mode}</td>
+                        <td>${result.correct_answer}</td>
+                        <td>${statusIcon} ${statusText}</td>
+                    </tr>
+                `;
+            }
         });
         
         tableHTML += `
