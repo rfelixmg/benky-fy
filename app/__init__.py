@@ -19,6 +19,11 @@ def create_app() -> Flask:
 	from .help.blueprints.help_bp import HelpBlueprint
 	help_bp = HelpBlueprint().create_blueprint()
 	app.register_blueprint(help_bp)
+	
+	# Register conjugation blueprint
+	from .conjugation.blueprints.conjugation_bp import create_conjugation_blueprint
+	conjugation_bp = create_conjugation_blueprint()
+	app.register_blueprint(conjugation_bp, url_prefix="/conjugation")
 
 	# Import and create flashcard modules
 	from .flashcard import create_vocab_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module

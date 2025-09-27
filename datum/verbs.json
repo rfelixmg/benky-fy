@@ -23,8 +23,28 @@
         "hiragana": "する"
       },
       "polite": {
-        "kanji": "為るます",
-        "hiragana": "するます"
+        "kanji": "します",
+        "hiragana": "します"
+      },
+      "negative": {
+        "kanji": "しない",
+        "hiragana": "しない"
+      },
+      "polite_negative": {
+        "kanji": "しません",
+        "hiragana": "しません"
+      },
+      "past": {
+        "kanji": "した",
+        "hiragana": "した"
+      },
+      "polite_past": {
+        "kanji": "しました",
+        "hiragana": "しました"
+      },
+      "past_negative": {
+        "kanji": "しなかった",
+        "hiragana": "しなかった"
       }
     },
     "kanji_analysis": {
@@ -71,6 +91,26 @@
       "polite": {
         "kanji": "知っているます",
         "hiragana": "しっているます"
+      },
+      "negative": {
+        "kanji": "知っていらない",
+        "hiragana": "しっていらない"
+      },
+      "polite_negative": {
+        "kanji": "知っていりません",
+        "hiragana": "しっていりません"
+      },
+      "past": {
+        "kanji": "知っていった",
+        "hiragana": "しっていった"
+      },
+      "polite_past": {
+        "kanji": "知っていりました",
+        "hiragana": "しっていりました"
+      },
+      "past_negative": {
+        "kanji": "知っていらなかった",
+        "hiragana": "しっていらなかった"
       }
     },
     "kanji_analysis": {
@@ -547,6 +587,26 @@
       "polite": {
         "kanji": "歩くます",
         "hiragana": "あるくます"
+      },
+      "negative": {
+        "kanji": "歩かない",
+        "hiragana": "あるかない"
+      },
+      "polite_negative": {
+        "kanji": "歩きません",
+        "hiragana": "あるきません"
+      },
+      "past": {
+        "kanji": "歩いた",
+        "hiragana": "あるいた"
+      },
+      "polite_past": {
+        "kanji": "歩きました",
+        "hiragana": "あるきました"
+      },
+      "past_negative": {
+        "kanji": "歩かなかった",
+        "hiragana": "あるかなかった"
       }
     },
     "kanji_analysis": {
@@ -598,6 +658,26 @@
       "polite": {
         "kanji": "行くます",
         "hiragana": "いくます"
+      },
+      "negative": {
+        "kanji": "行かない",
+        "hiragana": "いかない"
+      },
+      "polite_negative": {
+        "kanji": "行きません",
+        "hiragana": "いきません"
+      },
+      "past": {
+        "kanji": "行いた",
+        "hiragana": "いいた"
+      },
+      "polite_past": {
+        "kanji": "行きました",
+        "hiragana": "いきました"
+      },
+      "past_negative": {
+        "kanji": "行かなかった",
+        "hiragana": "いかなかった"
       }
     },
     "kanji_analysis": {
@@ -650,6 +730,26 @@
       "polite": {
         "kanji": "話すます",
         "hiragana": "はなすます"
+      },
+      "negative": {
+        "kanji": "話さない",
+        "hiragana": "はなさない"
+      },
+      "polite_negative": {
+        "kanji": "話しません",
+        "hiragana": "はなしません"
+      },
+      "past": {
+        "kanji": "話した",
+        "hiragana": "はなした"
+      },
+      "polite_past": {
+        "kanji": "話しました",
+        "hiragana": "はなしました"
+      },
+      "past_negative": {
+        "kanji": "話さなかった",
+        "hiragana": "はなさなかった"
       }
     },
     "kanji_analysis": {
@@ -701,6 +801,26 @@
       "polite": {
         "kanji": "言うます",
         "hiragana": "いうます"
+      },
+      "negative": {
+        "kanji": "言わない",
+        "hiragana": "いわない"
+      },
+      "polite_negative": {
+        "kanji": "言いません",
+        "hiragana": "いいません"
+      },
+      "past": {
+        "kanji": "言った",
+        "hiragana": "いった"
+      },
+      "polite_past": {
+        "kanji": "言いました",
+        "hiragana": "いいました"
+      },
+      "past_negative": {
+        "kanji": "言わなかった",
+        "hiragana": "いわなかった"
       }
     },
     "kanji_analysis": {
@@ -753,6 +873,26 @@
       "polite": {
         "kanji": "べんきょうするます",
         "hiragana": "べんきょうするます"
+      },
+      "negative": {
+        "kanji": "勉強しない",
+        "hiragana": "べんきょうしない"
+      },
+      "polite_negative": {
+        "kanji": "勉強しません",
+        "hiragana": "べんきょうしません"
+      },
+      "past": {
+        "kanji": "勉強した",
+        "hiragana": "べんきょうした"
+      },
+      "polite_past": {
+        "kanji": "勉強しました",
+        "hiragana": "べんきょうしました"
+      },
+      "past_negative": {
+        "kanji": "勉強しなかった",
+        "hiragana": "べんきょうしなかった"
       }
     },
     "kanji_analysis": {
@@ -804,6 +944,26 @@
       "polite": {
         "kanji": "買うます",
         "hiragana": "かうます"
+      },
+      "negative": {
+        "kanji": "買わない",
+        "hiragana": "かわない"
+      },
+      "polite_negative": {
+        "kanji": "買いません",
+        "hiragana": "かいません"
+      },
+      "past": {
+        "kanji": "買った",
+        "hiragana": "かった"
+      },
+      "polite_past": {
+        "kanji": "買いました",
+        "hiragana": "かいました"
+      },
+      "past_negative": {
+        "kanji": "買わなかった",
+        "hiragana": "かわなかった"
       }
     },
     "kanji_analysis": {
@@ -855,6 +1015,26 @@
       "polite": {
         "kanji": "売るます",
         "hiragana": "うるます"
+      },
+      "negative": {
+        "kanji": "売らない",
+        "hiragana": "うらない"
+      },
+      "polite_negative": {
+        "kanji": "売りません",
+        "hiragana": "うりません"
+      },
+      "past": {
+        "kanji": "売った",
+        "hiragana": "うった"
+      },
+      "polite_past": {
+        "kanji": "売りました",
+        "hiragana": "うりました"
+      },
+      "past_negative": {
+        "kanji": "売らなかった",
+        "hiragana": "うらなかった"
       }
     },
     "kanji_analysis": {
@@ -1236,6 +1416,26 @@
       "polite": {
         "kanji": "飲むます",
         "hiragana": "のむます"
+      },
+      "negative": {
+        "kanji": "飲まない",
+        "hiragana": "のまない"
+      },
+      "polite_negative": {
+        "kanji": "飲みません",
+        "hiragana": "のみません"
+      },
+      "past": {
+        "kanji": "飲んだ",
+        "hiragana": "のんだ"
+      },
+      "polite_past": {
+        "kanji": "飲みました",
+        "hiragana": "のみました"
+      },
+      "past_negative": {
+        "kanji": "飲まなかった",
+        "hiragana": "のまなかった"
       }
     },
     "kanji_analysis": {
@@ -1289,6 +1489,26 @@
       "polite": {
         "kanji": "聞くます",
         "hiragana": "きくます"
+      },
+      "negative": {
+        "kanji": "聞かない",
+        "hiragana": "きかない"
+      },
+      "polite_negative": {
+        "kanji": "聞きません",
+        "hiragana": "ききません"
+      },
+      "past": {
+        "kanji": "聞いた",
+        "hiragana": "きいた"
+      },
+      "polite_past": {
+        "kanji": "聞きました",
+        "hiragana": "ききました"
+      },
+      "past_negative": {
+        "kanji": "聞かなかった",
+        "hiragana": "きかなかった"
       }
     },
     "kanji_analysis": {
@@ -1341,6 +1561,26 @@
       "polite": {
         "kanji": "走るます",
         "hiragana": "はしるます"
+      },
+      "negative": {
+        "kanji": "走らない",
+        "hiragana": "はしらない"
+      },
+      "polite_negative": {
+        "kanji": "走りません",
+        "hiragana": "はしりません"
+      },
+      "past": {
+        "kanji": "走った",
+        "hiragana": "はしった"
+      },
+      "polite_past": {
+        "kanji": "走りました",
+        "hiragana": "はしりました"
+      },
+      "past_negative": {
+        "kanji": "走らなかった",
+        "hiragana": "はしらなかった"
       }
     },
     "kanji_analysis": {
@@ -1392,6 +1632,26 @@
       "polite": {
         "kanji": "乗るます",
         "hiragana": "のるます"
+      },
+      "negative": {
+        "kanji": "乗らない",
+        "hiragana": "のらない"
+      },
+      "polite_negative": {
+        "kanji": "乗りません",
+        "hiragana": "のりません"
+      },
+      "past": {
+        "kanji": "乗った",
+        "hiragana": "のった"
+      },
+      "polite_past": {
+        "kanji": "乗りました",
+        "hiragana": "のりました"
+      },
+      "past_negative": {
+        "kanji": "乗らなかった",
+        "hiragana": "のらなかった"
       }
     },
     "kanji_analysis": {
@@ -1444,6 +1704,26 @@
       "polite": {
         "kanji": "働くます",
         "hiragana": "はたらくます"
+      },
+      "negative": {
+        "kanji": "働かない",
+        "hiragana": "はたらかない"
+      },
+      "polite_negative": {
+        "kanji": "働きません",
+        "hiragana": "はたらきません"
+      },
+      "past": {
+        "kanji": "働いた",
+        "hiragana": "はたらいた"
+      },
+      "polite_past": {
+        "kanji": "働きました",
+        "hiragana": "はたらきました"
+      },
+      "past_negative": {
+        "kanji": "働かなかった",
+        "hiragana": "はたらかなかった"
       }
     },
     "kanji_analysis": {
@@ -1582,6 +1862,26 @@
       "polite": {
         "kanji": "置くます",
         "hiragana": "おくます"
+      },
+      "negative": {
+        "kanji": "置かない",
+        "hiragana": "おかない"
+      },
+      "polite_negative": {
+        "kanji": "置きません",
+        "hiragana": "おきません"
+      },
+      "past": {
+        "kanji": "置いた",
+        "hiragana": "おいた"
+      },
+      "polite_past": {
+        "kanji": "置きました",
+        "hiragana": "おきました"
+      },
+      "past_negative": {
+        "kanji": "置かなかった",
+        "hiragana": "おかなかった"
       }
     },
     "kanji_analysis": {
@@ -1633,6 +1933,26 @@
       "polite": {
         "kanji": "降るます",
         "hiragana": "ふるます"
+      },
+      "negative": {
+        "kanji": "降らない",
+        "hiragana": "ふらない"
+      },
+      "polite_negative": {
+        "kanji": "降りません",
+        "hiragana": "ふりません"
+      },
+      "past": {
+        "kanji": "降った",
+        "hiragana": "ふった"
+      },
+      "polite_past": {
+        "kanji": "降りました",
+        "hiragana": "ふりました"
+      },
+      "past_negative": {
+        "kanji": "降らなかった",
+        "hiragana": "ふらなかった"
       }
     },
     "kanji_analysis": {
@@ -1685,6 +2005,26 @@
       "polite": {
         "kanji": "歌うます",
         "hiragana": "うたうます"
+      },
+      "negative": {
+        "kanji": "歌わない",
+        "hiragana": "うたわない"
+      },
+      "polite_negative": {
+        "kanji": "歌いません",
+        "hiragana": "うたいません"
+      },
+      "past": {
+        "kanji": "歌った",
+        "hiragana": "うたった"
+      },
+      "polite_past": {
+        "kanji": "歌いました",
+        "hiragana": "うたいました"
+      },
+      "past_negative": {
+        "kanji": "歌わなかった",
+        "hiragana": "うたわなかった"
       }
     },
     "kanji_analysis": {
@@ -1736,6 +2076,26 @@
       "polite": {
         "kanji": "泣くます",
         "hiragana": "なくます"
+      },
+      "negative": {
+        "kanji": "泣かない",
+        "hiragana": "なかない"
+      },
+      "polite_negative": {
+        "kanji": "泣きません",
+        "hiragana": "なきません"
+      },
+      "past": {
+        "kanji": "泣いた",
+        "hiragana": "ないた"
+      },
+      "polite_past": {
+        "kanji": "泣きました",
+        "hiragana": "なきました"
+      },
+      "past_negative": {
+        "kanji": "泣かなかった",
+        "hiragana": "なかなかった"
       }
     },
     "kanji_analysis": {
@@ -1787,6 +2147,26 @@
       "polite": {
         "kanji": "撮るます",
         "hiragana": "とるます"
+      },
+      "negative": {
+        "kanji": "取らない",
+        "hiragana": "とらない"
+      },
+      "polite_negative": {
+        "kanji": "取りません",
+        "hiragana": "とりません"
+      },
+      "past": {
+        "kanji": "取った",
+        "hiragana": "とった"
+      },
+      "polite_past": {
+        "kanji": "取りました",
+        "hiragana": "とりました"
+      },
+      "past_negative": {
+        "kanji": "取らなかった",
+        "hiragana": "とらなかった"
       }
     },
     "kanji_analysis": {
@@ -1838,6 +2218,26 @@
       "polite": {
         "kanji": "でんわするます",
         "hiragana": "でんわするます"
+      },
+      "negative": {
+        "kanji": "電話しない",
+        "hiragana": "でんわしない"
+      },
+      "polite_negative": {
+        "kanji": "電話しません",
+        "hiragana": "でんわしません"
+      },
+      "past": {
+        "kanji": "電話した",
+        "hiragana": "でんわした"
+      },
+      "polite_past": {
+        "kanji": "電話しました",
+        "hiragana": "でんわしました"
+      },
+      "past_negative": {
+        "kanji": "電話しなかった",
+        "hiragana": "でんわしなかった"
       }
     },
     "kanji_analysis": {
@@ -1891,6 +2291,26 @@
       "polite": {
         "kanji": "さけぶます",
         "hiragana": "さけぶます"
+      },
+      "negative": {
+        "kanji": "叫ばない",
+        "hiragana": "さけばない"
+      },
+      "polite_negative": {
+        "kanji": "叫びません",
+        "hiragana": "さけびません"
+      },
+      "past": {
+        "kanji": "叫んだ",
+        "hiragana": "さけんだ"
+      },
+      "polite_past": {
+        "kanji": "叫びました",
+        "hiragana": "さけびました"
+      },
+      "past_negative": {
+        "kanji": "叫ばなかった",
+        "hiragana": "さけばなかった"
       }
     },
     "kanji_analysis": {
@@ -2114,8 +2534,28 @@
         "hiragana": "なる"
       },
       "polite": {
-        "kanji": "なるます",
-        "hiragana": "なるます"
+        "kanji": "なります",
+        "hiragana": "なります"
+      },
+      "negative": {
+        "kanji": "ならない",
+        "hiragana": "ならない"
+      },
+      "polite_negative": {
+        "kanji": "なりません",
+        "hiragana": "なりません"
+      },
+      "past": {
+        "kanji": "なった",
+        "hiragana": "なった"
+      },
+      "polite_past": {
+        "kanji": "なりました",
+        "hiragana": "なりました"
+      },
+      "past_negative": {
+        "kanji": "ならなかった",
+        "hiragana": "ならなかった"
       }
     },
     "kanji_analysis": {
@@ -2347,8 +2787,28 @@
         "hiragana": "ある"
       },
       "polite": {
-        "kanji": "あるます",
-        "hiragana": "あるます"
+        "kanji": "あります",
+        "hiragana": "あります"
+      },
+      "negative": {
+        "kanji": "あらない",
+        "hiragana": "あらない"
+      },
+      "polite_negative": {
+        "kanji": "ありません",
+        "hiragana": "ありません"
+      },
+      "past": {
+        "kanji": "あった",
+        "hiragana": "あった"
+      },
+      "polite_past": {
+        "kanji": "ありました",
+        "hiragana": "ありました"
+      },
+      "past_negative": {
+        "kanji": "あらなかった",
+        "hiragana": "あらなかった"
       }
     },
     "kanji_analysis": {
@@ -2400,6 +2860,26 @@
       "polite": {
         "kanji": "支払うます",
         "hiragana": "しはらうます"
+      },
+      "negative": {
+        "kanji": "支払わない",
+        "hiragana": "しはらわない"
+      },
+      "polite_negative": {
+        "kanji": "支払いません",
+        "hiragana": "しはらいません"
+      },
+      "past": {
+        "kanji": "支払った",
+        "hiragana": "しはらった"
+      },
+      "polite_past": {
+        "kanji": "支払いました",
+        "hiragana": "しはらいました"
+      },
+      "past_negative": {
+        "kanji": "支払わなかった",
+        "hiragana": "しはらわなかった"
       }
     },
     "kanji_analysis": {
@@ -2452,6 +2932,26 @@
       "polite": {
         "kanji": "切るます",
         "hiragana": "きるます"
+      },
+      "negative": {
+        "kanji": "切らない",
+        "hiragana": "きらない"
+      },
+      "polite_negative": {
+        "kanji": "切りません",
+        "hiragana": "きりません"
+      },
+      "past": {
+        "kanji": "切った",
+        "hiragana": "きった"
+      },
+      "polite_past": {
+        "kanji": "切りました",
+        "hiragana": "きりました"
+      },
+      "past_negative": {
+        "kanji": "切らなかった",
+        "hiragana": "きらなかった"
       }
     },
     "kanji_analysis": {
@@ -2673,6 +3173,26 @@
       "polite": {
         "kanji": "会うます",
         "hiragana": "あうます"
+      },
+      "negative": {
+        "kanji": "会わない",
+        "hiragana": "あわない"
+      },
+      "polite_negative": {
+        "kanji": "会いません",
+        "hiragana": "あいません"
+      },
+      "past": {
+        "kanji": "会った",
+        "hiragana": "あった"
+      },
+      "polite_past": {
+        "kanji": "会いました",
+        "hiragana": "あいました"
+      },
+      "past_negative": {
+        "kanji": "会わなかった",
+        "hiragana": "あわなかった"
       }
     },
     "kanji_analysis": {
@@ -2725,6 +3245,26 @@
       "polite": {
         "kanji": "書くます",
         "hiragana": "かくます"
+      },
+      "negative": {
+        "kanji": "書かない",
+        "hiragana": "かかない"
+      },
+      "polite_negative": {
+        "kanji": "書きません",
+        "hiragana": "かきません"
+      },
+      "past": {
+        "kanji": "書いた",
+        "hiragana": "かいた"
+      },
+      "polite_past": {
+        "kanji": "書きました",
+        "hiragana": "かきました"
+      },
+      "past_negative": {
+        "kanji": "書かなかった",
+        "hiragana": "かかなかった"
       }
     },
     "kanji_analysis": {
@@ -2778,6 +3318,26 @@
       "polite": {
         "kanji": "撮るます",
         "hiragana": "とるます"
+      },
+      "negative": {
+        "kanji": "撮らない",
+        "hiragana": "とらない"
+      },
+      "polite_negative": {
+        "kanji": "撮りません",
+        "hiragana": "とりません"
+      },
+      "past": {
+        "kanji": "撮った",
+        "hiragana": "とった"
+      },
+      "polite_past": {
+        "kanji": "撮りました",
+        "hiragana": "とりました"
+      },
+      "past_negative": {
+        "kanji": "撮らなかった",
+        "hiragana": "とらなかった"
       }
     },
     "kanji_analysis": {
@@ -2835,6 +3395,26 @@
       "polite": {
         "kanji": "待つます",
         "hiragana": "まつます"
+      },
+      "negative": {
+        "kanji": "待たない",
+        "hiragana": "またない"
+      },
+      "polite_negative": {
+        "kanji": "待ちません",
+        "hiragana": "まちません"
+      },
+      "past": {
+        "kanji": "待った",
+        "hiragana": "まった"
+      },
+      "polite_past": {
+        "kanji": "待ちました",
+        "hiragana": "まちました"
+      },
+      "past_negative": {
+        "kanji": "待たなかった",
+        "hiragana": "またなかった"
       }
     },
     "kanji_analysis": {
@@ -2886,6 +3466,26 @@
       "polite": {
         "kanji": "分かるます",
         "hiragana": "わかるます"
+      },
+      "negative": {
+        "kanji": "分からない",
+        "hiragana": "わからない"
+      },
+      "polite_negative": {
+        "kanji": "分かりません",
+        "hiragana": "わかりません"
+      },
+      "past": {
+        "kanji": "分かった",
+        "hiragana": "わかった"
+      },
+      "polite_past": {
+        "kanji": "分かりました",
+        "hiragana": "わかりました"
+      },
+      "past_negative": {
+        "kanji": "分からなかった",
+        "hiragana": "わからなかった"
       }
     },
     "kanji_analysis": {

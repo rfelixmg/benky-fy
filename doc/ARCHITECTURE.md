@@ -38,6 +38,13 @@ benky-fy/
 - **Display Management**: Flexible text rendering
 - **Module Integration**: Works with all flashcard modules
 
+### Conjugation System (`app/conjugation/`)
+- **Answer Checking**: Comprehensive validation system for verbs and adjectives
+- **Modular Design**: Separate checkers for different grammatical types (godan, ichidan, irregular verbs; i-adjective, na-adjective)
+- **Result Models**: Structured response data with detailed feedback
+- **API Endpoints**: RESTful API for conjugation practice and checking
+- **Data Integrity**: Automated conjugation data fixing and validation
+
 ### Settings System (`app/settings/`)
 - **Plugin Architecture**: Modular settings for different features
 - **Registry Pattern**: Centralized settings management

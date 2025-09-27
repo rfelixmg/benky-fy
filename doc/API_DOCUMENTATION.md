@@ -232,6 +232,101 @@ Each learning module (hiragana, katakana, verbs, adjectives, etc.) has the follo
 
 ---
 
+## Conjugation API Routes (`/conjugation`)
+
+### POST `/conjugation/api/conjugation/check`
+**Description**: Check conjugation answer against correct form  
+**Authentication**: Required  
+**Request Body**: JSON data with conjugation details
+
+**Request Format**:
+```json
+{
+  "user_input": "よみます",
+  "item_id": 1,
+  "conjugation_form": "polite",
+  "module_name": "verbs"
+}
+```
+
+**Response Format**:
+```json
+{
+  "success": true,
+  "is_correct": true,
+  "user_input": "よみます",
+  "correct_answer": "よみます",
+  "conjugation_form": "polite",
+  "feedback": "Correct!",
+  "item_info": {
+    "kanji": "読む",
+    "hiragana": "よむ",
+    "english": "to read",
+    "conjugation_type": "godan"
+  }
+}
+```
+
+### GET `/conjugation/api/conjugation/forms/{module_name}`
+**Description**: Get available conjugation forms for a module  
+**Authentication**: Required  
+**Parameters**:
+- `module_name` (string, required): Name of the module (verbs, adjectives)
+
+**Response Format**:
+```json
+{
+  "success": true,
+  "module_name": "verbs",
+  "forms": ["dictionary", "polite", "negative", "polite_negative", "past", "polite_past", "past_negative", "te_form", "potential", "volitional"]
+}
+```
+
+### GET `/conjugation/api/conjugation/practice/{module_name}`
+**Description**: Get a conjugation practice item  
+**Authentication**: Required  
+**Parameters**:
+- `module_name` (string, required): Name of the module (verbs, adjectives)
+- `form` (string, optional): Specific conjugation form to practice (default: polite)
+
+**Response Format**:
+```json
+{
+  "success": true,
+  "item": {
+    "id": 1,
+    "kanji": "読む",
+    "hiragana": "よむ",
+    "english": "to read",
+    "conjugation_type": "godan"
+  },
+  "conjugation_form": "polite",
+  "prompt": "Conjugate 'to read' in polite form"
+}
+```
+
+### GET `/conjugation/api/conjugation/stats/{module_name}`
+**Description**: Get conjugation statistics for a module  
+**Authentication**: Required  
+**Parameters**:
+- `module_name` (string, required): Name of the module (verbs, adjectives)
+
+**Response Format**:
+```json
+{
+  "success": true,
+  "module_name": "verbs",
+  "total_items": 46,
+  "type_counts": {
+    "godan": 25,
+    "ichidan": 15,
+    "irregular": 6
+  }
+}
+```
+
+---
+
 ## Available Learning Modules
 
 The following modules are available with the above API structure:

@@ -18,9 +18,9 @@ class ConjugationAnswerChecker:
         """Check conjugation answer using appropriate checker"""
         
         # Determine which checker to use based on grammatical type
-        if grammatical_type in ["verb", "godan", "ichidan"]:
+        if grammatical_type in ["verb", "godan", "ichidan", "irregular"]:
             checker = self.verb_checker
-        elif grammatical_type in ["i_adjective", "na_adjective"]:
+        elif grammatical_type in ["i_adjective", "na_adjective", "i_adjective_irregular"]:
             checker = self.adjective_checker
         else:
             # Default to verb checker

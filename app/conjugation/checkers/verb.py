@@ -10,8 +10,8 @@ class VerbConjugationChecker(BaseConjugationChecker):
     
     def __init__(self):
         self.supported_forms = [
-            "dictionary", "polite", "negative", "te_form", "past", 
-            "negative_past", "potential", "causative", "passive"
+            "dictionary", "polite", "negative", "polite_negative", "past", 
+            "polite_past", "past_negative", "te_form", "potential", "volitional"
         ]
     
     def get_supported_forms(self) -> List[str]:

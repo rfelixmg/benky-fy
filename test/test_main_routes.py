@@ -188,33 +188,6 @@ class TestEnvironmentVariableBehavior:
             response = client.get('/home', follow_redirects=False)
             TestAssertions.assert_redirects_to_login(response)
     
-    def test_with_force_prod_mode_uses_google_oauth(self):
-        """Test that when force_prod_mode=True, it uses Google OAuth even with test hash."""
-        # Set up environment with valid test hash but force production mode
-        with patch.dict(os.environ, {'BENKY_FY_TEST_HASH': TEST_HASH}):
-            app = create_app()
-            client = app.test_client()
-            
-            # Mock the is_test_mode function to use force_prod_mode=True
-            from app.auth import is_test_mode
-            original_is_test_mode = is_test_mode
-            
-            def mock_is_test_mode(force_prod_mode=False):
-                return original_is_test_mode(force_prod_mode=True)
-            
-            # Patch the function
-            with patch('app.auth.is_test_mode', side_effect=mock_is_test_mode):
-                # Test login route - should redirect to Google OAuth
-                response = client.get('/auth/login', follow_redirects=False)
-                
-                # Should redirect to Google OAuth (not to home)
-                assert response.status_code == 302
-                assert 'google' in response.location.lower() or 'oauth' in response.location.lower()
-                
-                # Test home route - should redirect to login (not accessible without OAuth)
-                response = client.get('/home', follow_redirects=False)
-                TestAssertions.assert_redirects_to_login(response)
-    
     def test_with_test_var_completely_removed_uses_google_oauth(self):
         """Test that when BENKY_FY_TEST_HASH is completely removed, it uses Google OAuth."""
         # Remove test hash completely

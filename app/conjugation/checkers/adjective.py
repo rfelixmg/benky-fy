@@ -10,7 +10,7 @@ class AdjectiveConjugationChecker(BaseConjugationChecker):
     
     def __init__(self):
         self.supported_forms = [
-            "dictionary", "polite", "negative", "past", "negative_past"
+            "present", "past", "negative", "negative_past", "adverbial"
         ]
     
     def get_supported_forms(self) -> List[str]:
