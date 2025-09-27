@@ -43,7 +43,7 @@ def create_app() -> Flask:
 	greetings_essential_bp = create_vocab_flashcard_module("greetings_essential", "./datum/greetings_essential.json")
 	question_words_bp = create_vocab_flashcard_module("question_words", "./datum/question_words.json")
 	base_nouns_bp = create_vocab_flashcard_module("base_nouns", "./datum/base_nouns.json")
-	katakana_words_bp = create_vocab_flashcard_module("katakana_words", "./datum/katakana_words.json")
+	katakana_words_bp = create_katakana_flashcard_module("katakana_words", "./datum/katakana_words.json")
 
 	# Google OAuth with Flask-Dance (only if not in test mode)
 	from app.auth import is_test_mode

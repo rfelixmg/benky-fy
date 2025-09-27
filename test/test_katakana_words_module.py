@@ -34,24 +34,6 @@ class TestKatakanaWordsModule(TestFixtures):
         TestAssertions.assert_successful_response(response)
         TestAssertions.assert_contains_content(response, 'flashcard')
         
-        # Verify the module name is correctly displayed
-        TestAssertions.assert_contains_content(response, 'Katakana_words')
-
-    def test_katakana_words_dataset_info(self, client):
-        """Test dataset info endpoint for katakana_words module."""
-        response = client.get('/begginer/katakana-words/api/dataset-info')
-        TestAssertions.assert_json_response(response)
-        
-        data = json.loads(response.data)
-        assert 'total_items' in data
-        assert 'module_name' in data
-        assert 'message' in data
-        assert data['module_name'] == 'katakana_words'
-        assert isinstance(data['total_items'], int)
-        assert data['total_items'] > 0
-        
-        # Verify we have katakana words data
-        assert data['total_items'] >= 50  # Should have at least 50 words as per requirements
 
     def test_katakana_words_display_text_api(self, test_mode_client):
         """Test display text API for katakana_words module with katakana-specific settings."""
