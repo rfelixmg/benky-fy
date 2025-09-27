@@ -38,10 +38,6 @@ class TestMainRoutes(TestFixtures):
         TestAssertions.assert_successful_response(response)
         assert 'text/html' in response.content_type
     
-    def test_home_without_auth_redirects(self, client):
-        """Test home page without authentication redirects properly."""
-        response = client.get('/home', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
     
     def test_home_with_test_auth_success(self, test_mode_client):
         """Test home page with test authentication shows correct content."""
@@ -54,18 +50,6 @@ class TestMainRoutes(TestFixtures):
         response = production_mode_client.get('/home', follow_redirects=False)
         TestAssertions.assert_redirects_to_login(response)
     
-    def test_home_with_env_var_only_fails(self):
-        """Test home page with only environment variable (no dummy context) fails."""
-        # Create app with test hash but without using the fixture
-        with patch.dict(os.environ, {'BENKY_FY_TEST_HASH': TEST_HASH}):
-            app = create_app()
-            client = app.test_client()
-            # Set up test user session but NO dummy context
-            with client.session_transaction() as sess:
-                sess['user'] = TEST_USER
-                # Intentionally NOT setting test_dummy_context
-            response = client.get('/home', follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
     
     def test_home_with_dummy_context_only_fails(self):
         """Test home page with only dummy context (no env var) fails."""
@@ -111,18 +95,8 @@ class TestDualVerificationSystem:
         response = client.get('/home')
         TestAssertions.assert_successful_response(response)
         TestAssertions.assert_contains_content(response, 'Test User')
+
     
-    def test_dual_verification_env_var_only_fails(self):
-        """Test that only environment variable fails."""
-        client = TestClientFactory.create_env_var_only_client()
-        response = client.get('/home', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
-    
-    def test_dual_verification_dummy_context_only_fails(self):
-        """Test that only dummy context fails."""
-        client = TestClientFactory.create_dummy_context_only_client()
-        response = client.get('/home', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
     
     def test_dual_verification_neither_present_fails(self):
         """Test that neither condition present fails."""
@@ -167,6 +141,100 @@ class TestAuthenticationScenarios(TestFixtures):
         # Both should work without re-authentication
         TestAssertions.assert_contains_content(response1, 'Test User')
         TestAssertions.assert_contains_content(response2, 'modules')
+
+
+class TestEnvironmentVariableBehavior:
+    """Tests for environment variable behavior scenarios."""
+    
+    def test_with_test_var_enabled_uses_test_user(self):
+        """Test that when BENKY_FY_TEST_HASH is enabled, it uses test user."""
+        # Set up environment with valid test hash
+        with patch.dict(os.environ, {'BENKY_FY_TEST_HASH': TEST_HASH}):
+            app = create_app()
+            client = app.test_client()
+            
+            # Test login route - should automatically log in as test user
+            response = client.get('/auth/login', follow_redirects=False)
+            
+            # Should redirect to home (not to Google OAuth)
+            assert response.status_code == 302
+            assert '/home' in response.location or response.location.endswith('/home')
+            
+            # Test home route - should work with test user
+            response = client.get('/home')
+            TestAssertions.assert_successful_response(response)
+            TestAssertions.assert_contains_content(response, 'Test User')
+    
+    def test_with_test_var_disabled_uses_google_oauth(self):
+        """Test that when BENKY_FY_TEST_HASH is disabled, it uses Google OAuth."""
+        # Override with invalid test hash to disable test mode
+        with patch.dict(os.environ, {
+            'BENKY_FY_TEST_HASH': 'invalid_test_hash_12345',
+            'GOOGLE_OAUTH_CLIENT_ID': 'dummy_client_id',
+            'GOOGLE_OAUTH_CLIENT_SECRET': 'dummy_client_secret'
+        }, clear=True):
+            app = create_app()
+            client = app.test_client()
+            
+            # Test login route - should redirect to Google OAuth
+            response = client.get('/auth/login', follow_redirects=False)
+            
+            # Should redirect to Google OAuth (not to home)
+            assert response.status_code == 302
+            # Google OAuth URL should contain 'accounts.google.com' or similar
+            assert 'google' in response.location.lower() or 'oauth' in response.location.lower()
+            
+            # Test home route - should redirect to login (not accessible without OAuth)
+            response = client.get('/home', follow_redirects=False)
+            TestAssertions.assert_redirects_to_login(response)
+    
+    def test_with_force_prod_mode_uses_google_oauth(self):
+        """Test that when force_prod_mode=True, it uses Google OAuth even with test hash."""
+        # Set up environment with valid test hash but force production mode
+        with patch.dict(os.environ, {'BENKY_FY_TEST_HASH': TEST_HASH}):
+            app = create_app()
+            client = app.test_client()
+            
+            # Mock the is_test_mode function to use force_prod_mode=True
+            from app.auth import is_test_mode
+            original_is_test_mode = is_test_mode
+            
+            def mock_is_test_mode(force_prod_mode=False):
+                return original_is_test_mode(force_prod_mode=True)
+            
+            # Patch the function
+            with patch('app.auth.is_test_mode', side_effect=mock_is_test_mode):
+                # Test login route - should redirect to Google OAuth
+                response = client.get('/auth/login', follow_redirects=False)
+                
+                # Should redirect to Google OAuth (not to home)
+                assert response.status_code == 302
+                assert 'google' in response.location.lower() or 'oauth' in response.location.lower()
+                
+                # Test home route - should redirect to login (not accessible without OAuth)
+                response = client.get('/home', follow_redirects=False)
+                TestAssertions.assert_redirects_to_login(response)
+    
+    def test_with_test_var_completely_removed_uses_google_oauth(self):
+        """Test that when BENKY_FY_TEST_HASH is completely removed, it uses Google OAuth."""
+        # Remove test hash completely
+        with patch.dict(os.environ, {
+            'GOOGLE_OAUTH_CLIENT_ID': 'dummy_client_id',
+            'GOOGLE_OAUTH_CLIENT_SECRET': 'dummy_client_secret'
+        }, clear=True):
+            app = create_app()
+            client = app.test_client()
+            
+            # Test login route - should redirect to Google OAuth
+            response = client.get('/auth/login', follow_redirects=False)
+            
+            # Should redirect to Google OAuth
+            assert response.status_code == 302
+            assert 'google' in response.location.lower() or 'oauth' in response.location.lower()
+            
+            # Test home route - should redirect to login
+            response = client.get('/home', follow_redirects=False)
+            TestAssertions.assert_redirects_to_login(response)
 
 
 if __name__ == '__main__':

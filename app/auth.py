@@ -9,8 +9,12 @@ import hashlib
 auth_bp = Blueprint("auth", __name__)
 
 
-def is_test_mode():
+def is_test_mode(force_prod_mode=False):
 	"""Check if we're in test mode based on environment variable and dummy context."""
+	if force_prod_mode:
+		print(f"DEBUG: Force production mode - bypassing test mode")
+		return False, None
+	
 	test_hash = os.environ.get('BENKY_FY_TEST_HASH')
 	if not test_hash:
 		return False, None
@@ -88,24 +92,38 @@ def login_required(f):
 		print(f"DEBUG: login_required - test_mode={test_mode}, dummy_context={dummy_context is not None}")
 		print(f"DEBUG: Current session user = {session.get('user')}")
 		
-		if test_mode:
-			# Test mode detected - automatically set up test user and context
-			print(f"DEBUG: Test mode detected! Setting up test user automatically.")
+		if test_mode and dummy_context:
+			# Test mode detected with dummy context - set up test user
+			print(f"DEBUG: Test mode detected with dummy context! Setting up test user automatically.")
 			if 'user' not in session:
 				session['user'] = get_test_user()
 				session.permanent = True
 				session.modified = True
 				print(f"DEBUG: Set test user in session: {session['user']}")
-			# Always set up test context when in test mode
-			setup_test_context()
-			print(f"DEBUG: Set up test context")
 			return f(*args, **kwargs)
+		
+		if test_mode and not dummy_context:
+			# Test mode detected but no dummy context - redirect to login
+			print(f"DEBUG: Test mode detected but no dummy context - redirecting to login")
+			session['next_url'] = request.url
+			flash('Test mode requires dummy context. Please log in.', 'info')
+			return redirect(url_for('auth.login'))
 		
 		# Normal authentication flow - check if user is already authenticated
 		if 'user' in session and session['user'] is not None:
-			# User is authenticated, allow access
-			print(f"DEBUG: User already authenticated: {session['user']}")
-			return f(*args, **kwargs)
+			# Check if this is a valid authenticated user (not from test mode)
+			user = session['user']
+			if user.get('is_test_user', False):
+				# This is a test user but we're not in test mode - clear session
+				print(f"DEBUG: Found test user in session but not in test mode - clearing session")
+				session.clear()
+				session['next_url'] = request.url
+				flash('Please log in to access this page.', 'info')
+				return redirect(url_for('auth.login'))
+			else:
+				# Valid authenticated user, allow access
+				print(f"DEBUG: User already authenticated: {session['user']}")
+				return f(*args, **kwargs)
 		
 		# User is not authenticated, redirect to login
 		print(f"DEBUG: User not authenticated, redirecting to login")
