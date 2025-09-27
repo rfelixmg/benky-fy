@@ -2968,6 +2968,76 @@ body {
     font-weight: 600;
 }
 
+/* Conjugation Input Table Styles */
+.conjugation-input-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.conjugation-input-table thead {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.conjugation-input-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.conjugation-input-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
+}
+
+.conjugation-form-label-cell {
+    font-weight: 500;
+    color: #2d3748;
+    background: rgba(102, 126, 234, 0.05);
+    min-width: 150px;
+}
+
+.conjugation-input-cell {
+    padding: 0.5rem;
+}
+
+.conjugation-input-cell .conjugation-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.conjugation-input-cell .conjugation-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: white;
+}
+
+.conjugation-input-cell .conjugation-input::placeholder {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.conjugation-form-row:hover {
+    background: rgba(102, 126, 234, 0.02);
+}
+
+.conjugation-form-row:last-child td {
+    border-bottom: none;
+}
+
 /* Enhanced Settings Modal */
 .settings-section h4 {
     color: #667eea;

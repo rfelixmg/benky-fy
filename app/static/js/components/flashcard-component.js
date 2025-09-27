@@ -149,23 +149,26 @@ export class FlashcardComponent {
     }
 
     /**
-     * Update display for conjugation mode
+     * Update display for conjugation mode - show single verb with multiple input forms
      */
     _updateConjugationDisplay(conjugationData) {
         const promptDisplay = document.getElementById('prompt-display');
         if (promptDisplay) {
-            // Create multiple prompts for each conjugation form
-            let promptsHTML = '';
-            conjugationData.prompts.forEach((promptData, index) => {
-                promptsHTML += `
-                    <div class="conjugation-prompt-item">
-                        <div class="conjugation-form-label">${promptData.formName}</div>
-                        <div class="conjugation-prompt-text">${promptData.prompt}</div>
-                    </div>
-                `;
-            });
+            // Show only the single verb based on prompt style
+            const settings = this.settingsManager.getAllSettings();
+            const promptStyle = settings.conjugationPromptStyle || 'english';
+            const item = conjugationData.item;
             
-            promptDisplay.innerHTML = `<div class="prompt-text">${promptsHTML}</div>`;
+            let verbDisplay = '';
+            if (promptStyle === 'kanji') {
+                verbDisplay = item.kanji;
+            } else if (promptStyle === 'furigana') {
+                verbDisplay = item.hiragana;
+            } else {
+                verbDisplay = item.english;
+            }
+            
+            promptDisplay.innerHTML = `<div class="prompt-text">${verbDisplay}</div>`;
         }
         
         // Update prompt script indicator
@@ -177,18 +180,21 @@ export class FlashcardComponent {
         // Show practice mode indicator
         this._updatePracticeModeIndicator('conjugation');
         
+        // Update header title for conjugation mode
+        this._updateHeaderTitle('conjugation');
+        
         // Create input fields for each conjugation form
         this._createConjugationInputFields(conjugationData.conjugationForms);
     }
 
     /**
-     * Create input fields for multiple conjugation forms
+     * Create input fields for multiple conjugation forms in table format
      */
     _createConjugationInputFields(conjugationForms) {
         const answerSection = document.querySelector('.answer-section');
         if (!answerSection) return;
 
-        // Clear existing input fields
+        // Clear existing input fields completely
         answerSection.innerHTML = '';
 
         // Get current input modes from settings
@@ -196,20 +202,48 @@ export class FlashcardComponent {
         const inputModes = settings.inputModes || ['hiragana'];
         console.log('Creating conjugation inputs for modes:', inputModes);
 
+        // Create table structure
+        const table = document.createElement('table');
+        table.className = 'conjugation-input-table';
+        
+        // Create table header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        // Add empty cell for conjugation form column
+        const formHeaderCell = document.createElement('th');
+        formHeaderCell.textContent = 'Conjugation Form';
+        headerRow.appendChild(formHeaderCell);
+        
+        // Add header cells for each input mode
+        inputModes.forEach(inputMode => {
+            const headerCell = document.createElement('th');
+            headerCell.textContent = this._getInputModeDisplayName(inputMode);
+            headerRow.appendChild(headerCell);
+        });
+        
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        
+        // Create table body
+        const tbody = document.createElement('tbody');
+        
         // Create input fields for each conjugation form
-        conjugationForms.forEach((form, index) => {
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'conjugation-input-group';
+        conjugationForms.forEach((form, formIndex) => {
+            const row = document.createElement('tr');
+            row.className = 'conjugation-form-row';
             
-            const label = document.createElement('label');
-            label.className = 'conjugation-input-label';
-            label.textContent = this._getFormDisplayName(form);
-            label.setAttribute('for', `conjugation_${form}`);
+            // Add conjugation form label cell
+            const formCell = document.createElement('td');
+            formCell.className = 'conjugation-form-label-cell';
+            formCell.textContent = this._getFormDisplayName(form);
+            row.appendChild(formCell);
             
-            inputGroup.appendChild(label);
-
-            // Create input fields for each selected input mode
+            // Add input cells for each input mode
             inputModes.forEach((inputMode, modeIndex) => {
+                const inputCell = document.createElement('td');
+                inputCell.className = 'conjugation-input-cell';
+                
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.id = `conjugation_${form}_${inputMode}`;
@@ -222,17 +256,21 @@ export class FlashcardComponent {
                 input.spellcheck = false;
                 
                 // Set focus on first input of first form
-                if (index === 0 && modeIndex === 0) {
+                if (formIndex === 0 && modeIndex === 0) {
                     input.autofocus = true;
                 }
                 
-                inputGroup.appendChild(input);
+                inputCell.appendChild(input);
+                row.appendChild(inputCell);
             });
             
-            answerSection.appendChild(inputGroup);
+            tbody.appendChild(row);
         });
+        
+        table.appendChild(tbody);
+        answerSection.appendChild(table);
 
-        // Setup event listeners for conjugation inputs
+        // Setup event listeners for conjugation inputs with InputManager features
         this._setupConjugationInputListeners();
     }
 
@@ -266,13 +304,27 @@ export class FlashcardComponent {
     }
 
     /**
-     * Setup event listeners for conjugation input fields
+     * Get display name for input mode
+     */
+    _getInputModeDisplayName(inputMode) {
+        const modeNames = {
+            'hiragana': 'Hiragana',
+            'kanji': 'Kanji',
+            'romaji': 'Romaji',
+            'katakana': 'Katakana',
+            'english': 'English'
+        };
+        return modeNames[inputMode] || inputMode;
+    }
+
+    /**
+     * Setup event listeners for conjugation input fields with InputManager features
      */
     _setupConjugationInputListeners() {
         const conjugationInputs = document.querySelectorAll('.conjugation-input');
         
         conjugationInputs.forEach(input => {
-            // Input change handler for romaji conversion
+            // Input change handler with romaji conversion
             input.addEventListener('input', () => {
                 this._handleConjugationInputChange(input);
             });
@@ -289,6 +341,44 @@ export class FlashcardComponent {
                     this._handleEnterKey();
                 }
             });
+        });
+    }
+
+    /**
+     * Handle conjugation input change with InputManager features
+     */
+    _handleConjugationInputChange(input) {
+        // Extract input mode from input ID
+        const inputId = input.id;
+        const parts = inputId.split('_');
+        const inputMode = parts[parts.length - 1]; // Last part is the input mode
+        
+        // Apply InputManager features based on input mode
+        if (inputMode === 'hiragana') {
+            this._handleHiraganaConversion(input);
+        }
+        
+        // Update check button state
+        this._updateCheckButtonState();
+    }
+
+    /**
+     * Handle romaji to hiragana conversion for conjugation inputs
+     */
+    _handleHiraganaConversion(input) {
+        // Import the romaji converter utility
+        import('/static/js/utils/romaji-converter.js').then(({ convertRomajiToHiragana }) => {
+            const cursorPos = input.selectionStart;
+            const originalValue = input.value;
+            const convertedValue = convertRomajiToHiragana(originalValue);
+
+            if (convertedValue !== originalValue) {
+                input.value = convertedValue;
+                const newCursorPos = Math.min(cursorPos, convertedValue.length);
+                input.setSelectionRange(newCursorPos, newCursorPos);
+            }
+        }).catch(error => {
+            console.warn('Failed to load romaji converter:', error);
         });
     }
 
@@ -369,6 +459,9 @@ export class FlashcardComponent {
             
             // Reset prompt script indicator to default
             this._resetPromptScriptIndicator();
+            
+            // Update header title for flashcard mode
+            this._updateHeaderTitle('flashcard');
         } catch (error) {
             console.error('Failed to load flashcard:', error);
             this.displayManager.showError('Failed to load flashcard');
@@ -408,6 +501,8 @@ export class FlashcardComponent {
         if (newMode !== this.currentMode) {
             console.log('Mode changed from', this.currentMode, 'to', newMode);
             this.currentMode = newMode;
+            // Update header title immediately
+            this._updateHeaderTitle(newMode);
             // Reload content with new mode
             this._loadInitialContent();
         } else {
@@ -871,6 +966,22 @@ export class FlashcardComponent {
                     break;
                 default:
                     promptScriptElement.textContent = 'hiragana';
+            }
+        }
+    }
+
+    /**
+     * Update header title based on practice mode
+     */
+    _updateHeaderTitle(mode) {
+        const headerTitle = document.getElementById('headerTitle');
+        if (headerTitle) {
+            const moduleName = this.moduleName || 'Verbs'; // Fallback to 'Verbs' if moduleName not available
+            
+            if (mode === 'conjugation') {
+                headerTitle.textContent = `${moduleName} Conjugation`;
+            } else {
+                headerTitle.textContent = `${moduleName} Flashcards`;
             }
         }
     }

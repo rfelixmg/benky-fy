@@ -68,17 +68,9 @@ export class ConjugationComponent {
             if (response.success) {
                 this.currentConjugationItem = response.item;
                 
-                // Create multiple conjugation prompts for the selected forms
-                const conjugationPrompts = availableSelectedForms.map(form => ({
-                    form: form,
-                    prompt: this._generatePrompt(response.item, form, settings.conjugationPromptStyle),
-                    formName: this._getFormDisplayName(form)
-                }));
-                
                 return {
                     item: response.item,
-                    conjugationForms: availableSelectedForms,
-                    prompts: conjugationPrompts
+                    conjugationForms: availableSelectedForms
                 };
             } else {
                 throw new Error(response.error || 'Failed to get conjugation practice item');
@@ -108,21 +100,13 @@ export class ConjugationComponent {
      * Generate conjugation prompt based on settings
      */
     _generatePrompt(item, conjugationForm, promptStyle) {
-        const formNames = {
-            'polite': 'polite form (ます)',
-            'negative': 'negative form (ない)',
-            'polite_negative': 'polite negative form (ません)',
-            'past': 'past form (た)',
-            'polite_past': 'polite past form (ました)',
-            'past_negative': 'past negative form (なかった)'
-        };
-
-        const formName = formNames[conjugationForm] || conjugationForm;
-
-        if (promptStyle === 'hiragana') {
-            return `Conjugate '${item.hiragana}' in ${formName}`;
+        if (promptStyle === 'kanji') {
+            return item.kanji;
+        } else if (promptStyle === 'furigana') {
+            return item.hiragana;
         } else {
-            return `Conjugate '${item.english}' in ${formName}`;
+            // Default to English
+            return item.english;
         }
     }
 
