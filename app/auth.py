@@ -20,15 +20,11 @@ def is_test_mode():
 	if test_hash != expected_hash:
 		return False, None
 	
-	# Check for dummy context in session (only if we're in a request context)
 	try:
 		dummy_context = session.get('test_dummy_context')
-		# Return True for test mode, but None if no dummy context
 		return True, dummy_context
 	except RuntimeError:
-		# No request context - this happens during app creation
-		# Return True for environment check, but no dummy context
-		return True, None
+		return False, None
 
 
 def get_dummy_context():
@@ -83,6 +79,7 @@ def login_required(f):
 		# Check if we're in test mode first - now requires both env var AND dummy context
 		test_mode, dummy_context = is_test_mode()
 		
+		print(f"DEBUG: test_mode={test_mode}, dummy_context={dummy_context}")
 		if test_mode and dummy_context:
 			# Set test user in session if not already set
 			if 'user' not in session:

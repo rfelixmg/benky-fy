@@ -42,7 +42,10 @@ def create_app() -> Flask:
 	# Google OAuth with Flask-Dance (only if not in test mode)
 	from app.auth import is_test_mode
 	
-	if not is_test_mode():
+	is_test, context = is_test_mode()
+	print(f"DEBUG: is_test_mode={is_test}, context={context}")
+	
+	if not is_test:
 		google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
 		google_client_secret = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET")
 		
@@ -54,7 +57,6 @@ def create_app() -> Flask:
 			client_secret=google_client_secret,
 			scope=["profile", "email"],
 			redirect_to="main.home",
-			# Remove custom redirect_url - let Flask-Dance handle it
 		)
 		
 		# Register Google OAuth blueprint
