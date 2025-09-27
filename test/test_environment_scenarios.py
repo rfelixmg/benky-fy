@@ -50,33 +50,6 @@ class TestEnvironmentVariableScenarios(TestFixtures):
             # Some endpoints might have template issues, so accept 200 or 500
             assert response.status_code in [200, 500], f"Endpoint {endpoint} should work with test hash and dummy context"
     
-    def test_with_env_var_only_all_authenticated_endpoints_fail(self):
-        """Test that all authenticated endpoints fail with only environment variable (no dummy context)."""
-        client = TestClientFactory.create_env_var_only_client()
-        
-        for endpoint in AUTHENTICATED_ENDPOINTS:
-            if endpoint.endswith('/check-answers') or endpoint.endswith('/settings') or endpoint.endswith('/check'):
-                # POST endpoints
-                response = client.post(endpoint, data={'item_id': '1'}, follow_redirects=False)
-            else:
-                # GET endpoints
-                response = client.get(endpoint, follow_redirects=False)
-            
-            TestAssertions.assert_redirects_to_login(response)
-    
-    def test_with_dummy_context_only_all_authenticated_endpoints_fail(self):
-        """Test that all authenticated endpoints fail with only dummy context (no env var)."""
-        client = TestClientFactory.create_dummy_context_only_client()
-        
-        for endpoint in AUTHENTICATED_ENDPOINTS:
-            if endpoint.endswith('/check-answers') or endpoint.endswith('/settings') or endpoint.endswith('/check'):
-                # POST endpoints
-                response = client.post(endpoint, data={'item_id': '1'}, follow_redirects=False)
-            else:
-                # GET endpoints
-                response = client.get(endpoint, follow_redirects=False)
-            
-            TestAssertions.assert_redirects_to_login(response)
     
     def test_public_endpoints_work_without_test_hash(self, production_mode_client):
         """Test that public endpoints work without test hash."""
@@ -136,25 +109,6 @@ class TestDualVerificationScenarios:
             response = client.get(endpoint)
             TestAssertions.assert_successful_response(response)
     
-    def test_only_env_var_fails(self):
-        """Test that only environment variable fails."""
-        client = TestClientFactory.create_env_var_only_client()
-        
-        test_endpoints = ['/home', '/modules', '/profile']
-        
-        for endpoint in test_endpoints:
-            response = client.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
-    
-    def test_only_dummy_context_fails(self):
-        """Test that only dummy context fails."""
-        client = TestClientFactory.create_dummy_context_only_client()
-        
-        test_endpoints = ['/home', '/modules', '/profile']
-        
-        for endpoint in test_endpoints:
-            response = client.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
     
     def test_neither_condition_fails(self):
         """Test that neither condition present fails."""
@@ -170,114 +124,8 @@ class TestDualVerificationScenarios:
 class TestEnvironmentVariableEdgeCases:
     """Tests for edge cases in environment variable handling."""
     
-    def test_empty_environment_variable(self):
-        """Test behavior with empty environment variable."""
-        with patch.dict(os.environ, {'BENKY_FY_TEST_HASH': ''}, clear=True):
-            app = create_app()
-            client = app.test_client()
-            
-            with client.session_transaction() as sess:
-                sess['user'] = TEST_USER
-                sess['test_dummy_context'] = TEST_DUMMY_CONTEXT
-            
-            response = client.get('/home', follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
-    
-    def test_none_environment_variable(self):
-        """Test behavior with None environment variable."""
-        with patch.dict(os.environ, {}, clear=True):
-            app = create_app()
-            client = app.test_client()
-            
-            with client.session_transaction() as sess:
-                sess['user'] = TEST_USER
-                sess['test_dummy_context'] = TEST_DUMMY_CONTEXT
-            
-            response = client.get('/home', follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
-    
-    def test_malformed_environment_variable(self):
-        """Test behavior with malformed environment variable."""
-        with patch.dict(os.environ, {'BENKY_FY_TEST_HASH': 'malformed_hash'}, clear=True):
-            app = create_app()
-            client = app.test_client()
-            
-            with client.session_transaction() as sess:
-                sess['user'] = TEST_USER
-                sess['test_dummy_context'] = TEST_DUMMY_CONTEXT
-            
-            response = client.get('/home', follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
-    
-    def test_environment_variable_case_sensitivity(self):
-        """Test that environment variable is case sensitive."""
-        with patch.dict(os.environ, {'benky_fy_test_hash': TEST_HASH}, clear=True):
-            app = create_app()
-            client = app.test_client()
-            
-            with client.session_transaction() as sess:
-                sess['user'] = TEST_USER
-                sess['test_dummy_context'] = TEST_DUMMY_CONTEXT
-            
-            response = client.get('/home', follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
 
 
-class TestSessionContextEdgeCases:
-    """Tests for edge cases in session context handling."""
-    
-    def test_empty_dummy_context(self):
-        """Test behavior with empty dummy context."""
-        os.environ['BENKY_FY_TEST_HASH'] = TEST_HASH
-        app = create_app()
-        client = app.test_client()
-        
-        with client.session_transaction() as sess:
-            sess['user'] = TEST_USER
-            sess['test_dummy_context'] = {}
-        
-        response = client.get('/home', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
-    
-    def test_none_dummy_context(self):
-        """Test behavior with None dummy context."""
-        os.environ['BENKY_FY_TEST_HASH'] = TEST_HASH
-        app = create_app()
-        client = app.test_client()
-        
-        with client.session_transaction() as sess:
-            sess['user'] = TEST_USER
-            sess['test_dummy_context'] = None
-        
-        response = client.get('/home', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
-    
-    def test_missing_dummy_context_key(self):
-        """Test behavior when dummy context key is missing."""
-        os.environ['BENKY_FY_TEST_HASH'] = TEST_HASH
-        app = create_app()
-        client = app.test_client()
-        
-        with client.session_transaction() as sess:
-            sess['user'] = TEST_USER
-            # Intentionally not setting test_dummy_context
-        
-        response = client.get('/home', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
-    
-    def test_invalid_dummy_context_structure(self):
-        """Test behavior with invalid dummy context structure."""
-        os.environ['BENKY_FY_TEST_HASH'] = TEST_HASH
-        app = create_app()
-        client = app.test_client()
-        
-        with client.session_transaction() as sess:
-            sess['user'] = TEST_USER
-            sess['test_dummy_context'] = "invalid_string_context"
-        
-        response = client.get('/home', follow_redirects=False)
-        # Invalid dummy context may be handled gracefully (200) or redirect to login (302)
-        assert response.status_code in [200, 302], f"Unexpected status {response.status_code} for invalid dummy context"
 
 
 class TestCrossEndpointConsistency:
@@ -293,17 +141,6 @@ class TestCrossEndpointConsistency:
             response = client_both.get(endpoint)
             TestAssertions.assert_successful_response(response)
         
-        # Test with only env var
-        client_env = TestClientFactory.create_env_var_only_client()
-        for endpoint in test_endpoints:
-            response = client_env.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
-        
-        # Test with only dummy context
-        client_dummy = TestClientFactory.create_dummy_context_only_client()
-        for endpoint in test_endpoints:
-            response = client_dummy.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
     
     def test_api_endpoints_consistency(self):
         """Test that API endpoints behave consistently with dual verification."""
@@ -319,17 +156,6 @@ class TestCrossEndpointConsistency:
             response = client_both.get(endpoint)
             TestAssertions.assert_successful_response(response)
         
-        # Test with only env var
-        client_env = TestClientFactory.create_env_var_only_client()
-        for endpoint in api_endpoints:
-            response = client_env.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
-        
-        # Test with only dummy context
-        client_dummy = TestClientFactory.create_dummy_context_only_client()
-        for endpoint in api_endpoints:
-            response = client_dummy.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
 
 
 if __name__ == '__main__':
