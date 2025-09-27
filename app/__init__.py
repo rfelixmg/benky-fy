@@ -26,11 +26,11 @@ def create_app() -> Flask:
 	app.register_blueprint(conjugation_bp, url_prefix="/conjugation")
 
 	# Import and create flashcard modules
-	from .flashcard import create_vocab_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module
+	from .flashcard import create_vocab_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module, create_katakana_flashcard_module
 	
 	# Create flashcard modules (only for existing data files)
 	hiragana_bp = create_vocab_flashcard_module("hiragana", "./datum/hiragana.json")
-	katakana_bp = create_vocab_flashcard_module("katakana", "./datum/katakana.json")
+	katakana_bp = create_katakana_flashcard_module("katakana", "./datum/katakana.json")
 	verbs_bp = create_verb_flashcard_module("verbs", "./datum/verbs.json")
 	adjectives_bp = create_adjective_flashcard_module("adjectives", "./datum/adjectives.json")
 	
