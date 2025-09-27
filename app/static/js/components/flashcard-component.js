@@ -110,6 +110,9 @@ export class FlashcardComponent {
      */
     async _loadRandomItem() {
         try {
+            // Clear any existing feedback before loading new item
+            this._clearFeedback();
+            
             const response = await this.apiClient.getNextItem();
             this.currentItemId = response.item_id;
             await this._loadFlashcard();
@@ -336,10 +339,31 @@ export class FlashcardComponent {
     }
 
     /**
+     * Clear feedback display and reset visual state
+     */
+    _clearFeedback() {
+        const feedbackElement = document.getElementById('feedbackMessage');
+        if (feedbackElement) {
+            feedbackElement.style.display = 'none';
+            feedbackElement.innerHTML = '';
+            feedbackElement.className = 'feedback-message';
+        }
+
+        // Remove feedback classes from flashcard module
+        const flashcardModule = document.querySelector('.flashcard-module');
+        if (flashcardModule) {
+            flashcardModule.classList.remove('correct', 'incorrect', 'partial');
+        }
+    }
+
+    /**
      * Load next flashcard item
      */
     async _loadNextItem() {
         try {
+            // Clear any existing feedback before loading new item
+            this._clearFeedback();
+            
             const response = await this.apiClient.getNextItem();
             this.currentItemId = response.item_id;
             await this._loadFlashcard();

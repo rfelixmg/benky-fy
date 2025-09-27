@@ -6,6 +6,7 @@ __pycache__/
 
 tmp/
 .emails/
+.team/
 # C extensions
 *.so
 *.env
