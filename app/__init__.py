@@ -14,6 +14,11 @@ def create_app() -> Flask:
 	# Register blueprints
 	from .routes import main_bp
 	from .auth import auth_bp
+	
+	# Register help blueprint
+	from .help.blueprints.help_bp import HelpBlueprint
+	help_bp = HelpBlueprint().create_blueprint()
+	app.register_blueprint(help_bp)
 
 	# Import and create flashcard modules
 	from .flashcard import create_vocab_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module

@@ -4,7 +4,10 @@
 <meta name="user-authenticated" content="{% if current_user %}true{% else %}false{% endif %}">
 <div class="flashcard-container">
 	<section class="flashcard-module">
-		<button class="settings-toggle-btn" title="Settings">⚙️</button>
+		<div class="module-controls">
+			<button class="settings-toggle-btn" title="Settings">⚙️</button>
+			<button class="help-toggle-btn" id="helpToggleBtn" title="Word Information">❓</button>
+		</div>
 		<header class="flashcard-header">
 			<h1>{{ module_name|title }} Flashcards</h1>
 		</header>

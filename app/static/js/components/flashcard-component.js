@@ -7,6 +7,7 @@ import { ApiClient } from '/static/js/core/api-client.js';
 import { InputManager } from '/static/js/core/input-manager.js';
 import { DisplayManager } from '/static/js/core/display-manager.js';
 import { SettingsModal } from '/static/js/components/settings-modal.js';
+import { HelpComponent } from '/static/js/components/help-modal.js';
 export class FlashcardComponent {
     constructor(moduleName) {
         this.moduleName = moduleName;
@@ -15,6 +16,7 @@ export class FlashcardComponent {
         this.inputManager = null;
         this.displayManager = null;
         this.settingsModal = null;
+        this.helpModal = null;
         
         this.currentItemId = 1;
         this.isUserInteraction = false;
@@ -32,12 +34,19 @@ export class FlashcardComponent {
             this.inputManager = new InputManager('.answer-section');
             this.displayManager = new DisplayManager('.flashcard-container');
             this.settingsModal = new SettingsModal();
+            this.helpModal = new HelpComponent();
 
             // Setup settings modal
             this.settingsModal.initialize(
                 this.settingsManager,
                 () => this._onSettingsChange()
             );
+
+            // Setup help modal
+            this.helpModal.initialize(this.moduleName, this.apiClient);
+
+            // Setup help toggle button
+            this._setupHelpToggleButton();
 
             // Setup toggle button
             this._setupToggleButton();
@@ -62,6 +71,18 @@ export class FlashcardComponent {
         if (toggleBtn) {
             toggleBtn.addEventListener('click', () => {
                 this.settingsModal.toggle();
+            });
+        }
+    }
+
+    /**
+     * Setup help toggle button
+     */
+    _setupHelpToggleButton() {
+        const helpToggleBtn = document.getElementById('helpToggleBtn');
+        if (helpToggleBtn) {
+            helpToggleBtn.addEventListener('click', () => {
+                this.helpModal.show(null, this.currentItemId);
             });
         }
     }
@@ -119,11 +140,16 @@ export class FlashcardComponent {
     async _loadFlashcard() {
         try {
             const settings = this.settingsManager.getAllSettings();
-            await this.displayManager.updateDisplay(
+            const response = await this.displayManager.updateDisplay(
                 this.currentItemId,
                 settings,
                 this.apiClient
             );
+            
+            // Update help modal with current item data
+            if (this.helpModal && response) {
+                this.helpModal.updateItem(response);
+            }
         } catch (error) {
             console.error('Failed to load flashcard:', error);
             this.displayManager.showError('Failed to load flashcard');

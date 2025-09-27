@@ -99,6 +99,23 @@ export class DisplayManager {
         modeElements.forEach(element => {
             element.textContent = mode;
         });
+        
+        // Update the prompt script indicator
+        const promptScriptElement = document.getElementById('prompt-script');
+        if (promptScriptElement) {
+            // Map display modes to user-friendly script names
+            const scriptNames = {
+                'kana': 'hiragana',
+                'kanji': 'kanji',
+                'kanji_furigana': 'kanji+furigana',
+                'weighted': 'weighted',
+                'english': 'english'
+            };
+            
+            const scriptName = scriptNames[mode] || mode;
+            promptScriptElement.textContent = scriptName;
+            console.log(`Updated prompt script indicator to: ${scriptName}`);
+        }
     }
 
     /**
