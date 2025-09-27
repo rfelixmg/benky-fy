@@ -203,11 +203,57 @@ export class FlashcardComponent {
         // Clear input fields
         this.inputManager.clearInputValues();
 
-        // Show feedback (this would be implemented by a feedback component)
-        console.log('Answer response:', response);
+        // Show feedback
+        this._showFeedback(response);
 
-        // Load next item
-        this._loadNextItem();
+        // Load next item after a short delay
+        setTimeout(() => {
+            this._loadNextItem();
+        }, 2000); // 2 second delay to show feedback
+    }
+
+    /**
+     * Show feedback to user
+     */
+    _showFeedback(response) {
+        const feedbackElement = document.getElementById('feedbackMessage');
+        if (!feedbackElement) {
+            console.warn('Feedback element not found');
+            return;
+        }
+
+        const allCorrect = response.all_correct;
+        const results = response.results || {};
+        
+        // Build feedback message
+        let feedbackText = '';
+        let feedbackClass = '';
+        
+        if (allCorrect) {
+            feedbackText = '✅ Correct! Well done!';
+            feedbackClass = 'correct';
+        } else {
+            feedbackText = '❌ Incorrect. Here are the correct answers:';
+            feedbackClass = 'incorrect';
+            
+            // Add correct answers
+            Object.keys(results).forEach(mode => {
+                const result = results[mode];
+                if (!result.is_correct) {
+                    feedbackText += `\\n${mode}: ${result.correct_answer}`;
+                }
+            });
+        }
+
+        // Update feedback element
+        feedbackElement.textContent = feedbackText;
+        feedbackElement.className = `feedback-message ${feedbackClass}`;
+        feedbackElement.style.display = 'block';
+
+        // Hide feedback after delay
+        setTimeout(() => {
+            feedbackElement.style.display = 'none';
+        }, 3000);
     }
 
     /**

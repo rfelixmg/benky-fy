@@ -181,7 +181,25 @@ export class InputManager {
             input.addEventListener('keyup', () => {
                 this._updateCheckButtonState();
             });
+
+            // Keydown handler for ENTER key
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    this._handleEnterKey();
+                }
+            });
         });
+    }
+
+    /**
+     * Handle ENTER key press
+     */
+    _handleEnterKey() {
+        const checkButton = document.getElementById('checkButton');
+        if (checkButton && !checkButton.disabled) {
+            checkButton.click();
+        }
     }
 
     /**
