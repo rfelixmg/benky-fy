@@ -230,7 +230,7 @@ export class InputManager {
                 const newCursorPos = Math.min(cursorPos, convertedValue.length);
                 input.setSelectionRange(newCursorPos, newCursorPos);
             }
-        }, 100);
+        }, 300); // Increased delay to 300ms for better user experience
     }
 
     /**

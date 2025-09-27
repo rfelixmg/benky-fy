@@ -68,16 +68,12 @@ export function convertRomajiToHiragana(romajiText) {
             }
         }
 
-        // Special handling for 'n' - don't convert if followed by vowels or 'y'
-        if (!found && romajiText[i] === 'n' && i < romajiText.length - 1) {
-            const nextChar = romajiText[i + 1];
-            
-            // Don't convert 'n' if it's followed by a vowel or 'y' or another 'n'
-            if (nextChar === 'a' || nextChar === 'i' || nextChar === 'u' || 
-                nextChar === 'e' || nextChar === 'o' || nextChar === 'y' || 
-                nextChar === 'n') {
+        // Special handling for 'n' - be more conservative with conversion
+        if (!found && romajiText[i] === 'n') {
+            if (i < romajiText.length - 1) {
+                const nextChar = romajiText[i + 1];
                 
-                // Try longer combinations first
+                // Try longer combinations first (na, ni, nu, ne, no, nya, etc.)
                 for (let length = 3; length >= 2; length--) {
                     if (i + length <= romajiText.length) {
                         const substring = romajiText.substring(i, i + length);
@@ -90,12 +86,17 @@ export function convertRomajiToHiragana(romajiText) {
                     }
                 }
                 
-                // If no combination found, leave 'n' as is for now
+                // If no combination found, leave 'n' unconverted to wait for more input
                 if (!found) {
                     result += romajiText[i];
                     i++;
                     found = true;
                 }
+            } else {
+                // 'n' at end of string - convert to 'ん' only if it's clearly standalone
+                result += 'ん';
+                i++;
+                found = true;
             }
         }
 
