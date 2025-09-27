@@ -2821,13 +2821,109 @@ body {
 	}
 }
 
-/* Conjugation Feedback Styles */
-.conjugation-feedback {
+/* Multi-Conjugation Interface Styles - Following Existing Patterns */
+.conjugation-prompt-item {
     margin: 1rem 0;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.conjugation-form-label {
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.conjugation-prompt-text {
+    font-size: 1.1rem;
+    color: #2d3748;
+    line-height: 1.4;
+}
+
+.conjugation-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 1rem 0;
+}
+
+.conjugation-input-label {
+    font-weight: 500;
+    color: #4a5568;
+    font-size: 0.9rem;
+}
+
+.conjugation-input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: rgba(255,255,255,0.9);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.conjugation-input:focus {
+    border-color: #667eea;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.25);
+}
+
+.conjugation-input::placeholder {
+    color: #a0aec0;
+}
+
+/* Multi-Conjugation Feedback Styles - Following Existing Patterns */
+.conjugation-result-item {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.conjugation-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.conjugation-form-name {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 1rem;
+}
+
+.conjugation-status {
+    font-size: 1.2rem;
+}
+
+.conjugation-result-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.conjugation-detail {
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+.conjugation-detail strong {
+    color: #2d3748;
+    margin-right: 0.5rem;
 }
 
 .feedback-item {
@@ -2880,11 +2976,19 @@ body {
     font-weight: 600;
 }
 
-/* Practice Mode Toggle */
-.practice-mode-toggle {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
+/* Disabled input mode options */
+.checkbox-option input[disabled] + span {
+    color: #a0aec0;
+    text-decoration: line-through;
+}
+
+.checkbox-option input[disabled] {
+    cursor: not-allowed;
+}
+
+.checkbox-option:has(input[disabled]) {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .practice-mode-toggle .radio-option {

@@ -330,8 +330,47 @@ export class SettingsModal {
             conjugationSettingsSection.style.display = mode === 'conjugation' ? 'block' : 'none';
         }
 
+        // Update answer input modes based on practice mode
+        this._updateAnswerInputModesForPracticeMode(mode);
+
         if (this.onSettingsChange) {
             this.onSettingsChange();
+        }
+    }
+
+    /**
+     * Update answer input modes based on practice mode
+     */
+    _updateAnswerInputModesForPracticeMode(mode) {
+        const inputModeInputs = document.querySelectorAll('input[name="input_modes"]');
+        
+        if (mode === 'conjugation') {
+            // For conjugation practice, only enable hiragana and kanji
+            inputModeInputs.forEach(input => {
+                if (input.value === 'hiragana' || input.value === 'kanji') {
+                    input.disabled = false;
+                    input.parentElement.style.opacity = '1';
+                } else {
+                    input.disabled = true;
+                    input.checked = false;
+                    input.parentElement.style.opacity = '0.5';
+                }
+            });
+            
+            // Ensure at least hiragana is selected
+            const hiraganaInput = document.querySelector('input[name="input_modes"][value="hiragana"]');
+            if (hiraganaInput && !hiraganaInput.checked) {
+                hiraganaInput.checked = true;
+            }
+            
+            // Update settings
+            this._handleInputModeChange();
+        } else {
+            // For regular flashcards, enable all input modes
+            inputModeInputs.forEach(input => {
+                input.disabled = false;
+                input.parentElement.style.opacity = '1';
+            });
         }
     }
 
