@@ -463,6 +463,8 @@ export class FlashcardComponent {
         
         // Only create flashcard input fields when in flashcard mode
         if (this.currentMode === 'flashcard') {
+            // Clear any conjugation elements first when switching to flashcard mode
+            this._clearConjugationElements();
             this.inputManager.createInputFields(settings.inputModes, this.currentMode);
         } else {
             // Clear flashcard inputs when in conjugation mode
@@ -595,6 +597,7 @@ export class FlashcardComponent {
                 }
                 
                 response = await this.conjugationComponent.checkConjugationAnswers(userAnswers);
+                this._handleAnswerResponse(response, userAnswers);
             } else {
                 // Handle regular flashcard answer checking
                 const userAnswers = this.inputManager.getInputValues();
@@ -613,9 +616,8 @@ export class FlashcardComponent {
                     userAnswers,
                     settings
                 );
+                this._handleAnswerResponse(response, userAnswers);
             }
-
-            this._handleAnswerResponse(response);
         } catch (error) {
             console.error('Failed to check answer:', error);
         }
@@ -649,7 +651,7 @@ export class FlashcardComponent {
     /**
      * Handle answer response
      */
-    _handleAnswerResponse(response) {
+    _handleAnswerResponse(response, userAnswers = null) {
         // Clear any existing feedback timer
         if (this.feedbackTimer) {
             clearTimeout(this.feedbackTimer);
@@ -665,9 +667,9 @@ export class FlashcardComponent {
 
         // Show feedback
         if (this.currentMode === 'conjugation') {
-            this._showConjugationFeedback(response);
+            this._showConjugationFeedback(response, userAnswers);
         } else {
-            this._showFeedback(response);
+            this._showFeedback(response, userAnswers);
         }
 
         // Set timer to load next item after feedback period
@@ -693,7 +695,7 @@ export class FlashcardComponent {
     /**
      * Show feedback to user
      */
-    _showFeedback(response) {
+    _showFeedback(response, userAnswers = null) {
         const feedbackElement = document.getElementById('feedbackMessage');
         if (!feedbackElement) {
             console.warn('Feedback element not found');
@@ -724,14 +726,15 @@ export class FlashcardComponent {
             headerText = '❌ Incorrect answers.';
         }
 
-        // Build table HTML with consistent format: Input | Expected | Result
+        // Build table HTML with consistent format: User Input | Expected | Result
         let tableHTML = `
             <div class="feedback-header">${headerText}</div>
             <table class="feedback-table">
                 <thead>
                     <tr>
-                        <th>Input</th>
-                        <th>Expected</th>
+                        <th>Request Type</th>
+                        <th>User Input</th>
+                        <th>Target</th>
                         <th>Result</th>
                     </tr>
                 </thead>
@@ -748,13 +751,14 @@ export class FlashcardComponent {
             if (result) {
                 const isCorrect = result.is_correct;
                 const statusIcon = isCorrect ? '✅' : '❌';
-                const statusText = isCorrect ? 'Correct' : 'Incorrect';
+                const userInput = userAnswers && userAnswers[mode] ? userAnswers[mode] : 'No input';
                 
                 tableHTML += `
                     <tr>
                         <td>${mode}</td>
+                        <td>${userInput}</td>
                         <td>${result.correct_answer}</td>
-                        <td>${statusIcon} ${statusText}</td>
+                        <td>${statusIcon}</td>
                     </tr>
                 `;
             }
@@ -801,7 +805,7 @@ export class FlashcardComponent {
     /**
      * Show conjugation feedback to user
      */
-    _showConjugationFeedback(results) {
+    _showConjugationFeedback(results, userAnswers = null) {
         const feedbackElement = document.getElementById('feedbackMessage');
         if (!feedbackElement) {
             console.warn('Feedback element not found');
@@ -826,14 +830,15 @@ export class FlashcardComponent {
             headerText = '❌ Incorrect conjugations.';
         }
         
-        // Build table HTML with consistent format: Input | Expected | Result
+        // Build table HTML with consistent format: Request Type | User Input | Target | Result
         let tableHTML = `
             <div class="feedback-header">${headerText}</div>
             <table class="feedback-table">
                 <thead>
                     <tr>
-                        <th>Input</th>
-                        <th>Expected</th>
+                        <th>Request Type</th>
+                        <th>User Input</th>
+                        <th>Target</th>
                         <th>Result</th>
                     </tr>
                 </thead>
@@ -844,14 +849,15 @@ export class FlashcardComponent {
         results.forEach(result => {
             const isCorrect = result.result.is_correct;
             const statusIcon = isCorrect ? '✅' : '❌';
-            const statusText = isCorrect ? 'Correct' : 'Incorrect';
             const modeDisplay = result.mode ? ` (${result.mode})` : '';
+            const userInput = result.userInput || 'No input';
             
             tableHTML += `
                 <tr>
                     <td>${result.formName}${modeDisplay}</td>
+                    <td>${userInput}</td>
                     <td>${result.result.correct_answer || 'N/A'}</td>
-                    <td>${statusIcon} ${statusText}</td>
+                    <td>${statusIcon}</td>
                 </tr>
             `;
         });
@@ -1072,21 +1078,31 @@ export class FlashcardComponent {
             flashcardContainer.classList.remove('conjugation-mode');
         }
         
-        // Clear conjugation input fields
-        const conjugationInputGroups = document.querySelectorAll('.conjugation-input-group');
-        conjugationInputGroups.forEach(group => group.remove());
+        // Clear conjugation input table (created by _createConjugationInputFields)
+        const conjugationInputTable = document.querySelector('.conjugation-input-table');
+        if (conjugationInputTable) {
+            conjugationInputTable.remove();
+        }
         
-        // Clear conjugation prompt items
-        const conjugationPromptItems = document.querySelectorAll('.conjugation-prompt-item');
-        conjugationPromptItems.forEach(item => item.remove());
+        // Clear all conjugation-related elements comprehensively
+        const conjugationElements = document.querySelectorAll(`
+            .conjugation-input-group,
+            .conjugation-prompt-item,
+            .conjugation-form-label,
+            .conjugation-prompt-text,
+            .conjugation-form-row,
+            .conjugation-form-label-cell,
+            .conjugation-input-cell,
+            .conjugation-input
+        `);
+        conjugationElements.forEach(element => element.remove());
         
-        // Clear conjugation form labels
-        const conjugationFormLabels = document.querySelectorAll('.conjugation-form-label');
-        conjugationFormLabels.forEach(label => label.remove());
-        
-        // Clear conjugation prompt text
-        const conjugationPromptTexts = document.querySelectorAll('.conjugation-prompt-text');
-        conjugationPromptTexts.forEach(text => text.remove());
+        // Clear practice mode indicator if it's in conjugation mode
+        const practiceModeIndicator = document.getElementById('practiceModeIndicator');
+        if (practiceModeIndicator && practiceModeIndicator.classList.contains('conjugation')) {
+            practiceModeIndicator.style.display = 'none';
+            practiceModeIndicator.classList.remove('conjugation');
+        }
     }
 
     /**
