@@ -10,14 +10,60 @@ auth_bp = Blueprint("auth", __name__)
 
 
 def is_test_mode():
-	"""Check if we're in test mode based on environment variable."""
+	"""Check if we're in test mode based on environment variable and dummy context."""
 	test_hash = os.environ.get('BENKY_FY_TEST_HASH')
 	if not test_hash:
-		return False
+		return False, None
 	
 	# Expected hash for test mode (you can change this secret)
 	expected_hash = hashlib.sha256(b'benky-fy-test-mode-2024').hexdigest()
-	return test_hash == expected_hash
+	if test_hash != expected_hash:
+		return False, None
+	
+	# Check for dummy context in session (only if we're in a request context)
+	try:
+		dummy_context = session.get('test_dummy_context')
+		# Return True for test mode, but None if no dummy context
+		return True, dummy_context
+	except RuntimeError:
+		# No request context - this happens during app creation
+		# Return True for environment check, but no dummy context
+		return True, None
+
+
+def get_dummy_context():
+	"""Get dummy context for test modules."""
+	return {
+		"test_modules": {
+			"hiragana": {"enabled": True, "data_source": "test"},
+			"katakana": {"enabled": True, "data_source": "test"},
+			"verbs": {"enabled": True, "data_source": "test"},
+			"adjectives": {"enabled": True, "data_source": "test"},
+			"numbers_basic": {"enabled": True, "data_source": "test"},
+			"vocab": {"enabled": True, "data_source": "test"}
+		},
+		"test_user_context": {
+			"session_id": "test_session_12345",
+			"test_mode": True,
+			"bypass_oauth": True
+		}
+	}
+
+
+def setup_test_context():
+	"""Set up test context in session for test mode."""
+	dummy_context = get_dummy_context()
+	session['test_dummy_context'] = dummy_context
+	session.permanent = True
+	session.modified = True
+	return dummy_context
+
+
+def clear_test_context():
+	"""Clear test context from session."""
+	if 'test_dummy_context' in session:
+		del session['test_dummy_context']
+		session.modified = True
 
 
 def get_test_user():
@@ -34,8 +80,10 @@ def login_required(f):
 	"""Decorator to require authentication for a route."""
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
-		# Check if we're in test mode first
-		if is_test_mode():
+		# Check if we're in test mode first - now requires both env var AND dummy context
+		test_mode, dummy_context = is_test_mode()
+		
+		if test_mode and dummy_context:
 			# Set test user in session if not already set
 			if 'user' not in session:
 				session['user'] = get_test_user()
@@ -43,13 +91,19 @@ def login_required(f):
 				session.modified = True
 			return f(*args, **kwargs)
 		
-		# Normal authentication flow
-		if 'user' not in session:
-			# Store the URL they were trying to access
+		# If we're in test mode but don't have dummy context, redirect to login
+		if test_mode and not dummy_context:
 			session['next_url'] = request.url
-			flash('Please log in to access this page.', 'info')
+			flash('Test mode requires dummy context. Please log in.', 'info')
 			return redirect(url_for('auth.login'))
-		return f(*args, **kwargs)
+		
+		# Normal authentication flow - always require Google OAuth
+		# Clear any existing user session to force OAuth
+		if 'user' in session:
+			del session['user']
+		session['next_url'] = request.url
+		flash('Please log in to access this page.', 'info')
+		return redirect(url_for('auth.login'))
 	return decorated_function
 
 

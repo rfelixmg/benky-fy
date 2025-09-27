@@ -19,6 +19,23 @@ TEST_USER = {
     "is_test_user": True
 }
 
+# Test dummy context for modules
+TEST_DUMMY_CONTEXT = {
+    "test_modules": {
+        "hiragana": {"enabled": True, "data_source": "test"},
+        "katakana": {"enabled": True, "data_source": "test"},
+        "verbs": {"enabled": True, "data_source": "test"},
+        "adjectives": {"enabled": True, "data_source": "test"},
+        "numbers_basic": {"enabled": True, "data_source": "test"},
+        "vocab": {"enabled": True, "data_source": "test"}
+    },
+    "test_user_context": {
+        "session_id": "test_session_12345",
+        "test_mode": True,
+        "bypass_oauth": True
+    }
+}
+
 # Test modules to verify (using correct URL prefixes for flashcard API)
 TEST_MODULES = ['hiragana', 'katakana', 'verbs', 'adjectives', 'numbers-basic']
 
@@ -47,3 +64,9 @@ PUBLIC_ENDPOINTS = [
     '/auth/debug-oauth',
     '/begginer/verbs/api/dataset-info'
 ]
+
+# Test data constants
+TEST_ITEM_ID = 1
+TEST_INVALID_ITEM_ID = 9999
+TEST_MODULE_NAME = 'verbs'
+TEST_INVALID_MODULE_NAME = 'nonexistent'
