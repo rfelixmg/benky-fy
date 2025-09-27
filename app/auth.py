@@ -79,7 +79,6 @@ def login_required(f):
 		# Check if we're in test mode first - now requires both env var AND dummy context
 		test_mode, dummy_context = is_test_mode()
 		
-		print(f"DEBUG: test_mode={test_mode}, dummy_context={dummy_context}")
 		if test_mode and dummy_context:
 			# Set test user in session if not already set
 			if 'user' not in session:
@@ -94,10 +93,12 @@ def login_required(f):
 			flash('Test mode requires dummy context. Please log in.', 'info')
 			return redirect(url_for('auth.login'))
 		
-		# Normal authentication flow - always require Google OAuth
-		# Clear any existing user session to force OAuth
-		if 'user' in session:
-			del session['user']
+		# Normal authentication flow - check if user is already authenticated
+		if 'user' in session and session['user'] is not None:
+			# User is authenticated, allow access
+			return f(*args, **kwargs)
+		
+		# User is not authenticated, redirect to login
 		session['next_url'] = request.url
 		flash('Please log in to access this page.', 'info')
 		return redirect(url_for('auth.login'))
@@ -130,7 +131,13 @@ def login():
 	
 	# Google is authorized, fetch user info and complete login
 	print("Google authorized, fetching user info and completing login")
-	response = google.get("/oauth2/v2/userinfo")
+	try:
+		response = google.get("/oauth2/v2/userinfo")
+	except Exception as e:
+		print(f"Error fetching user info: {e}")
+		# Token might be expired or invalid, clear session and restart OAuth
+		session.clear()
+		return redirect(url_for("google.login"))
 	
 	if not response.ok:
 		print(f"Failed to get user info: {response.status_code}")
