@@ -338,7 +338,7 @@ export class FlashcardComponent {
             input.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
                     event.preventDefault();
-                    this._handleEnterKey();
+                    this._handleConjugationEnterKey();
                 }
             });
         });
@@ -366,20 +366,43 @@ export class FlashcardComponent {
      * Handle romaji to hiragana conversion for conjugation inputs
      */
     _handleHiraganaConversion(input) {
-        // Import the romaji converter utility
-        import('/static/js/utils/romaji-converter.js').then(({ convertRomajiToHiragana }) => {
+        // Use the same timeout mechanism as InputManager
+        if (this.conjugationConversionTimeout) {
+            clearTimeout(this.conjugationConversionTimeout);
+        }
+
+        this.conjugationConversionTimeout = setTimeout(() => {
             const cursorPos = input.selectionStart;
             const originalValue = input.value;
-            const convertedValue = convertRomajiToHiragana(originalValue);
+            const convertedValue = this._convertRomajiToHiragana(originalValue);
 
             if (convertedValue !== originalValue) {
                 input.value = convertedValue;
                 const newCursorPos = Math.min(cursorPos, convertedValue.length);
                 input.setSelectionRange(newCursorPos, newCursorPos);
             }
-        }).catch(error => {
-            console.warn('Failed to load romaji converter:', error);
-        });
+        }, 300); // Same 300ms delay as InputManager
+    }
+
+    /**
+     * Convert romaji to hiragana (using the same implementation as InputManager)
+     */
+    _convertRomajiToHiragana(romajiText) {
+        // Use the globally available romaji converter
+        if (window.convertRomajiToHiragana) {
+            return window.convertRomajiToHiragana(romajiText);
+        }
+        return romajiText; // Fallback if converter not available
+    }
+
+    /**
+     * Handle ENTER key press for conjugation inputs
+     */
+    _handleConjugationEnterKey() {
+        const checkButton = document.getElementById('checkButton');
+        if (checkButton && !checkButton.disabled) {
+            checkButton.click();
+        }
     }
 
     /**
@@ -536,7 +559,9 @@ export class FlashcardComponent {
                 console.log('Conjugation user answers:', userAnswers);
                 
                 // Check if any answer is provided
-                const hasAnswer = Object.values(userAnswers).some(answer => answer.trim().length > 0);
+                const hasAnswer = Object.values(userAnswers).some(formAnswers => 
+                    Object.values(formAnswers).some(answer => answer && answer.trim().length > 0)
+                );
                 
                 if (!hasAnswer) {
                     console.warn('No conjugation answer provided');
@@ -591,6 +616,7 @@ export class FlashcardComponent {
             }
         });
         
+        console.log('Collected conjugation input values:', values);
         return values;
     }
 

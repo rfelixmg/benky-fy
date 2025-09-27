@@ -60,10 +60,10 @@ def create_conjugation_blueprint():
                     'hiragana': item.hiragana,
                     'english': item.english,
                     'conjugations': getattr(item, 'conjugations', {}),
-                    'conjugation': getattr(item, 'conjugation', 'godan'),
+                    'conjugation': getattr(item, 'grammatical_type', 'godan'),  # Use grammatical_type as conjugation type
                     'grammatical_type': getattr(item, 'grammatical_type', 'verb')
                 }
-                grammatical_type = item_dict.get('conjugation', '') or item_dict.get('grammatical_type', 'verb')
+                grammatical_type = item_dict.get('grammatical_type', 'verb')
             else:
                 # Convert FlashcardItem to dict for conjugation checker
                 item_dict = {
@@ -145,7 +145,7 @@ def create_conjugation_blueprint():
                 else:
                     # Handle dictionary
                     item_data = item
-                    grammatical_type = item.get('conjugation', '') or item.get('grammatical_type', 'verb')
+                    grammatical_type = item.get('grammatical_type', 'verb')
             elif module_name == 'adjectives':
                 if not adjective_engine._data:
                     return jsonify({'error': 'No adjective data available'}), 500
