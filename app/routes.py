@@ -28,7 +28,26 @@ def modules():
 @login_required
 def profile():
 	user = get_current_user()
-	return render_template("pages/profile.html", user=user)
+	
+	# Create mock profile data for testing/demo
+	profile_data = {
+		"level": "Beginner",
+		"join_date": "2024-01-15",
+		"total_study_time": "45 hours",
+		"streak": 7,
+		"achievements": [
+			"First Steps",
+			"Week Warrior", 
+			"Hiragana Master"
+		],
+		"preferences": {
+			"daily_goal": "30 minutes",
+			"notifications": "Enabled",
+			"theme": "Light"
+		}
+	}
+	
+	return render_template("pages/profile.html", user=user, profile=profile_data)
 
 @main_bp.route("/begginer")
 @login_required
