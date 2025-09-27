@@ -1148,6 +1148,64 @@ body {
 	font-style: italic;
 }
 
+/* Help modal loading and error states */
+.help-loading {
+	text-align: center;
+	padding: 40px 20px;
+}
+
+.loading-spinner {
+	width: 40px;
+	height: 40px;
+	border: 4px solid #f3f3f3;
+	border-top: 4px solid #007bff;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 0 auto 20px;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.help-loading p {
+	color: #666;
+	font-size: 16px;
+	margin: 0;
+}
+
+.help-error {
+	text-align: center;
+	padding: 40px 20px;
+}
+
+.help-error p {
+	color: #dc3545;
+	font-size: 16px;
+	margin: 0 0 20px 0;
+}
+
+.retry-button {
+	background: #007bff;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.retry-button:hover {
+	background: #0056b3;
+}
+
+.retry-button:active {
+	background: #004085;
+}
+
 /* Furigana hover styles */
 .furigana-hover {
 	cursor: help !important;

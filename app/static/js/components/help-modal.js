@@ -9,6 +9,11 @@ export class HelpComponent {
         this.moduleName = null;
         this.currentItemId = null;
         this.apiClient = null;
+        this.isLoading = false;
+        this.hasError = false;
+        this.errorMessage = '';
+        this.cache = new Map(); // Cache for successful responses
+        this.timeoutMs = 10000; // 10 second timeout
     }
 
     /**
@@ -70,18 +75,29 @@ export class HelpComponent {
     async show(itemData = null, itemId = null) {
         if (!this.modal) return;
 
+        // Reset error state
+        this.hasError = false;
+        this.errorMessage = '';
+
         // Use provided item data or fetch from API
         if (itemData) {
             this.currentItem = itemData;
             this._populateModal();
         } else if (this.moduleName && itemId) {
-            // Fetch word info from API
-            await this._fetchWordInfo(itemId);
+            // Check cache first
+            const cacheKey = `${this.moduleName}-${itemId}`;
+            if (this.cache.has(cacheKey)) {
+                this.currentItem = this.cache.get(cacheKey);
+                this._populateModal();
+            } else {
+                // Fetch word info from API with loading state
+                await this._fetchWordInfo(itemId);
+            }
         } else {
             // Fallback: get current item from display manager
             this.currentItem = this._getCurrentItemData();
             if (!this.currentItem) {
-                console.warn('No item data available for help modal');
+                this._showError('No word information available');
                 return;
             }
             this._populateModal();
@@ -102,11 +118,23 @@ export class HelpComponent {
     }
 
     /**
-     * Fetch word information from API
+     * Fetch word information from API with loading states and error handling
      */
     async _fetchWordInfo(itemId) {
+        this.isLoading = true;
+        this._showLoadingState();
+
         try {
-            const response = await fetch(`/help/api/word-info?module_name=${this.moduleName}&item_id=${itemId}`);
+            // Create timeout promise
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Request timeout')), this.timeoutMs);
+            });
+
+            // Create fetch promise
+            const fetchPromise = fetch(`/help/api/word-info?module_name=${this.moduleName}&item_id=${itemId}`);
+            
+            // Race between fetch and timeout
+            const response = await Promise.race([fetchPromise, timeoutPromise]);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -116,14 +144,27 @@ export class HelpComponent {
             
             if (data.success) {
                 this.currentItem = data.word_info;
+                
+                // Cache successful response
+                const cacheKey = `${this.moduleName}-${itemId}`;
+                this.cache.set(cacheKey, data.word_info);
+                
                 this._populateModalFromAPI(data.display_info);
             } else {
-                console.error('Failed to fetch word info:', data.error);
-                this._showError('Failed to load word information');
+                throw new Error(data.error || 'Failed to load word information');
             }
         } catch (error) {
             console.error('Error fetching word info:', error);
-            this._showError('Error loading word information');
+            
+            if (error.message === 'Request timeout') {
+                this._showError('Request timed out. Please check your connection and try again.', true);
+            } else if (error.message.includes('HTTP error')) {
+                this._showError('Server error. Please try again later.', true);
+            } else {
+                this._showError('Failed to load word information. Please try again.', true);
+            }
+        } finally {
+            this.isLoading = false;
         }
     }
 
@@ -232,17 +273,61 @@ export class HelpComponent {
     }
 
     /**
-     * Show error message in modal
+     * Show loading state in modal
      */
-    _showError(message) {
+    _showLoadingState() {
         const modalBody = document.getElementById('helpModalBody');
         if (!modalBody) return;
 
         modalBody.innerHTML = `
-            <div class="help-error">
-                <p>❌ ${message}</p>
+            <div class="help-loading">
+                <div class="loading-spinner"></div>
+                <p>Loading word information...</p>
             </div>
         `;
+    }
+
+    /**
+     * Show error message in modal with retry option
+     */
+    _showError(message, showRetry = false) {
+        const modalBody = document.getElementById('helpModalBody');
+        if (!modalBody) return;
+
+        this.hasError = true;
+        this.errorMessage = message;
+
+        const retryButton = showRetry ? `
+            <button type="button" class="retry-button" id="retryHelpBtn">
+                Try Again
+            </button>
+        ` : '';
+
+        modalBody.innerHTML = `
+            <div class="help-error">
+                <p>❌ ${message}</p>
+                ${retryButton}
+            </div>
+        `;
+
+        // Add retry button event listener if present
+        if (showRetry) {
+            const retryBtn = document.getElementById('retryHelpBtn');
+            if (retryBtn) {
+                retryBtn.addEventListener('click', () => {
+                    this._retryRequest();
+                });
+            }
+        }
+    }
+
+    /**
+     * Retry the failed request
+     */
+    async _retryRequest() {
+        if (this.currentItemId) {
+            await this._fetchWordInfo(this.currentItemId);
+        }
     }
 
     /**
