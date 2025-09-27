@@ -116,7 +116,7 @@ export class FlashcardComponent {
                 await this._loadConjugationItem();
             } else {
                 console.log('Loading regular flashcard on initial load');
-                await this._loadRandomItem();
+                await this._loadFlashcard();
             }
 
             // Setup check button
@@ -144,7 +144,7 @@ export class FlashcardComponent {
         } catch (error) {
             console.error('Failed to load conjugation item:', error);
             // Fallback to regular flashcard if conjugation fails
-            await this._loadRandomItem();
+            await this._loadFlashcard();
         }
     }
 
@@ -349,6 +349,9 @@ export class FlashcardComponent {
      */
     async _loadFlashcard() {
         try {
+            // Clear any conjugation elements first
+            this._clearConjugationElements();
+            
             const settings = this.settingsManager.getAllSettings();
             const response = await this.displayManager.updateDisplay(
                 this.currentItemId,
@@ -363,6 +366,9 @@ export class FlashcardComponent {
 
             // Hide practice mode indicator for regular flashcards
             this._updatePracticeModeIndicator('flashcard');
+            
+            // Reset prompt script indicator to default
+            this._resetPromptScriptIndicator();
         } catch (error) {
             console.error('Failed to load flashcard:', error);
             this.displayManager.showError('Failed to load flashcard');
@@ -807,6 +813,65 @@ export class FlashcardComponent {
         } catch (error) {
             console.error('Failed to get statistics:', error);
             return null;
+        }
+    }
+
+    /**
+     * Clear conjugation-specific elements from display
+     */
+    _clearConjugationElements() {
+        // Clear any conjugation-specific CSS classes
+        const flashcardContainer = document.querySelector('.flashcard-container');
+        if (flashcardContainer) {
+            flashcardContainer.classList.remove('conjugation-mode');
+        }
+        
+        // Clear conjugation input fields
+        const conjugationInputGroups = document.querySelectorAll('.conjugation-input-group');
+        conjugationInputGroups.forEach(group => group.remove());
+        
+        // Clear conjugation prompt items
+        const conjugationPromptItems = document.querySelectorAll('.conjugation-prompt-item');
+        conjugationPromptItems.forEach(item => item.remove());
+        
+        // Clear conjugation form labels
+        const conjugationFormLabels = document.querySelectorAll('.conjugation-form-label');
+        conjugationFormLabels.forEach(label => label.remove());
+        
+        // Clear conjugation prompt text
+        const conjugationPromptTexts = document.querySelectorAll('.conjugation-prompt-text');
+        conjugationPromptTexts.forEach(text => text.remove());
+    }
+
+    /**
+     * Reset prompt script indicator to default
+     */
+    _resetPromptScriptIndicator() {
+        const promptScriptElement = document.getElementById('prompt-script');
+        if (promptScriptElement) {
+            // Reset to default based on current display mode
+            const settings = this.settingsManager.getAllSettings();
+            const displayMode = settings.displayMode || 'kana';
+            
+            switch (displayMode) {
+                case 'kana':
+                    promptScriptElement.textContent = 'hiragana';
+                    break;
+                case 'kanji':
+                    promptScriptElement.textContent = 'kanji';
+                    break;
+                case 'kanji_furigana':
+                    promptScriptElement.textContent = 'kanji + furigana';
+                    break;
+                case 'english':
+                    promptScriptElement.textContent = 'english';
+                    break;
+                case 'weighted':
+                    promptScriptElement.textContent = 'mixed';
+                    break;
+                default:
+                    promptScriptElement.textContent = 'hiragana';
+            }
         }
     }
 }

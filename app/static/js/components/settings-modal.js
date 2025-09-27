@@ -197,7 +197,8 @@ export class SettingsModal {
         const practiceModeInput = document.querySelector(`input[name="practice_mode"][value="${settings.practiceMode}"]`);
         if (practiceModeInput) {
             practiceModeInput.checked = true;
-            this._handlePracticeModeChange(settings.practiceMode);
+            this._updateSectionVisibilityForPracticeMode(settings.practiceMode);
+            this._updateAnswerInputModesForPracticeMode(settings.practiceMode);
         }
 
         // Set conjugation forms
@@ -324,17 +325,47 @@ export class SettingsModal {
 
         this.settingsManager.updateSetting('practiceMode', mode);
         
-        // Show/hide conjugation settings section
-        const conjugationSettingsSection = document.getElementById('conjugation-settings-section');
-        if (conjugationSettingsSection) {
-            conjugationSettingsSection.style.display = mode === 'conjugation' ? 'block' : 'none';
-        }
+        // Show/hide sections based on practice mode
+        this._updateSectionVisibilityForPracticeMode(mode);
 
         // Update answer input modes based on practice mode
         this._updateAnswerInputModesForPracticeMode(mode);
 
         if (this.onSettingsChange) {
             this.onSettingsChange();
+        }
+    }
+
+    /**
+     * Update section visibility based on practice mode
+     */
+    _updateSectionVisibilityForPracticeMode(mode) {
+        const flashcardDisplaySection = document.getElementById('flashcard-display-section');
+        const conjugationSettingsSection = document.getElementById('conjugation-settings-section');
+        const answerInputSection = document.getElementById('answer-input-section');
+        
+        if (mode === 'flashcard') {
+            // Show flashcard display mode and answer input mode
+            if (flashcardDisplaySection) {
+                flashcardDisplaySection.style.display = 'block';
+            }
+            if (conjugationSettingsSection) {
+                conjugationSettingsSection.style.display = 'none';
+            }
+            if (answerInputSection) {
+                answerInputSection.style.display = 'block';
+            }
+        } else if (mode === 'conjugation') {
+            // Show conjugation settings and answer input mode
+            if (flashcardDisplaySection) {
+                flashcardDisplaySection.style.display = 'none';
+            }
+            if (conjugationSettingsSection) {
+                conjugationSettingsSection.style.display = 'block';
+            }
+            if (answerInputSection) {
+                answerInputSection.style.display = 'block';
+            }
         }
     }
 
