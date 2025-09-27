@@ -222,26 +222,41 @@ export class FlashcardComponent {
             return;
         }
 
-        const allCorrect = response.all_correct;
         const results = response.results || {};
         
-        // Build feedback message
+        // Count correct answers
+        const correctCount = Object.values(results).filter(result => result.is_correct).length;
+        const totalCount = Object.keys(results).length;
+        
+        // Determine feedback type and message
         let feedbackText = '';
         let feedbackClass = '';
         
-        if (allCorrect) {
-            feedbackText = '✅ Correct! Well done!';
+        if (correctCount === totalCount && totalCount > 0) {
+            // All correct - GREEN
+            feedbackText = '✅ Perfect! All answers correct!';
             feedbackClass = 'correct';
-        } else {
-            feedbackText = '❌ Incorrect. Here are the correct answers:';
-            feedbackClass = 'incorrect';
+        } else if (correctCount > 0) {
+            // Partial correct - ORANGE
+            feedbackText = `🟠 Partial success! ${correctCount}/${totalCount} correct.`;
+            feedbackClass = 'partial';
             
-            // Add correct answers
+            // Add incorrect answers with correct ones
             Object.keys(results).forEach(mode => {
                 const result = results[mode];
                 if (!result.is_correct) {
                     feedbackText += `\\n${mode}: ${result.correct_answer}`;
                 }
+            });
+        } else {
+            // All wrong - RED
+            feedbackText = '❌ Incorrect. Here are the correct answers:';
+            feedbackClass = 'incorrect';
+            
+            // Add all correct answers
+            Object.keys(results).forEach(mode => {
+                const result = results[mode];
+                feedbackText += `\\n${mode}: ${result.correct_answer}`;
             });
         }
 
