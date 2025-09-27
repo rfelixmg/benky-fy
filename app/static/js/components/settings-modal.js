@@ -69,7 +69,7 @@ export class SettingsModal {
         // Close modal when clicking outside
         document.addEventListener('click', (event) => {
             if (this.isVisible && !this.modal.contains(event.target) && 
-                !event.target.closest('.settings-toggle-btn')) {
+                !event.target.closest('.settings-btn')) {
                 this.hide();
             }
         });

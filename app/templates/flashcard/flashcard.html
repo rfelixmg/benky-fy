@@ -4,13 +4,13 @@
 <meta name="user-authenticated" content="{% if current_user %}true{% else %}false{% endif %}">
 <div class="flashcard-container">
 	<section class="flashcard-module">
-		<div class="module-controls">
-			<button class="settings-toggle-btn" title="Settings">⚙️</button>
-			<button class="help-toggle-btn" id="helpToggleBtn" title="Word Information">❓</button>
+		<div class="flashcard-header">
+			<div class="header-title">{{ module_name|title }} Flashcards</div>
+			<div class="header-buttons">
+				<button class="settings-btn" title="Settings">⚙️</button>
+				<button class="help-btn" id="helpToggleBtn" title="Word Information">❓</button>
+			</div>
 		</div>
-		<header class="flashcard-header">
-			<h1>{{ module_name|title }} Flashcards</h1>
-		</header>
 	
 		<!-- Include Settings Modal -->
 		{% include 'flashcard/components/settings_modal.html' %}

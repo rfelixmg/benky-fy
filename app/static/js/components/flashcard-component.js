@@ -67,7 +67,7 @@ export class FlashcardComponent {
      * Setup settings toggle button
      */
     _setupToggleButton() {
-        const toggleBtn = document.querySelector('.settings-toggle-btn');
+        const toggleBtn = document.querySelector('.settings-btn');
         if (toggleBtn) {
             toggleBtn.addEventListener('click', () => {
                 this.settingsModal.toggle();
@@ -317,6 +317,17 @@ export class FlashcardComponent {
         feedbackElement.innerHTML = tableHTML;
         feedbackElement.className = `feedback-message ${feedbackClass}`;
         feedbackElement.style.display = 'block';
+
+        // Apply feedback class to flashcard module for background colors
+        const flashcardModule = document.querySelector('.flashcard-module');
+        if (flashcardModule) {
+            // Remove any existing feedback classes
+            flashcardModule.classList.remove('correct', 'incorrect', 'partial');
+            // Add the new feedback class
+            if (feedbackClass) {
+                flashcardModule.classList.add(feedbackClass);
+            }
+        }
 
         // Hide feedback after delay
         setTimeout(() => {

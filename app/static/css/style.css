@@ -219,6 +219,12 @@ body {
 	box-shadow: 0 10px 30px rgba(245, 101, 101, 0.2);
 }
 
+.flashcard-module.partial {
+	background: rgba(255, 193, 7, 0.3);
+	border: 2px solid rgba(255, 193, 7, 0.5);
+	box-shadow: 0 10px 30px rgba(255, 193, 7, 0.2);
+}
+
 .panel h1, .panel h2, .panel h3 { color: #2d3748; }
 .panel p { color: #4a5568; }
 
@@ -1146,19 +1152,30 @@ body {
 	pointer-events: none;
 }
 
-.module-controls {
+.flashcard-header {
 	display: flex;
-	flex-direction: row;
 	align-items: center;
-	gap: 0.75rem;
-	position: absolute;
-	top: 0;
-	right: 0;
-	height: 100%;
+	width: 100%;
+	margin-bottom: 2rem;
 }
 
-.settings-toggle-btn,
-.help-toggle-btn {
+.header-title {
+	width: 70%;
+	text-align: center;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.header-buttons {
+	width: 30%;
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px; /* small padding between buttons */
+	padding-right: 10px;
+}
+
+.settings-btn,
+.help-btn {
 	background: rgba(255, 255, 255, 0.95);
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	border-radius: 50%;
@@ -1175,8 +1192,8 @@ body {
 	backdrop-filter: blur(8px);
 }
 
-.settings-toggle-btn:hover,
-.help-toggle-btn:hover {
+.settings-btn:hover,
+.help-btn:hover {
 	background: rgba(255, 255, 255, 1);
 	border-color: rgba(59, 130, 246, 0.3);
 	color: #3b82f6;
@@ -1184,14 +1201,14 @@ body {
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.settings-toggle-btn:active,
-.help-toggle-btn:active {
+.settings-btn:active,
+.help-btn:active {
 	transform: translateY(0);
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.settings-toggle-btn:focus,
-.help-toggle-btn:focus {
+.settings-btn:focus,
+.help-btn:focus {
 	outline: none;
 	border-color: #3b82f6;
 	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
