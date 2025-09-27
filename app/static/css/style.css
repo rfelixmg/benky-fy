@@ -1108,6 +1108,43 @@ body {
 	text-align: center;
 	font-weight: 500;
 }
+
+/* Furigana hover styles */
+.furigana-hover {
+	cursor: help !important;
+	border-bottom: 1px dotted currentColor !important;
+	position: relative;
+	display: inline;
+	text-decoration: none;
+}
+
+.furigana-hover:hover {
+	background-color: rgba(0, 0, 0, 0.1) !important;
+	border-radius: 2px !important;
+	padding: 1px 2px;
+	transition: background-color 0.2s ease;
+}
+
+/* Ensure tooltips work properly */
+.furigana-hover[title] {
+	position: relative;
+}
+
+.furigana-hover[title]:hover::after {
+	content: attr(title);
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: rgba(0, 0, 0, 0.8);
+	color: white;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	white-space: nowrap;
+	z-index: 1000;
+	pointer-events: none;
+}
 .result { margin-top: 1rem; padding: 1rem; border-radius: 12px; }
 .result.correct { background: #d0f0ea; border: 1px solid #a8d5c2; }
 .result.incorrect { background: #f5d0d6; border: 1px solid #e1a5b0; }

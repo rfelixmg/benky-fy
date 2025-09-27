@@ -18,7 +18,7 @@ export class DisplayManager {
             this.currentItem = response;
             this.currentDisplayText = response.text;
             
-            this._renderDisplayText(response.text);
+            this._renderDisplayText(response.text, settings);
             this._updateDisplayMode(response.mode);
             
             return response;
@@ -31,7 +31,7 @@ export class DisplayManager {
     /**
      * Render display text in the container
      */
-    _renderDisplayText(text) {
+    _renderDisplayText(text, settings = null) {
         if (!this.container) {
             console.warn('Display container not found');
             return;
@@ -43,8 +43,51 @@ export class DisplayManager {
                               this.container;
 
         if (displayElement) {
-            displayElement.innerHTML = text;
+            // Apply furigana style transformation if settings are provided
+            let processedText = text;
+            if (settings && settings.furiganaStyle && settings.furiganaStyle !== 'ruby') {
+                processedText = this._applyFuriganaStyle(text, settings.furiganaStyle);
+                console.log(`Applied furigana style '${settings.furiganaStyle}':`, processedText);
+            }
+            
+            displayElement.innerHTML = processedText;
+            
+            // Add debugging for hover elements
+            if (settings && settings.furiganaStyle === 'hover') {
+                const hoverElements = displayElement.querySelectorAll('.furigana-hover');
+                hoverElements.forEach((element, index) => {
+                    console.log(`Hover element ${index}:`, {
+                        title: element.getAttribute('title'),
+                        text: element.textContent,
+                        html: element.outerHTML
+                    });
+                });
+            }
         }
+    }
+
+    /**
+     * Apply furigana style transformation
+     */
+    _applyFuriganaStyle(text, style) {
+        if (!text || style === 'ruby') {
+            return text;
+        }
+
+        // Simple regex-based conversion
+        const rubyRegex = /<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>/g;
+        return text.replace(rubyRegex, (match, kanji, furigana) => {
+            switch (style) {
+                case 'brackets':
+                    return `${kanji}[${furigana}]`;
+                case 'hover':
+                    return `<span class="furigana-hover" title="${furigana}">${kanji}</span>`;
+                case 'inline':
+                    return `${kanji} (${furigana})`;
+                default:
+                    return kanji;
+            }
+        });
     }
 
     /**

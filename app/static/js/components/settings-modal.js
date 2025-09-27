@@ -99,12 +99,12 @@ export class SettingsModal {
         });
 
         // Furigana style change handlers
-        const furiganaStyleInputs = document.querySelectorAll('input[name="furigana_style"]');
-        furiganaStyleInputs.forEach(input => {
-            input.addEventListener('change', (e) => {
+        const furiganaStyleSelect = document.querySelector('#furigana-style');
+        if (furiganaStyleSelect) {
+            furiganaStyleSelect.addEventListener('change', (e) => {
                 this._handleFuriganaStyleChange(e.target.value);
             });
-        });
+        }
 
         // Weight change handlers
         const weightInputs = document.querySelectorAll('input[name^="proportions."]');
