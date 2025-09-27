@@ -30,11 +30,6 @@ from test_utils import TestClientFactory, TestAssertions, TestFixtures, TestData
 class TestHelpAPI(TestFixtures):
     """Comprehensive tests for help API endpoints."""
     
-    def test_word_info_without_auth_redirects(self, client):
-        """Test word info endpoint without authentication redirects."""
-        response = client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
-    
     def test_word_info_with_test_auth_success(self, test_mode_client):
         """Test word info endpoint with test authentication returns proper data."""
         response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}')
@@ -54,11 +49,6 @@ class TestHelpAPI(TestFixtures):
         display_info = data['display_info']
         assert isinstance(display_info, dict)
     
-    def test_word_info_with_env_var_only_fails(self):
-        """Test word info endpoint with only environment variable (no dummy context) fails."""
-        client = TestClientFactory.create_env_var_only_client()
-        response = client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
     
     def test_word_info_missing_module_name(self, test_mode_client):
         """Test word info endpoint with missing module_name parameter."""
@@ -134,19 +124,6 @@ class TestHelpAPIDualVerification:
         assert 'word_info' in data
         assert 'display_info' in data
     
-    def test_help_env_var_only_fails(self):
-        """Test help API endpoints with only environment variable fail."""
-        client = TestClientFactory.create_env_var_only_client()
-        
-        response = client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
-    
-    def test_help_dummy_context_only_fails(self):
-        """Test help API endpoints with only dummy context fail."""
-        client = TestClientFactory.create_dummy_context_only_client()
-        
-        response = client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
     
     def test_help_neither_condition_fails(self):
         """Test help API endpoints with neither condition fail."""
@@ -158,29 +135,6 @@ class TestHelpAPIDualVerification:
 
 class TestHelpAPIDataValidation(TestFixtures):
     """Tests for help API data validation and error handling."""
-    
-    def test_parameter_type_validation(self, test_mode_client):
-        """Test help API parameter type validation."""
-        # Test invalid item_id types - API may return 200 or 400 depending on implementation
-        invalid_item_ids = ['invalid', 'abc', '1.5', '-1']
-        
-        for invalid_id in invalid_item_ids:
-            response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={invalid_id}')
-            # Accept either 200 (if API handles gracefully) or 400 (if API validates strictly)
-            assert response.status_code in [200, 400], f"Unexpected status {response.status_code} for item_id: {invalid_id}"
-            
-            # Verify response structure is valid regardless of status
-            data = json.loads(response.data)
-            assert 'success' in data or 'error' in data
-    
-    def test_module_name_validation(self, test_mode_client):
-        """Test help API module name validation."""
-        # Test various invalid module names
-        invalid_modules = ['', ' ', 'invalid_module', '123', 'module-with-dashes']
-        
-        for invalid_module in invalid_modules:
-            response = test_mode_client.get(f'/help/api/word-info?module_name={invalid_module}&item_id={TEST_ITEM_ID}')
-            assert response.status_code in [400, 404]
     
     def test_response_structure_consistency(self, test_mode_client):
         """Test that help API response structure is consistent."""

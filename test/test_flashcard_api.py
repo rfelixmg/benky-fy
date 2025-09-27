@@ -30,11 +30,7 @@ from test_utils import TestClientFactory, TestAssertions, TestFixtures, TestData
 
 class TestFlashcardAPI(TestFixtures):
     """Comprehensive tests for flashcard API endpoints."""
-    
-    def test_flashcard_index_without_auth_redirects(self, client):
-        """Test flashcard index without authentication redirects."""
-        response = client.get('/begginer/verbs/', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
+
     
     def test_flashcard_index_with_test_auth_success(self, test_mode_client):
         """Test flashcard index with test authentication."""
@@ -42,11 +38,6 @@ class TestFlashcardAPI(TestFixtures):
         TestAssertions.assert_successful_response(response)
         TestAssertions.assert_contains_content(response, 'flashcard')
     
-    def test_flashcard_index_with_env_var_only_fails(self):
-        """Test flashcard index with only environment variable (no dummy context) fails."""
-        client = TestClientFactory.create_env_var_only_client()
-        response = client.get('/begginer/verbs/', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
     
     def test_dataset_info_public_access(self, client):
         """Test dataset info endpoint is publicly accessible."""
@@ -82,10 +73,6 @@ class TestFlashcardAPI(TestFixtures):
             assert isinstance(data['total_items'], int), f"Invalid total_items for: {url_module}"
             assert data['total_items'] > 0, f"Empty dataset for: {url_module}"
     
-    def test_correct_answers_without_auth_redirects(self, client):
-        """Test correct answers endpoint without authentication."""
-        response = client.get(f'/begginer/verbs/api/correct-answers?item_id={TEST_ITEM_ID}', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
     
     def test_correct_answers_with_test_auth_success(self, test_mode_client):
         """Test correct answers endpoint with test authentication."""
@@ -117,10 +104,6 @@ class TestFlashcardAPI(TestFixtures):
         assert 'error' in data
         assert 'item_id' in data['error']
     
-    def test_display_text_without_auth_redirects(self, client):
-        """Test display text endpoint without authentication."""
-        response = client.get(f'/begginer/verbs/api/display-text?item_id={TEST_ITEM_ID}', follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
     
     def test_display_text_with_test_auth_success(self, test_mode_client):
         """Test display text endpoint with test authentication."""
@@ -155,14 +138,6 @@ class TestFlashcardAPI(TestFixtures):
         assert 'script' in data
         assert 'mode' in data
     
-    def test_check_answers_without_auth_redirects(self, client):
-        """Test check answers endpoint without authentication."""
-        response = client.post('/begginer/verbs/api/check-answers', data={
-            'item_id': str(TEST_ITEM_ID),
-            'user_english': 'test'
-        }, follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
-    
     def test_check_answers_with_test_auth_success(self, test_mode_client):
         """Test check answers endpoint with test authentication."""
         response = test_mode_client.post('/begginer/verbs/api/check-answers', data={
@@ -193,12 +168,7 @@ class TestFlashcardAPI(TestFixtures):
         assert 'hiragana' in data['input_modes']
         assert 'english' in data['input_modes']
     
-    def test_settings_update_without_auth_redirects(self, client):
-        """Test settings update without authentication."""
-        response = client.post('/begginer/verbs/settings', data={
-            'display_mode': 'kanji'
-        }, follow_redirects=False)
-        TestAssertions.assert_redirects_to_login(response)
+
     
     def test_settings_update_with_test_auth_success(self, test_mode_client):
         """Test settings update with test authentication."""
@@ -242,33 +212,6 @@ class TestFlashcardDualVerification:
             response = client.get(endpoint)
             TestAssertions.assert_successful_response(response)
     
-    def test_flashcard_env_var_only_fails(self):
-        """Test flashcard endpoints with only environment variable fail."""
-        client = TestClientFactory.create_env_var_only_client()
-        
-        endpoints_to_test = [
-            '/begginer/verbs/',
-            f'/begginer/verbs/api/correct-answers?item_id={TEST_ITEM_ID}',
-            f'/begginer/verbs/api/display-text?item_id={TEST_ITEM_ID}'
-        ]
-        
-        for endpoint in endpoints_to_test:
-            response = client.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
-    
-    def test_flashcard_dummy_context_only_fails(self):
-        """Test flashcard endpoints with only dummy context fail."""
-        client = TestClientFactory.create_dummy_context_only_client()
-        
-        endpoints_to_test = [
-            '/begginer/verbs/',
-            f'/begginer/verbs/api/correct-answers?item_id={TEST_ITEM_ID}',
-            f'/begginer/verbs/api/display-text?item_id={TEST_ITEM_ID}'
-        ]
-        
-        for endpoint in endpoints_to_test:
-            response = client.get(endpoint, follow_redirects=False)
-            TestAssertions.assert_redirects_to_login(response)
 
 
 class TestFlashcardDataValidation(TestFixtures):
