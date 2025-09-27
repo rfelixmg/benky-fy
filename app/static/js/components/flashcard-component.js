@@ -380,6 +380,8 @@ export class FlashcardComponent {
         // Apply InputManager features based on input mode
         if (inputMode === 'hiragana') {
             this._handleHiraganaConversion(input);
+        } else if (inputMode === 'katakana') {
+            this._handleKatakanaConversion(input);
         }
         
         // Update check button state
@@ -415,6 +417,39 @@ export class FlashcardComponent {
         // Use the globally available romaji converter
         if (window.convertRomajiToHiragana) {
             return window.convertRomajiToHiragana(romajiText);
+        }
+        return romajiText; // Fallback if converter not available
+    }
+
+    /**
+     * Handle katakana to hiragana conversion for conjugation inputs
+     */
+    _handleKatakanaConversion(input) {
+        // Use the same timeout mechanism as InputManager
+        if (this.conjugationConversionTimeout) {
+            clearTimeout(this.conjugationConversionTimeout);
+        }
+
+        this.conjugationConversionTimeout = setTimeout(() => {
+            const cursorPos = input.selectionStart;
+            const originalValue = input.value;
+            const convertedValue = this._convertRomajiToKatakana(originalValue);
+
+            if (convertedValue !== originalValue) {
+                input.value = convertedValue;
+                const newCursorPos = Math.min(cursorPos, convertedValue.length);
+                input.setSelectionRange(newCursorPos, newCursorPos);
+            }
+        }, 300); // Same 300ms delay as InputManager
+    }
+
+    /**
+     * Convert romaji to katakana (using the same implementation as InputManager)
+     */
+    _convertRomajiToKatakana(romajiText) {
+        // Use the globally available katakana converter
+        if (window.convertRomajiToKatakana) {
+            return window.convertRomajiToKatakana(romajiText);
         }
         return romajiText; // Fallback if converter not available
     }

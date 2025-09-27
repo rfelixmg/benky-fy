@@ -3,6 +3,7 @@
  * Manages dynamic input fields based on settings
  */
 import { convertRomajiToHiragana } from '/static/js/utils/romaji-converter.js';
+import { convertRomajiToKatakana } from '/static/js/utils/katakana-converter.js';
 export class InputManager {
     constructor(containerSelector) {
         this.container = document.querySelector(containerSelector);
@@ -266,8 +267,12 @@ export class InputManager {
      * Handle input change for specific mode
      */
     _handleInputChange(mode, input) {
+        console.log('Input change detected, mode:', mode, 'value:', input.value);
         if (mode === 'hiragana') {
             this._handleHiraganaConversion(input);
+        } else if (mode === 'katakana') {
+            console.log('Triggering katakana conversion');
+            this._handleKatakanaConversion(input);
         }
         this._updateCheckButtonState();
     }
@@ -299,6 +304,46 @@ export class InputManager {
     _convertRomajiToHiragana(romajiText) {
         // Use the imported romaji converter utility
         return convertRomajiToHiragana(romajiText);
+    }
+
+    /**
+     * Handle katakana to hiragana conversion
+     */
+    _handleKatakanaConversion(input) {
+        if (this.conversionTimeout) {
+            clearTimeout(this.conversionTimeout);
+        }
+
+        this.conversionTimeout = setTimeout(() => {
+            const cursorPos = input.selectionStart;
+            const originalValue = input.value;
+            const convertedValue = this._convertRomajiToKatakana(originalValue);
+
+            if (convertedValue !== originalValue) {
+                input.value = convertedValue;
+                const newCursorPos = Math.min(cursorPos, convertedValue.length);
+                input.setSelectionRange(newCursorPos, newCursorPos);
+            }
+        }, 300); // Same delay as hiragana conversion for consistency
+    }
+
+    /**
+     * Convert romaji to katakana (basic implementation)
+     */
+    _convertRomajiToKatakana(romajiText) {
+        // Use the imported katakana converter utility
+        console.log('Converting romaji to katakana:', romajiText);
+        console.log('convertRomajiToKatakana function:', typeof convertRomajiToKatakana);
+        
+        // Test if the function exists and works
+        try {
+            const result = convertRomajiToKatakana(romajiText);
+            console.log('Converted result:', result);
+            return result;
+        } catch (error) {
+            console.error('Error in romaji to katakana conversion:', error);
+            return romajiText;
+        }
     }
 
     /**

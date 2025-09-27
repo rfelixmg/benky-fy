@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Katakana Conversion Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .test-cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 15px; }
+        .test-case { padding: 10px; border: 1px solid #eee; border-radius: 3px; text-align: center; }
+        .test-case input { font-size: 14px; text-align: center; width: 100%; }
+        .test-case .result { font-size: 16px; margin-top: 5px; padding: 5px; background-color: #f0f0f0; }
+        .interactive { margin: 20px 0; }
+        .interactive input { width: 100%; padding: 8px; font-size: 16px; }
+        .interactive .result { margin-top: 10px; padding: 10px; background-color: #f0f0f0; font-size: 18px; min-height: 30px; }
+    </style>
+</head>
+<body>
+    <h1>Romaji to Katakana Conversion Test</h1>
+    
+    <div class="test-section interactive">
+        <h2>Interactive Test</h2>
+        <input type="text" id="romajiInput" placeholder="Type romaji here (e.g., konnichiwa)">
+        <div class="result" id="conversionResult">Result will appear here...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Cases</h2>
+        <div class="test-cases" id="testCases">
+            <!-- Test cases will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the katakana converter
+        import { convertRomajiToKatakana, isKatakana, containsKatakana } from './app/static/js/utils/katakana-converter.js';
+
+        // Comprehensive test cases including all combinations
+        const testCases = [
+            // Basic vowels
+            { romaji: 'a', expected: 'ア' },
+            { romaji: 'i', expected: 'イ' },
+            { romaji: 'u', expected: 'ウ' },
+            { romaji: 'e', expected: 'エ' },
+            { romaji: 'o', expected: 'オ' },
+            
+            // K series
+            { romaji: 'ka', expected: 'カ' },
+            { romaji: 'ki', expected: 'キ' },
+            { romaji: 'ku', expected: 'ク' },
+            { romaji: 'ke', expected: 'ケ' },
+            { romaji: 'ko', expected: 'コ' },
+            { romaji: 'ga', expected: 'ガ' },
+            { romaji: 'gi', expected: 'ギ' },
+            { romaji: 'gu', expected: 'グ' },
+            { romaji: 'ge', expected: 'ゲ' },
+            { romaji: 'go', expected: 'ゴ' },
+            
+            // S series
+            { romaji: 'sa', expected: 'サ' },
+            { romaji: 'shi', expected: 'シ' },
+            { romaji: 'su', expected: 'ス' },
+            { romaji: 'se', expected: 'セ' },
+            { romaji: 'so', expected: 'ソ' },
+            { romaji: 'za', expected: 'ザ' },
+            { romaji: 'ji', expected: 'ジ' },
+            { romaji: 'zu', expected: 'ズ' },
+            { romaji: 'ze', expected: 'ゼ' },
+            { romaji: 'zo', expected: 'ゾ' },
+            
+            // T series
+            { romaji: 'ta', expected: 'タ' },
+            { romaji: 'chi', expected: 'チ' },
+            { romaji: 'tsu', expected: 'ツ' },
+            { romaji: 'te', expected: 'テ' },
+            { romaji: 'to', expected: 'ト' },
+            { romaji: 'da', expected: 'ダ' },
+            { romaji: 'di', expected: 'ヂ' },
+            { romaji: 'du', expected: 'ヅ' },
+            { romaji: 'de', expected: 'デ' },
+            { romaji: 'do', expected: 'ド' },
+            
+            // N series
+            { romaji: 'na', expected: 'ナ' },
+            { romaji: 'ni', expected: 'ニ' },
+            { romaji: 'nu', expected: 'ヌ' },
+            { romaji: 'ne', expected: 'ネ' },
+            { romaji: 'no', expected: 'ノ' },
+            { romaji: 'n', expected: 'ン' },
+            
+            // H series
+            { romaji: 'ha', expected: 'ハ' },
+            { romaji: 'hi', expected: 'ヒ' },
+            { romaji: 'fu', expected: 'フ' },
+            { romaji: 'he', expected: 'ヘ' },
+            { romaji: 'ho', expected: 'ホ' },
+            { romaji: 'ba', expected: 'バ' },
+            { romaji: 'bi', expected: 'ビ' },
+            { romaji: 'bu', expected: 'ブ' },
+            { romaji: 'be', expected: 'ベ' },
+            { romaji: 'bo', expected: 'ボ' },
+            { romaji: 'pa', expected: 'パ' },
+            { romaji: 'pi', expected: 'ピ' },
+            { romaji: 'pu', expected: 'プ' },
+            { romaji: 'pe', expected: 'ペ' },
+            { romaji: 'po', expected: 'ポ' },
+            
+            // M series
+            { romaji: 'ma', expected: 'マ' },
+            { romaji: 'mi', expected: 'ミ' },
+            { romaji: 'mu', expected: 'ム' },
+            { romaji: 'me', expected: 'メ' },
+            { romaji: 'mo', expected: 'モ' },
+            
+            // Y series
+            { romaji: 'ya', expected: 'ヤ' },
+            { romaji: 'yu', expected: 'ユ' },
+            { romaji: 'yo', expected: 'ヨ' },
+            
+            // R series
+            { romaji: 'ra', expected: 'ラ' },
+            { romaji: 'ri', expected: 'リ' },
+            { romaji: 'ru', expected: 'ル' },
+            { romaji: 're', expected: 'レ' },
+            { romaji: 'ro', expected: 'ロ' },
+            
+            // W series
+            { romaji: 'wa', expected: 'ワ' },
+            { romaji: 'wi', expected: 'ヰ' },
+            { romaji: 'we', expected: 'ヱ' },
+            { romaji: 'wo', expected: 'ヲ' },
+            
+            // Common combinations (3 characters) - These are the key ones you mentioned!
+            { romaji: 'kya', expected: 'キャ' },
+            { romaji: 'kyu', expected: 'キュ' },
+            { romaji: 'kyo', expected: 'キョ' },
+            { romaji: 'gya', expected: 'ギャ' },
+            { romaji: 'gyu', expected: 'ギュ' },
+            { romaji: 'gyo', expected: 'ギョ' },
+            { romaji: 'sha', expected: 'シャ' },
+            { romaji: 'shu', expected: 'シュ' },
+            { romaji: 'sho', expected: 'ショ' },
+            { romaji: 'ja', expected: 'ジャ' },
+            { romaji: 'ju', expected: 'ジュ' },
+            { romaji: 'jo', expected: 'ジョ' },
+            { romaji: 'cha', expected: 'チャ' },
+            { romaji: 'chu', expected: 'チュ' },
+            { romaji: 'cho', expected: 'チョ' },
+            { romaji: 'nya', expected: 'ニャ' },
+            { romaji: 'nyu', expected: 'ニュ' },
+            { romaji: 'nyo', expected: 'ニョ' },
+            { romaji: 'hya', expected: 'ヒャ' },
+            { romaji: 'hyu', expected: 'ヒュ' },
+            { romaji: 'hyo', expected: 'ヒョ' },
+            { romaji: 'bya', expected: 'ビャ' },
+            { romaji: 'byu', expected: 'ビュ' },
+            { romaji: 'byo', expected: 'ビョ' },
+            { romaji: 'pya', expected: 'ピャ' },
+            { romaji: 'pyu', expected: 'ピュ' },
+            { romaji: 'pyo', expected: 'ピョ' },
+            { romaji: 'mya', expected: 'ミャ' },
+            { romaji: 'myu', expected: 'ミュ' },
+            { romaji: 'myo', expected: 'ミョ' },
+            { romaji: 'rya', expected: 'リャ' },
+            { romaji: 'ryu', expected: 'リュ' },
+            { romaji: 'ryo', expected: 'リョ' },
+            
+            // Long vowel mark
+            { romaji: '-', expected: 'ー' },
+            
+            // Double consonants (small tsu)
+            { romaji: 'kka', expected: 'ッカ' },
+            { romaji: 'ssa', expected: 'ッサ' },
+            { romaji: 'tta', expected: 'ッタ' },
+            { romaji: 'ppa', expected: 'ッパ' },
+            { romaji: 'mma', expected: 'ッマ' },
+            { romaji: 'rra', expected: 'ッラ' },
+            
+            // Common words
+            { romaji: 'konnichiwa', expected: 'コンニチワ' },
+            { romaji: 'arigatou', expected: 'アリガトウ' },
+            { romaji: 'sayonara', expected: 'サヨナラ' },
+            { romaji: 'ohayou', expected: 'オハヨウ' },
+            { romaji: 'konbanwa', expected: 'コンバンワ' },
+            { romaji: 'sumimasen', expected: 'スミマセン' },
+            { romaji: 'gomennasai', expected: 'ゴメンナサイ' },
+            { romaji: 'hajimemashite', expected: 'ハジメマシテ' },
+            { romaji: 'yoroshiku', expected: 'ヨロシク' },
+            { romaji: 'itadakimasu', expected: 'イタダキマス' },
+            { romaji: 'gochisousama', expected: 'ゴチソウサマ' },
+            { romaji: 'kyou', expected: 'キョウ' },
+            { romaji: 'ashita', expected: 'アシタ' },
+            { romaji: 'kinou', expected: 'キノウ' },
+            { romaji: 'ima', expected: 'イマ' },
+            { romaji: 'koko', expected: 'ココ' },
+            { romaji: 'soko', expected: 'ソコ' },
+            { romaji: 'asoko', expected: 'アソコ' },
+            { romaji: 'doko', expected: 'ドコ' },
+            { romaji: 'itsu', expected: 'イツ' },
+            { romaji: 'nani', expected: 'ナニ' },
+            { romaji: 'dare', expected: 'ダレ' },
+            { romaji: 'doushite', expected: 'ドウシテ' },
+            { romaji: 'ikura', expected: 'イクラ' },
+            { romaji: 'nannin', expected: 'ナンニン' }
+        ];
+
+        // Set up interactive test
+        const romajiInput = document.getElementById('romajiInput');
+        const conversionResult = document.getElementById('conversionResult');
+
+        romajiInput.addEventListener('input', (e) => {
+            const romaji = e.target.value;
+            const katakana = convertRomajiToKatakana(romaji);
+            conversionResult.textContent = katakana || 'No conversion available';
+        });
+
+        // Set up test cases
+        const testCasesContainer = document.getElementById('testCases');
+        
+        testCases.forEach(testCase => {
+            const testDiv = document.createElement('div');
+            testDiv.className = 'test-case';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = testCase.romaji;
+            input.readOnly = true;
+            
+            const result = document.createElement('div');
+            result.className = 'result';
+            result.textContent = testCase.expected;
+            
+            testDiv.appendChild(input);
+            testDiv.appendChild(result);
+            testCasesContainer.appendChild(testDiv);
+        });
+
+        // Test the conversion function
+        console.log('Testing romaji to katakana conversion...');
+        let passed = 0;
+        let failed = 0;
+        
+        testCases.forEach(testCase => {
+            const result = convertRomajiToKatakana(testCase.romaji);
+            const testPassed = result === testCase.expected;
+            if (testPassed) {
+                passed++;
+            } else {
+                failed++;
+            }
+            console.log(`${testCase.romaji} -> ${result} (expected: ${testCase.expected}) ${testPassed ? '✓' : '✗'}`);
+        });
+
+        console.log(`\nTest Results: ${passed} passed, ${failed} failed`);
+
+        // Test utility functions
+        console.log('\nTesting utility functions...');
+        console.log('isKatakana("ア"):', isKatakana('ア'));
+        console.log('isKatakana("a"):', isKatakana('a'));
+        console.log('containsKatakana("コンニチワ"):', containsKatakana('コンニチワ'));
+        console.log('containsKatakana("hello"):', containsKatakana('hello'));
+    </script>
+</body>
+</html>

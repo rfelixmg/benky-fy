@@ -8,11 +8,13 @@ export async function initializeFlashcardApp(moduleName) {
         const [
             { FlashcardComponent },
             { convertRomajiToHiragana, romajiToHiragana },
+            { convertRomajiToKatakana, romajiToKatakana, isKatakana, containsKatakana },
             { FuriganaRenderer },
             { ValidationUtils }
         ] = await Promise.all([
             import('/static/js/components/flashcard-component.js'),
             import('/static/js/utils/romaji-converter.js'),
+            import('/static/js/utils/katakana-converter.js'),
             import('/static/js/utils/furigana-renderer.js'),
             import('/static/js/utils/validation.js')
         ]);
@@ -27,6 +29,10 @@ export async function initializeFlashcardApp(moduleName) {
         // Make utilities available globally for backward compatibility
         window.convertRomajiToHiragana = convertRomajiToHiragana;
         window.romajiToHiragana = romajiToHiragana;
+        window.convertRomajiToKatakana = convertRomajiToKatakana;
+        window.romajiToKatakana = romajiToKatakana;
+        window.isKatakana = isKatakana;
+        window.containsKatakana = containsKatakana;
         window.FuriganaRenderer = FuriganaRenderer;
         window.ValidationUtils = ValidationUtils;
 
@@ -44,10 +50,12 @@ export async function initializeFlashcardApp(moduleName) {
 export async function getUtilities() {
     const [
         { convertRomajiToHiragana, romajiToHiragana },
+        { convertRomajiToKatakana, romajiToKatakana, isKatakana, containsKatakana },
         { FuriganaRenderer },
         { ValidationUtils }
     ] = await Promise.all([
         import('/static/js/utils/romaji-converter.js'),
+        import('/static/js/utils/katakana-converter.js'),
         import('/static/js/utils/furigana-renderer.js'),
         import('/static/js/utils/validation.js')
     ]);
@@ -55,6 +63,10 @@ export async function getUtilities() {
     return {
         convertRomajiToHiragana,
         romajiToHiragana,
+        convertRomajiToKatakana,
+        romajiToKatakana,
+        isKatakana,
+        containsKatakana,
         FuriganaRenderer,
         ValidationUtils
     };
