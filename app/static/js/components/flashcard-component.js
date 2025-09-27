@@ -228,47 +228,68 @@ export class FlashcardComponent {
         const correctCount = Object.values(results).filter(result => result.is_correct).length;
         const totalCount = Object.keys(results).length;
         
-        // Determine feedback type and message
-        let feedbackText = '';
+        // Determine feedback type and CSS class
         let feedbackClass = '';
+        let headerText = '';
         
         if (correctCount === totalCount && totalCount > 0) {
             // All correct - GREEN
-            feedbackText = '✅ Perfect! All answers correct!';
             feedbackClass = 'correct';
+            headerText = '✅ Perfect! All answers correct!';
         } else if (correctCount > 0) {
             // Partial correct - ORANGE
-            feedbackText = `🟠 Partial success! ${correctCount}/${totalCount} correct.`;
             feedbackClass = 'partial';
-            
-            // Add incorrect answers with correct ones
-            Object.keys(results).forEach(mode => {
-                const result = results[mode];
-                if (!result.is_correct) {
-                    feedbackText += `\\n${mode}: ${result.correct_answer}`;
-                }
-            });
+            headerText = `🟠 Partial success! ${correctCount}/${totalCount} correct.`;
         } else {
             // All wrong - RED
-            feedbackText = '❌ Incorrect. Here are the correct answers:';
             feedbackClass = 'incorrect';
-            
-            // Add all correct answers
-            Object.keys(results).forEach(mode => {
-                const result = results[mode];
-                feedbackText += `\\n${mode}: ${result.correct_answer}`;
-            });
+            headerText = '❌ Incorrect answers.';
         }
 
+        // Build table HTML
+        let tableHTML = `
+            <div class="feedback-header">${headerText}</div>
+            <table class="feedback-table">
+                <thead>
+                    <tr>
+                        <th>Input</th>
+                        <th>Target</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        // Add table rows for each input mode
+        Object.keys(results).forEach(mode => {
+            const result = results[mode];
+            const isCorrect = result.is_correct;
+            const statusIcon = isCorrect ? '✅' : '❌';
+            const statusText = isCorrect ? 'Correct' : 'Incorrect';
+            
+            tableHTML += `
+                <tr>
+                    <td>${mode}</td>
+                    <td>${result.correct_answer}</td>
+                    <td>${statusIcon} ${statusText}</td>
+                </tr>
+            `;
+        });
+        
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+
         // Update feedback element
-        feedbackElement.textContent = feedbackText;
+        feedbackElement.innerHTML = tableHTML;
         feedbackElement.className = `feedback-message ${feedbackClass}`;
         feedbackElement.style.display = 'block';
 
         // Hide feedback after delay
         setTimeout(() => {
             feedbackElement.style.display = 'none';
-        }, 3000);
+        }, 4000); // Increased to 4 seconds to read the table
     }
 
     /**
