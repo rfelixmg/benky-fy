@@ -1115,6 +1115,39 @@ body {
 	font-weight: 500;
 }
 
+/* Feedback actions */
+.feedback-actions {
+	margin-top: 16px;
+	text-align: center;
+}
+
+.skip-button {
+	background: #007bff;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.skip-button:hover {
+	background: #0056b3;
+}
+
+.skip-button:active {
+	background: #004085;
+}
+
+.skip-hint {
+	font-size: 12px;
+	color: #666;
+	margin-top: 8px;
+	font-style: italic;
+}
+
 /* Furigana hover styles */
 .furigana-hover {
 	cursor: help !important;

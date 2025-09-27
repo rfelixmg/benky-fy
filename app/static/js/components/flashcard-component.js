@@ -235,10 +235,10 @@ export class FlashcardComponent {
         // Show feedback
         this._showFeedback(response);
 
-        // Load next item after a short delay
+        // Load next item after feedback period
         setTimeout(() => {
             this._loadNextItem();
-        }, 2000); // 2 second delay to show feedback
+        }, 8000); // 8 second delay to show feedback
     }
 
     /**
@@ -316,6 +316,14 @@ export class FlashcardComponent {
             </table>
         `;
 
+        // Add skip button to feedback
+        tableHTML += `
+            <div class="feedback-actions">
+                <button type="button" class="skip-button" id="skipFeedbackBtn">Next Card →</button>
+                <div class="skip-hint">Press Enter or click to continue</div>
+            </div>
+        `;
+
         // Update feedback element
         feedbackElement.innerHTML = tableHTML;
         feedbackElement.className = `feedback-message ${feedbackClass}`;
@@ -331,6 +339,9 @@ export class FlashcardComponent {
                 flashcardModule.classList.add(feedbackClass);
             }
         }
+
+        // Setup skip functionality
+        this._setupSkipFeedback();
 
         // Hide feedback after delay
         setTimeout(() => {
@@ -354,6 +365,40 @@ export class FlashcardComponent {
         if (flashcardModule) {
             flashcardModule.classList.remove('correct', 'incorrect', 'partial');
         }
+    }
+
+    /**
+     * Setup skip feedback functionality
+     */
+    _setupSkipFeedback() {
+        const skipButton = document.getElementById('skipFeedbackBtn');
+        if (skipButton) {
+            skipButton.addEventListener('click', () => {
+                this._skipToNextItem();
+            });
+        }
+
+        // Add keyboard listener for Enter key during feedback
+        const handleSkipKeydown = (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                this._skipToNextItem();
+                // Remove listener after use
+                document.removeEventListener('keydown', handleSkipKeydown);
+            }
+        };
+        
+        document.addEventListener('keydown', handleSkipKeydown);
+    }
+
+    /**
+     * Skip to next item (early feedback skip)
+     */
+    _skipToNextItem() {
+        // Clear feedback immediately
+        this._clearFeedback();
+        // Load next item
+        this._loadNextItem();
     }
 
     /**
