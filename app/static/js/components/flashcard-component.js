@@ -27,6 +27,8 @@ export class FlashcardComponent {
         
         // Timer management
         this.feedbackTimer = null;
+        this.countdownTimer = null;
+        this.countdownSeconds = 0;
     }
 
     /**
@@ -648,10 +650,13 @@ export class FlashcardComponent {
         }
 
         // Set timer to load next item after feedback period
+        this.countdownSeconds = 8; // 8 second delay to show feedback
+        this._startCountdownTimer();
+        
         this.feedbackTimer = setTimeout(() => {
             this._loadNextItem();
             this.feedbackTimer = null;
-        }, 8000); // 8 second delay to show feedback
+        }, 8000);
     }
 
     /**
@@ -873,6 +878,9 @@ export class FlashcardComponent {
             this.feedbackTimer = null;
         }
         
+        // Stop countdown timer
+        this._stopCountdownTimer();
+        
         const feedbackElement = document.getElementById('feedbackMessage');
         if (feedbackElement) {
             feedbackElement.style.display = 'none';
@@ -912,6 +920,71 @@ export class FlashcardComponent {
     }
 
     /**
+     * Start countdown timer display
+     */
+    _startCountdownTimer() {
+        this._updateCountdownDisplay();
+        
+        this.countdownTimer = setInterval(() => {
+            this.countdownSeconds--;
+            this._updateCountdownDisplay();
+            
+            if (this.countdownSeconds <= 0) {
+                this._stopCountdownTimer();
+            }
+        }, 1000);
+    }
+
+    /**
+     * Stop countdown timer display
+     */
+    _stopCountdownTimer() {
+        if (this.countdownTimer) {
+            clearInterval(this.countdownTimer);
+            this.countdownTimer = null;
+        }
+        this._hideCountdownDisplay();
+    }
+
+    /**
+     * Update countdown display
+     */
+    _updateCountdownDisplay() {
+        const feedbackElement = document.getElementById('feedbackMessage');
+        if (!feedbackElement) return;
+
+        // Find or create countdown element
+        let countdownElement = feedbackElement.querySelector('.countdown-timer');
+        if (!countdownElement) {
+            countdownElement = document.createElement('div');
+            countdownElement.className = 'countdown-timer';
+            countdownElement.innerHTML = `
+                <div class="countdown-text">Next card in:</div>
+                <div class="countdown-number">${this.countdownSeconds}</div>
+            `;
+            feedbackElement.appendChild(countdownElement);
+        } else {
+            const numberElement = countdownElement.querySelector('.countdown-number');
+            if (numberElement) {
+                numberElement.textContent = this.countdownSeconds;
+            }
+        }
+    }
+
+    /**
+     * Hide countdown display
+     */
+    _hideCountdownDisplay() {
+        const feedbackElement = document.getElementById('feedbackMessage');
+        if (feedbackElement) {
+            const countdownElement = feedbackElement.querySelector('.countdown-timer');
+            if (countdownElement) {
+                countdownElement.remove();
+            }
+        }
+    }
+
+    /**
      * Skip to next item (early feedback skip)
      */
     _skipToNextItem() {
@@ -920,6 +993,9 @@ export class FlashcardComponent {
             clearTimeout(this.feedbackTimer);
             this.feedbackTimer = null;
         }
+        
+        // Stop countdown timer
+        this._stopCountdownTimer();
         
         // Clear feedback immediately
         this._clearFeedback();
