@@ -86,7 +86,7 @@ class FlashcardBlueprint:
         @bp.route("/check", methods=["POST"])
         @login_required
         def check():
-            item = self.engine[int(request.form["item_id"])]
+            item = self.engine[int(request.form["item_id"]) - 1]  # Convert from 1-based to 0-based indexing
             settings = get_user_settings(self.module_name)
             settings_groups = settings_registry.get_settings_groups(get_module_settings_config(self.module_name))
             
@@ -137,7 +137,7 @@ class FlashcardBlueprint:
             
             try:
                 item_id = int(item_id)
-                item = self.engine[item_id]
+                item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
                 settings = get_user_settings(self.module_name)
                 
                 # Build correct answers based on input modes
@@ -177,7 +177,7 @@ class FlashcardBlueprint:
             
             try:
                 item_id = int(item_id)
-                item = self.engine[item_id]
+                item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
                 
                 # Get settings from URL parameters (real-time) or fallback to session settings
                 display_mode = request.args.get('display_mode')
@@ -232,7 +232,7 @@ class FlashcardBlueprint:
             
             try:
                 item_id = int(item_id)
-                item = self.engine[item_id]
+                item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
                 
                 # Create test settings
                 test_settings = {
@@ -277,7 +277,7 @@ class FlashcardBlueprint:
             
             try:
                 item_id = int(item_id)
-                item = self.engine[item_id]
+                item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
                 
                 # Build correct answers based on input modes
                 correct_answers = {}
@@ -314,12 +314,23 @@ class FlashcardBlueprint:
             except Exception as e:
                 return {"error": f"Error processing request: {str(e)}"}, 500
         
+        @bp.route("/api/dataset-info", methods=["GET"])
+        def get_dataset_info():
+            """Get dataset information including size"""
+            try:
+                return {
+                    "total_items": len(self.engine._data),
+                    "module_name": self.module_name,
+                    "message": "Dataset info retrieved successfully"
+                }
+            except Exception as e:
+                return {"error": f"Failed to get dataset info: {str(e)}"}, 500
         @bp.route("/api/test-check-answers", methods=["POST"])
         def test_check_answers():
             """Test endpoint for answer checking without authentication"""
             try:
                 item_id = int(request.form.get('item_id', 0))
-                item = self.engine[item_id]
+                item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
                 
                 # Get test input modes
                 input_modes = request.form.get('input_modes', 'hiragana,romaji,english').split(',')

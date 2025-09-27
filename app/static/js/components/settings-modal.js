@@ -74,6 +74,14 @@ export class SettingsModal {
             }
         });
 
+        // Close button handler
+        const closeButton = document.querySelector('.settings-close-btn');
+        if (closeButton) {
+            closeButton.addEventListener('click', () => {
+                this.hide();
+            });
+        }
+
         // Display mode change handlers
         const displayModeInputs = document.querySelectorAll('input[name="display_mode"]');
         displayModeInputs.forEach(input => {
@@ -244,5 +252,21 @@ export class SettingsModal {
             console.error('Failed to save settings:', error);
             // Settings are still saved to localStorage
         }
+    }
+
+    /**
+     * Reset settings to defaults
+     */
+    _resetSettings() {
+        if (!this.settingsManager) return;
+
+        this.settingsManager.resetToDefaults();
+        this._loadSettingsIntoUI();
+        
+        if (this.onSettingsChange) {
+            this.onSettingsChange();
+        }
+        
+        console.log('Settings reset to defaults');
     }
 }

@@ -22,51 +22,7 @@
 	</div>
 	
 	<div class="answer-section">
-		{% set input_modes = settings.get('input_modes', settings.get('checking_styles', ['hiragana'])) %}
-		
-		{% for mode in input_modes %}
-		<div class="input-group">
-			{% if mode == 'hiragana' %}
-			<label for="user_hiragana" class="input-label">
-				Type in romaji (auto-converts to hiragana)
-			</label>
-			<input type="text" 
-				   id="user_hiragana" 
-				   name="user_hiragana" 
-				   class="answer-input" 
-				   placeholder="Type in romaji..." 
-				   autofocus 
-				   autocomplete="off" 
-				   autocorrect="off" 
-				   autocapitalize="off" 
-				   spellcheck="false" />
-			{% elif mode == 'romaji' %}
-			<label for="user_romaji" class="input-label">
-				Type in romaji
-			</label>
-			<input type="text" 
-				   id="user_romaji" 
-				   name="user_romaji" 
-				   class="answer-input" 
-				   placeholder="Type in romaji..." 
-				   autocomplete="off" 
-				   autocorrect="off" 
-				   autocapitalize="off" 
-				   spellcheck="false" />
-			{% else %}
-			<label for="user_{{ mode }}" class="input-label">Your answer ({{ mode }}):</label>
-			<input type="text" 
-				   id="user_{{ mode }}" 
-				   name="user_{{ mode }}" 
-				   class="answer-input" 
-				   placeholder="Type {{ mode }}..." 
-				   autocomplete="off" 
-				   autocorrect="off" 
-				   autocapitalize="off" 
-				   spellcheck="false" />
-			{% endif %}
-		</div>
-		{% endfor %}
+		<!-- Input fields will be dynamically created by JavaScript -->
 	</div>
 	
 	<input type="hidden" id="item_id" name="item_id" value="{{ item.index }}">

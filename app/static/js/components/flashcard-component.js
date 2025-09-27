@@ -74,13 +74,29 @@ export class FlashcardComponent {
             // Load settings into UI
             this._applySettingsToUI();
 
-            // Load initial flashcard
-            await this._loadFlashcard();
+            // Load a random initial flashcard
+            await this._loadRandomItem();
 
             // Setup check button
             this._setupCheckButton();
         } catch (error) {
             console.error('Failed to load initial content:', error);
+        }
+    }
+
+    /**
+     * Load a random flashcard item
+     */
+    async _loadRandomItem() {
+        try {
+            const response = await this.apiClient.getNextItem();
+            this.currentItemId = response.item_id;
+            await this._loadFlashcard();
+        } catch (error) {
+            console.error('Failed to load random item:', error);
+            // Fallback to item 1 if random loading fails
+            this.currentItemId = 1;
+            await this._loadFlashcard();
         }
     }
 

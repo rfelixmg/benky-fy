@@ -6,6 +6,7 @@ export class ApiClient {
     constructor(moduleName) {
         this.moduleName = moduleName;
         this.baseUrl = `/begginer/${moduleName}`;
+        this.maxItemId = null; // Cache the maximum item ID
     }
 
     /**
@@ -66,17 +67,40 @@ export class ApiClient {
     }
 
     /**
+     * Get dataset information including size
+     */
+    async getDatasetInfo() {
+        try {
+            const response = await fetch(`${this.baseUrl}/api/dataset-info`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to get dataset info:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Get next flashcard item (simulated - no actual endpoint exists)
      * This will return a random item ID for the next flashcard
      */
     async getNextItem() {
         try {
-            // Since there's no actual next-item endpoint, we'll simulate getting a random item
-            // In a real implementation, this would track progress and return the next item
-            const randomItemId = Math.floor(Math.random() * 100) + 1; // Simulate random item
+            // Get the actual dataset size from the backend
+            if (this.maxItemId === null) {
+                const datasetInfo = await this.getDatasetInfo();
+                this.maxItemId = datasetInfo.total_items;
+            }
+            
+            const randomItemId = Math.floor(Math.random() * this.maxItemId) + 1;
+            
             return {
                 item_id: randomItemId,
-                message: "Next item generated (simulated)"
+                message: `Next item generated (random from 1-${this.maxItemId})`
             };
         } catch (error) {
             console.error('Failed to get next item:', error);
