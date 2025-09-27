@@ -132,19 +132,45 @@ def create_conjugation_blueprint():
                 
                 import random
                 item = random.choice(verb_engine._data)
-                grammatical_type = item.get('conjugation', '') or item.get('grammatical_type', 'verb')
+                # Handle FlashcardItem object
+                if hasattr(item, 'index'):
+                    item_data = {
+                        'id': item.index,
+                        'kanji': item.kanji,
+                        'hiragana': item.hiragana,
+                        'english': item.english,
+                        'conjugations': item.conjugations if item.conjugations else {},
+                        'grammatical_type': getattr(item, 'grammatical_type', 'verb')
+                    }
+                else:
+                    # Handle dictionary
+                    item_data = item
+                    grammatical_type = item.get('conjugation', '') or item.get('grammatical_type', 'verb')
             elif module_name == 'adjectives':
                 if not adjective_engine._data:
                     return jsonify({'error': 'No adjective data available'}), 500
                 
                 import random
                 item = random.choice(adjective_engine._data)
-                grammatical_type = item.get('conjugation_type', 'i_adjective')
+                # Handle FlashcardItem object
+                if hasattr(item, 'index'):
+                    item_data = {
+                        'id': item.index,
+                        'kanji': item.kanji,
+                        'hiragana': item.hiragana,
+                        'english': item.english,
+                        'conjugations': item.conjugations if item.conjugations else {},
+                        'grammatical_type': getattr(item, 'conjugation_type', 'i_adjective')
+                    }
+                else:
+                    # Handle dictionary
+                    item_data = item
+                    grammatical_type = item.get('conjugation_type', 'i_adjective')
             else:
                 return jsonify({'error': 'Invalid module_name'}), 400
             
             # Get the correct answer for the requested form
-            conjugations = item.get('conjugations', {})
+            conjugations = item_data.get('conjugations', {})
             correct_answer = conjugations.get(conjugation_form, {})
             
             if not correct_answer:
@@ -153,14 +179,14 @@ def create_conjugation_blueprint():
             return jsonify({
                 'success': True,
                 'item': {
-                    'id': item.get('id', 0),
-                    'kanji': item.get('kanji', ''),
-                    'hiragana': item.get('hiragana', ''),
-                    'english': item.get('english', ''),
-                    'conjugation_type': grammatical_type
+                    'id': item_data.get('id', 0),
+                    'kanji': item_data.get('kanji', ''),
+                    'hiragana': item_data.get('hiragana', ''),
+                    'english': item_data.get('english', ''),
+                    'conjugation_type': item_data.get('grammatical_type', 'verb')
                 },
                 'conjugation_form': conjugation_form,
-                'prompt': f"Conjugate '{item.get('english', '')}' in {conjugation_form} form"
+                'prompt': f"Conjugate '{item_data.get('english', '')}' in {conjugation_form} form"
             })
             
         except Exception as e:

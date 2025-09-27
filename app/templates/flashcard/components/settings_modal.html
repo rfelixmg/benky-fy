@@ -94,6 +94,82 @@
 				</div>
 			</div>
 
+			<!-- Practice Mode Section -->
+			<div class="settings-section">
+				<div class="settings-section-header">
+					<h3>Practice Mode</h3>
+					<span class="section-toggle">▼</span>
+				</div>
+				<div class="settings-section-content" id="practice-mode">
+					<div class="radio-group">
+						<label class="radio-option">
+							<input type="radio" name="practice_mode" value="flashcard" checked>
+							<span>📚 Flashcard Mode</span>
+						</label>
+						<label class="radio-option">
+							<input type="radio" name="practice_mode" value="conjugation">
+							<span>🔄 Conjugation Practice</span>
+						</label>
+					</div>
+					<div class="helper-text">
+						<p>Choose between regular flashcards or conjugation practice.</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Conjugation Settings Section -->
+			<div class="settings-section" id="conjugation-settings-section" style="display: none;">
+				<div class="settings-section-header">
+					<h3>Conjugation Settings</h3>
+					<span class="section-toggle">▼</span>
+				</div>
+				<div class="settings-section-content" id="conjugation-settings">
+					<div class="checkbox-group">
+						<h4>Conjugation Forms</h4>
+						<label class="checkbox-option">
+							<input type="checkbox" name="conjugation_forms" value="polite" checked>
+							<span>Polite (ます form)</span>
+						</label>
+						<label class="checkbox-option">
+							<input type="checkbox" name="conjugation_forms" value="negative">
+							<span>Negative (ない form)</span>
+						</label>
+						<label class="checkbox-option">
+							<input type="checkbox" name="conjugation_forms" value="polite_negative">
+							<span>Polite Negative (ません)</span>
+						</label>
+						<label class="checkbox-option">
+							<input type="checkbox" name="conjugation_forms" value="past">
+							<span>Past (た form)</span>
+						</label>
+						<label class="checkbox-option">
+							<input type="checkbox" name="conjugation_forms" value="polite_past">
+							<span>Polite Past (ました)</span>
+						</label>
+						<label class="checkbox-option">
+							<input type="checkbox" name="conjugation_forms" value="past_negative">
+							<span>Past Negative (なかった)</span>
+						</label>
+					</div>
+					
+					<div class="radio-group">
+						<h4>Prompt Style</h4>
+						<label class="radio-option">
+							<input type="radio" name="conjugation_prompt_style" value="english" checked>
+							<span>English (e.g., "Conjugate 'to read' in polite form")</span>
+						</label>
+						<label class="radio-option">
+							<input type="radio" name="conjugation_prompt_style" value="hiragana">
+							<span>Hiragana (e.g., "よむ in polite form")</span>
+						</label>
+					</div>
+					
+					<div class="helper-text">
+						<p>Select which conjugation forms to practice and how prompts are displayed.</p>
+					</div>
+				</div>
+			</div>
+
 			<!-- Answer Input Mode Section -->
 			<div class="settings-section">
 				<div class="settings-section-header">

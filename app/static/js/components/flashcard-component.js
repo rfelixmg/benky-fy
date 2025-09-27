@@ -8,6 +8,7 @@ import { InputManager } from '/static/js/core/input-manager.js';
 import { DisplayManager } from '/static/js/core/display-manager.js';
 import { SettingsModal } from '/static/js/components/settings-modal.js';
 import { HelpComponent } from '/static/js/components/help-modal.js';
+import { ConjugationComponent } from '/static/js/components/conjugation-component.js';
 export class FlashcardComponent {
     constructor(moduleName) {
         this.moduleName = moduleName;
@@ -17,10 +18,12 @@ export class FlashcardComponent {
         this.displayManager = null;
         this.settingsModal = null;
         this.helpModal = null;
+        this.conjugationComponent = null;
         
         this.currentItemId = 1;
         this.isUserInteraction = false;
         this.isPageLoaded = false;
+        this.currentMode = 'flashcard'; // 'flashcard' or 'conjugation'
     }
 
     /**
@@ -35,6 +38,7 @@ export class FlashcardComponent {
             this.displayManager = new DisplayManager('.flashcard-container');
             this.settingsModal = new SettingsModal();
             this.helpModal = new HelpComponent();
+            this.conjugationComponent = new ConjugationComponent(this.apiClient, this.settingsManager);
 
             // Setup settings modal
             this.settingsModal.initialize(
@@ -44,6 +48,9 @@ export class FlashcardComponent {
 
             // Setup help modal
             this.helpModal.initialize(this.moduleName, this.apiClient);
+
+            // Initialize conjugation component
+            await this.conjugationComponent.initialize();
 
             // Setup help toggle button
             this._setupHelpToggleButton();
@@ -95,8 +102,16 @@ export class FlashcardComponent {
             // Load settings into UI
             this._applySettingsToUI();
 
-            // Load a random initial flashcard
-            await this._loadRandomItem();
+            // Determine current mode
+            const settings = this.settingsManager.getAllSettings();
+            this.currentMode = settings.practiceMode || 'flashcard';
+
+            // Load content based on mode
+            if (this.currentMode === 'conjugation') {
+                await this._loadConjugationItem();
+            } else {
+                await this._loadRandomItem();
+            }
 
             // Setup check button
             this._setupCheckButton();
@@ -106,21 +121,57 @@ export class FlashcardComponent {
     }
 
     /**
-     * Load a random flashcard item
+     * Load a conjugation practice item
      */
-    async _loadRandomItem() {
+    async _loadConjugationItem() {
         try {
             // Clear any existing feedback before loading new item
             this._clearFeedback();
             
-            const response = await this.apiClient.getNextItem();
-            this.currentItemId = response.item_id;
-            await this._loadFlashcard();
+            const conjugationData = await this.conjugationComponent.getRandomConjugationItem();
+            this.currentItemId = conjugationData.item.id;
+            
+            // Update the display with conjugation prompt
+            this._updateConjugationDisplay(conjugationData);
         } catch (error) {
-            console.error('Failed to load random item:', error);
-            // Fallback to item 1 if random loading fails
-            this.currentItemId = 1;
-            await this._loadFlashcard();
+            console.error('Failed to load conjugation item:', error);
+            // Fallback to regular flashcard if conjugation fails
+            await this._loadRandomItem();
+        }
+    }
+
+    /**
+     * Update display for conjugation mode
+     */
+    _updateConjugationDisplay(conjugationData) {
+        const promptDisplay = document.getElementById('prompt-display');
+        if (promptDisplay) {
+            promptDisplay.innerHTML = `<div class="prompt-text">${conjugationData.prompt}</div>`;
+        }
+        
+        // Update prompt script indicator
+        const promptScriptElement = document.getElementById('prompt-script');
+        if (promptScriptElement) {
+            promptScriptElement.textContent = 'conjugation';
+        }
+
+        // Show practice mode indicator
+        this._updatePracticeModeIndicator('conjugation');
+    }
+
+    /**
+     * Update practice mode indicator
+     */
+    _updatePracticeModeIndicator(mode) {
+        const indicator = document.getElementById('practiceModeIndicator');
+        if (indicator) {
+            if (mode === 'conjugation') {
+                indicator.textContent = '🔄 Conjugation Practice';
+                indicator.className = 'practice-mode-indicator conjugation';
+                indicator.style.display = 'block';
+            } else {
+                indicator.style.display = 'none';
+            }
         }
     }
 
@@ -153,6 +204,9 @@ export class FlashcardComponent {
             if (this.helpModal && response) {
                 this.helpModal.updateItem(response);
             }
+
+            // Hide practice mode indicator for regular flashcards
+            this._updatePracticeModeIndicator('flashcard');
         } catch (error) {
             console.error('Failed to load flashcard:', error);
             this.displayManager.showError('Failed to load flashcard');
@@ -182,7 +236,19 @@ export class FlashcardComponent {
      */
     _onSettingsChange() {
         this.isUserInteraction = true;
-        this._applySettingsToUI();
+        
+        // Check if practice mode changed
+        const settings = this.settingsManager.getAllSettings();
+        const newMode = settings.practiceMode || 'flashcard';
+        
+        if (newMode !== this.currentMode) {
+            this.currentMode = newMode;
+            // Reload content with new mode
+            this._loadInitialContent();
+        } else {
+            // Just apply settings to UI
+            this._applySettingsToUI();
+        }
     }
 
     /**
@@ -213,11 +279,20 @@ export class FlashcardComponent {
                 return;
             }
 
-            const response = await this.apiClient.checkAnswer(
-                this.currentItemId,
-                userAnswers,  // Pass the full userAnswers object
-                settings
-            );
+            let response;
+            
+            if (this.currentMode === 'conjugation') {
+                // Handle conjugation answer checking
+                const userInput = userAnswers.hiragana || userAnswers.romaji || Object.values(userAnswers)[0];
+                response = await this.conjugationComponent.checkConjugationAnswer(userInput);
+            } else {
+                // Handle regular flashcard answer checking
+                response = await this.apiClient.checkAnswer(
+                    this.currentItemId,
+                    userAnswers,
+                    settings
+                );
+            }
 
             this._handleAnswerResponse(response);
         } catch (error) {
@@ -233,7 +308,11 @@ export class FlashcardComponent {
         this.inputManager.clearInputValues();
 
         // Show feedback
-        this._showFeedback(response);
+        if (this.currentMode === 'conjugation') {
+            this._showConjugationFeedback(response);
+        } else {
+            this._showFeedback(response);
+        }
 
         // Load next item after feedback period
         setTimeout(() => {
@@ -350,6 +429,65 @@ export class FlashcardComponent {
     }
 
     /**
+     * Show conjugation feedback to user
+     */
+    _showConjugationFeedback(response) {
+        const feedbackElement = document.getElementById('feedbackMessage');
+        if (!feedbackElement) {
+            console.warn('Feedback element not found');
+            return;
+        }
+
+        const isCorrect = response.is_correct;
+        const feedbackClass = isCorrect ? 'correct' : 'incorrect';
+        const headerText = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+        
+        let feedbackHTML = `
+            <div class="feedback-header">${headerText}</div>
+            <div class="conjugation-feedback">
+                <div class="feedback-item">
+                    <strong>Your answer:</strong> ${response.user_input || 'No answer provided'}
+                </div>
+                <div class="feedback-item">
+                    <strong>Correct answer:</strong> ${response.correct_answer || 'N/A'}
+                </div>
+                <div class="feedback-item">
+                    <strong>Form:</strong> ${response.conjugation_form || 'N/A'}
+                </div>
+                ${response.feedback ? `<div class="feedback-item"><strong>Note:</strong> ${response.feedback}</div>` : ''}
+            </div>
+            <div class="feedback-actions">
+                <button type="button" class="skip-button" id="skipFeedbackBtn">Next Card →</button>
+                <div class="skip-hint">Press Enter or click to continue</div>
+            </div>
+        `;
+
+        // Update feedback element
+        feedbackElement.innerHTML = feedbackHTML;
+        feedbackElement.className = `feedback-message ${feedbackClass}`;
+        feedbackElement.style.display = 'block';
+
+        // Apply feedback class to flashcard module for background colors
+        const flashcardModule = document.querySelector('.flashcard-module');
+        if (flashcardModule) {
+            // Remove any existing feedback classes
+            flashcardModule.classList.remove('correct', 'incorrect', 'partial');
+            // Add the new feedback class
+            if (feedbackClass) {
+                flashcardModule.classList.add(feedbackClass);
+            }
+        }
+
+        // Setup skip functionality
+        this._setupSkipFeedback();
+
+        // Hide feedback after delay
+        setTimeout(() => {
+            feedbackElement.style.display = 'none';
+        }, 8000); // 8 seconds to review the feedback
+    }
+
+    /**
      * Clear feedback display and reset visual state
      */
     _clearFeedback() {
@@ -409,9 +547,13 @@ export class FlashcardComponent {
             // Clear any existing feedback before loading new item
             this._clearFeedback();
             
-            const response = await this.apiClient.getNextItem();
-            this.currentItemId = response.item_id;
-            await this._loadFlashcard();
+            if (this.currentMode === 'conjugation') {
+                await this._loadConjugationItem();
+            } else {
+                const response = await this.apiClient.getNextItem();
+                this.currentItemId = response.item_id;
+                await this._loadFlashcard();
+            }
         } catch (error) {
             console.error('Failed to load next item:', error);
         }

@@ -2821,11 +2821,95 @@ body {
 	}
 }
 
-/* Mixed Input Feedback System Styles */
-.field-correct {
-	border: 2px solid #10b981 !important;
-	background-color: #f0fdf4 !important;
-	box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+/* Conjugation Feedback Styles */
+.conjugation-feedback {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.feedback-item {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.feedback-item strong {
+    color: #fff;
+    margin-right: 0.5rem;
+}
+
+/* Practice Mode Indicator */
+.practice-mode-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(102, 126, 234, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.practice-mode-indicator.conjugation {
+    background: rgba(118, 75, 162, 0.8);
+}
+
+/* Conjugation Settings Panel */
+#conjugation-settings-section {
+    transition: all 0.3s ease;
+}
+
+#conjugation-settings-section h4 {
+    color: #667eea;
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Enhanced Settings Modal */
+.settings-section h4 {
+    color: #667eea;
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Practice Mode Toggle */
+.practice-mode-toggle {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.practice-mode-toggle .radio-option {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.practice-mode-toggle .radio-option:hover {
+    border-color: rgba(102, 126, 234, 0.6);
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.practice-mode-toggle .radio-option input[type="radio"]:checked + span {
+    color: #667eea;
+    font-weight: 600;
+}
+
+.practice-mode-toggle .radio-option:has(input[type="radio"]:checked) {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
 }
 
 .field-incorrect {

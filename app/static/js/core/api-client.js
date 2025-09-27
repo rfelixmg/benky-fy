@@ -130,6 +130,88 @@ export class ApiClient {
     }
 
     /**
+     * Check conjugation answer
+     */
+    async checkConjugation(userInput, itemId, conjugationForm, module) {
+        try {
+            const response = await fetch('/conjugation/api/conjugation/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_input: userInput,
+                    item_id: itemId,
+                    conjugation_form: conjugationForm,
+                    module_name: module
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to check conjugation:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get conjugation forms for a module
+     */
+    async getConjugationForms(module) {
+        try {
+            const response = await fetch(`/conjugation/api/conjugation/forms/${module}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to get conjugation forms:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get conjugation practice item
+     */
+    async getConjugationPractice(module, conjugationForm = 'polite') {
+        try {
+            const params = new URLSearchParams({ form: conjugationForm });
+            const response = await fetch(`/conjugation/api/conjugation/practice/${module}?${params}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to get conjugation practice:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get conjugation statistics
+     */
+    async getConjugationStats(module) {
+        try {
+            const response = await fetch(`/conjugation/api/conjugation/stats/${module}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to get conjugation stats:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Flatten weights object for URL parameters
      */
     _flattenWeights(weights) {

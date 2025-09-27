@@ -114,6 +114,33 @@ export class SettingsModal {
             });
         });
 
+        // Practice mode change handlers
+        const practiceModeInputs = document.querySelectorAll('input[name="practice_mode"]');
+        practiceModeInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                this._handlePracticeModeChange(e.target.value);
+            });
+        });
+
+        // Conjugation forms change handlers
+        const conjugationFormInputs = document.querySelectorAll('input[name="conjugation_forms"]');
+        conjugationFormInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                this._handleConjugationFormsChange();
+            });
+        });
+
+        // Conjugation prompt style change handlers
+        const conjugationPromptStyleInputs = document.querySelectorAll('input[name="conjugation_prompt_style"]');
+        conjugationPromptStyleInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                this._handleConjugationPromptStyleChange(e.target.value);
+            });
+        });
+
+        // Section toggle handlers
+        this._setupSectionToggles();
+
         // Save button
         const saveButton = document.querySelector('#saveSettingsBtn');
         if (saveButton) {
@@ -165,6 +192,25 @@ export class SettingsModal {
                 weightInput.value = settings.weights[key];
             }
         });
+
+        // Set practice mode
+        const practiceModeInput = document.querySelector(`input[name="practice_mode"][value="${settings.practiceMode}"]`);
+        if (practiceModeInput) {
+            practiceModeInput.checked = true;
+            this._handlePracticeModeChange(settings.practiceMode);
+        }
+
+        // Set conjugation forms
+        const conjugationFormInputs = document.querySelectorAll('input[name="conjugation_forms"]');
+        conjugationFormInputs.forEach(input => {
+            input.checked = settings.conjugationForms.includes(input.value);
+        });
+
+        // Set conjugation prompt style
+        const conjugationPromptStyleInput = document.querySelector(`input[name="conjugation_prompt_style"][value="${settings.conjugationPromptStyle}"]`);
+        if (conjugationPromptStyleInput) {
+            conjugationPromptStyleInput.checked = true;
+        }
     }
 
     /**
@@ -268,5 +314,98 @@ export class SettingsModal {
         }
         
         console.log('Settings reset to defaults');
+    }
+
+    /**
+     * Handle practice mode change
+     */
+    _handlePracticeModeChange(mode) {
+        if (!this.settingsManager) return;
+
+        this.settingsManager.updateSetting('practiceMode', mode);
+        
+        // Show/hide conjugation settings section
+        const conjugationSettingsSection = document.getElementById('conjugation-settings-section');
+        if (conjugationSettingsSection) {
+            conjugationSettingsSection.style.display = mode === 'conjugation' ? 'block' : 'none';
+        }
+
+        if (this.onSettingsChange) {
+            this.onSettingsChange();
+        }
+    }
+
+    /**
+     * Handle conjugation forms change
+     */
+    _handleConjugationFormsChange() {
+        if (!this.settingsManager) return;
+
+        const checkboxes = document.querySelectorAll('input[name="conjugation_forms"]:checked');
+        const conjugationForms = Array.from(checkboxes).map(cb => cb.value);
+        
+        this.settingsManager.updateSetting('conjugationForms', conjugationForms);
+
+        if (this.onSettingsChange) {
+            this.onSettingsChange();
+        }
+    }
+
+    /**
+     * Handle conjugation prompt style change
+     */
+    _handleConjugationPromptStyleChange(style) {
+        if (!this.settingsManager) return;
+
+        this.settingsManager.updateSetting('conjugationPromptStyle', style);
+
+        if (this.onSettingsChange) {
+            this.onSettingsChange();
+        }
+    }
+
+    /**
+     * Setup section toggle functionality
+     */
+    _setupSectionToggles() {
+        const sectionHeaders = document.querySelectorAll('.settings-section-header');
+        
+        sectionHeaders.forEach(header => {
+            const toggle = header.querySelector('.section-toggle');
+            const section = header.parentElement;
+            const content = section.querySelector('.settings-section-content');
+            
+            if (toggle && content) {
+                // Set initial state
+                const isCollapsed = content.style.display === 'none';
+                this._updateToggleIcon(toggle, !isCollapsed);
+                
+                // Add click handler
+                header.addEventListener('click', () => {
+                    const isCurrentlyCollapsed = content.style.display === 'none';
+                    
+                    if (isCurrentlyCollapsed) {
+                        content.style.display = 'block';
+                        this._updateToggleIcon(toggle, true);
+                    } else {
+                        content.style.display = 'none';
+                        this._updateToggleIcon(toggle, false);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Update toggle icon based on expanded state
+     */
+    _updateToggleIcon(toggle, isExpanded) {
+        if (isExpanded) {
+            toggle.textContent = '▼';
+            toggle.style.transform = 'rotate(0deg)';
+        } else {
+            toggle.textContent = '▶';
+            toggle.style.transform = 'rotate(0deg)';
+        }
     }
 }

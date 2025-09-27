@@ -15,7 +15,10 @@ export class SettingsManager {
                 kanji: 0.3,
                 kanji_furigana: 0.2,
                 english: 0.2
-            }
+            },
+            practiceMode: 'flashcard',
+            conjugationForms: ['polite'],
+            conjugationPromptStyle: 'english'
         };
         this.settings = this.loadSettings();
     }
