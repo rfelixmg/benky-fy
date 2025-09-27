@@ -5,8 +5,28 @@
 export class ApiClient {
     constructor(moduleName) {
         this.moduleName = moduleName;
-        this.baseUrl = `/begginer/${moduleName}`;
+        // Handle different URL patterns for different modules
+        this.baseUrl = this._getBaseUrl(moduleName);
         this.maxItemId = null; // Cache the maximum item ID
+    }
+
+    /**
+     * Get the correct base URL for the module
+     */
+    _getBaseUrl(moduleName) {
+        // Handle special cases for modules with different URL patterns
+        const urlMappings = {
+            'numbers_basic': '/begginer/numbers-basic',
+            'numbers_extended': '/begginer/numbers-extended', 
+            'days_of_week': '/begginer/days-of-week',
+            'months_complete': '/begginer/months',
+            'colors_basic': '/begginer/colors',
+            'greetings_essential': '/begginer/greetings',
+            'question_words': '/begginer/question-words',
+            'base_nouns': '/begginer/base-nouns'
+        };
+        
+        return urlMappings[moduleName] || `/begginer/${moduleName}`;
     }
 
     /**

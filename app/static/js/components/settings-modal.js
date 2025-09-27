@@ -165,6 +165,9 @@ export class SettingsModal {
         if (!this.settingsManager) return;
 
         const settings = this.settingsManager.getAllSettings();
+        
+        // Hide conjugation options for modules that don't support it
+        this._updateConjugationVisibility();
 
         // Set display mode
         const displayModeInput = document.querySelector(`input[name="display_mode"][value="${settings.displayMode}"]`);
@@ -476,6 +479,40 @@ export class SettingsModal {
         } else {
             toggle.textContent = '▶';
             toggle.style.transform = 'rotate(0deg)';
+        }
+    }
+
+    /**
+     * Update conjugation visibility based on module support
+     */
+    _updateConjugationVisibility() {
+        if (!this.settingsManager) return;
+        
+        const conjugationSupported = this.settingsManager.isConjugationSupported();
+        
+        // Hide conjugation practice mode option if not supported
+        const conjugationModeInput = document.querySelector('input[name="practice_mode"][value="conjugation"]');
+        if (conjugationModeInput) {
+            const conjugationModeLabel = conjugationModeInput.closest('.radio-option');
+            if (conjugationModeLabel) {
+                conjugationModeLabel.style.display = conjugationSupported ? 'block' : 'none';
+            }
+        }
+        
+        // Hide conjugation settings section if not supported
+        const conjugationSettingsSection = document.getElementById('conjugation-settings-section');
+        if (conjugationSettingsSection) {
+            conjugationSettingsSection.style.display = conjugationSupported ? 'block' : 'none';
+        }
+        
+        // If conjugation is not supported and it's currently selected, switch to flashcard
+        const settings = this.settingsManager.getAllSettings();
+        if (!conjugationSupported && settings.practiceMode === 'conjugation') {
+            const flashcardModeInput = document.querySelector('input[name="practice_mode"][value="flashcard"]');
+            if (flashcardModeInput) {
+                flashcardModeInput.checked = true;
+                this.settingsManager.updateSetting('practiceMode', 'flashcard');
+            }
         }
     }
 }

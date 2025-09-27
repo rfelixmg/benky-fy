@@ -15,6 +15,12 @@ export class DisplayManager {
     async updateDisplay(itemId, settings, apiClient) {
         try {
             const response = await apiClient.getDisplayText(itemId, settings);
+            
+            // Validate response
+            if (!response || !response.text) {
+                throw new Error('Invalid response from display API');
+            }
+            
             this.currentItem = response;
             this.currentDisplayText = response.text;
             
@@ -24,6 +30,7 @@ export class DisplayManager {
             return response;
         } catch (error) {
             console.error('Failed to update display:', error);
+            this.showError(`Failed to load content: ${error.message}`);
             throw error;
         }
     }

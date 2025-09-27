@@ -112,11 +112,22 @@ export class FlashcardComponent {
             this.currentMode = settings.practiceMode || 'flashcard';
             console.log('Initial mode set to:', this.currentMode);
 
+            // Check if conjugation is supported for this module
+            const conjugationSupported = this.settingsManager.isConjugationSupported();
+            console.log('Conjugation supported:', conjugationSupported);
+
+            // If conjugation mode is selected but not supported, fallback to flashcard mode
+            if (this.currentMode === 'conjugation' && !conjugationSupported) {
+                console.log('Conjugation not supported for this module, falling back to flashcard mode');
+                this.currentMode = 'flashcard';
+                this.settingsManager.updateSetting('practiceMode', 'flashcard');
+            }
+
             // Load settings into UI with correct mode
             this._applySettingsToUI();
 
             // Load content based on mode
-            if (this.currentMode === 'conjugation') {
+            if (this.currentMode === 'conjugation' && conjugationSupported) {
                 console.log('Loading conjugation item on initial load');
                 await this._loadConjugationItem();
             } else {
@@ -128,6 +139,13 @@ export class FlashcardComponent {
             this._setupCheckButton();
         } catch (error) {
             console.error('Failed to load initial content:', error);
+            // Fallback to regular flashcard if anything fails
+            try {
+                await this._loadFlashcard();
+                this._setupCheckButton();
+            } catch (fallbackError) {
+                console.error('Fallback flashcard loading also failed:', fallbackError);
+            }
         }
     }
 
@@ -541,6 +559,16 @@ export class FlashcardComponent {
         const newMode = settings.practiceMode || 'flashcard';
         
         console.log('Settings changed. Current mode:', this.currentMode, 'New mode:', newMode);
+        
+        // Check if conjugation is supported for this module
+        const conjugationSupported = this.settingsManager.isConjugationSupported();
+        
+        // If trying to switch to conjugation mode but not supported, revert to flashcard
+        if (newMode === 'conjugation' && !conjugationSupported) {
+            console.log('Conjugation not supported for this module, reverting to flashcard mode');
+            this.settingsManager.updateSetting('practiceMode', 'flashcard');
+            return; // Exit early, settings will be updated
+        }
         
         if (newMode !== this.currentMode) {
             console.log('Mode changed from', this.currentMode, 'to', newMode);

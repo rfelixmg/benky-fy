@@ -5,7 +5,15 @@
 export class SettingsManager {
     constructor(moduleName) {
         this.moduleName = moduleName;
-        this.defaultSettings = {
+        this.defaultSettings = this._getDefaultSettings(moduleName);
+        this.settings = this.loadSettings();
+    }
+
+    /**
+     * Get default settings based on module type
+     */
+    _getDefaultSettings(moduleName) {
+        const baseSettings = {
             displayMode: 'kana',
             kanaTypes: ['hiragana'],
             inputModes: ['hiragana'],
@@ -16,11 +24,35 @@ export class SettingsManager {
                 kanji_furigana: 0.2,
                 english: 0.2
             },
-            practiceMode: 'flashcard',
-            conjugationForms: ['polite'],
-            conjugationPromptStyle: 'english'
+            practiceMode: 'flashcard'
         };
-        this.settings = this.loadSettings();
+
+        // Only Verbs and Adjectives support conjugation
+        if (moduleName === 'verbs' || moduleName === 'adjectives') {
+            // Conjugation-capable modules
+            return {
+                ...baseSettings,
+                conjugationForms: ['polite', 'negative', 'polite_negative'],
+                conjugationPromptStyle: 'english'
+            };
+        } else if (moduleName === 'hiragana' || moduleName === 'katakana') {
+            // Kana-only modules
+            return {
+                ...baseSettings,
+                displayMode: 'kana',
+                inputModes: ['hiragana', 'romaji'],
+                kanaTypes: moduleName === 'hiragana' ? ['hiragana'] : ['katakana']
+            };
+        } else if (moduleName.includes('numbers') || moduleName.includes('colors') || moduleName.includes('greetings')) {
+            // Vocabulary modules with specific needs
+            return {
+                ...baseSettings,
+                inputModes: ['hiragana', 'english'],
+                displayMode: 'weighted'
+            };
+        }
+
+        return baseSettings;
     }
 
     /**
@@ -72,7 +104,8 @@ export class SettingsManager {
                 }
             });
 
-            const response = await fetch(`/begginer/${this.moduleName}/settings`, {
+            const baseUrl = this._getBaseUrl(this.moduleName);
+            const response = await fetch(`${baseUrl}/settings`, {
                 method: 'POST',
                 body: formData,
                 redirect: 'manual'
@@ -121,5 +154,41 @@ export class SettingsManager {
     resetToDefaults() {
         this.settings = { ...this.defaultSettings };
         this.saveSettings();
+    }
+
+    /**
+     * Check if conjugation is supported for this module
+     */
+    isConjugationSupported() {
+        return this.moduleName === 'verbs' || this.moduleName === 'adjectives';
+    }
+
+    /**
+     * Get available practice modes for this module
+     */
+    getAvailablePracticeModes() {
+        if (this.isConjugationSupported()) {
+            return ['flashcard', 'conjugation'];
+        }
+        return ['flashcard'];
+    }
+
+    /**
+     * Get the correct base URL for the module
+     */
+    _getBaseUrl(moduleName) {
+        // Handle special cases for modules with different URL patterns
+        const urlMappings = {
+            'numbers_basic': '/begginer/numbers-basic',
+            'numbers_extended': '/begginer/numbers-extended', 
+            'days_of_week': '/begginer/days-of-week',
+            'months_complete': '/begginer/months',
+            'colors_basic': '/begginer/colors',
+            'greetings_essential': '/begginer/greetings',
+            'question_words': '/begginer/question-words',
+            'base_nouns': '/begginer/base-nouns'
+        };
+        
+        return urlMappings[moduleName] || `/begginer/${moduleName}`;
     }
 }

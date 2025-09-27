@@ -30,12 +30,40 @@ export class ConjugationComponent {
     async _loadAvailableForms() {
         try {
             const moduleName = this.apiClient.moduleName;
+            
+            // Check if module supports conjugation
+            if (!this._isConjugationSupported(moduleName)) {
+                this.availableForms = [];
+                return;
+            }
+            
             const response = await this.apiClient.getConjugationForms(moduleName);
             this.availableForms = response.forms || [];
         } catch (error) {
             console.error('Failed to load conjugation forms:', error);
-            this.availableForms = ['polite', 'negative', 'polite_negative', 'past', 'polite_past', 'past_negative'];
+            // Provide fallback forms based on module type
+            this.availableForms = this._getFallbackForms(this.apiClient.moduleName);
         }
+    }
+
+    /**
+     * Check if module supports conjugation
+     */
+    _isConjugationSupported(moduleName) {
+        const conjugationModules = ['verbs', 'adjectives'];
+        return conjugationModules.includes(moduleName);
+    }
+
+    /**
+     * Get fallback conjugation forms based on module type
+     */
+    _getFallbackForms(moduleName) {
+        if (moduleName === 'verbs') {
+            return ['polite', 'negative', 'polite_negative', 'past', 'polite_past', 'past_negative'];
+        } else if (moduleName === 'adjectives') {
+            return ['polite', 'negative', 'polite_negative'];
+        }
+        return [];
     }
 
     /**
