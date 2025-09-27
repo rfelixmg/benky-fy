@@ -709,7 +709,7 @@ export class FlashcardComponent {
             console.log('Automatic timer expired - loading next item');
             this._loadNextItem();
             this.feedbackTimer = null;
-        }, 8000);
+        }, 10000);
     }
 
     /**
@@ -829,7 +829,7 @@ export class FlashcardComponent {
         // Hide feedback after delay
         setTimeout(() => {
             feedbackElement.style.display = 'none';
-        }, 8000); // 8 seconds to review the table
+        }, 10000); // 8 seconds to review the table
     }
 
     /**
