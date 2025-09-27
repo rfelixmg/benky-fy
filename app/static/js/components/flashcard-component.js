@@ -29,6 +29,7 @@ export class FlashcardComponent {
         this.feedbackTimer = null;
         this.countdownTimer = null;
         this.countdownSeconds = 0;
+        this.skipKeydownHandler = null;
     }
 
     /**
@@ -705,6 +706,7 @@ export class FlashcardComponent {
         this._startCountdownTimer();
         
         this.feedbackTimer = setTimeout(() => {
+            console.log('Automatic timer expired - loading next item');
             this._loadNextItem();
             this.feedbackTimer = null;
         }, 8000);
@@ -941,6 +943,12 @@ export class FlashcardComponent {
         // Stop countdown timer
         this._stopCountdownTimer();
         
+        // Remove keyboard listener for skip functionality
+        if (this.skipKeydownHandler) {
+            document.removeEventListener('keydown', this.skipKeydownHandler);
+            this.skipKeydownHandler = null;
+        }
+        
         const feedbackElement = document.getElementById('feedbackMessage');
         if (feedbackElement) {
             feedbackElement.style.display = 'none';
@@ -967,16 +975,15 @@ export class FlashcardComponent {
         }
 
         // Add keyboard listener for Enter key during feedback
-        const handleSkipKeydown = (event) => {
+        // Store reference to handler for cleanup
+        this.skipKeydownHandler = (event) => {
             if (event.key === 'Enter') {
                 event.preventDefault();
                 this._skipToNextItem();
-                // Remove listener after use
-                document.removeEventListener('keydown', handleSkipKeydown);
             }
         };
         
-        document.addEventListener('keydown', handleSkipKeydown);
+        document.addEventListener('keydown', this.skipKeydownHandler);
     }
 
     /**
@@ -1048,6 +1055,8 @@ export class FlashcardComponent {
      * Skip to next item (early feedback skip)
      */
     _skipToNextItem() {
+        console.log('User skipped feedback - stopping timers and loading next item');
+        
         // Clear the automatic feedback timer
         if (this.feedbackTimer) {
             clearTimeout(this.feedbackTimer);
