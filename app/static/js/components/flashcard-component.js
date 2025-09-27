@@ -24,6 +24,9 @@ export class FlashcardComponent {
         this.isUserInteraction = false;
         this.isPageLoaded = false;
         this.currentMode = 'flashcard'; // 'flashcard' or 'conjugation'
+        
+        // Timer management
+        this.feedbackTimer = null;
     }
 
     /**
@@ -624,6 +627,12 @@ export class FlashcardComponent {
      * Handle answer response
      */
     _handleAnswerResponse(response) {
+        // Clear any existing feedback timer
+        if (this.feedbackTimer) {
+            clearTimeout(this.feedbackTimer);
+            this.feedbackTimer = null;
+        }
+
         // Clear input fields
         if (this.currentMode === 'conjugation') {
             this._clearConjugationInputValues();
@@ -638,9 +647,10 @@ export class FlashcardComponent {
             this._showFeedback(response);
         }
 
-        // Load next item after feedback period
-        setTimeout(() => {
+        // Set timer to load next item after feedback period
+        this.feedbackTimer = setTimeout(() => {
             this._loadNextItem();
+            this.feedbackTimer = null;
         }, 8000); // 8 second delay to show feedback
     }
 
@@ -857,6 +867,12 @@ export class FlashcardComponent {
      * Clear feedback display and reset visual state
      */
     _clearFeedback() {
+        // Clear the automatic feedback timer
+        if (this.feedbackTimer) {
+            clearTimeout(this.feedbackTimer);
+            this.feedbackTimer = null;
+        }
+        
         const feedbackElement = document.getElementById('feedbackMessage');
         if (feedbackElement) {
             feedbackElement.style.display = 'none';
@@ -899,8 +915,15 @@ export class FlashcardComponent {
      * Skip to next item (early feedback skip)
      */
     _skipToNextItem() {
+        // Clear the automatic feedback timer
+        if (this.feedbackTimer) {
+            clearTimeout(this.feedbackTimer);
+            this.feedbackTimer = null;
+        }
+        
         // Clear feedback immediately
         this._clearFeedback();
+        
         // Load next item
         this._loadNextItem();
     }
