@@ -106,7 +106,7 @@ export class HelpComponent {
      */
     async _fetchWordInfo(itemId) {
         try {
-            const response = await fetch(`/help/api/test-word-info?module_name=${this.moduleName}&item_id=${itemId}`);
+            const response = await fetch(`/help/api/word-info?module_name=${this.moduleName}&item_id=${itemId}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

@@ -2,15 +2,48 @@ from flask import Blueprint, redirect, url_for, session, request, flash, render_
 from flask_dance.contrib.google import google
 from flask_dance.consumer import oauth_authorized
 from functools import wraps
+import os
+import hashlib
 
 
 auth_bp = Blueprint("auth", __name__)
+
+
+def is_test_mode():
+	"""Check if we're in test mode based on environment variable."""
+	test_hash = os.environ.get('BENKY_FY_TEST_HASH')
+	if not test_hash:
+		return False
+	
+	# Expected hash for test mode (you can change this secret)
+	expected_hash = hashlib.sha256(b'benky-fy-test-mode-2024').hexdigest()
+	return test_hash == expected_hash
+
+
+def get_test_user():
+	"""Get test user data for test mode."""
+	return {
+		"name": "Test User",
+		"email": "test@benky-fy.com",
+		"picture": "https://via.placeholder.com/150/4285f4/ffffff?text=T",
+		"is_test_user": True
+	}
 
 
 def login_required(f):
 	"""Decorator to require authentication for a route."""
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
+		# Check if we're in test mode first
+		if is_test_mode():
+			# Set test user in session if not already set
+			if 'user' not in session:
+				session['user'] = get_test_user()
+				session.permanent = True
+				session.modified = True
+			return f(*args, **kwargs)
+		
+		# Normal authentication flow
 		if 'user' not in session:
 			# Store the URL they were trying to access
 			session['next_url'] = request.url

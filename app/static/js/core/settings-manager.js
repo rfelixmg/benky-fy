@@ -76,12 +76,7 @@ export class SettingsManager {
             });
 
             if (response.status === 401 || response.status === 403 || response.status === 302) {
-                // Use test endpoint for development
-                const testResponse = await fetch(`/begginer/${this.moduleName}/api/test-settings`, {
-                    method: 'POST',
-                    body: formData
-                });
-                return await testResponse.json();
+                throw new Error('Authentication required');
             }
 
             if (!response.ok) {

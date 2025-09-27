@@ -22,7 +22,7 @@ export class ApiClient {
                 ...this._flattenWeights(settings.weights)
             });
 
-            const response = await fetch(`${this.baseUrl}/api/test-display-text?${params}`);
+            const response = await fetch(`${this.baseUrl}/api/display-text?${params}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -50,7 +50,7 @@ export class ApiClient {
                 formData.append(fieldName, userAnswers[mode]);
             });
 
-            const response = await fetch(`${this.baseUrl}/api/test-check-answers`, {
+            const response = await fetch(`${this.baseUrl}/api/check-answers`, {
                 method: 'POST',
                 body: formData
             });

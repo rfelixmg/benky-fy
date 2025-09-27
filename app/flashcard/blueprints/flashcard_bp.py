@@ -64,24 +64,6 @@ class FlashcardBlueprint:
             except Exception as e:
                 return {"error": f"Error processing settings: {str(e)}"}, 500
         
-        @bp.route("/api/test-settings", methods=["POST"])
-        def test_update_settings():
-            """Test endpoint for settings update (no auth required for testing)"""
-            try:
-                # Convert form data to dict
-                form_data = {}
-                for key, value in request.form.items():
-                    if value == "1":  # Checkbox checked
-                        form_data[key] = True
-                    elif value == "0":  # Checkbox unchecked
-                        form_data[key] = False
-                    else:
-                        form_data[key] = value
-                
-                # For test endpoint, just return success without actually saving
-                return {"status": "success", "message": "Settings saved (test mode)", "settings": form_data}
-            except Exception as e:
-                return {"error": f"Error processing settings: {str(e)}"}, 500
         
         @bp.route("/check", methods=["POST"])
         @login_required
@@ -222,97 +204,7 @@ class FlashcardBlueprint:
             except (ValueError, IndexError):
                 return {"error": "Invalid item_id"}, 400
         
-        @bp.route("/api/test-display-text", methods=["GET"])
-        def test_display_text():
-            """Test endpoint for display text (no auth required for testing)"""
-            item_id = request.args.get('item_id', '0')
-            display_mode = request.args.get('display_mode', 'kana')
-            kana_type = request.args.get('kana_type', 'hiragana')
-            furigana_style = request.args.get('furigana_style', 'ruby')
-            
-            try:
-                item_id = int(item_id)
-                item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
-                
-                # Create test settings
-                test_settings = {
-                    "display_mode": display_mode,
-                    "kana_type": kana_type,
-                    "furigana_style": furigana_style,
-                    "proportions": {
-                        "kana": 0.3,
-                        "kanji": 0.2,
-                        "kanji_furigana": 0.2,
-                        "english": 0.3
-                    }
-                }
-                
-                # Use the new display text logic
-                if hasattr(self.engine, 'get_display_text'):
-                    display_result = self.engine.get_display_text(item, test_settings)
-                    return {
-                        "text": display_result["text"],
-                        "script": display_result["script"],
-                        "mode": display_result["mode"],
-                        "fallback_used": display_result["fallback_used"],
-                        "test_settings": test_settings,
-                        "item_info": {
-                            "english": item.english,
-                            "hiragana": item.hiragana,
-                            "kanji": item.kanji,
-                            "katakana": item.katakana
-                        }
-                    }
-                else:
-                    return {"error": "Engine does not support display text method"}
-            
-            except (ValueError, IndexError) as e:
-                return {"error": f"Invalid item_id: {e}"}, 400
         
-        @bp.route("/api/test-correct-answers", methods=["GET"])
-        def test_correct_answers():
-            """Test endpoint for correct answers without authentication"""
-            item_id = request.args.get('item_id', '0')
-            input_modes = request.args.get('input_modes', 'hiragana,romaji,english').split(',')
-            
-            try:
-                item_id = int(item_id)
-                item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
-                
-                # Build correct answers based on input modes
-                correct_answers = {}
-                for mode in input_modes:
-                    mode = mode.strip()
-                    if mode == "hiragana":
-                        correct_answers["user_hiragana"] = item.hiragana
-                        correct_answers["user_hiragana_romaji"] = item.hiragana
-                    elif mode == "romaji":
-                        correct_answers["user_romaji"] = item.romaji
-                        correct_answers["user_hiragana_romaji"] = item.romaji
-                    elif mode == "kanji":
-                        correct_answers["user_kanji"] = item.kanji
-                    elif mode == "katakana":
-                        if item.katakana and item.katakana.strip() not in ['–', '']:
-                            correct_answers["user_katakana"] = item.katakana
-                    elif mode == "english":
-                        correct_answers["user_english"] = item.english
-                
-                return {
-                    "correct_answers": correct_answers,
-                    "input_modes": input_modes,
-                    "item_info": {
-                        "hiragana": item.hiragana,
-                        "kanji": item.kanji,
-                        "katakana": item.katakana,
-                        "english": item.english,
-                        "romaji": item.romaji
-                    }
-                }
-                
-            except (ValueError, IndexError) as e:
-                return {"error": f"Invalid item_id: {e}"}, 400
-            except Exception as e:
-                return {"error": f"Error processing request: {str(e)}"}, 500
         
         @bp.route("/api/dataset-info", methods=["GET"])
         def get_dataset_info():
@@ -325,15 +217,20 @@ class FlashcardBlueprint:
                 }
             except Exception as e:
                 return {"error": f"Failed to get dataset info: {str(e)}"}, 500
-        @bp.route("/api/test-check-answers", methods=["POST"])
-        def test_check_answers():
-            """Test endpoint for answer checking without authentication"""
+        
+        @bp.route("/api/check-answers", methods=["POST"])
+        @login_required
+        def api_check_answers():
+            """API endpoint for checking answers (JSON response)"""
             try:
                 item_id = int(request.form.get('item_id', 0))
                 item = self.engine[item_id - 1]  # Convert from 1-based to 0-based indexing
+                settings = get_user_settings(self.module_name)
                 
-                # Get test input modes
-                input_modes = request.form.get('input_modes', 'hiragana,romaji,english').split(',')
+                # Get input modes
+                input_modes = request.form.get('input_modes', '').split(',')
+                if not input_modes or input_modes == ['']:
+                    input_modes = settings.get("input_modes", settings.get("checking_styles", ["english"]))
                 
                 # Collect user inputs
                 user_inputs = {}
@@ -349,18 +246,24 @@ class FlashcardBlueprint:
                 if hasattr(self.engine, 'check_answers_with_input_modes'):
                     results = self.engine.check_answers_with_input_modes(user_inputs, item, input_modes)
                 else:
-                    results = {"error": "Engine does not support new answer checking"}
+                    # Fallback to old system
+                    checking_styles = settings.get("checking_styles", ["english"])
+                    results = self.engine.check_answers(user_inputs, item, checking_styles)
+                
+                # Check if all answers are correct
+                all_correct = all_correct_logic(results)
                 
                 return {
                     "results": results,
                     "user_inputs": user_inputs,
                     "input_modes": input_modes,
-                    "all_correct": all_correct_logic(results)
+                    "all_correct": all_correct
                 }
                 
             except (ValueError, IndexError) as e:
                 return {"error": f"Invalid item_id: {e}"}, 400
             except Exception as e:
                 return {"error": f"Error processing request: {str(e)}"}, 500
+        
         
         return bp

@@ -39,20 +39,26 @@ def create_app() -> Flask:
 	question_words_bp = create_vocab_flashcard_module("question_words", "./datum/question_words.json")
 	base_nouns_bp = create_vocab_flashcard_module("base_nouns", "./datum/base_nouns.json")
 
-	# Google OAuth with Flask-Dance
-	google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
-	google_client_secret = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET")
+	# Google OAuth with Flask-Dance (only if not in test mode)
+	from app.auth import is_test_mode
 	
-	if not google_client_id or not google_client_secret:
-		raise ValueError("Google OAuth credentials not found. Please set GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET environment variables.")
-	
-	google_bp = make_google_blueprint(
-		client_id=google_client_id,
-		client_secret=google_client_secret,
-		scope=["profile", "email"],
-		redirect_to="main.home",
-		# Remove custom redirect_url - let Flask-Dance handle it
-	)
+	if not is_test_mode():
+		google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")
+		google_client_secret = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET")
+		
+		if not google_client_id or not google_client_secret:
+			raise ValueError("Google OAuth credentials not found. Please set GOOGLE_OAUTH_CLIENT_ID and GOOGLE_OAUTH_CLIENT_SECRET environment variables.")
+		
+		google_bp = make_google_blueprint(
+			client_id=google_client_id,
+			client_secret=google_client_secret,
+			scope=["profile", "email"],
+			redirect_to="main.home",
+			# Remove custom redirect_url - let Flask-Dance handle it
+		)
+		
+		# Register Google OAuth blueprint
+		app.register_blueprint(google_bp, url_prefix="/login")
 
 	app.register_blueprint(main_bp)
 	app.register_blueprint(auth_bp, url_prefix="/auth")  # Add URL prefix for auth routes
@@ -70,9 +76,6 @@ def create_app() -> Flask:
 	app.register_blueprint(greetings_essential_bp, url_prefix="/begginer/greetings")
 	app.register_blueprint(question_words_bp, url_prefix="/begginer/question-words")
 	app.register_blueprint(base_nouns_bp, url_prefix="/begginer/base_nouns")
-	
-	# Register Google OAuth blueprint
-	app.register_blueprint(google_bp, url_prefix="/login")
 
 	# Make session user available in all templates as `current_user`
 	@app.context_processor

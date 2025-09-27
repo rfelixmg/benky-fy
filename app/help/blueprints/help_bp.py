@@ -61,45 +61,6 @@ class HelpBlueprint:
             except Exception as e:
                 return jsonify({'error': f'Failed to get word info: {str(e)}'}), 500
         
-        @bp.route('/api/test-word-info', methods=['GET'])
-        def test_word_info():
-            """Test endpoint for word information (no authentication required)."""
-            try:
-                # Get parameters
-                module_name = request.args.get('module_name', 'verbs')
-                item_id = request.args.get('item_id', '1')
-                
-                # Get the flashcard engine for the module
-                engine = self._get_flashcard_engine(module_name)
-                if not engine:
-                    return jsonify({'error': f'Module {module_name} not found'}), 404
-                
-                # Get item data
-                try:
-                    item_id = int(item_id)
-                    item_data = engine[item_id - 1]  # Convert from 1-based to 0-based
-                except (ValueError, IndexError):
-                    return jsonify({'error': 'Invalid item_id'}), 400
-                
-                # Extract word information
-                word_info = self.word_info_engine.extract_word_info(
-                    item_data.__dict__ if hasattr(item_data, '__dict__') else item_data,
-                    module_name,
-                    item_id
-                )
-                
-                # Get display information
-                display_info = self.word_info_engine.get_display_info(word_info)
-                
-                return jsonify({
-                    'success': True,
-                    'word_info': word_info.to_dict(),
-                    'display_info': display_info,
-                    'message': 'Test word information retrieved successfully'
-                })
-                
-            except Exception as e:
-                return jsonify({'error': f'Failed to get test word info: {str(e)}'}), 500
         
         return bp
     
