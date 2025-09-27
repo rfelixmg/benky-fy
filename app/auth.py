@@ -17,13 +17,20 @@ def is_test_mode():
 	
 	# Expected hash for test mode (you can change this secret)
 	expected_hash = hashlib.sha256(b'benky-fy-test-mode-2024').hexdigest()
+
 	if test_hash != expected_hash:
 		return False, None
 	
 	try:
-		dummy_context = session.get('test_dummy_context')
+		print(f"DEBUG: Test mode detected!")
+		dummy_context = session.get('test_dummy_context', None)
+		if dummy_context is None:
+			dummy_context = setup_test_context()
 		return True, dummy_context
-	except RuntimeError:
+
+
+	except RuntimeError as exp:
+		print(f"DEBUG: RuntimeError in session, returning False: {exp}")
 		return False, None
 
 
@@ -76,29 +83,32 @@ def login_required(f):
 	"""Decorator to require authentication for a route."""
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
-		# Check if we're in test mode first - now requires both env var AND dummy context
+		# Check if we're in test mode first - only requires environment variable
 		test_mode, dummy_context = is_test_mode()
+		print(f"DEBUG: login_required - test_mode={test_mode}, dummy_context={dummy_context is not None}")
+		print(f"DEBUG: Current session user = {session.get('user')}")
 		
-		if test_mode and dummy_context:
-			# Set test user in session if not already set
+		if test_mode:
+			# Test mode detected - automatically set up test user and context
+			print(f"DEBUG: Test mode detected! Setting up test user automatically.")
 			if 'user' not in session:
 				session['user'] = get_test_user()
 				session.permanent = True
 				session.modified = True
+				print(f"DEBUG: Set test user in session: {session['user']}")
+			# Always set up test context when in test mode
+			setup_test_context()
+			print(f"DEBUG: Set up test context")
 			return f(*args, **kwargs)
-		
-		# If we're in test mode but don't have dummy context, redirect to login
-		if test_mode and not dummy_context:
-			session['next_url'] = request.url
-			flash('Test mode requires dummy context. Please log in.', 'info')
-			return redirect(url_for('auth.login'))
 		
 		# Normal authentication flow - check if user is already authenticated
 		if 'user' in session and session['user'] is not None:
 			# User is authenticated, allow access
+			print(f"DEBUG: User already authenticated: {session['user']}")
 			return f(*args, **kwargs)
 		
 		# User is not authenticated, redirect to login
+		print(f"DEBUG: User not authenticated, redirecting to login")
 		session['next_url'] = request.url
 		flash('Please log in to access this page.', 'info')
 		return redirect(url_for('auth.login'))
@@ -119,7 +129,18 @@ def is_authenticated():
 def login():
 	"""Login route that handles the complete OAuth flow"""
 	
-	# If user is already logged in, redirect to home
+	# Check if we're in test mode first
+	test_mode, dummy_context = is_test_mode()
+	if test_mode:
+		print("DEBUG: Test mode detected in login route! Setting up test user.")
+		if 'user' not in session:
+			session['user'] = get_test_user()
+			session.permanent = True
+			session.modified = True
+		if dummy_context is None:
+			setup_test_context()
+		return redirect(url_for("main.home"))
+	
 	if 'user' in session:
 		return redirect(url_for("main.home"))
 	
@@ -356,6 +377,27 @@ def debug_oauth():
 				debug_info["google_profile"] = response.json()
 		except Exception as e:
 			debug_info["google_error"] = str(e)
+	
+	return debug_info
+
+
+@auth_bp.route("/debug-test-mode")
+def debug_test_mode():
+	"""Debug endpoint to see test mode configuration"""
+	import hashlib
+	
+	test_hash = os.environ.get('BENKY_FY_TEST_HASH')
+	expected_hash = hashlib.sha256(b'benky-fy-test-mode-2024').hexdigest()
+	
+	debug_info = {
+		"test_hash_env_var": test_hash,
+		"expected_hash": expected_hash,
+		"hash_matches": test_hash == expected_hash,
+		"session_test_context": session.get('test_dummy_context'),
+		"session_user": session.get("user"),
+		"session_keys": list(session.keys()),
+		"is_test_mode_result": is_test_mode(),
+	}
 	
 	return debug_info
 
