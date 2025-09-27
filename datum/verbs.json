@@ -90,7 +90,7 @@
       },
       "polite": {
         "kanji": "知っているます",
-        "hiragana": "しっているます"
+        "hiragana": "しっていります"
       },
       "negative": {
         "kanji": "知っていらない",
@@ -586,7 +586,7 @@
       },
       "polite": {
         "kanji": "歩くます",
-        "hiragana": "あるくます"
+        "hiragana": "あるきます"
       },
       "negative": {
         "kanji": "歩かない",
@@ -657,7 +657,7 @@
       },
       "polite": {
         "kanji": "行くます",
-        "hiragana": "いくます"
+        "hiragana": "いきます"
       },
       "negative": {
         "kanji": "行かない",
@@ -729,7 +729,7 @@
       },
       "polite": {
         "kanji": "話すます",
-        "hiragana": "はなすます"
+        "hiragana": "はなします"
       },
       "negative": {
         "kanji": "話さない",
@@ -800,7 +800,7 @@
       },
       "polite": {
         "kanji": "言うます",
-        "hiragana": "いうます"
+        "hiragana": "いいます"
       },
       "negative": {
         "kanji": "言わない",
@@ -943,7 +943,7 @@
       },
       "polite": {
         "kanji": "買うます",
-        "hiragana": "かうます"
+        "hiragana": "かいます"
       },
       "negative": {
         "kanji": "買わない",
@@ -1014,7 +1014,7 @@
       },
       "polite": {
         "kanji": "売るます",
-        "hiragana": "うるます"
+        "hiragana": "うります"
       },
       "negative": {
         "kanji": "売らない",
@@ -1415,7 +1415,7 @@
       },
       "polite": {
         "kanji": "飲むます",
-        "hiragana": "のむます"
+        "hiragana": "のみます"
       },
       "negative": {
         "kanji": "飲まない",
@@ -1488,7 +1488,7 @@
       },
       "polite": {
         "kanji": "聞くます",
-        "hiragana": "きくます"
+        "hiragana": "ききます"
       },
       "negative": {
         "kanji": "聞かない",
@@ -1560,7 +1560,7 @@
       },
       "polite": {
         "kanji": "走るます",
-        "hiragana": "はしるます"
+        "hiragana": "はしります"
       },
       "negative": {
         "kanji": "走らない",
@@ -1631,7 +1631,7 @@
       },
       "polite": {
         "kanji": "乗るます",
-        "hiragana": "のるます"
+        "hiragana": "のります"
       },
       "negative": {
         "kanji": "乗らない",
@@ -1703,7 +1703,7 @@
       },
       "polite": {
         "kanji": "働くます",
-        "hiragana": "はたらくます"
+        "hiragana": "はたらきます"
       },
       "negative": {
         "kanji": "働かない",
@@ -1861,7 +1861,7 @@
       },
       "polite": {
         "kanji": "置くます",
-        "hiragana": "おくます"
+        "hiragana": "おきます"
       },
       "negative": {
         "kanji": "置かない",
@@ -1932,7 +1932,7 @@
       },
       "polite": {
         "kanji": "降るます",
-        "hiragana": "ふるます"
+        "hiragana": "ふります"
       },
       "negative": {
         "kanji": "降らない",
@@ -2004,7 +2004,7 @@
       },
       "polite": {
         "kanji": "歌うます",
-        "hiragana": "うたうます"
+        "hiragana": "うたいます"
       },
       "negative": {
         "kanji": "歌わない",
@@ -2075,7 +2075,7 @@
       },
       "polite": {
         "kanji": "泣くます",
-        "hiragana": "なくます"
+        "hiragana": "なきます"
       },
       "negative": {
         "kanji": "泣かない",
@@ -2145,8 +2145,8 @@
         "hiragana": "とる"
       },
       "polite": {
-        "kanji": "撮るます",
-        "hiragana": "とるます"
+        "kanji": "取るます",
+        "hiragana": "とります"
       },
       "negative": {
         "kanji": "取らない",
@@ -2289,8 +2289,8 @@
         "hiragana": "さけぶ"
       },
       "polite": {
-        "kanji": "さけぶます",
-        "hiragana": "さけぶます"
+        "kanji": "叫ぶます",
+        "hiragana": "さけびます"
       },
       "negative": {
         "kanji": "叫ばない",
@@ -2859,7 +2859,7 @@
       },
       "polite": {
         "kanji": "支払うます",
-        "hiragana": "しはらうます"
+        "hiragana": "しはらいます"
       },
       "negative": {
         "kanji": "支払わない",
@@ -2931,7 +2931,7 @@
       },
       "polite": {
         "kanji": "切るます",
-        "hiragana": "きるます"
+        "hiragana": "きります"
       },
       "negative": {
         "kanji": "切らない",
@@ -3172,7 +3172,7 @@
       },
       "polite": {
         "kanji": "会うます",
-        "hiragana": "あうます"
+        "hiragana": "あいます"
       },
       "negative": {
         "kanji": "会わない",
@@ -3244,7 +3244,7 @@
       },
       "polite": {
         "kanji": "書くます",
-        "hiragana": "かくます"
+        "hiragana": "かきます"
       },
       "negative": {
         "kanji": "書かない",
@@ -3317,7 +3317,7 @@
       },
       "polite": {
         "kanji": "撮るます",
-        "hiragana": "とるます"
+        "hiragana": "とります"
       },
       "negative": {
         "kanji": "撮らない",
@@ -3394,7 +3394,7 @@
       },
       "polite": {
         "kanji": "待つます",
-        "hiragana": "まつます"
+        "hiragana": "まちます"
       },
       "negative": {
         "kanji": "待たない",
@@ -3465,7 +3465,7 @@
       },
       "polite": {
         "kanji": "分かるます",
-        "hiragana": "わかるます"
+        "hiragana": "わかります"
       },
       "negative": {
         "kanji": "分からない",
