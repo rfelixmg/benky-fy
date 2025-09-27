@@ -13,7 +13,7 @@ export class InputManager {
     /**
      * Create input fields based on input modes
      */
-    createInputFields(inputModes) {
+    createInputFields(inputModes, currentMode = 'flashcard') {
         if (!this.container) {
             console.warn('Input container not found');
             return;
@@ -22,12 +22,53 @@ export class InputManager {
         // Clear existing input fields
         this.clearInputFields();
 
-        // Create new input fields
+        // Create table structure for consistent styling
+        const table = document.createElement('table');
+        table.className = 'input-table';
+        
+        // Create table header
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        
+        const requestHeaderCell = document.createElement('th');
+        requestHeaderCell.textContent = 'Request';
+        headerRow.appendChild(requestHeaderCell);
+        
+        const inputHeaderCell = document.createElement('th');
+        inputHeaderCell.textContent = 'Input';
+        headerRow.appendChild(inputHeaderCell);
+        
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        
+        // Create table body
+        const tbody = document.createElement('tbody');
+        
+        // Create input fields for each mode
         inputModes.forEach((mode, index) => {
-            const inputGroup = this._createInputGroup(mode, index);
-            this.container.appendChild(inputGroup);
+            const row = document.createElement('tr');
+            row.className = 'input-form-row';
+            
+            // Add request label cell
+            const requestCell = document.createElement('td');
+            requestCell.className = 'input-request-cell';
+            requestCell.textContent = this._getInputModeDisplayName(mode);
+            row.appendChild(requestCell);
+            
+            // Add input cell
+            const inputCell = document.createElement('td');
+            inputCell.className = 'input-field-cell';
+            
+            const inputGroup = this._createInputGroup(mode, index, currentMode);
+            inputCell.appendChild(inputGroup);
+            row.appendChild(inputCell);
+            
+            tbody.appendChild(row);
             this.inputFields.set(mode, inputGroup);
         });
+        
+        table.appendChild(tbody);
+        this.container.appendChild(table);
 
         // Initialize event listeners
         this._initializeEventListeners();
@@ -37,9 +78,11 @@ export class InputManager {
      * Clear all input fields
      */
     clearInputFields() {
-        this.inputFields.forEach((group, mode) => {
-            group.remove();
-        });
+        // Remove the entire table if it exists
+        const existingTable = this.container.querySelector('.input-table');
+        if (existingTable) {
+            existingTable.remove();
+        }
         this.inputFields.clear();
     }
 
@@ -93,16 +136,27 @@ export class InputManager {
     }
 
     /**
+     * Get display name for input mode
+     */
+    _getInputModeDisplayName(inputMode) {
+        const modeNames = {
+            'hiragana': 'Hiragana',
+            'kanji': 'Kanji',
+            'romaji': 'Romaji',
+            'katakana': 'Katakana',
+            'english': 'English'
+        };
+        return modeNames[inputMode] || inputMode;
+    }
+
+    /**
      * Create input group for specific mode
      */
-    _createInputGroup(mode, index) {
+    _createInputGroup(mode, index, currentMode = 'flashcard') {
         const inputGroup = document.createElement('div');
         inputGroup.className = 'input-group';
 
-        const label = this._createLabel(mode);
-        const input = this._createInput(mode, index);
-
-        inputGroup.appendChild(label);
+        const input = this._createInput(mode, index, currentMode);
         inputGroup.appendChild(input);
 
         return inputGroup;
@@ -135,7 +189,7 @@ export class InputManager {
     /**
      * Create input field for mode
      */
-    _createInput(mode, index) {
+    _createInput(mode, index, currentMode = 'flashcard') {
         const input = document.createElement('input');
         input.type = 'text';
         input.id = `user_${mode}`;
@@ -155,6 +209,12 @@ export class InputManager {
                 break;
             default:
                 input.placeholder = `Type ${mode}...`;
+        }
+
+        // Disable flashcard inputs when in conjugation mode
+        if (currentMode === 'conjugation') {
+            input.disabled = true;
+            input.classList.add('disabled-input');
         }
 
         if (index === 0) {

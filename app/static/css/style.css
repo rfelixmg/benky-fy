@@ -2602,6 +2602,32 @@ body {
 	.weight-slider {
 		width: 100%;
 	}
+	
+	/* Top Settings Row Responsive */
+	.top-settings-row {
+		flex-direction: column;
+		gap: 1rem;
+	}
+	
+	/* Practice Mode Toggle Responsive */
+	.practice-mode-options {
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+	
+	.practice-mode-options .radio-option {
+		padding: 0.75rem;
+	}
+	
+	/* Prompt Style Options Responsive */
+	.prompt-style-options {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	
+	.prompt-style-options .radio-option {
+		padding: 0.75rem;
+	}
 }
 
 .check-button {
@@ -2939,6 +2965,99 @@ body {
     margin-right: 0.5rem;
 }
 
+/* Practice Mode Toggle - Top Level in Settings */
+.practice-mode-toggle {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 12px;
+    border: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+/* Conjugation Prompt Style within Conjugation Section */
+.conjugation-prompt-style-group h4 {
+    margin: 1rem 0 0.75rem 0;
+    color: #667eea;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.prompt-style-options {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    justify-content: flex-start;
+}
+
+.prompt-style-options .radio-option {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    border: 2px solid rgba(118, 75, 162, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: white;
+}
+
+.prompt-style-options .radio-option:hover {
+    border-color: rgba(118, 75, 162, 0.6);
+    background: rgba(118, 75, 162, 0.1);
+}
+
+.prompt-style-options .radio-option input[type="radio"]:checked + span {
+    color: #764ba2;
+    font-weight: 600;
+}
+
+.prompt-style-options .radio-option:has(input[type="radio"]:checked) {
+    border-color: #764ba2;
+    background: rgba(118, 75, 162, 0.1);
+}
+
+.prompt-style-options .radio-option span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.practice-mode-options {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.practice-mode-options .radio-option {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: white;
+}
+
+.practice-mode-options .radio-option:hover {
+    border-color: rgba(102, 126, 234, 0.6);
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.practice-mode-options .radio-option input[type="radio"]:checked + span {
+    color: #667eea;
+    font-weight: 600;
+}
+
+.practice-mode-options .radio-option:has(input[type="radio"]:checked) {
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.practice-mode-options .radio-option span {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
 /* Practice Mode Indicator */
 .practice-mode-indicator {
     position: absolute;
@@ -2966,6 +3085,95 @@ body {
     margin: 1rem 0 0.5rem 0;
     font-size: 1rem;
     font-weight: 600;
+}
+
+/* Input Table Styles - Consistent across all modules */
+.input-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.input-table thead {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.input-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.input-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
+}
+
+.input-request-cell {
+    font-weight: 500;
+    color: #2d3748;
+    background: rgba(102, 126, 234, 0.05);
+    min-width: 150px;
+}
+
+.input-field-cell {
+    padding: 0.5rem;
+}
+
+.input-field-cell .answer-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.input-field-cell .answer-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: white;
+}
+
+.input-field-cell .answer-input::placeholder {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.input-form-row:hover {
+    background: rgba(102, 126, 234, 0.02);
+}
+
+.input-form-row:last-child td {
+    border-bottom: none;
+}
+
+/* Disabled input styles */
+.disabled-input {
+    background-color: #f5f5f5 !important;
+    color: #999 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+}
+
+.disabled-input::placeholder {
+    color: #ccc !important;
+}
+
+.conjugation-input.disabled-input {
+    background-color: #f5f5f5 !important;
+    color: #999 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
 }
 
 /* Conjugation Input Table Styles */

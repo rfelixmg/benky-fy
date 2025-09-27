@@ -106,14 +106,14 @@ export class FlashcardComponent {
      */
     async _loadInitialContent() {
         try {
-            // Load settings into UI
-            this._applySettingsToUI();
-
-            // Determine current mode
+            // Determine current mode first
             const settings = this.settingsManager.getAllSettings();
             console.log('Initial settings loaded:', settings);
             this.currentMode = settings.practiceMode || 'flashcard';
             console.log('Initial mode set to:', this.currentMode);
+
+            // Load settings into UI with correct mode
+            this._applySettingsToUI();
 
             // Load content based on mode
             if (this.currentMode === 'conjugation') {
@@ -259,6 +259,12 @@ export class FlashcardComponent {
                 input.autocorrect = 'off';
                 input.autocapitalize = 'off';
                 input.spellcheck = false;
+                
+                // Disable conjugation inputs when in flashcard mode
+                if (this.currentMode === 'flashcard') {
+                    input.disabled = true;
+                    input.classList.add('disabled-input');
+                }
                 
                 // Set focus on first input of first form
                 if (formIndex === 0 && modeIndex === 0) {
@@ -455,8 +461,13 @@ export class FlashcardComponent {
     _applySettingsToUI() {
         const settings = this.settingsManager.getAllSettings();
         
-        // Update input fields
-        this.inputManager.createInputFields(settings.inputModes);
+        // Only create flashcard input fields when in flashcard mode
+        if (this.currentMode === 'flashcard') {
+            this.inputManager.createInputFields(settings.inputModes, this.currentMode);
+        } else {
+            // Clear flashcard inputs when in conjugation mode
+            this.inputManager.clearInputFields();
+        }
         
         // Update display
         this._updateDisplay();
@@ -481,6 +492,9 @@ export class FlashcardComponent {
             if (this.helpModal && response) {
                 this.helpModal.updateItem(response);
             }
+
+            // Create flashcard input fields
+            this.inputManager.createInputFields(settings.inputModes, 'flashcard');
 
             // Hide practice mode indicator for regular flashcards
             this._updatePracticeModeIndicator('flashcard');
@@ -528,9 +542,16 @@ export class FlashcardComponent {
         
         if (newMode !== this.currentMode) {
             console.log('Mode changed from', this.currentMode, 'to', newMode);
+            
+            // Clear all existing inputs first
+            this.inputManager.clearInputFields();
+            
+            // Update current mode
             this.currentMode = newMode;
+            
             // Update header title immediately
             this._updateHeaderTitle(newMode);
+            
             // Reload content with new mode
             this._loadInitialContent();
         } else {
@@ -703,14 +724,14 @@ export class FlashcardComponent {
             headerText = '❌ Incorrect answers.';
         }
 
-        // Build table HTML
+        // Build table HTML with consistent format: Input | Expected | Result
         let tableHTML = `
             <div class="feedback-header">${headerText}</div>
             <table class="feedback-table">
                 <thead>
                     <tr>
                         <th>Input</th>
-                        <th>Target</th>
+                        <th>Expected</th>
                         <th>Result</th>
                     </tr>
                 </thead>
@@ -805,38 +826,43 @@ export class FlashcardComponent {
             headerText = '❌ Incorrect conjugations.';
         }
         
-        let feedbackHTML = `
+        // Build table HTML with consistent format: Input | Expected | Result
+        let tableHTML = `
             <div class="feedback-header">${headerText}</div>
-            <div class="conjugation-feedback">
+            <table class="feedback-table">
+                <thead>
+                    <tr>
+                        <th>Input</th>
+                        <th>Expected</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
         `;
         
-        // Add results for each conjugation form
+        // Add results for each conjugation form in the same order as requested
         results.forEach(result => {
             const isCorrect = result.result.is_correct;
             const statusIcon = isCorrect ? '✅' : '❌';
+            const statusText = isCorrect ? 'Correct' : 'Incorrect';
             const modeDisplay = result.mode ? ` (${result.mode})` : '';
             
-            feedbackHTML += `
-                <div class="conjugation-result-item">
-                    <div class="conjugation-result-header">
-                        <span class="conjugation-form-name">${result.formName}${modeDisplay}</span>
-                        <span class="conjugation-status">${statusIcon}</span>
-                    </div>
-                    <div class="conjugation-result-details">
-                        <div class="conjugation-detail">
-                            <strong>Your answer:</strong> ${result.userInput || 'No answer provided'}
-                        </div>
-                        <div class="conjugation-detail">
-                            <strong>Correct answer:</strong> ${result.result.correct_answer || 'N/A'}
-                        </div>
-                        ${result.result.feedback ? `<div class="conjugation-detail"><strong>Note:</strong> ${result.result.feedback}</div>` : ''}
-                    </div>
-                </div>
+            tableHTML += `
+                <tr>
+                    <td>${result.formName}${modeDisplay}</td>
+                    <td>${result.result.correct_answer || 'N/A'}</td>
+                    <td>${statusIcon} ${statusText}</td>
+                </tr>
             `;
         });
         
-        feedbackHTML += `
-            </div>
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+
+        // Add skip button to feedback
+        tableHTML += `
             <div class="feedback-actions">
                 <button type="button" class="skip-button" id="skipFeedbackBtn">Next Card →</button>
                 <div class="skip-hint">Press Enter or click to continue</div>
@@ -844,7 +870,7 @@ export class FlashcardComponent {
         `;
 
         // Update feedback element
-        feedbackElement.innerHTML = feedbackHTML;
+        feedbackElement.innerHTML = tableHTML;
         feedbackElement.className = `feedback-message ${feedbackClass}`;
         feedbackElement.style.display = 'block';
 
