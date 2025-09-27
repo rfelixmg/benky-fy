@@ -135,7 +135,7 @@ def create_conjugation_blueprint():
                 # Handle FlashcardItem object
                 if hasattr(item, 'index'):
                     item_data = {
-                        'id': item.index,
+                        'id': item.index + 1,  # Convert to 1-based ID for consistency
                         'kanji': item.kanji,
                         'hiragana': item.hiragana,
                         'english': item.english,
@@ -155,7 +155,7 @@ def create_conjugation_blueprint():
                 # Handle FlashcardItem object
                 if hasattr(item, 'index'):
                     item_data = {
-                        'id': item.index,
+                        'id': item.index + 1,  # Convert to 1-based ID for consistency
                         'kanji': item.kanji,
                         'hiragana': item.hiragana,
                         'english': item.english,
