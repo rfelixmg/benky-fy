@@ -6,6 +6,7 @@ from ..engines.adjective import AdjectiveFlashcardEngine
 from ..engines.vocab import VocabFlashcardEngine
 from ..engines.katakana import KatakanaFlashcardEngine
 from ..blueprints.flashcard_bp import FlashcardBlueprint
+from ..blueprints.custom_practice_bp import CustomPracticeBlueprint
 
 
 def create_flashcard_module(module_name: str, csv_filename: str):
@@ -40,4 +41,10 @@ def create_katakana_flashcard_module(module_name: str, json_filename: str):
     """Factory function to create a katakana flashcard module with katakana-specific logic"""
     engine = KatakanaFlashcardEngine(json_filename, module_name)
     blueprint_creator = FlashcardBlueprint(module_name, engine)
+    return blueprint_creator.blueprint
+
+
+def create_custom_practice_module():
+    """Factory function to create a custom practice module"""
+    blueprint_creator = CustomPracticeBlueprint()
     return blueprint_creator.blueprint

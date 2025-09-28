@@ -1,0 +1,257 @@
+{% extends "base/base.html" %}
+
+{% block title %}Custom Practice - Module Selection{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>Custom Practice - Select Modules
+                    </h2>
+                    <p class="text-muted mb-0">Choose completed modules to practice words from multiple sources</p>
+                </div>
+                <div class="card-body">
+                    <form id="module-selection-form">
+                        <div class="mb-4">
+                            <h4>Available Modules</h4>
+                            <p class="text-muted">Select one or more completed modules to include in your custom practice session.</p>
+                            
+                            <div class="row" id="module-list">
+                                <!-- Modules will be loaded dynamically -->
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h4>Practice Settings</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="multi-word-count" class="form-label">Words per display:</label>
+                                    <select class="form-select" id="multi-word-count">
+                                        <option value="1">1 word</option>
+                                        <option value="2" selected>2 words</option>
+                                        <option value="3">3 words</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Selected modules:</label>
+                                    <div id="selected-modules-summary" class="text-muted">
+                                        No modules selected
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('main.modules') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Modules
+                            </a>
+                            <button type="submit" id="start-practice-btn" class="btn btn-primary" disabled>
+                                <i class="fas fa-play me-2"></i>Start Practice Session
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Modal -->
+<div class="modal fade" id="loading-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h5>Creating Practice Session...</h5>
+                <p class="text-muted">Please wait while we prepare your custom practice session.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const moduleList = document.getElementById('module-list');
+    const selectedModulesSummary = document.getElementById('selected-modules-summary');
+    const startPracticeBtn = document.getElementById('start-practice-btn');
+    const form = document.getElementById('module-selection-form');
+    const loadingModal = new bootstrap.Modal(document.getElementById('loading-modal'));
+    
+    let selectedModules = [];
+    
+    // Load available modules
+    async function loadModules() {
+        try {
+            const response = await fetch('/custom-practice/api/modules');
+            const data = await response.json();
+            
+            if (data.modules) {
+                renderModules(data.modules);
+            }
+        } catch (error) {
+            console.error('Error loading modules:', error);
+            showAlert('Error loading modules. Please try again.', 'danger');
+        }
+    }
+    
+    // Render modules in the UI
+    function renderModules(modules) {
+        moduleList.innerHTML = '';
+        
+        modules.forEach(module => {
+            const moduleCard = document.createElement('div');
+            moduleCard.className = 'col-md-6 col-lg-4 mb-3';
+            moduleCard.innerHTML = `
+                <div class="card module-card h-100" data-module-id="${module.id}">
+                    <div class="card-body">
+                        <div class="form-check">
+                            <input class="form-check-input module-checkbox" type="checkbox" 
+                                   value="${module.id}" id="module-${module.id}">
+                            <label class="form-check-label w-100" for="module-${module.id}">
+                                <h6 class="card-title mb-1">${module.name}</h6>
+                                <p class="card-text text-muted small mb-1">
+                                    ${module.word_count} words
+                                </p>
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>Completed
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            moduleList.appendChild(moduleCard);
+        });
+        
+        // Add event listeners to checkboxes
+        document.querySelectorAll('.module-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateSelectedModules);
+        });
+    }
+    
+    // Update selected modules
+    function updateSelectedModules() {
+        selectedModules = Array.from(document.querySelectorAll('.module-checkbox:checked'))
+            .map(checkbox => checkbox.value);
+        
+        // Update summary
+        if (selectedModules.length === 0) {
+            selectedModulesSummary.textContent = 'No modules selected';
+            selectedModulesSummary.className = 'text-muted';
+        } else {
+            const moduleNames = selectedModules.map(id => {
+                const card = document.querySelector(`[data-module-id="${id}"]`);
+                return card ? card.querySelector('.card-title').textContent : id;
+            });
+            selectedModulesSummary.textContent = `${selectedModules.length} module(s): ${moduleNames.join(', ')}`;
+            selectedModulesSummary.className = 'text-success fw-bold';
+        }
+        
+        // Enable/disable start button
+        startPracticeBtn.disabled = selectedModules.length === 0;
+    }
+    
+    // Handle form submission
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (selectedModules.length === 0) {
+            showAlert('Please select at least one module to practice.', 'warning');
+            return;
+        }
+        
+        const multiWordCount = parseInt(document.getElementById('multi-word-count').value);
+        
+        // Show loading modal
+        loadingModal.show();
+        
+        try {
+            const response = await fetch('/custom-practice/session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    selected_modules: selectedModules,
+                    multi_word_count: multiWordCount
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Redirect to practice page
+                window.location.href = '/custom-practice/practice';
+            } else {
+                throw new Error(data.error || 'Failed to create practice session');
+            }
+        } catch (error) {
+            console.error('Error creating session:', error);
+            loadingModal.hide();
+            showAlert('Error creating practice session. Please try again.', 'danger');
+        }
+    });
+    
+    // Utility function to show alerts
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const container = document.querySelector('.card-body');
+        container.insertBefore(alertDiv, container.firstChild);
+        
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+    
+    // Load modules on page load
+    loadModules();
+});
+</script>
+
+<style>
+.module-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.module-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.module-card.selected {
+    border-color: #0d6efd;
+    background-color: #f8f9ff;
+}
+
+.form-check-input:checked + .form-check-label .card {
+    border-color: #0d6efd;
+    background-color: #f8f9ff;
+}
+
+#selected-modules-summary {
+    min-height: 1.5rem;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    background-color: #f8f9fa;
+}
+</style>
+{% endblock %}

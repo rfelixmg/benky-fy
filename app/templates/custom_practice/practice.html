@@ -1,0 +1,463 @@
+{% extends "base/base.html" %}
+
+{% block title %}Custom Practice Session{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <!-- Progress Bar -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="mb-0">Session Progress</h5>
+                        <span class="badge bg-primary" id="progress-text">0 / 0 words</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Multi-Word Display -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="fas fa-language me-2"></i>Custom Practice
+                        </h4>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#settings-modal">
+                                <i class="fas fa-cog me-1"></i>Settings
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" id="reset-session-btn">
+                                <i class="fas fa-redo me-1"></i>Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="words-container">
+                        <!-- Words will be loaded dynamically -->
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="button" class="btn btn-success btn-lg" id="check-answers-btn" disabled>
+                            <i class="fas fa-check me-2"></i>Check Answers
+                        </button>
+                        <button type="button" class="btn btn-primary btn-lg ms-2" id="next-words-btn" style="display: none;">
+                            <i class="fas fa-forward me-2"></i>Next Words
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Results Display -->
+            <div id="results-container" class="mt-4" style="display: none;">
+                <!-- Results will be shown here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal fade" id="settings-modal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-cog me-2"></i>Custom Practice Settings
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="settings-form">
+                    {% for group in settings_groups %}
+                    <div class="mb-4">
+                        <h6 class="text-primary">{{ group.name }}</h6>
+                        <p class="text-muted small">{{ group.description }}</p>
+                        
+                        {% for setting in group.settings %}
+                        <div class="mb-3">
+                            {% if setting.type == 'radio' %}
+                                <label class="form-label">{{ setting.name }}</label>
+                                {% for value, label in setting.options.items() %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="{{ setting.key }}" 
+                                           value="{{ value }}" id="{{ setting.key }}_{{ value }}"
+                                           {% if settings.get(setting.key) == value %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ setting.key }}_{{ value }}">
+                                        {{ label }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            {% elif setting.type == 'checkbox' %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="{{ setting.key }}" 
+                                           value="true" id="{{ setting.key }}"
+                                           {% if settings.get(setting.key) %}checked{% endif %}>
+                                    <label class="form-check-label" for="{{ setting.key }}">
+                                        {{ setting.name }}
+                                    </label>
+                                </div>
+                            {% elif setting.type == 'select' %}
+                                <label for="{{ setting.key }}" class="form-label">{{ setting.name }}</label>
+                                <select class="form-select" name="{{ setting.key }}" id="{{ setting.key }}">
+                                    {% for value, label in setting.options.items() %}
+                                    <option value="{{ value }}" {% if settings.get(setting.key) == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Session Complete Modal -->
+<div class="modal fade" id="session-complete-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-trophy me-2 text-warning"></i>Session Complete!
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-check-circle text-success" style="font-size: 3rem;"></i>
+                </div>
+                <h4>Great job!</h4>
+                <p class="text-muted">You've completed your custom practice session.</p>
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="border rounded p-3">
+                            <h5 class="text-primary mb-1" id="session-total-words">0</h5>
+                            <small class="text-muted">Words Practiced</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border rounded p-3">
+                            <h5 class="text-success mb-1" id="session-correct-answers">0</h5>
+                            <small class="text-muted">Correct Answers</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="border rounded p-3">
+                            <h5 class="text-info mb-1" id="session-accuracy">0%</h5>
+                            <small class="text-muted">Accuracy</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/custom-practice/'">
+                    <i class="fas fa-plus me-2"></i>New Session
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.location.href='/modules'">
+                    <i class="fas fa-home me-2"></i>Back to Modules
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const wordsContainer = document.getElementById('words-container');
+    const checkAnswersBtn = document.getElementById('check-answers-btn');
+    const nextWordsBtn = document.getElementById('next-words-btn');
+    const resultsContainer = document.getElementById('results-container');
+    const progressText = document.getElementById('progress-text');
+    const progressBar = document.getElementById('progress-bar');
+    const resetSessionBtn = document.getElementById('reset-session-btn');
+    const saveSettingsBtn = document.getElementById('save-settings-btn');
+    
+    let currentWords = [];
+    let sessionStats = {
+        totalWords: 0,
+        correctAnswers: 0,
+        totalAnswers: 0
+    };
+    
+    // Load initial words
+    loadNextWords();
+    
+    // Event listeners
+    checkAnswersBtn.addEventListener('click', checkAnswers);
+    nextWordsBtn.addEventListener('click', loadNextWords);
+    resetSessionBtn.addEventListener('click', resetSession);
+    saveSettingsBtn.addEventListener('click', saveSettings);
+    
+    // Load next set of words
+    async function loadNextWords() {
+        try {
+            const response = await fetch('/custom-practice/api/next');
+            const data = await response.json();
+            
+            if (data.words && data.words.length > 0) {
+                currentWords = data.words;
+                renderWords(data.words);
+                updateProgress(data.session_progress);
+                
+                checkAnswersBtn.disabled = false;
+                nextWordsBtn.style.display = 'none';
+                resultsContainer.style.display = 'none';
+            } else {
+                // No more words, show completion modal
+                showSessionComplete();
+            }
+        } catch (error) {
+            console.error('Error loading words:', error);
+            showAlert('Error loading words. Please try again.', 'danger');
+        }
+    }
+    
+    // Render words in the UI
+    function renderWords(words) {
+        wordsContainer.innerHTML = '';
+        
+        words.forEach((word, index) => {
+            const wordCard = document.createElement('div');
+            wordCard.className = 'col-md-6 mb-3';
+            wordCard.innerHTML = `
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">${word.prompt}</h5>
+                            <span class="badge bg-secondary">${word.source_module}</span>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control answer-input" 
+                                   data-word-index="${word.index}" 
+                                   placeholder="Enter your answer...">
+                        </div>
+                        <div class="answer-feedback" style="display: none;">
+                            <!-- Feedback will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            wordsContainer.appendChild(wordCard);
+        });
+        
+        // Focus on first input
+        const firstInput = wordsContainer.querySelector('.answer-input');
+        if (firstInput) {
+            firstInput.focus();
+        }
+        
+        // Add enter key support
+        wordsContainer.querySelectorAll('.answer-input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAnswers();
+                }
+            });
+        });
+    }
+    
+    // Check answers
+    async function checkAnswers() {
+        const answers = Array.from(wordsContainer.querySelectorAll('.answer-input'))
+            .map(input => ({
+                word_index: parseInt(input.dataset.wordIndex),
+                answer: input.value.trim()
+            }));
+        
+        if (answers.some(answer => !answer.answer)) {
+            showAlert('Please answer all questions before checking.', 'warning');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/custom-practice/api/answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ answers })
+            });
+            
+            const data = await response.json();
+            
+            if (data.results) {
+                showResults(data.results);
+                updateSessionStats(data.results);
+                
+                checkAnswersBtn.disabled = true;
+                nextWordsBtn.style.display = 'inline-block';
+            }
+        } catch (error) {
+            console.error('Error checking answers:', error);
+            showAlert('Error checking answers. Please try again.', 'danger');
+        }
+    }
+    
+    // Show results
+    function showResults(results) {
+        resultsContainer.innerHTML = '';
+        
+        results.forEach((result, index) => {
+            const resultCard = document.createElement('div');
+            resultCard.className = `alert ${result.correct ? 'alert-success' : 'alert-danger'}`;
+            resultCard.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas ${result.correct ? 'fa-check-circle' : 'fa-times-circle'} me-3"></i>
+                    <div class="flex-grow-1">
+                        <strong>${result.prompt}</strong><br>
+                        <small>
+                            Your answer: <strong>${result.user_answer}</strong><br>
+                            Correct answer: <strong>${result.correct_answer}</strong><br>
+                            Source: ${result.source_module}
+                        </small>
+                    </div>
+                </div>
+            `;
+            
+            resultsContainer.appendChild(resultCard);
+        });
+        
+        resultsContainer.style.display = 'block';
+    }
+    
+    // Update session statistics
+    function updateSessionStats(results) {
+        results.forEach(result => {
+            sessionStats.totalAnswers++;
+            if (result.correct) {
+                sessionStats.correctAnswers++;
+            }
+        });
+        sessionStats.totalWords += results.length;
+    }
+    
+    // Update progress
+    function updateProgress(progress) {
+        progressText.textContent = `${progress.practiced_words} / ${progress.total_words} words`;
+        progressBar.style.width = `${progress.progress_percentage}%`;
+        progressBar.setAttribute('aria-valuenow', progress.progress_percentage);
+    }
+    
+    // Reset session
+    async function resetSession() {
+        if (confirm('Are you sure you want to reset this session? All progress will be lost.')) {
+            try {
+                const response = await fetch('/custom-practice/reset', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    sessionStats = { totalWords: 0, correctAnswers: 0, totalAnswers: 0 };
+                    loadNextWords();
+                }
+            } catch (error) {
+                console.error('Error resetting session:', error);
+                showAlert('Error resetting session. Please try again.', 'danger');
+            }
+        }
+    }
+    
+    // Save settings
+    async function saveSettings() {
+        const formData = new FormData(document.getElementById('settings-form'));
+        
+        try {
+            const response = await fetch('/custom-practice/settings', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (response.ok) {
+                showAlert('Settings saved successfully!', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('settings-modal')).hide();
+            }
+        } catch (error) {
+            console.error('Error saving settings:', error);
+            showAlert('Error saving settings. Please try again.', 'danger');
+        }
+    }
+    
+    // Show session complete modal
+    function showSessionComplete() {
+        const accuracy = sessionStats.totalAnswers > 0 ? 
+            Math.round((sessionStats.correctAnswers / sessionStats.totalAnswers) * 100) : 0;
+        
+        document.getElementById('session-total-words').textContent = sessionStats.totalWords;
+        document.getElementById('session-correct-answers').textContent = sessionStats.correctAnswers;
+        document.getElementById('session-accuracy').textContent = accuracy + '%';
+        
+        const modal = new bootstrap.Modal(document.getElementById('session-complete-modal'));
+        modal.show();
+    }
+    
+    // Utility function to show alerts
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const container = document.querySelector('.container');
+        container.insertBefore(alertDiv, container.firstChild);
+        
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+});
+</script>
+
+<style>
+.answer-input {
+    font-size: 1.1rem;
+    padding: 0.75rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+.progress {
+    height: 1rem;
+}
+
+#words-container .card {
+    transition: transform 0.2s;
+}
+
+#words-container .card:hover {
+    transform: translateY(-2px);
+}
+
+.alert {
+    border-radius: 0.5rem;
+}
+
+.modal-content {
+    border-radius: 0.75rem;
+}
+</style>
+{% endblock %}

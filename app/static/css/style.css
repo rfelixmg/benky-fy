@@ -3394,3 +3394,53 @@ body {
 	50% { transform: scale(1.1); }
 	100% { transform: scale(1); }
 }
+
+
+/* Custom Practice Module Styles */
+.module-card--special {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+	border: 2px solid #5a67d8;
+	position: relative;
+	overflow: hidden;
+}
+
+.module-card--special::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+	pointer-events: none;
+}
+
+.module-card--special .module-card__title {
+	color: white;
+	font-weight: bold;
+}
+
+.module-card--special p {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.module-btn--special {
+	background: rgba(255, 255, 255, 0.2);
+	color: white;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	font-weight: bold;
+	transition: all 0.3s ease;
+}
+
+.module-btn--special:hover {
+	background: rgba(255, 255, 255, 0.3);
+	color: white;
+	border-color: rgba(255, 255, 255, 0.5);
+	transform: translateY(-2px);
+}
+
+.module-card--special:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}

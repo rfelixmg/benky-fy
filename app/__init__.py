@@ -26,7 +26,7 @@ def create_app() -> Flask:
 	app.register_blueprint(conjugation_bp, url_prefix="/conjugation")
 
 	# Import and create flashcard modules
-	from .flashcard import create_vocab_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module, create_katakana_flashcard_module
+	from .flashcard import create_vocab_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module, create_katakana_flashcard_module, create_custom_practice_module
 	
 	# Create flashcard modules (only for existing data files)
 	hiragana_bp = create_vocab_flashcard_module("hiragana", "./datum/hiragana.json")
@@ -44,6 +44,9 @@ def create_app() -> Flask:
 	question_words_bp = create_vocab_flashcard_module("question_words", "./datum/question_words.json")
 	base_nouns_bp = create_vocab_flashcard_module("base_nouns", "./datum/base_nouns.json")
 	katakana_words_bp = create_katakana_flashcard_module("katakana_words", "./datum/katakana_words.json")
+	
+	# Create custom practice module
+	custom_practice_bp = create_custom_practice_module()
 
 	# Google OAuth with Flask-Dance (only if not in test mode)
 	from app.auth import is_test_mode
@@ -85,6 +88,9 @@ def create_app() -> Flask:
 	app.register_blueprint(question_words_bp, url_prefix="/begginer/question-words")
 	app.register_blueprint(base_nouns_bp, url_prefix="/begginer/base_nouns")
 	app.register_blueprint(katakana_words_bp, url_prefix="/begginer/katakana-words")
+	
+	# Register custom practice module
+	app.register_blueprint(custom_practice_bp, url_prefix="/custom-practice")
 
 	# Make session user available in all templates as `current_user`
 	@app.context_processor

@@ -10,7 +10,11 @@ settings_registry = SettingsRegistry()
 
 def get_module_settings_config(module_name: str) -> List[str]:
     """Get settings configuration for a module"""
-    # For now, return all available settings
+    # Custom practice excludes conjugation settings
+    if module_name == "custom_practice":
+        return ["core", "furigana", "vocabulary"]
+    
+    # For all other modules, return all available settings
     return ["core", "furigana", "conjugation", "vocabulary"]
 
 
