@@ -13,6 +13,7 @@ auth_bp = Blueprint("auth", __name__)
 def is_test_mode(force_prod_mode=False):
 	"""Check if we're in test mode based on environment variable and dummy context."""
 	if force_prod_mode:
+		
 		logger.debug("Force production mode - bypassing test mode")
 		return False, None
 	
