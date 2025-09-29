@@ -56,8 +56,8 @@ export default function ModulesPage() {
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-white">Learning Modules</h1>
-            <p className="text-white/80">Choose a module to start learning</p>
+            <h1 className="text-3xl font-bold text-primary-foreground">Learning Modules</h1>
+            <p className="text-primary-foreground/80">Choose a module to start learning</p>
           </div>
           
           {authData?.user && (
@@ -77,29 +77,29 @@ export default function ModulesPage() {
                     href={`/flashcards/${module.id}`}
                     className="group"
                   >
-                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+                    <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 hover:bg-background/20 transition-all duration-300 transform hover:scale-105">
                       <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${module.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                        <IconComponent className="w-6 h-6 text-white" />
+                        <IconComponent className="w-6 h-6 text-primary-foreground" />
                       </div>
                       
-                      <h3 className="text-xl font-semibold text-white mb-2">
+                      <h3 className="text-xl font-semibold text-primary-foreground mb-2">
                         {module.name}
                       </h3>
                       
-                      <p className="text-white/80 text-sm mb-4">
+                      <p className="text-primary-foreground/80 text-sm mb-4">
                         {module.description}
                       </p>
                       
                       <div className="flex justify-between items-center mb-4">
-                        <span className="text-xs bg-white/20 text-white px-2 py-1 rounded-full">
+                        <span className="text-xs bg-primary-foreground/20 text-primary-foreground px-2 py-1 rounded-full">
                           {module.difficulty}
                         </span>
-                        <span className="text-xs text-white/60">
+                        <span className="text-xs text-primary-foreground/60">
                           {module.cards} cards
                         </span>
                       </div>
                       
-                      <div className="flex items-center text-white/60 text-sm group-hover:text-white transition-colors">
+                      <div className="flex items-center text-primary-foreground/60 text-sm group-hover:text-primary-foreground transition-colors">
                         Start Learning
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -111,21 +111,21 @@ export default function ModulesPage() {
             
             {/* Additional Info */}
             <div className="mt-12 text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
-                <h3 className="text-xl font-semibold text-white mb-4">
+              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
+                <h3 className="text-xl font-semibold text-primary-foreground mb-4">
                   How it works
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-white/80">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-primary-foreground/80">
                   <div>
-                    <div className="font-medium text-white mb-2">1. Choose a Module</div>
+                    <div className="font-medium text-primary-foreground mb-2">1. Choose a Module</div>
                     <p>Select from Hiragana, Katakana, Verbs, or Adjectives</p>
                   </div>
                   <div>
-                    <div className="font-medium text-white mb-2">2. Practice with Flashcards</div>
+                    <div className="font-medium text-primary-foreground mb-2">2. Practice with Flashcards</div>
                     <p>Type your answers and get instant feedback</p>
                   </div>
                   <div>
-                    <div className="font-medium text-white mb-2">3. Track Progress</div>
+                    <div className="font-medium text-primary-foreground mb-2">3. Track Progress</div>
                     <p>Monitor your learning with detailed statistics</p>
                   </div>
                 </div>

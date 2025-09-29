@@ -131,7 +131,7 @@ export function FlashcardDisplay({
     <div className="w-full max-w-2xl mx-auto mb-8">
       <div 
         className={cn(
-          "relative bg-white/10 backdrop-blur-sm rounded-lg p-8 min-h-[300px] flex items-center justify-center transition-all duration-300",
+          "relative bg-background/10 backdrop-blur-sm rounded-lg p-8 min-h-[300px] flex items-center justify-center transition-all duration-300",
           isFlipping && "transform scale-105",
           isUserInteraction && "opacity-75"
         )}
@@ -151,14 +151,14 @@ export function FlashcardDisplay({
         </div>
         
         {/* Flip indicator */}
-        <div className="absolute bottom-4 right-4 text-white/50 text-sm">
+        <div className="absolute bottom-4 right-4 text-primary-foreground/50 text-sm">
           Click to flip
         </div>
       </div>
       
       {/* Word type indicator */}
       <div className="flex justify-center mt-4">
-        <div className="bg-white/20 text-white px-3 py-1 rounded-full text-sm">
+        <div className="bg-primary-foreground/20 text-primary-foreground px-3 py-1 rounded-full text-sm">
           {item.type}
         </div>
       </div>

@@ -11,6 +11,7 @@ import { ActionButtons } from '@/components/flashcard/action-buttons';
 import { SettingsModal } from '@/components/flashcard/settings-modal';
 import { HelpModal } from '@/components/flashcard/help-modal';
 import { Statistics } from '@/components/flashcard/statistics';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Loader2, Settings, HelpCircle } from 'lucide-react';
 
@@ -80,10 +81,10 @@ export default function FlashcardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
-          <p className="text-white">Loading flashcards...</p>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-indigo-600 dark:text-indigo-400" />
+          <p className="text-gray-700 dark:text-gray-300">Loading flashcards...</p>
         </div>
       </div>
     );
@@ -91,9 +92,9 @@ export default function FlashcardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center">
-          <p className="text-white mb-4">Error loading flashcards</p>
+          <p className="text-gray-700 dark:text-gray-300 mb-4">Error loading flashcards</p>
           <Button onClick={() => window.location.reload()}>
             Retry
           </Button>
@@ -104,38 +105,39 @@ export default function FlashcardPage() {
 
   if (!wordsData || !currentItem) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
         <div className="text-center">
-          <p className="text-white">No flashcards available</p>
+          <p className="text-gray-700 dark:text-gray-300">No flashcards available</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 relative overflow-hidden">
       {/* Header */}
       <div className="relative z-10 p-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold text-white capitalize">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200 capitalize">
             {moduleName} Flashcards
           </h1>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setCurrentMode(prev => prev === 'flashcard' ? 'conjugation' : 'flashcard')}
-            className="border-white text-white hover:bg-white/10"
+            className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             {currentMode === 'flashcard' ? 'Switch to Conjugation' : 'Switch to Flashcards'}
           </Button>
         </div>
         
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowStats(true)}
-            className="border-white text-white hover:bg-white/10"
+            className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             Statistics
           </Button>
@@ -143,7 +145,7 @@ export default function FlashcardPage() {
             variant="outline"
             size="sm"
             onClick={() => setShowHelp(true)}
-            className="border-white text-white hover:bg-white/10"
+            className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             <HelpCircle className="w-4 h-4 mr-2" />
             Help
@@ -152,7 +154,7 @@ export default function FlashcardPage() {
             variant="outline"
             size="sm"
             onClick={() => setShowSettings(true)}
-            className="border-white text-white hover:bg-white/10"
+            className="border-indigo-300 text-indigo-700 hover:bg-indigo-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
           >
             <Settings className="w-4 h-4 mr-2" />
             Settings

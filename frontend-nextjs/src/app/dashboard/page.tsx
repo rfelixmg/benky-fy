@@ -31,10 +31,10 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-3xl font-bold text-primary-foreground">
               Welcome back, {authData?.user?.name?.split(' ')[0] || 'Student'}!
             </h1>
-            <p className="text-white/80">Ready to continue your Japanese learning journey?</p>
+            <p className="text-primary-foreground/80">Ready to continue your Japanese learning journey?</p>
           </div>
           
           {authData?.user && (
@@ -50,23 +50,23 @@ export default function DashboardPage() {
               {stats.map((stat) => {
                 const IconComponent = stat.icon;
                 return (
-                  <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                  <div key={stat.label} className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
                     <div className="flex items-center justify-between mb-2">
                       <IconComponent className={`w-6 h-6 ${stat.color}`} />
                     </div>
-                    <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                    <div className="text-sm text-white/70">{stat.label}</div>
+                    <div className="text-2xl font-bold text-primary-foreground mb-1">{stat.value}</div>
+                    <div className="text-sm text-primary-foreground/70">{stat.label}</div>
                   </div>
                 );
               })}
             </div>
             
             {/* Recent Modules */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8">
+            <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 mb-8">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-semibold text-white">Continue Learning</h2>
+                <h2 className="text-xl font-semibold text-primary-foreground">Continue Learning</h2>
                 <Link href="/modules">
-                  <Button variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
                     View All Modules
                   </Button>
                 </Link>
@@ -79,20 +79,20 @@ export default function DashboardPage() {
                     href={`/flashcards/${module.id}`}
                     className="group"
                   >
-                    <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-all duration-300">
+                    <div className="bg-background/5 rounded-lg p-4 hover:bg-background/10 transition-all duration-300">
                       <div className="flex justify-between items-center mb-2">
-                        <h3 className="font-medium text-white">{module.name}</h3>
-                        <span className="text-sm text-white/60">{module.progress}%</span>
+                        <h3 className="font-medium text-primary-foreground">{module.name}</h3>
+                        <span className="text-sm text-primary-foreground/60">{module.progress}%</span>
                       </div>
                       
-                      <div className="w-full bg-white/20 rounded-full h-2 mb-2">
+                      <div className="w-full bg-primary-foreground/20 rounded-full h-2 mb-2">
                         <div
-                          className="bg-white h-2 rounded-full transition-all duration-300"
+                          className="bg-primary-foreground h-2 rounded-full transition-all duration-300"
                           style={{ width: `${module.progress}%` }}
                         />
                       </div>
                       
-                      <div className="text-xs text-white/60">
+                      <div className="text-xs text-primary-foreground/60">
                         Last studied: {module.lastStudied}
                       </div>
                     </div>
@@ -103,23 +103,23 @@ export default function DashboardPage() {
             
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">Quick Start</h3>
+              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-primary-foreground mb-4">Quick Start</h3>
                 <div className="space-y-3">
                   <Link href="/flashcards/hiragana">
-                    <Button className="w-full justify-start bg-white text-primary hover:bg-white/90">
+                    <Button className="w-full justify-start bg-background text-primary hover:bg-background/90">
                       <BookOpen className="w-4 h-4 mr-2" />
                       Practice Hiragana
                     </Button>
                   </Link>
                   <Link href="/flashcards/verbs">
-                    <Button className="w-full justify-start bg-white text-primary hover:bg-white/90">
+                    <Button className="w-full justify-start bg-background text-primary hover:bg-background/90">
                       <Target className="w-4 h-4 mr-2" />
                       Practice Verbs
                     </Button>
                   </Link>
                   <Link href="/modules">
-                    <Button variant="outline" className="w-full justify-start border-white text-white hover:bg-white/10">
+                    <Button variant="outline" className="w-full justify-start border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
                       <Brain className="w-4 h-4 mr-2" />
                       Browse All Modules
                     </Button>
@@ -127,28 +127,28 @@ export default function DashboardPage() {
                 </div>
               </div>
               
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">Today&apos;s Goals</h3>
+              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-primary-foreground mb-4">Today&apos;s Goals</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Study 20 cards</span>
-                    <span className="text-sm text-white/60">12/20</span>
+                    <span className="text-primary-foreground/80">Study 20 cards</span>
+                    <span className="text-sm text-primary-foreground/60">12/20</span>
                   </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-white h-2 rounded-full w-3/5" />
+                  <div className="w-full bg-primary-foreground/20 rounded-full h-2">
+                    <div className="bg-primary-foreground h-2 rounded-full w-3/5" />
                   </div>
                   
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Maintain streak</span>
+                    <span className="text-primary-foreground/80">Maintain streak</span>
                     <span className="text-sm text-green-400">✓ Done</span>
                   </div>
                   
                   <div className="flex justify-between items-center">
-                    <span className="text-white/80">Practice for 15 min</span>
-                    <span className="text-sm text-white/60">8/15 min</span>
+                    <span className="text-primary-foreground/80">Practice for 15 min</span>
+                    <span className="text-sm text-primary-foreground/60">8/15 min</span>
                   </div>
-                  <div className="w-full bg-white/20 rounded-full h-2">
-                    <div className="bg-white h-2 rounded-full w-1/2" />
+                  <div className="w-full bg-primary-foreground/20 rounded-full h-2">
+                    <div className="bg-primary-foreground h-2 rounded-full w-1/2" />
                   </div>
                 </div>
               </div>
