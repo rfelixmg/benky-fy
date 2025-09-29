@@ -34,14 +34,14 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_flashcard_index_with_test_auth_success(self, test_mode_client):
         """Test flashcard index with test authentication."""
-        response = test_mode_client.get('/begginer/verbs/')
+        response = test_mode_client.get('/v1/begginer/verbs/')
         TestAssertions.assert_successful_response(response)
         TestAssertions.assert_contains_content(response, 'flashcard')
     
     
     def test_dataset_info_public_access(self, client):
         """Test dataset info endpoint is publicly accessible."""
-        response = client.get('/begginer/verbs/api/dataset-info')
+        response = client.get('/v1/begginer/verbs/api/dataset-info')
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)
@@ -64,7 +64,7 @@ class TestFlashcardAPI(TestFixtures):
         }
         
         for url_module in TEST_MODULES:
-            response = client.get(f'/begginer/{url_module}/api/dataset-info')
+            response = client.get(f'/v1/begginer/{url_module}/api/dataset-info')
             TestAssertions.assert_json_response(response)
             
             data = json.loads(response.data)
@@ -76,7 +76,7 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_correct_answers_with_test_auth_success(self, test_mode_client):
         """Test correct answers endpoint with test authentication."""
-        response = test_mode_client.get(f'/begginer/verbs/api/correct-answers?item_id={TEST_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/begginer/verbs/api/correct-answers?item_id={TEST_ITEM_ID}')
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)
@@ -91,14 +91,14 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_correct_answers_invalid_item_id(self, test_mode_client):
         """Test correct answers endpoint with invalid item ID."""
-        response = test_mode_client.get(f'/begginer/verbs/api/correct-answers?item_id={TEST_INVALID_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/begginer/verbs/api/correct-answers?item_id={TEST_INVALID_ITEM_ID}')
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
     
     def test_correct_answers_missing_item_id(self, test_mode_client):
         """Test correct answers endpoint with missing item ID."""
-        response = test_mode_client.get('/begginer/verbs/api/correct-answers')
+        response = test_mode_client.get('/v1/begginer/verbs/api/correct-answers')
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
@@ -107,7 +107,7 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_display_text_with_test_auth_success(self, test_mode_client):
         """Test display text endpoint with test authentication."""
-        response = test_mode_client.get(f'/begginer/verbs/api/display-text?item_id={TEST_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/begginer/verbs/api/display-text?item_id={TEST_ITEM_ID}')
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)
@@ -130,7 +130,7 @@ class TestFlashcardAPI(TestFixtures):
             'proportions.english': '0.3'
         }
         
-        response = test_mode_client.get('/begginer/verbs/api/display-text', query_string=params)
+        response = test_mode_client.get('/v1/begginer/verbs/api/display-text', query_string=params)
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)
@@ -140,7 +140,7 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_check_answers_with_test_auth_success(self, test_mode_client):
         """Test check answers endpoint with test authentication."""
-        response = test_mode_client.post('/begginer/verbs/api/check-answers', data={
+        response = test_mode_client.post('/v1/begginer/verbs/api/check-answers', data={
             'item_id': str(TEST_ITEM_ID),
             'user_english': 'test'
         })
@@ -154,7 +154,7 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_check_answers_with_input_modes(self, test_mode_client):
         """Test check answers endpoint with input modes."""
-        response = test_mode_client.post('/begginer/verbs/api/check-answers', data={
+        response = test_mode_client.post('/v1/begginer/verbs/api/check-answers', data={
             'item_id': str(TEST_ITEM_ID),
             'input_modes': 'hiragana,english',
             'user_hiragana': 'test',
@@ -172,7 +172,7 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_settings_update_with_test_auth_success(self, test_mode_client):
         """Test settings update with test authentication."""
-        response = test_mode_client.post('/begginer/verbs/settings', data={
+        response = test_mode_client.post('/v1/begginer/verbs/settings', data={
             'display_mode': 'kanji',
             'furigana_enabled': '1',
             'auto_advance': '0'
@@ -186,7 +186,7 @@ class TestFlashcardAPI(TestFixtures):
     
     def test_check_endpoint_with_test_auth(self, test_mode_client):
         """Test check endpoint with test authentication."""
-        response = test_mode_client.post('/begginer/verbs/check', data={
+        response = test_mode_client.post('/v1/begginer/verbs/check', data={
             'item_id': str(TEST_ITEM_ID),
             'user_english': 'test'
         })
@@ -203,9 +203,9 @@ class TestFlashcardDualVerification:
         
         # Test various flashcard endpoints
         endpoints_to_test = [
-            '/begginer/verbs/',
-            f'/begginer/verbs/api/correct-answers?item_id={TEST_ITEM_ID}',
-            f'/begginer/verbs/api/display-text?item_id={TEST_ITEM_ID}'
+            '/v1/begginer/verbs/',
+            f'/v1/begginer/verbs/api/correct-answers?item_id={TEST_ITEM_ID}',
+            f'/v1/begginer/verbs/api/display-text?item_id={TEST_ITEM_ID}'
         ]
         
         for endpoint in endpoints_to_test:
@@ -219,17 +219,17 @@ class TestFlashcardDataValidation(TestFixtures):
     
     def test_invalid_module_name(self, test_mode_client):
         """Test flashcard endpoints with invalid module name."""
-        response = test_mode_client.get('/begginer/invalid_module/api/dataset-info')
+        response = test_mode_client.get('/v1/begginer/invalid_module/api/dataset-info')
         assert response.status_code == 404
     
     def test_missing_required_parameters(self, test_mode_client):
         """Test flashcard endpoints with missing required parameters."""
         # Test missing item_id - API may return 200 or 400 depending on implementation
-        response = test_mode_client.get('/begginer/verbs/api/correct-answers')
+        response = test_mode_client.get('/v1/begginer/verbs/api/correct-answers')
         assert response.status_code in [200, 400], f"Unexpected status {response.status_code} for missing item_id"
         
         # Test missing item_id in POST request
-        response = test_mode_client.post('/begginer/verbs/api/check-answers', data={
+        response = test_mode_client.post('/v1/begginer/verbs/api/check-answers', data={
             'user_english': 'test'
         })
         assert response.status_code in [200, 400], f"Unexpected status {response.status_code} for missing item_id in POST"
@@ -237,11 +237,11 @@ class TestFlashcardDataValidation(TestFixtures):
     def test_invalid_parameter_types(self, test_mode_client):
         """Test flashcard endpoints with invalid parameter types."""
         # Test string item_id instead of integer - API may return 200 or 400 depending on implementation
-        response = test_mode_client.get('/begginer/verbs/api/correct-answers?item_id=invalid')
+        response = test_mode_client.get('/v1/begginer/verbs/api/correct-answers?item_id=invalid')
         assert response.status_code in [200, 400], f"Unexpected status {response.status_code} for invalid item_id type"
         
         # Test negative item_id - API may return 200 or 400 depending on implementation
-        response = test_mode_client.get('/begginer/verbs/api/correct-answers?item_id=-1')
+        response = test_mode_client.get('/v1/begginer/verbs/api/correct-answers?item_id=-1')
         assert response.status_code in [200, 400], f"Unexpected status {response.status_code} for negative item_id"
 
 

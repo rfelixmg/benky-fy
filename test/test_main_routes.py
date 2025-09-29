@@ -110,12 +110,12 @@ class TestAuthenticationScenarios(TestFixtures):
     
     def test_public_endpoints_accessible(self, production_mode_client):
         """Test that public endpoints are accessible without authentication."""
-        public_endpoints = ['/', '/auth/login', '/auth/logout']
+        public_endpoints = ['/', '/v1/auth/login', '/v1/auth/logout']
         
         for endpoint in public_endpoints:
             response = production_mode_client.get(endpoint)
             # OAuth endpoints may fail with 500 in test mode (expected behavior)
-            if endpoint == '/auth/login':
+            if endpoint == '/v1/auth/login':
                 assert response.status_code in [200, 302, 500], f"Public endpoint {endpoint} should be accessible or fail gracefully"
             else:
                 assert response.status_code in [200, 302], f"Public endpoint {endpoint} should be accessible"
@@ -154,7 +154,7 @@ class TestEnvironmentVariableBehavior:
             client = app.test_client()
             
             # Test login route - should automatically log in as test user
-            response = client.get('/auth/login', follow_redirects=False)
+            response = client.get('/v1/auth/login', follow_redirects=False)
             
             # Should redirect to home (not to Google OAuth)
             assert response.status_code == 302
@@ -177,7 +177,7 @@ class TestEnvironmentVariableBehavior:
             client = app.test_client()
             
             # Test login route - should redirect to Google OAuth
-            response = client.get('/auth/login', follow_redirects=False)
+            response = client.get('/v1/auth/login', follow_redirects=False)
             
             # Should redirect to Google OAuth (not to home)
             assert response.status_code == 302
@@ -199,7 +199,7 @@ class TestEnvironmentVariableBehavior:
             client = app.test_client()
             
             # Test login route - should redirect to Google OAuth
-            response = client.get('/auth/login', follow_redirects=False)
+            response = client.get('/v1/auth/login', follow_redirects=False)
             
             # Should redirect to Google OAuth
             assert response.status_code == 302

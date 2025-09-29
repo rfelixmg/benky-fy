@@ -3,6 +3,12 @@ import os
 from flask_dance.contrib.google import make_google_blueprint
 
 
+def _version_prefix(path: str) -> str:
+	"""Helper function to add API version prefix to routes."""
+	if not path:
+		return "/v1"
+	return f"/v1{path}"
+
 def create_app() -> Flask:
 	"""Application factory pattern for Benkyo-Fi."""
 	
@@ -18,12 +24,12 @@ def create_app() -> Flask:
 	# Register help blueprint
 	from .help.blueprints.help_bp import HelpBlueprint
 	help_bp = HelpBlueprint().create_blueprint()
-	app.register_blueprint(help_bp)
+	app.register_blueprint(help_bp, url_prefix=_version_prefix("/help"))
 	
 	# Register conjugation blueprint
 	from .conjugation.blueprints.conjugation_bp import create_conjugation_blueprint
 	conjugation_bp = create_conjugation_blueprint()
-	app.register_blueprint(conjugation_bp, url_prefix="/conjugation")
+	app.register_blueprint(conjugation_bp, url_prefix=_version_prefix("/conjugation"))
 
 	# Import and create flashcard modules
 	from .flashcard import create_vocab_flashcard_module, create_verb_flashcard_module, create_adjective_flashcard_module, create_katakana_flashcard_module
@@ -69,22 +75,22 @@ def create_app() -> Flask:
 		app.register_blueprint(google_bp, url_prefix="/login")
 
 	app.register_blueprint(main_bp)
-	app.register_blueprint(auth_bp, url_prefix="/auth")  # Add URL prefix for auth routes
-	app.register_blueprint(hiragana_bp, url_prefix="/begginer/hiragana")
-	app.register_blueprint(katakana_bp, url_prefix="/begginer/katakana")
-	app.register_blueprint(verbs_bp, url_prefix="/begginer/verbs")
-	app.register_blueprint(adjectives_bp, url_prefix="/begginer/adjectives")
+	app.register_blueprint(auth_bp, url_prefix=_version_prefix("/auth"))  # Add URL prefix for auth routes
+	app.register_blueprint(hiragana_bp, url_prefix=_version_prefix("/begginer/hiragana"))
+	app.register_blueprint(katakana_bp, url_prefix=_version_prefix("/begginer/katakana"))
+	app.register_blueprint(verbs_bp, url_prefix=_version_prefix("/begginer/verbs"))
+	app.register_blueprint(adjectives_bp, url_prefix=_version_prefix("/begginer/adjectives"))
 	
 	# Register vocabulary modules
-	app.register_blueprint(numbers_basic_bp, url_prefix="/begginer/numbers-basic")
-	app.register_blueprint(numbers_extended_bp, url_prefix="/begginer/numbers-extended")
-	app.register_blueprint(days_of_week_bp, url_prefix="/begginer/days-of-week")
-	app.register_blueprint(months_complete_bp, url_prefix="/begginer/months")
-	app.register_blueprint(colors_basic_bp, url_prefix="/begginer/colors")
-	app.register_blueprint(greetings_essential_bp, url_prefix="/begginer/greetings")
-	app.register_blueprint(question_words_bp, url_prefix="/begginer/question-words")
-	app.register_blueprint(base_nouns_bp, url_prefix="/begginer/base_nouns")
-	app.register_blueprint(katakana_words_bp, url_prefix="/begginer/katakana-words")
+	app.register_blueprint(numbers_basic_bp, url_prefix=_version_prefix("/begginer/numbers-basic"))
+	app.register_blueprint(numbers_extended_bp, url_prefix=_version_prefix("/begginer/numbers-extended"))
+	app.register_blueprint(days_of_week_bp, url_prefix=_version_prefix("/begginer/days-of-week"))
+	app.register_blueprint(months_complete_bp, url_prefix=_version_prefix("/begginer/months"))
+	app.register_blueprint(colors_basic_bp, url_prefix=_version_prefix("/begginer/colors"))
+	app.register_blueprint(greetings_essential_bp, url_prefix=_version_prefix("/begginer/greetings"))
+	app.register_blueprint(question_words_bp, url_prefix=_version_prefix("/begginer/question-words"))
+	app.register_blueprint(base_nouns_bp, url_prefix=_version_prefix("/begginer/base_nouns"))
+	app.register_blueprint(katakana_words_bp, url_prefix=_version_prefix("/begginer/katakana-words"))
 
 	# Make session user available in all templates as `current_user`
 	@app.context_processor

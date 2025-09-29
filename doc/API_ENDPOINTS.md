@@ -4,6 +4,14 @@
 - **Development**: `http://localhost:8080`
 - **Production**: `https://your-domain.com`
 
+## API Versioning
+All API endpoints are versioned under the `/v1` prefix. For example:
+- `/auth/login` becomes `/v1/auth/login`
+- `/help/api/word-info` becomes `/v1/help/api/word-info`
+- `/begginer/hiragana` becomes `/v1/begginer/hiragana`
+
+This versioning ensures API stability and enables future updates without breaking existing integrations.
+
 ## Main Routes (`/`)
 
 ### GET `/`
@@ -33,7 +41,7 @@
 
 ---
 
-## Authentication Routes (`/auth`)
+## Authentication Routes (`/v1/auth`)
 
 ### GET `/auth/login`
 **Description**: Login route that handles OAuth flow  
@@ -76,7 +84,7 @@
 
 ---
 
-## Help API Routes (`/help`)
+## Help API Routes (`/v1/help`)
 
 ### GET `/help/api/word-info`
 **Description**: Get detailed word information for help modal  
@@ -109,7 +117,7 @@
 
 ---
 
-## Flashcard Module Routes (`/begginer/{module}`)
+## Flashcard Module Routes (`/v1/begginer/{module}`)
 
 ### GET `/begginer/{module}/`
 **Description**: Main flashcard interface  
@@ -162,18 +170,18 @@
 
 ## Available Learning Modules
 
-- **hiragana**: `/begginer/hiragana`
-- **katakana**: `/begginer/katakana`
-- **verbs**: `/begginer/verbs`
-- **adjectives**: `/begginer/adjectives`
-- **numbers-basic**: `/begginer/numbers-basic`
-- **numbers-extended**: `/begginer/numbers-extended`
-- **days-of-week**: `/begginer/days-of-week`
-- **months**: `/begginer/months`
-- **colors**: `/begginer/colors`
-- **greetings**: `/begginer/greetings`
-- **question-words**: `/begginer/question-words`
-- **base_nouns**: `/begginer/base_nouns`
+- **hiragana**: `/v1/begginer/hiragana`
+- **katakana**: `/v1/begginer/katakana`
+- **verbs**: `/v1/begginer/verbs`
+- **adjectives**: `/v1/begginer/adjectives`
+- **numbers-basic**: `/v1/begginer/numbers-basic`
+- **numbers-extended**: `/v1/begginer/numbers-extended`
+- **days-of-week**: `/v1/begginer/days-of-week`
+- **months**: `/v1/begginer/months`
+- **colors**: `/v1/begginer/colors`
+- **greetings**: `/v1/begginer/greetings`
+- **question-words**: `/v1/begginer/question-words`
+- **base_nouns**: `/v1/begginer/base_nouns`
 
 ---
 

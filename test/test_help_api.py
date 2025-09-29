@@ -32,7 +32,7 @@ class TestHelpAPI(TestFixtures):
     
     def test_word_info_with_test_auth_success(self, test_mode_client):
         """Test word info endpoint with test authentication returns proper data."""
-        response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}')
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)
@@ -52,7 +52,7 @@ class TestHelpAPI(TestFixtures):
     
     def test_word_info_missing_module_name(self, test_mode_client):
         """Test word info endpoint with missing module_name parameter."""
-        response = test_mode_client.get(f'/help/api/word-info?item_id={TEST_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/help/api/word-info?item_id={TEST_ITEM_ID}')
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
@@ -61,7 +61,7 @@ class TestHelpAPI(TestFixtures):
     
     def test_word_info_missing_item_id(self, test_mode_client):
         """Test word info endpoint with missing item_id parameter."""
-        response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}')
+        response = test_mode_client.get(f'/v1/help/api/word-info?module_name={TEST_MODULE_NAME}')
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
@@ -70,7 +70,7 @@ class TestHelpAPI(TestFixtures):
     
     def test_word_info_missing_both_params(self, test_mode_client):
         """Test word info endpoint with both parameters missing."""
-        response = test_mode_client.get('/help/api/word-info')
+        response = test_mode_client.get('/v1/help/api/word-info')
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
@@ -78,7 +78,7 @@ class TestHelpAPI(TestFixtures):
     
     def test_word_info_invalid_module_name(self, test_mode_client):
         """Test word info endpoint with invalid module name."""
-        response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_INVALID_MODULE_NAME}&item_id={TEST_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/help/api/word-info?module_name={TEST_INVALID_MODULE_NAME}&item_id={TEST_ITEM_ID}')
         assert response.status_code == 404
         data = json.loads(response.data)
         assert 'error' in data
@@ -86,14 +86,14 @@ class TestHelpAPI(TestFixtures):
     
     def test_word_info_invalid_item_id_string(self, test_mode_client):
         """Test word info endpoint with invalid item ID (string)."""
-        response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id=invalid')
+        response = test_mode_client.get(f'/v1/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id=invalid')
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
     
     def test_word_info_invalid_item_id_out_of_range(self, test_mode_client):
         """Test word info endpoint with item ID out of range."""
-        response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_INVALID_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_INVALID_ITEM_ID}')
         assert response.status_code == 400
         data = json.loads(response.data)
         assert 'error' in data
@@ -101,7 +101,7 @@ class TestHelpAPI(TestFixtures):
     def test_word_info_all_modules(self, test_mode_client):
         """Test word info endpoint with all available modules."""
         for module in HELP_API_MODULES:
-            response = test_mode_client.get(f'/help/api/word-info?module_name={module}&item_id={TEST_ITEM_ID}')
+            response = test_mode_client.get(f'/v1/help/api/word-info?module_name={module}&item_id={TEST_ITEM_ID}')
             TestAssertions.assert_json_response(response)
             
             data = json.loads(response.data)
@@ -116,7 +116,7 @@ class TestHelpAPIDualVerification:
         client = TestClientFactory.create_test_mode_client()
         
         # Test word info endpoint
-        response = client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}')
+        response = client.get(f'/v1/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}')
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)
@@ -129,7 +129,7 @@ class TestHelpAPIDualVerification:
         """Test help API endpoints with neither condition fail."""
         client = TestClientFactory.create_production_client()
         
-        response = client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}', follow_redirects=False)
+        response = client.get(f'/v1/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}', follow_redirects=False)
         TestAssertions.assert_redirects_to_login(response)
 
 
@@ -138,7 +138,7 @@ class TestHelpAPIDataValidation(TestFixtures):
     
     def test_response_structure_consistency(self, test_mode_client):
         """Test that help API response structure is consistent."""
-        response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/help/api/word-info?module_name={TEST_MODULE_NAME}&item_id={TEST_ITEM_ID}')
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)
@@ -157,7 +157,7 @@ class TestHelpAPIDataValidation(TestFixtures):
     def test_error_response_structure(self, test_mode_client):
         """Test that error responses have consistent structure."""
         # Test missing parameters
-        response = test_mode_client.get('/help/api/word-info')
+        response = test_mode_client.get('/v1/help/api/word-info')
         assert response.status_code == 400
         
         data = json.loads(response.data)
@@ -165,7 +165,7 @@ class TestHelpAPIDataValidation(TestFixtures):
         assert isinstance(data['error'], str)
         
         # Test invalid module
-        response = test_mode_client.get(f'/help/api/word-info?module_name={TEST_INVALID_MODULE_NAME}&item_id={TEST_ITEM_ID}')
+        response = test_mode_client.get(f'/v1/help/api/word-info?module_name={TEST_INVALID_MODULE_NAME}&item_id={TEST_ITEM_ID}')
         assert response.status_code == 404
         
         data = json.loads(response.data)
@@ -179,7 +179,7 @@ class TestHelpAPIModuleCoverage(TestFixtures):
     def test_all_help_modules_accessible(self, test_mode_client):
         """Test that all help modules are accessible."""
         for module in HELP_API_MODULES:
-            response = test_mode_client.get(f'/help/api/word-info?module_name={module}&item_id={TEST_ITEM_ID}')
+            response = test_mode_client.get(f'/v1/help/api/word-info?module_name={module}&item_id={TEST_ITEM_ID}')
             
             # Should either succeed or fail gracefully
             assert response.status_code in [200, 400, 404], f"Unexpected status for module: {module}"
@@ -193,7 +193,7 @@ class TestHelpAPIModuleCoverage(TestFixtures):
         successful_responses = []
         
         for module in HELP_API_MODULES:
-            response = test_mode_client.get(f'/help/api/word-info?module_name={module}&item_id={TEST_ITEM_ID}')
+            response = test_mode_client.get(f'/v1/help/api/word-info?module_name={module}&item_id={TEST_ITEM_ID}')
             
             if response.status_code == 200:
                 data = json.loads(response.data)

@@ -35,7 +35,7 @@ class TestConjugationSystem(TestFixtures):
             'module_name': 'verbs'
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         TestAssertions.assert_json_response(response)
@@ -54,7 +54,7 @@ class TestConjugationSystem(TestFixtures):
             # Missing item_id, conjugation_form, module_name
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         assert response.status_code == 400
@@ -71,7 +71,7 @@ class TestConjugationSystem(TestFixtures):
             'module_name': 'invalid_module'
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         assert response.status_code == 400
@@ -88,7 +88,7 @@ class TestConjugationSystem(TestFixtures):
             'module_name': 'verbs'
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         TestAssertions.assert_json_response(response)
@@ -101,7 +101,7 @@ class TestConjugationSystem(TestFixtures):
     
     def test_conjugation_forms_endpoint(self, test_mode_client):
         """Test conjugation forms endpoint."""
-        response = test_mode_client.get('/conjugation/api/conjugation/forms/verbs')
+        response = test_mode_client.get('/v1/conjugation/api/conjugation/forms/verbs')
         
         TestAssertions.assert_json_response(response)
         data = json.loads(response.data)
@@ -121,7 +121,7 @@ class TestConjugationSystem(TestFixtures):
             'module_name': 'verbs'
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         assert response.status_code == 400
@@ -138,7 +138,7 @@ class TestConjugationSystem(TestFixtures):
             'module_name': 'adjectives'
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         TestAssertions.assert_json_response(response)
@@ -159,7 +159,7 @@ class TestConjugationSystem(TestFixtures):
             'module_name': 'verbs'
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         TestAssertions.assert_json_response(response)
@@ -171,7 +171,7 @@ class TestConjugationSystem(TestFixtures):
     
     def test_conjugation_forms_endpoint_adjectives(self, test_mode_client):
         """Test conjugation forms endpoint for adjectives."""
-        response = test_mode_client.get('/conjugation/api/conjugation/forms/adjectives')
+        response = test_mode_client.get('/v1/conjugation/api/conjugation/forms/adjectives')
         
         TestAssertions.assert_json_response(response)
         data = json.loads(response.data)
@@ -191,7 +191,7 @@ class TestConjugationSystem(TestFixtures):
             'module_name': 'verbs'
         }
         
-        response = test_mode_client.post('/conjugation/api/conjugation/check', 
+        response = test_mode_client.post('/v1/conjugation/api/conjugation/check', 
                                        json=test_data)
         
         assert response.status_code == 400

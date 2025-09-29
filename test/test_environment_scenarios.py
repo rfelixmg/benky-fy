@@ -145,9 +145,9 @@ class TestCrossEndpointConsistency:
     def test_api_endpoints_consistency(self):
         """Test that API endpoints behave consistently with dual verification."""
         api_endpoints = [
-            '/help/api/word-info?module_name=verbs&item_id=1',
-            '/begginer/verbs/api/correct-answers?item_id=1',
-            '/begginer/verbs/api/display-text?item_id=1'
+            '/v1/help/api/word-info?module_name=verbs&item_id=1',
+            '/v1/begginer/verbs/api/correct-answers?item_id=1',
+            '/v1/begginer/verbs/api/display-text?item_id=1'
         ]
         
         # Test with both conditions

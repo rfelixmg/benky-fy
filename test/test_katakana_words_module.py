@@ -30,7 +30,7 @@ class TestKatakanaWordsModule(TestFixtures):
 
     def test_katakana_words_module_accessibility(self, test_mode_client):
         """Test that katakana_words module is accessible and loads correctly."""
-        response = test_mode_client.get('/begginer/katakana-words/')
+        response = test_mode_client.get('/v1/begginer/katakana-words/')
         TestAssertions.assert_successful_response(response)
         TestAssertions.assert_contains_content(response, 'flashcard')
         
@@ -49,7 +49,7 @@ class TestKatakanaWordsModule(TestFixtures):
             'proportions.english': '0.3'
         }
         
-        response = test_mode_client.get('/begginer/katakana-words/api/display-text', query_string=params)
+        response = test_mode_client.get('/v1/begginer/katakana-words/api/display-text', query_string=params)
         TestAssertions.assert_json_response(response)
         
         data = json.loads(response.data)

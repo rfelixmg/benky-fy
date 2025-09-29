@@ -3,6 +3,8 @@
  * Manages API calls for display text, settings, and flashcard data
  */
 export class ApiClient {
+    static API_VERSION = 'v1';
+
     constructor(moduleName) {
         this.moduleName = moduleName;
         // Handle different URL patterns for different modules
@@ -27,7 +29,8 @@ export class ApiClient {
             'katakana_words': '/begginer/katakana-words'
         };
         
-        return urlMappings[moduleName] || `/begginer/${moduleName}`;
+        const basePath = urlMappings[moduleName] || `/begginer/${moduleName}`;
+        return `/${ApiClient.API_VERSION}${basePath}`;
     }
 
     /**
@@ -155,7 +158,7 @@ export class ApiClient {
      */
     async checkConjugation(userInput, itemId, conjugationForm, module) {
         try {
-            const response = await fetch('/conjugation/api/conjugation/check', {
+            const response = await fetch(`/${ApiClient.API_VERSION}/conjugation/api/conjugation/check`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -182,7 +185,7 @@ export class ApiClient {
      */
     async getConjugationForms(module) {
         try {
-            const response = await fetch(`/conjugation/api/conjugation/forms/${module}`);
+            const response = await fetch(`/${ApiClient.API_VERSION}/conjugation/api/conjugation/forms/${module}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -201,7 +204,7 @@ export class ApiClient {
     async getConjugationPractice(module, conjugationForm = 'polite') {
         try {
             const params = new URLSearchParams({ form: conjugationForm });
-            const response = await fetch(`/conjugation/api/conjugation/practice/${module}?${params}`);
+            const response = await fetch(`/${ApiClient.API_VERSION}/conjugation/api/conjugation/practice/${module}?${params}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -219,7 +222,7 @@ export class ApiClient {
      */
     async getConjugationStats(module) {
         try {
-            const response = await fetch(`/conjugation/api/conjugation/stats/${module}`);
+            const response = await fetch(`/${ApiClient.API_VERSION}/conjugation/api/conjugation/stats/${module}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

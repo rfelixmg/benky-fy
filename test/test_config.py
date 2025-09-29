@@ -47,22 +47,22 @@ AUTHENTICATED_ENDPOINTS = [
     '/home',
     '/modules',
     '/profile',
-    '/help/api/word-info?module_name=verbs&item_id=1',
-    '/begginer/verbs/',
-    '/begginer/verbs/api/correct-answers?item_id=1',
-    '/begginer/verbs/api/display-text?item_id=1',
-    '/begginer/verbs/api/check-answers',
-    '/begginer/verbs/settings',
-    '/begginer/verbs/check'
+    '/v1/help/api/word-info?module_name=verbs&item_id=1',
+    '/v1/begginer/verbs/',
+    '/v1/begginer/verbs/api/correct-answers?item_id=1',
+    '/v1/begginer/verbs/api/display-text?item_id=1',
+    '/v1/begginer/verbs/api/check-answers',
+    '/v1/begginer/verbs/settings',
+    '/v1/begginer/verbs/check'
 ]
 
 PUBLIC_ENDPOINTS = [
     '/',
-    '/auth/login',
-    '/auth/logout',
-    '/auth/check-auth',
-    '/auth/debug-oauth',
-    '/begginer/verbs/api/dataset-info'
+    '/v1/auth/login',
+    '/v1/auth/logout',
+    '/v1/auth/check-auth',
+    '/v1/auth/debug-oauth',
+    '/v1/begginer/verbs/api/dataset-info'
 ]
 
 # Test data constants
