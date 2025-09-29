@@ -5,6 +5,8 @@ import useSWR from 'swr';
 import { fetchFlashcards, submitAnswer } from '@/lib/api';
 import { SwipeableCard } from './SwipeableCard';
 import { ProgressTracker } from './ProgressTracker';
+import { SettingsModal } from './modals/SettingsModal';
+import { HelpModal } from './modals/HelpModal';
 import { analytics } from '@/lib/analytics';
 
 interface FlashcardContainerProps {
@@ -34,6 +36,9 @@ interface FlashcardResponse {
 export function FlashcardContainer({ moduleId }: FlashcardContainerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [userAnswer, setUserAnswer] = useState('');
   const [stats, setStats] = useState({
     total: 0,
     completed: 0,
@@ -139,22 +144,119 @@ export function FlashcardContainer({ moduleId }: FlashcardContainerProps) {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <ProgressTracker stats={stats} />
-      
-      <SwipeableCard
-        question={currentCard.prompt}
-        answer={currentCard.answer}
-        showAnswer={showAnswer}
-        onShowAnswer={() => {
-          setShowAnswer(true);
-          analytics.track('answer_revealed', { module: moduleId });
-        }}
-        onAnswer={handleAnswer}
-        furiganaHtml={currentCard.furigana_html}
-        furiganaText={currentCard.furigana_text}
-        furiganaStyle={currentCard.furigana_style}
-      />
+    <div className="flashcard-container">
+      <section className="flashcard-module">
+        <div className="flashcard-header">
+          <div className="header-title" id="headerTitle">
+            {moduleId.replace('_', ' ').charAt(0).toUpperCase() + moduleId.slice(1)} Flashcards
+          </div>
+          <div className="header-buttons">
+            <button 
+              className="settings-btn" 
+              title="Settings"
+              onClick={() => setShowSettings(true)}
+            >
+              ⚙️
+            </button>
+            <button 
+              className="help-btn" 
+              id="helpToggleBtn" 
+              title="Word Information"
+              onClick={() => setShowHelp(true)}
+            >
+              ❓
+            </button>
+          </div>
+        </div>
+
+        {/* Settings Modal */}
+        <SettingsModal 
+          isOpen={showSettings} 
+          onClose={() => setShowSettings(false)} 
+        />
+
+        {/* Flashcard Display */}
+        <SwipeableCard
+          question={currentCard.prompt}
+          answer={currentCard.answer}
+          showAnswer={showAnswer}
+          onShowAnswer={() => {
+            setShowAnswer(true);
+            analytics.track('answer_revealed', { module: moduleId });
+          }}
+          onAnswer={handleAnswer}
+          furiganaHtml={currentCard.furigana_html}
+          furiganaText={currentCard.furigana_text}
+          furiganaStyle={currentCard.furigana_style}
+        />
+
+        {/* Progress Section */}
+        <ProgressTracker stats={stats} />
+
+        {/* Answer Input */}
+        <div className="answer-input-section">
+          <input
+            type="text"
+            className="answer-input"
+            placeholder="Type your answer..."
+            value={userAnswer}
+            onChange={(e) => setUserAnswer(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter' && !showAnswer) {
+                setShowAnswer(true);
+                analytics.track('answer_revealed', { module: moduleId });
+              }
+            }}
+            disabled={showAnswer}
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="action-buttons">
+          {!showAnswer ? (
+            <button
+              className="check-answer-btn"
+              onClick={() => {
+                setShowAnswer(true);
+                analytics.track('answer_revealed', { module: moduleId });
+              }}
+            >
+              Check Answer
+            </button>
+          ) : (
+            <>
+              <button
+                className="incorrect-btn"
+                onClick={() => handleAnswer(false)}
+              >
+                Incorrect
+              </button>
+              <button
+                className="correct-btn"
+                onClick={() => handleAnswer(true)}
+              >
+                Correct
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Statistics */}
+        <div className="statistics-section">
+          <div className="stat-item">
+            <span className="stat-label">Completed:</span>
+            <span className="stat-value">{stats.completed} / {stats.total}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Correct:</span>
+            <span className="stat-value">{stats.correct}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Streak:</span>
+            <span className="stat-value">{stats.streak}</span>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

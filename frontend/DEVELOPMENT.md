@@ -5,7 +5,7 @@
 1. Create `.env.local`:
 ```bash
 # API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_API_URL=http://localhost:5000  # Flask backend runs on port 5000
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 # Environment
@@ -83,3 +83,30 @@ DEBUG_API=true npm run dev
 npm test -- --coverage
 open coverage/lcov-report/index.html
 ```
+
+## Security Guidelines
+
+1. Dependency Management:
+```bash
+# Check for vulnerabilities
+npm audit
+
+# Fix vulnerabilities (safe updates only)
+npm audit fix
+
+# Fix vulnerabilities (including breaking changes)
+npm audit fix --force
+```
+
+2. Regular Security Checks:
+- Run `npm audit` before deploying
+- Review dependency updates for breaking changes
+- Keep Next.js and React up to date
+- Use environment variables for sensitive data
+
+3. Security Best Practices:
+- Use HTTPS in production
+- Implement proper CORS policies
+- Validate all user inputs
+- Follow Content Security Policy (CSP) guidelines
+- Keep API keys and secrets in environment variables
