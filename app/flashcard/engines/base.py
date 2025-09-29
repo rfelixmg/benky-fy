@@ -7,6 +7,7 @@ from typing import List, Dict, Any
 
 from ..models.item import FlashcardItem
 from ..utils.romaji import romaji_to_hiragana
+from flask import current_app
 
 
 class BaseFlashcardEngine:
@@ -171,7 +172,7 @@ class BaseFlashcardEngine:
             else:
                 result["text"] = "N/A"
                 result["script"] = "error"
-                print(f"Warning: Missing display content for kanji mode: {item}")
+                current_app.logger.warning(f"Missing display content for kanji mode: {item}")
         
         elif display_mode == "kana":
             # Show kana based on kana_type setting
@@ -182,7 +183,7 @@ class BaseFlashcardEngine:
                 else:
                     result["text"] = "N/A"
                     result["script"] = "error"
-                    print(f"Warning: Missing hiragana content: {item}")
+                    current_app.logger.warning(f"Missing hiragana content: {item}")
             elif kana_type == "katakana":
                 if item.katakana and item.katakana.strip() and item.katakana.strip() not in ['–', '']:
                     result["text"] = item.katakana
@@ -196,7 +197,7 @@ class BaseFlashcardEngine:
                     else:
                         result["text"] = "N/A"
                         result["script"] = "error"
-                        print(f"Warning: Missing katakana content: {item}")
+                        current_app.logger.warning(f"Missing katakana content: {item}")
             else:  # mixed (future)
                 # For now, default to hiragana
                 if item.hiragana and item.hiragana.strip():

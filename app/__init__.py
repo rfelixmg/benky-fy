@@ -1,6 +1,8 @@
 from flask import Flask, session, request
 import os
+import uuid
 from flask_dance.contrib.google import make_google_blueprint
+from .utils.logger import logger
 
 
 def create_app() -> Flask:
@@ -10,6 +12,12 @@ def create_app() -> Flask:
 
 	# Secret key for sessions (required by Flask and Flask-Dance)
 	app.secret_key = os.environ.get("FLASK_SECRET_KEY", "superkey-benky-fy")
+	
+	@app.before_request
+	def before_request():
+		# Generate session ID if not present
+		if 'session_id' not in session:
+			session['session_id'] = str(uuid.uuid4())
 
 	# Register blueprints
 	from .routes import main_bp
@@ -52,7 +60,7 @@ def create_app() -> Flask:
 	from app.auth import is_test_mode
 	
 	is_test, context = is_test_mode()
-	print(f"DEBUG: is_test_mode={is_test}, context={context}")
+	app.logger.debug(f"Test mode status: is_test={is_test}, context={context}")
 	
 	if not is_test:
 		google_client_id = os.environ.get("GOOGLE_OAUTH_CLIENT_ID")

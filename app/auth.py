@@ -4,6 +4,7 @@ from flask_dance.consumer import oauth_authorized
 from functools import wraps
 import os
 import hashlib
+from .utils.logger import logger
 
 
 auth_bp = Blueprint("auth", __name__)
@@ -12,7 +13,7 @@ auth_bp = Blueprint("auth", __name__)
 def is_test_mode(force_prod_mode=False):
 	"""Check if we're in test mode based on environment variable and dummy context."""
 	if force_prod_mode:
-		print(f"DEBUG: Force production mode - bypassing test mode")
+		logger.debug("Force production mode - bypassing test mode")
 		return False, None
 	
 	test_hash = os.environ.get('BENKY_FY_TEST_HASH')
@@ -26,7 +27,7 @@ def is_test_mode(force_prod_mode=False):
 		return False, None
 	
 	try:
-		print(f"DEBUG: Test mode detected!")
+		logger.debug("Test mode detected")
 		dummy_context = session.get('test_dummy_context', None)
 		if dummy_context is None:
 			dummy_context = setup_test_context()
@@ -34,7 +35,7 @@ def is_test_mode(force_prod_mode=False):
 
 
 	except RuntimeError as exp:
-		print(f"DEBUG: RuntimeError in session, returning False: {exp}")
+		logger.error(f"RuntimeError in session, returning False: {exp}")
 		return False, None
 
 
@@ -89,22 +90,21 @@ def login_required(f):
 	def decorated_function(*args, **kwargs):
 		# Check if we're in test mode first - only requires environment variable
 		test_mode, dummy_context = is_test_mode()
-		print(f"DEBUG: login_required - test_mode={test_mode}, dummy_context={dummy_context is not None}")
-		print(f"DEBUG: Current session user = {session.get('user')}")
+		logger.info(f"Login check - test_mode={test_mode}, has_context={dummy_context is not None}, user={session.get('user')}")
 		
 		if test_mode and dummy_context:
 			# Test mode detected with dummy context - set up test user
-			print(f"DEBUG: Test mode detected with dummy context! Setting up test user automatically.")
+			logger.info("Test mode setup - Setting up test user automatically")
 			if 'user' not in session:
 				session['user'] = get_test_user()
 				session.permanent = True
 				session.modified = True
-				print(f"DEBUG: Set test user in session: {session['user']}")
+				logger.info(f"Test user setup - user={session['user']}")
 			return f(*args, **kwargs)
 		
 		if test_mode and not dummy_context:
 			# Test mode detected but no dummy context - redirect to login
-			print(f"DEBUG: Test mode detected but no dummy context - redirecting to login")
+			logger.error("Test mode error - No dummy context available")
 			session['next_url'] = request.url
 			flash('Test mode requires dummy context. Please log in.', 'info')
 			return redirect(url_for('auth.login'))
@@ -115,18 +115,18 @@ def login_required(f):
 			user = session['user']
 			if user.get('is_test_user', False):
 				# This is a test user but we're not in test mode - clear session
-				print(f"DEBUG: Found test user in session but not in test mode - clearing session")
+				logger.warning("Invalid test user - Test user found outside test mode")
 				session.clear()
 				session['next_url'] = request.url
 				flash('Please log in to access this page.', 'info')
 				return redirect(url_for('auth.login'))
 			else:
 				# Valid authenticated user, allow access
-				print(f"DEBUG: User already authenticated: {session['user']}")
+				logger.info(f"Auth check successful - user={session['user']}")
 				return f(*args, **kwargs)
 		
 		# User is not authenticated, redirect to login
-		print(f"DEBUG: User not authenticated, redirecting to login")
+		logger.info(f"Auth required - redirecting to {request.url}")
 		session['next_url'] = request.url
 		flash('Please log in to access this page.', 'info')
 		return redirect(url_for('auth.login'))
@@ -150,7 +150,7 @@ def login():
 	# Check if we're in test mode first
 	test_mode, dummy_context = is_test_mode()
 	if test_mode:
-		print("DEBUG: Test mode detected in login route! Setting up test user.")
+		logger.info("Test mode login - Setting up test user in login route")
 		if 'user' not in session:
 			session['user'] = get_test_user()
 			session.permanent = True
@@ -164,28 +164,34 @@ def login():
 	
 	# Check if Google OAuth is authorized
 	if not google.authorized:
-		print("Google not authorized, starting OAuth flow")
+		logger.info("Starting Google OAuth flow")
 		# Start the OAuth flow - this will redirect to Google
 		return redirect(url_for("google.login"))
 	
 	# Google is authorized, fetch user info and complete login
-	print("Google authorized, fetching user info and completing login")
+	logger.log_auth('oauth_fetch', True, {'message': 'Fetching user info from Google'})
 	try:
 		response = google.get("/oauth2/v2/userinfo")
 	except Exception as e:
-		print(f"Error fetching user info: {e}")
+		logger.log_auth('oauth_error', False, {
+			'error': str(e),
+			'error_type': type(e).__name__
+		})
 		# Token might be expired or invalid, clear session and restart OAuth
 		session.clear()
 		return redirect(url_for("google.login"))
 	
 	if not response.ok:
-		print(f"Failed to get user info: {response.status_code}")
+		logger.log_auth('oauth_response_error', False, {
+			'status_code': response.status_code,
+			'error': response.text
+		})
 		session.clear()  # Clear any partial session data
 		# Try OAuth flow again
 		return redirect(url_for("google.login"))
 
 	profile = response.json()
-	print(f"Got user profile: {profile}")
+	logger.log_auth('oauth_profile', True, {'profile': profile})
 	
 	user_name = profile.get("name") or profile.get("given_name") or "User"
 	user_email = profile.get("email")
@@ -202,7 +208,7 @@ def login():
 	session.permanent = True
 	session.modified = True
 	
-	print(f"User session created: {session['user']}")
+	logger.log_auth('session_created', True, {'user': session['user']})
 
 	# Always redirect to /home after successful login
 	return redirect(url_for("main.home"))
@@ -212,22 +218,25 @@ def login():
 @oauth_authorized.connect_via(google)
 def google_logged_in(blueprint, token):
 	"""Called when Google OAuth login is completed"""
-	print(f"OAuth callback fired! Token: {token is not None}")
+	logger.log_auth('oauth_callback', True, {'has_token': token is not None})
 	
 	if not token:
-		print("No token received")
+		logger.log_auth('oauth_token_missing', False, {'message': 'No token received from Google'})
 		flash("Failed to log in with Google.", category="error")
 		return False
 
 	# Fetch user profile from Google
 	response = blueprint.session.get("/oauth2/v2/userinfo")
 	if not response.ok:
-		print(f"Failed to get user info in callback: {response.status_code}")
+		logger.log_auth('oauth_callback_error', False, {
+			'status_code': response.status_code,
+			'error': response.text
+		})
 		flash("Failed to fetch user info from Google.", category="error")
 		return False
 
 	profile = response.json()
-	print(f"OAuth callback got profile: {profile}")
+	logger.log_auth('oauth_callback_profile', True, {'profile': profile})
 	
 	user_name = profile.get("name") or profile.get("given_name") or "User"
 	user_email = profile.get("email")
@@ -244,7 +253,7 @@ def google_logged_in(blueprint, token):
 	session.permanent = True
 	session.modified = True
 	
-	print(f"OAuth callback set session: {session['user']}")
+	logger.log_auth('oauth_callback_session', True, {'user': session['user']})
 	
 	flash(f"Successfully logged in as {user_name}!", category="success")
 	

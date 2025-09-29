@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "benky-fy"
+version = "0.1.0"
+description = "Benky-Fy - Japanese Learning Platform"
+authors = [
+    {name = "Benky-Fy Team", email = "team@benky-fy.com"}
+]
+dependencies = [
+    "Flask==3.0.0",
+    "Flask-Dance==7.0.0",
+    "Flask-Session==0.5.0",
+    "requests==2.31.0",
+    "python-dotenv==1.0.0",
+    "gunicorn==21.2.0",
+    "oauthlib==3.2.2",
+    "itsdangerous==2.1.2",
+    "psutil==5.9.8",
+    "pytest==8.0.0",
+    "pytest-cov==4.1.0"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=app --cov-report=term-missing"
+pythonpath = ["."]
