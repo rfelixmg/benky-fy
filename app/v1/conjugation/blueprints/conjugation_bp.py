@@ -1,10 +1,10 @@
 """Conjugation API blueprint implementation."""
 
 from flask import Blueprint, request, jsonify
-from app.auth import login_required
-from app.conjugation import create_conjugation_checker
-from app.flashcard.engines.verb import VerbFlashcardEngine
-from app.flashcard.engines.adjective import AdjectiveFlashcardEngine
+from ...auth import login_required
+from .. import create_conjugation_checker
+from ...flashcard.engines.verb import VerbFlashcardEngine
+from ...flashcard.engines.adjective import AdjectiveFlashcardEngine
 import json
 import os
 
@@ -14,8 +14,8 @@ def create_conjugation_blueprint():
     bp = Blueprint('conjugation', __name__)
     
     # Load data files
-    verbs_file = os.path.join(os.path.dirname(__file__), '../../../datum/verbs.json')
-    adjectives_file = os.path.join(os.path.dirname(__file__), '../../../datum/adjectives.json')
+    verbs_file = os.path.join(os.path.dirname(__file__), '../../../../datum/verbs.json')
+    adjectives_file = os.path.join(os.path.dirname(__file__), '../../../../datum/adjectives.json')
     
     verb_engine = VerbFlashcardEngine(verbs_file)
     adjective_engine = AdjectiveFlashcardEngine(adjectives_file)

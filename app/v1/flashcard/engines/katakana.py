@@ -4,7 +4,7 @@ import json
 import random
 from typing import List, Dict, Any
 
-from app.settings import get_user_settings
+from ...settings import get_user_settings
 from .base import BaseFlashcardEngine
 from ..models.item import FlashcardItem
 

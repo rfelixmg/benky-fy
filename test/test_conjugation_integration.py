@@ -8,9 +8,9 @@ import sys
 import os
 sys.path.append('.')
 
-from app.conjugation import create_conjugation_checker
-from app.flashcard.engines.verb import VerbFlashcardEngine
-from app.flashcard.engines.adjective import AdjectiveFlashcardEngine
+from app.v1.conjugation import create_conjugation_checker
+from app.v1.flashcard.engines.verb import VerbFlashcardEngine
+from app.v1.flashcard.engines.adjective import AdjectiveFlashcardEngine
 
 def test_conjugation_integration():
     """Test the conjugation integration end-to-end"""

@@ -2,8 +2,8 @@
 
 from flask import Blueprint, render_template, request, session, redirect, url_for
 
-from app.auth import login_required, get_current_user
-from app.settings import settings_registry, get_user_settings, update_user_settings, get_module_settings_config
+from ...auth import login_required, get_current_user
+from ...settings import settings_registry, get_user_settings, update_user_settings, get_module_settings_config
 from ..engines.base import BaseFlashcardEngine
 from ..utils.validation import all_correct_logic
 
