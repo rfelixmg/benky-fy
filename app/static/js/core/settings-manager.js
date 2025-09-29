@@ -1,12 +1,15 @@
 /**
  * Settings Manager - Handles all settings state and persistence
  * Manages display modes, input modes, furigana styles, and weights
+ * Now with module-aware configuration support
  */
 export class SettingsManager {
     constructor(moduleName) {
         this.moduleName = moduleName;
+        this.moduleConfig = null;
         this.defaultSettings = this._getDefaultSettings(moduleName);
         this.settings = this.loadSettings();
+        this.configLoadPromise = this.loadModuleConfig();
     }
 
     /**
@@ -208,5 +211,165 @@ export class SettingsManager {
         };
         
         return urlMappings[moduleName] || `/begginer/${moduleName}`;
+    }
+
+    /**
+     * Load module configuration from backend
+     */
+    async loadModuleConfig() {
+        try {
+            const response = await fetch(`/api/settings/${this.moduleName}`);
+            if (response.ok) {
+                this.moduleConfig = await response.json();
+                this.validateCurrentSettings();
+                console.log('Module config loaded for', this.moduleName, ':', this.moduleConfig);
+            } else {
+                console.warn('Failed to load module config:', response.status);
+            }
+        } catch (error) {
+            console.error('Failed to load module config:', error);
+        }
+    }
+    
+    /**
+     * Wait for module config to be loaded
+     */
+    async waitForConfig() {
+        if (this.configLoadPromise) {
+            await this.configLoadPromise;
+        }
+    }
+
+    /**
+     * Validate current settings against module configuration
+     */
+    validateCurrentSettings() {
+        if (!this.moduleConfig) return;
+
+        const invalidSettings = [];
+        const restrictedSettings = [];
+
+        Object.keys(this.settings).forEach(key => {
+            const value = this.settings[key];
+            
+            // Check if setting is restricted for this module
+            if (this.isSettingRestricted(key, value)) {
+                restrictedSettings.push({ key, value });
+            }
+            
+            // Check if setting value is available for this module
+            if (!this.isSettingAvailable(key, value)) {
+                invalidSettings.push({ key, value });
+            }
+        });
+
+        // Reset invalid/restricted settings to defaults
+        [...invalidSettings, ...restrictedSettings].forEach(({ key }) => {
+            const defaultValue = this.moduleConfig.defaults[key];
+            if (defaultValue !== undefined) {
+                this.settings[key] = defaultValue;
+                console.log(`Reset invalid setting '${key}' to default for module '${this.moduleName}'`);
+            }
+        });
+
+        if (invalidSettings.length > 0 || restrictedSettings.length > 0) {
+            this.saveSettings();
+        }
+    }
+
+    /**
+     * Check if a setting is restricted for this module
+     */
+    isSettingRestricted(settingKey, value) {
+        if (!this.moduleConfig) return false;
+        
+        const restrictedOptions = this.moduleConfig.restricted_options;
+        for (const [key, values] of Object.entries(restrictedOptions)) {
+            if (settingKey === key || values.includes(settingKey) || values.includes(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if a setting value is available for this module
+     */
+    isSettingAvailable(settingKey, value) {
+        if (!this.moduleConfig) return true;
+        
+        const availableOptions = this.moduleConfig.available_options[settingKey];
+        if (!availableOptions || availableOptions.length === 0) {
+            return true; // No restrictions, all values allowed
+        }
+        
+        return availableOptions.includes(value);
+    }
+
+    /**
+     * Get available options for a setting
+     */
+    getAvailableOptions(settingKey) {
+        if (!this.moduleConfig) return null;
+        return this.moduleConfig.available_options[settingKey] || null;
+    }
+
+    /**
+     * Validate settings against module configuration
+     */
+    async validateSettings(settings) {
+        try {
+            const response = await fetch('/api/settings/validate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    module_name: this.moduleName,
+                    settings: settings
+                })
+            });
+
+            if (response.ok) {
+                return await response.json();
+            } else {
+                throw new Error(`Validation failed: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Failed to validate settings:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Update setting with validation
+     */
+    async updateSettingWithValidation(key, value) {
+        // Check if setting is restricted
+        if (this.isSettingRestricted(key, value)) {
+            throw new Error(`Setting '${key}' is not allowed for module '${this.moduleName}'`);
+        }
+
+        // Check if setting value is available
+        if (!this.isSettingAvailable(key, value)) {
+            throw new Error(`Setting value '${value}' is not available for module '${this.moduleName}'`);
+        }
+
+        // If validation passes, update the setting
+        this.updateSetting(key, value);
+    }
+
+    /**
+     * Get module-specific default settings
+     */
+    getModuleDefaults() {
+        return this.moduleConfig ? this.moduleConfig.defaults : {};
+    }
+
+    /**
+     * Get restricted options for this module
+     */
+    getRestrictedOptions() {
+        return this.moduleConfig ? this.moduleConfig.restricted_options : {};
     }
 }

@@ -4,6 +4,8 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 
 from app.auth import login_required, get_current_user
 from app.settings import settings_registry, get_user_settings, update_user_settings, get_module_settings_config
+from app.settings.config.module_configs import get_module_config
+from flask import jsonify
 from ..engines.base import BaseFlashcardEngine
 from ..utils.validation import all_correct_logic
 
@@ -24,7 +26,8 @@ class FlashcardBlueprint:
         @login_required
         def index():
             settings = get_user_settings(self.module_name)
-            settings_groups = settings_registry.get_settings_groups(get_module_settings_config(self.module_name))
+            # Use module name directly for new module-aware system
+            settings_groups = settings_registry.get_module_settings_groups(self.module_name)
             
             # Use new display mode system if available, otherwise fallback to old system
             if hasattr(self.engine, 'get_next_with_display_mode'):
@@ -70,7 +73,7 @@ class FlashcardBlueprint:
         def check():
             item = self.engine[int(request.form["item_id"]) - 1]  # Convert from 1-based to 0-based indexing
             settings = get_user_settings(self.module_name)
-            settings_groups = settings_registry.get_settings_groups(get_module_settings_config(self.module_name))
+            settings_groups = settings_registry.get_module_settings_groups(self.module_name)
             
             # Use new input modes system if available, otherwise fallback to old system
             if "input_modes" in settings and hasattr(self.engine, 'check_answers_with_input_modes'):
@@ -217,6 +220,68 @@ class FlashcardBlueprint:
                 }
             except Exception as e:
                 return {"error": f"Failed to get dataset info: {str(e)}"}, 500
+        
+        @bp.route("/api/settings/<module_name>", methods=["GET"])
+        @login_required
+        def get_module_settings_config(module_name):
+            """Get module-specific settings configuration"""
+            try:
+                config = get_module_config(module_name)
+                return jsonify({
+                    'defaults': config.default_settings,
+                    'available_options': config.available_options,
+                    'restricted_options': config.restricted_options
+                })
+            except Exception as e:
+                return jsonify({'error': str(e)}), 500
+        
+        @bp.route("/api/settings/validate", methods=["POST"])
+        @login_required
+        def validate_settings_for_module():
+            """Validate settings against module configuration"""
+            try:
+                data = request.get_json()
+                module_name = data.get('module_name')
+                settings = data.get('settings', {})
+                
+                if not module_name:
+                    return jsonify({'error': 'module_name is required'}), 400
+                
+                config = get_module_config(module_name)
+                
+                # Validate each setting
+                validation_results = {}
+                for key, value in settings.items():
+                    is_valid = True
+                    error_message = None
+                    
+                    # Check restricted options
+                    restricted_values = config.restricted_options.get(key, [])
+                    if value in restricted_values:
+                        is_valid = False
+                        error_message = f"Setting '{key}' value '{value}' is not allowed for module '{module_name}'"
+                    
+                    # Check available options
+                    available_values = config.available_options.get(key, [])
+                    if available_values and value not in available_values:
+                        is_valid = False
+                        if not error_message:
+                            error_message = f"Setting '{key}' value '{value}' is not available for module '{module_name}'"
+                    
+                    validation_results[key] = {
+                        'valid': is_valid,
+                        'error': error_message,
+                        'suggested_default': config.default_settings.get(key) if not is_valid else None
+                    }
+                
+                return jsonify({
+                    'module_name': module_name,
+                    'validation_results': validation_results,
+                    'all_valid': all(result['valid'] for result in validation_results.values())
+                })
+                
+            except Exception as e:
+                return jsonify({'error': str(e)}), 500
         
         @bp.route("/api/check-answers", methods=["POST"])
         @login_required

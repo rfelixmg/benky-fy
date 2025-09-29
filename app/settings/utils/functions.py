@@ -23,9 +23,9 @@ def get_user_settings(module_name: str) -> Dict[str, Any]:
     session_key = f"flashcard_settings_{module_name}"
     settings = session.get(session_key, {})
     
-    # If no settings found, return defaults
+    # If no settings found, return module-specific defaults
     if not settings:
-        settings = settings_registry.get_default_settings()
+        settings = settings_registry.get_default_settings_for_module(module_name)
         session[session_key] = settings
     
     return settings

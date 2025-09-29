@@ -30,26 +30,26 @@ export class SettingsModal {
     /**
      * Toggle modal visibility
      */
-    toggle() {
+    async toggle() {
         if (!this.modal) return;
 
         this.isVisible = !this.isVisible;
         this.modal.classList.toggle('show', this.isVisible);
 
         if (this.isVisible) {
-            this._loadSettingsIntoUI();
+            await this._loadSettingsIntoUI();
         }
     }
 
     /**
      * Show modal
      */
-    show() {
+    async show() {
         if (!this.modal) return;
 
         this.isVisible = true;
         this.modal.classList.add('show');
-        this._loadSettingsIntoUI();
+        await this._loadSettingsIntoUI();
     }
 
     /**
@@ -161,13 +161,19 @@ export class SettingsModal {
     /**
      * Load settings into UI
      */
-    _loadSettingsIntoUI() {
+    async _loadSettingsIntoUI() {
         if (!this.settingsManager) return;
 
         const settings = this.settingsManager.getAllSettings();
         
+        // Wait for module config to load before applying restrictions
+        await this.settingsManager.waitForConfig();
+        
         // Hide conjugation options for modules that don't support it
         this._updateConjugationVisibility();
+        
+        // Apply module-specific restrictions
+        this._applyModuleRestrictions();
 
         // Set display mode
         const displayModeInput = document.querySelector(`input[name="display_mode"][value="${settings.displayMode}"]`);
@@ -518,5 +524,133 @@ export class SettingsModal {
                 this.settingsManager.updateSetting('practiceMode', 'flashcard');
             }
         }
+    }
+
+    /**
+     * Apply module-specific restrictions to UI
+     */
+    _applyModuleRestrictions() {
+        if (!this.settingsManager || !this.settingsManager.moduleConfig) {
+            console.log('No module config available for restrictions');
+            return;
+        }
+
+        const restrictedOptions = this.settingsManager.getRestrictedOptions();
+        const availableOptions = this.settingsManager.moduleConfig.available_options;
+
+        console.log('Applying module restrictions for', this.settingsManager.moduleName);
+        console.log('Restricted options:', restrictedOptions);
+        console.log('Available options:', availableOptions);
+
+        // Apply restrictions to display mode options
+        this._filterDropdownOptions('display_mode', availableOptions.display_mode);
+        
+        // Apply restrictions to input mode options
+        this._filterCheckboxGroup('input_modes', availableOptions.input_modes);
+        
+        // Apply restrictions to furigana style options
+        this._filterDropdownOptions('furigana_style', availableOptions.furigana_style);
+        
+        // Hide kanji-related options for kana-only modules
+        this._handleKanaOnlyModules(restrictedOptions);
+        
+        // Hide conjugation options for non-conjugation modules
+        this._handleConjugationRestrictions(restrictedOptions);
+    }
+
+    /**
+     * Filter dropdown options based on module restrictions
+     */
+    _filterDropdownOptions(inputName, allowedValues) {
+        if (!allowedValues || allowedValues.length === 0) return;
+        
+        const inputs = document.querySelectorAll(`input[name="${inputName}"]`);
+        inputs.forEach(input => {
+            const container = input.closest('.radio-option') || input.closest('.checkbox-option') || input.parentElement;
+            if (allowedValues.includes(input.value)) {
+                container.style.display = 'block';
+                input.disabled = false;
+            } else {
+                container.style.display = 'none';
+                input.checked = false;
+            }
+        });
+    }
+
+    /**
+     * Filter checkbox group options based on module restrictions
+     */
+    _filterCheckboxGroup(inputName, allowedValues) {
+        if (!allowedValues || allowedValues.length === 0) return;
+        
+        const inputs = document.querySelectorAll(`input[name="${inputName}"]`);
+        inputs.forEach(input => {
+            const container = input.closest('.checkbox-option') || input.parentElement;
+            if (allowedValues.includes(input.value)) {
+                container.style.display = 'block';
+                input.disabled = false;
+            } else {
+                container.style.display = 'none';
+                input.checked = false;
+            }
+        });
+    }
+
+    /**
+     * Handle restrictions for kana-only modules
+     */
+    _handleKanaOnlyModules(restrictedOptions) {
+        // Hide kanji-related display-mode options
+        if (restrictedOptions.kanji_options) {
+            console.log('Hiding kanji options:', restrictedOptions.kanji_options);
+            restrictedOptions.kanji_options.forEach(option => {
+                const inputs = document.querySelectorAll(`input[name="display_mode"][value="${option}"]`);
+                console.log(`Found ${inputs.length} display mode inputs for "${option}"`);
+                inputs.forEach(input => {
+                    const container = input.closest('.radio-option, .checkbox-option, li') || input.parentElement;
+                    container.style.display = 'none';
+                    container.style.visibility = 'hidden';
+                    input.checked = false;
+                    input.disabled = true;
+                    console.log(`Hidden kanji option: ${option}`);
+                });
+            });
+        }
+    }
+
+    /**
+     * Handle conjugation restrictions
+     */
+    _handleConjugationRestrictions(restrictedOptions) {
+        if (restrictedOptions.conjugation && restrictedOptions.conjugation.includes('enable_conjugation')) {
+            // Hide all conjugation-related options
+            const conjugationInputs = document.querySelectorAll('input[name*="conjugation"]');
+            conjugationInputs.forEach(input => {
+                const container = input.closest('.checkbox-option') || input.closest('.radio-option') || input.parentElement;
+                container.style.display = 'none';
+                input.checked = false;
+            });
+            
+            // Hide conjugation practice mode
+            const conjugationModeInput = document.querySelector('input[name="practice_mode"][value="conjugation"]');
+            if (conjugationModeInput) {
+                const container = conjugationModeInput.closest('.radio-option') || conjugationModeInput.parentElement;
+                container.style.display = 'none';
+                conjugationModeInput.checked = false;
+                
+                // Switch to flashcard mode if conjugation was selected
+                this.settingsManager.updateSetting('practiceMode', 'flashcard');
+            }
+        }
+    }
+
+    /**
+     * Validate setting before applying
+     */
+    _validateSetting(settingKey, value) {
+        if (!this.settingsManager) return true;
+        
+        return this.settingsManager.isSettingAvailable(settingKey, value) && 
+               !this.settingsManager.isSettingRestricted(settingKey, value);
     }
 }

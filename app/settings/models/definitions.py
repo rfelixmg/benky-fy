@@ -1,8 +1,12 @@
 """Settings data model definitions."""
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Callable
+from typing import Dict, List, Any, Optional, Callable, Union, TYPE_CHECKING
 from abc import ABC, abstractmethod
+
+# Prevent circular import issues
+if TYPE_CHECKING:
+    from ..config.module_configs import ModuleSettingsConfig
 
 
 @dataclass
@@ -31,7 +35,7 @@ class SettingsPlugin(ABC):
     """Base class for settings plugins"""
     
     @abstractmethod
-    def get_settings_groups(self) -> List[SettingsGroup]:
+    def get_settings_groups(self, module_config=None) -> List[SettingsGroup]:
         """Return the settings groups this plugin provides"""
         pass
     

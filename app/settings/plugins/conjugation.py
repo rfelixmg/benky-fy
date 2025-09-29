@@ -1,13 +1,13 @@
 """Conjugation settings plugin."""
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from ..models.definitions import SettingsPlugin, SettingsGroup, SettingDefinition
 
 
 class ConjugationSettingsPlugin(SettingsPlugin):
     """Conjugation practice settings"""
     
-    def get_settings_groups(self) -> List[SettingsGroup]:
+    def get_settings_groups(self, module_config=None) -> List[SettingsGroup]:
         return [
             SettingsGroup(
                 name="Conjugation Practice",

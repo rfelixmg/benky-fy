@@ -1,14 +1,15 @@
 """Core flashcard settings plugin."""
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
 from ..models.definitions import SettingsPlugin, SettingsGroup, SettingDefinition
 
 
 class CoreSettingsPlugin(SettingsPlugin):
     """Core flashcard settings (styles, checking modes)"""
     
-    def get_settings_groups(self) -> List[SettingsGroup]:
-        return [
+    def get_settings_groups(self, module_config=None) -> List[SettingsGroup]:
+        # Filter settings based on module configuration
+        groups = [
             SettingsGroup(
                 name="Flashcard Type",
                 description="Choose the type of flashcard practice",
@@ -135,6 +136,76 @@ class CoreSettingsPlugin(SettingsPlugin):
                 condition=lambda settings: settings.get("display_mode") == "weighted"
             )
         ]
+        
+        # Filter groups based on module configuration
+        if module_config:
+            filtered_groups = []
+            for group in groups:
+                filtered_settings = []
+                for setting in group.settings:
+                    # Skip restricted settings for this module
+                    if self._is_setting_allowed(setting.key, module_config):
+                        filtered_settings.append(setting)
+                    else:
+                        # Update options for this setting based on module config
+                        filtered_setting = self._filter_setting_options(setting, module_config)
+                        if filtered_setting:
+                            filtered_settings.append(filtered_setting)
+                
+                if filtered_settings:
+                    filtered_groups.append(SettingsGroup(
+                        name=group.name,
+                        description=group.description,
+                        settings=filtered_settings,
+                        condition=group.condition
+                    ))
+            
+            return filtered_groups
+        
+        return groups
+    
+    def _is_setting_allowed(self, setting_key: str, module_config) -> bool:
+        """Check if a setting is allowed for this module"""
+        if module_config is None:
+            return True
+        
+        restricted_options = module_config.restricted_options
+        for restricted_setting, restricted_values in restricted_options.items():
+            if setting_key == restricted_setting or setting_key in restricted_values:
+                return False
+        
+        return True
+    
+    def _filter_setting_options(self, setting: SettingDefinition, module_config):
+        """Filter setting options based on module configuration"""
+        if not setting.options:
+            return None
+            
+        filtered_options = {}
+        available_options = module_config.available_options.get(setting.key, [])
+        
+        if not available_options:
+            # If no specific options defined, use all options
+            return setting
+        
+        # Filter options based on available options
+        for value, label in setting.options.items():
+            if value in available_options:
+                filtered_options[value] = label
+        
+        if not filtered_options:
+            return None
+            
+        return SettingDefinition(
+            key=setting.key,
+            name=setting.name,
+            description=setting.description,
+            type=setting.type,
+            default_value=setting.default_value,
+            options=filtered_options,
+            validation=setting.validation,
+            dependencies=setting.dependencies
+        )
     
     def process_settings(self, settings: Dict[str, Any]) -> Dict[str, Any]:
         # Process input modes
