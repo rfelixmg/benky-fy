@@ -1,0 +1,161 @@
+'use client';
+
+import { AuthGuard, UserMenu } from '@/components/auth-guard';
+import { useAuth } from '@/lib/hooks';
+import { FloatingElements } from '@/components/floating-elements';
+import { Button } from '@/components/ui/button';
+import { BookOpen, Brain, Target, TrendingUp, Clock, Award } from 'lucide-react';
+import Link from 'next/link';
+
+const recentModules = [
+  { id: 'hiragana', name: 'Hiragana', progress: 75, lastStudied: '2 hours ago' },
+  { id: 'verbs', name: 'Japanese Verbs', progress: 45, lastStudied: '1 day ago' },
+  { id: 'katakana', name: 'Katakana', progress: 20, lastStudied: '3 days ago' },
+];
+
+const stats = [
+  { label: 'Total Cards Studied', value: '156', icon: BookOpen, color: 'text-blue-500' },
+  { label: 'Current Streak', value: '7 days', icon: TrendingUp, color: 'text-green-500' },
+  { label: 'Study Time Today', value: '25 min', icon: Clock, color: 'text-purple-500' },
+  { label: 'Accuracy Rate', value: '87%', icon: Award, color: 'text-orange-500' },
+];
+
+export default function DashboardPage() {
+  const { data: authData } = useAuth();
+
+  return (
+    <AuthGuard>
+      <div className="min-h-screen bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+        <FloatingElements />
+        
+        {/* Header */}
+        <div className="relative z-10 p-6 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-white">
+              Welcome back, {authData?.user?.name?.split(' ')[0] || 'Student'}!
+            </h1>
+            <p className="text-white/80">Ready to continue your Japanese learning journey?</p>
+          </div>
+          
+          {authData?.user && (
+            <UserMenu user={authData.user} />
+          )}
+        </div>
+        
+        {/* Main Content */}
+        <div className="relative z-10 px-6 pb-6">
+          <div className="max-w-6xl mx-auto">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              {stats.map((stat) => {
+                const IconComponent = stat.icon;
+                return (
+                  <div key={stat.label} className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <IconComponent className={`w-6 h-6 ${stat.color}`} />
+                    </div>
+                    <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                    <div className="text-sm text-white/70">{stat.label}</div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Recent Modules */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold text-white">Continue Learning</h2>
+                <Link href="/modules">
+                  <Button variant="outline" className="border-white text-white hover:bg-white/10">
+                    View All Modules
+                  </Button>
+                </Link>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {recentModules.map((module) => (
+                  <Link
+                    key={module.id}
+                    href={`/flashcards/${module.id}`}
+                    className="group"
+                  >
+                    <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-all duration-300">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium text-white">{module.name}</h3>
+                        <span className="text-sm text-white/60">{module.progress}%</span>
+                      </div>
+                      
+                      <div className="w-full bg-white/20 rounded-full h-2 mb-2">
+                        <div
+                          className="bg-white h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${module.progress}%` }}
+                        />
+                      </div>
+                      
+                      <div className="text-xs text-white/60">
+                        Last studied: {module.lastStudied}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            
+            {/* Quick Actions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Quick Start</h3>
+                <div className="space-y-3">
+                  <Link href="/flashcards/hiragana">
+                    <Button className="w-full justify-start bg-white text-primary hover:bg-white/90">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Practice Hiragana
+                    </Button>
+                  </Link>
+                  <Link href="/flashcards/verbs">
+                    <Button className="w-full justify-start bg-white text-primary hover:bg-white/90">
+                      <Target className="w-4 h-4 mr-2" />
+                      Practice Verbs
+                    </Button>
+                  </Link>
+                  <Link href="/modules">
+                    <Button variant="outline" className="w-full justify-start border-white text-white hover:bg-white/10">
+                      <Brain className="w-4 h-4 mr-2" />
+                      Browse All Modules
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+              
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Today&apos;s Goals</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/80">Study 20 cards</span>
+                    <span className="text-sm text-white/60">12/20</span>
+                  </div>
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full w-3/5" />
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/80">Maintain streak</span>
+                    <span className="text-sm text-green-400">✓ Done</span>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-white/80">Practice for 15 min</span>
+                    <span className="text-sm text-white/60">8/15 min</span>
+                  </div>
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div className="bg-white h-2 rounded-full w-1/2" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AuthGuard>
+  );
+}
