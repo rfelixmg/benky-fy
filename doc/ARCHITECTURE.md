@@ -89,7 +89,7 @@ benky-fy/
 - **No Client-side Secrets**: All sensitive data server-side
 - **Input Validation**: Comprehensive parameter validation
 - **Error Handling**: Secure error responses
-- **CORS Configuration**: Same-origin request design
+- **CORS Configuration**: Cross-origin support for frontend integration
 
 ## Development Workflow
 

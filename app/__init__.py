@@ -1,10 +1,14 @@
 from flask import Flask
+from flask_cors import CORS
 import os
 
 def create_app() -> Flask:
     """Application factory pattern for Benkyo-Fi."""
     
     app = Flask(__name__, static_folder="static", template_folder="templates")
+
+    # Configure CORS for frontend integration
+    CORS(app, origins=['http://localhost:3000'], supports_credentials=True)
 
     # Configure app
     app.secret_key = os.environ.get("FLASK_SECRET_KEY", "superkey-benky-fy")

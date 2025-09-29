@@ -395,7 +395,7 @@ The following modules are available with the above API structure:
 Currently no rate limiting is implemented. Consider implementing rate limiting for production use.
 
 ## CORS
-CORS is not explicitly configured. The application is designed for same-origin requests.
+CORS is configured using Flask-CORS to support frontend integration. The application accepts cross-origin requests from `http://localhost:3000` (Next.js frontend) with credentials support enabled.
 
 ## Security Considerations
 - All authenticated routes require valid session

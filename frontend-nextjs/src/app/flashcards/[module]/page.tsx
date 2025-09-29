@@ -73,10 +73,10 @@ export default function FlashcardPage() {
 
 
   useEffect(() => {
-    if (flashcardData && !isPageLoaded) {
+    if (wordsData && !isPageLoaded) {
       setIsPageLoaded(true);
     }
-  }, [flashcardData, isPageLoaded]);
+  }, [wordsData, isPageLoaded]);
 
   if (isLoading) {
     return (
@@ -102,7 +102,7 @@ export default function FlashcardPage() {
     );
   }
 
-  if (!flashcardData || !currentItem) {
+  if (!wordsData || !currentItem) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
         <div className="text-center">
@@ -166,7 +166,7 @@ export default function FlashcardPage() {
           {/* Progress Section */}
           <ProgressSection
             currentItem={currentItemId}
-            totalItems={flashcardData.length}
+            totalItems={wordsData.length}
             moduleName={moduleName}
           />
 
@@ -192,7 +192,7 @@ export default function FlashcardPage() {
             onSkip={handleSkip}
             disabled={isUserInteraction}
             canGoPrevious={currentItemId > 1}
-            canGoNext={currentItemId < flashcardData.length}
+            canGoNext={currentItemId < wordsData.length}
           />
         </div>
       </div>
