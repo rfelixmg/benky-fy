@@ -1,9 +1,11 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { AuthGuard, UserMenu } from '@/components/auth-guard';
 import { useAuth } from '@/lib/hooks';
 import { FloatingElements } from '@/components/floating-elements';
-import { BookOpen, Brain, Target, Zap, ArrowRight } from 'lucide-react';
+import { RomajiInput } from '@/components/japanese/romaji-input';
+import { BookOpen, Brain, Target, Zap, ArrowRight, Search } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -48,6 +50,19 @@ const modules = [
 
 export default function ModulesPage() {
   const { data: authData } = useAuth();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [useRomajiInput, setUseRomajiInput] = useState(false);
+
+  // Filter modules based on search term
+  const filteredModules = useMemo(() => {
+    if (!searchTerm.trim()) return modules;
+    
+    return modules.filter(module => 
+      module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      module.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      module.difficulty.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm]);
 
   return (
     <AuthGuard>
@@ -77,11 +92,12 @@ export default function ModulesPage() {
           )}
         </div>
         
+
         {/* Modules Grid */}
         <div className="relative z-10 px-6 pb-6">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {modules.map((module) => {
+              {filteredModules.map((module) => {
                 const IconComponent = module.icon;
                 return (
                   <Link

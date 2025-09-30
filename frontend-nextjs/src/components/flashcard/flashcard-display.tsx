@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { FlashcardItem, UserSettings } from '@/lib/api-client';
 import { cn } from '@/lib/utils';
+import { Furigana, JapaneseText } from '@/components/japanese/furigana';
 
 interface FlashcardDisplayProps {
   item: FlashcardItem;
@@ -35,21 +36,24 @@ export function FlashcardDisplay({
     }, 600);
   };
 
-  const renderFurigana = (text: string, furigana?: string) => {
-    if (!settings.furiganaEnabled || !furigana) {
-      return text;
+  const renderJapaneseText = (text: string, furigana?: string) => {
+    if (settings.furiganaEnabled && furigana) {
+      return (
+        <Furigana
+          kanji={text}
+          furigana={furigana}
+          showFurigana={settings.furiganaEnabled}
+          className="text-white"
+        />
+      );
     }
-
-    // Simple furigana rendering - in a real app you'd use a proper Japanese text renderer
+    
     return (
-      <span className="relative">
-        {text}
-        {furigana && (
-          <span className="absolute -top-6 left-0 text-xs text-muted-foreground">
-            {furigana}
-          </span>
-        )}
-      </span>
+      <JapaneseText
+        text={text}
+        showFurigana={settings.furiganaEnabled}
+        className="text-white"
+      />
     );
   };
 
@@ -73,12 +77,12 @@ export function FlashcardDisplay({
             <div className="text-4xl md:text-6xl font-bold text-white mb-4">
               {item.kanji && (
                 <div className="mb-2">
-                  {renderFurigana(item.kanji, item.furigana)}
+                  {renderJapaneseText(item.kanji, item.furigana)}
                 </div>
               )}
               {item.hiragana && (
                 <div className="mb-2">
-                  {renderFurigana(item.hiragana, item.furigana)}
+                  {renderJapaneseText(item.hiragana, item.furigana)}
                 </div>
               )}
               <div className="text-2xl text-white/80">
@@ -94,12 +98,12 @@ export function FlashcardDisplay({
             <div className="text-4xl md:text-6xl font-bold text-white mb-4">
               {item.kanji && (
                 <div className="mb-2">
-                  {renderFurigana(item.kanji, item.furigana)}
+                  {renderJapaneseText(item.kanji, item.furigana)}
                 </div>
               )}
               {item.hiragana && (
                 <div className="mb-2">
-                  {renderFurigana(item.hiragana, item.furigana)}
+                  {renderJapaneseText(item.hiragana, item.furigana)}
                 </div>
               )}
             </div>
@@ -156,12 +160,6 @@ export function FlashcardDisplay({
         </div>
       </div>
       
-      {/* Word type indicator */}
-      <div className="flex justify-center mt-4">
-        <div className="bg-primary-purple/20 text-primary-purple px-3 py-1 rounded-full text-sm border border-primary-purple/30">
-          {item.type}
-        </div>
-      </div>
     </div>
   );
 }

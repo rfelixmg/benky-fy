@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { Home, LayoutDashboard, BookOpen, User, Settings } from 'lucide-react';
 import { useAuth } from '@/lib/hooks';
 
@@ -64,9 +63,6 @@ export function NavigationHeader({ currentPage, showUserMenu = true }: Navigatio
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-4">
-            {/* Theme Toggle */}
-            <ThemeToggle />
-            
             {/* User Menu */}
             {showUserMenu && authData?.user && (
               <div className="flex items-center gap-2">

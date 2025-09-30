@@ -11,6 +11,9 @@ import { ActionButtons } from '@/components/flashcard/action-buttons';
 import { SettingsModal } from '@/components/flashcard/settings-modal';
 import { HelpModal } from '@/components/flashcard/help-modal';
 import { Statistics } from '@/components/flashcard/statistics';
+import { ConjugationPractice } from '@/components/conjugation/conjugation-practice';
+import { ConjugationSettings } from '@/components/conjugation/conjugation-settings';
+import { ConjugationStats } from '@/components/conjugation/conjugation-stats';
 import { NavigationHeader } from '@/components/navigation-header';
 import { Button } from '@/components/ui/button';
 import { Loader2, Settings, HelpCircle } from 'lucide-react';
@@ -26,6 +29,13 @@ export default function FlashcardPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showStats, setShowStats] = useState(false);
+  const [showConjugationSettings, setShowConjugationSettings] = useState(false);
+  const [selectedConjugationForm, setSelectedConjugationForm] = useState('polite');
+  const [currentAttempts, setCurrentAttempts] = useState(0);
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [lastAnswer, setLastAnswer] = useState('');
+  const [lastMatchedType, setLastMatchedType] = useState<string | undefined>();
+  const [lastConvertedAnswer, setLastConvertedAnswer] = useState<string | undefined>();
   
   const { data: wordsData, isLoading, error } = useWordsData(moduleName);
   const { getSettings } = useSettingsStore();
@@ -39,32 +49,76 @@ export default function FlashcardPage() {
     
     setIsUserInteraction(true);
     
-    // Frontend validation (V2 API doesn't provide answer checking)
-    const correctAnswer = currentItem.english || currentItem.hiragana || currentItem.kanji || '';
-    const isCorrect = validateAnswer(userAnswer, correctAnswer);
+    // Prepare correct answers for validation
+    const correctAnswers = {
+      hiragana: currentItem.hiragana,
+      katakana: currentItem.katakana,
+      english: currentItem.english,
+      kanji: currentItem.kanji,
+    };
+    
+    // Use comprehensive validation
+    const validationResult = validateAnswer(userAnswer, correctAnswers, settings);
+    const answerIsCorrect = validationResult.isCorrect;
+    
+    // Store answer information for feedback
+    setLastAnswer(userAnswer);
+    setLastMatchedType(validationResult.matchedType);
+    setLastConvertedAnswer(validationResult.convertedAnswer);
+    
+    // Update attempt counter
+    const newAttempts = currentAttempts + 1;
+    setCurrentAttempts(newAttempts);
+    setIsCorrect(answerIsCorrect);
     
     // Handle feedback display
-    if (isCorrect) {
+    if (answerIsCorrect) {
       // Move to next item after a delay
       setTimeout(() => {
         setCurrentItemId(prev => prev + 1);
+        setCurrentAttempts(0);
+        setIsCorrect(false);
         setIsUserInteraction(false);
       }, 1500);
     } else {
-      // Show incorrect feedback
-      setTimeout(() => {
-        setIsUserInteraction(false);
-      }, 2000);
+      // Check if max attempts reached
+      const maxAttempts = settings.max_answer_attempts;
+      const hasAttemptsLeft = maxAttempts === -1 || newAttempts < maxAttempts;
+      
+      if (!hasAttemptsLeft) {
+        // Max attempts reached - show correct answer and move to next
+        setTimeout(() => {
+          setCurrentItemId(prev => prev + 1);
+          setCurrentAttempts(0);
+          setIsCorrect(false);
+          setIsUserInteraction(false);
+        }, 3000);
+      } else {
+        // Show incorrect feedback but allow more attempts
+        setTimeout(() => {
+          setIsUserInteraction(false);
+        }, 2000);
+      }
     }
-  }, [currentItem]);
+  }, [currentItem, currentAttempts, settings]);
 
   const handleNext = useCallback(() => {
     setCurrentItemId(prev => prev + 1);
+    setCurrentAttempts(0);
+    setIsCorrect(false);
+    setLastAnswer('');
+    setLastMatchedType(undefined);
+    setLastConvertedAnswer(undefined);
     setIsUserInteraction(false);
   }, []);
 
   const handlePrevious = useCallback(() => {
     setCurrentItemId(prev => Math.max(1, prev - 1));
+    setCurrentAttempts(0);
+    setIsCorrect(false);
+    setLastAnswer('');
+    setLastMatchedType(undefined);
+    setLastConvertedAnswer(undefined);
     setIsUserInteraction(false);
   }, []);
 
@@ -137,6 +191,17 @@ export default function FlashcardPage() {
           </div>
           
           <div className="flex items-center gap-2">
+            {currentMode === 'conjugation' && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowConjugationSettings(true)}
+                className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Conjugation Settings
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -154,53 +219,71 @@ export default function FlashcardPage() {
               <HelpCircle className="w-4 h-4 mr-2" />
               Help
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowSettings(true)}
-              className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Settings
-            </Button>
+            {currentMode === 'flashcard' && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSettings(true)}
+                className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Settings
+              </Button>
+            )}
           </div>
         </div>
 
         {/* Main Content */}
         <div className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4">
-        <div className="w-full max-w-4xl">
-          {/* Progress Section */}
-          <ProgressSection
-            currentItem={currentItemId}
-            totalItems={wordsData.length}
-            moduleName={moduleName}
-          />
+          {currentMode === 'flashcard' ? (
+            <div className="w-full max-w-4xl">
+              {/* Progress Section */}
+              <ProgressSection
+                currentItem={currentItemId}
+                totalItems={wordsData.length}
+                moduleName={moduleName}
+              />
 
-          {/* Flashcard Display */}
-          <FlashcardDisplay
-            item={currentItem}
-            settings={settings}
-            isUserInteraction={isUserInteraction}
-            mode={currentMode}
-          />
+              {/* Flashcard Display */}
+              <FlashcardDisplay
+                item={currentItem}
+                settings={settings}
+                isUserInteraction={isUserInteraction}
+                mode={currentMode}
+              />
 
-          {/* Answer Input */}
-          <AnswerInput
-            onSubmit={handleAnswerSubmit}
-            disabled={isUserInteraction}
-            settings={settings}
-          />
+              {/* Answer Input */}
+              <AnswerInput
+                onSubmit={handleAnswerSubmit}
+                disabled={isUserInteraction}
+                settings={settings}
+                currentAttempts={currentAttempts}
+                maxAttempts={settings.max_answer_attempts}
+                isCorrect={isCorrect}
+                currentItem={currentItem}
+                lastAnswer={lastAnswer}
+                lastMatchedType={lastMatchedType}
+                lastConvertedAnswer={lastConvertedAnswer}
+              />
 
-          {/* Action Buttons */}
-          <ActionButtons
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-            onSkip={handleSkip}
-            disabled={isUserInteraction}
-            canGoPrevious={currentItemId > 1}
-            canGoNext={currentItemId < wordsData.length}
-          />
-        </div>
+              {/* Action Buttons */}
+              <ActionButtons
+                onNext={handleNext}
+                onPrevious={handlePrevious}
+                onSkip={handleSkip}
+                disabled={isUserInteraction}
+                canGoPrevious={currentItemId > 1}
+                canGoNext={currentItemId < wordsData.length}
+              />
+            </div>
+          ) : (
+            /* Conjugation Practice Mode */
+            <ConjugationPractice
+              moduleName={moduleName}
+              initialForm={selectedConjugationForm}
+              onComplete={() => setCurrentMode('flashcard')}
+            />
+          )}
         </div>
       </div>
 
@@ -221,9 +304,41 @@ export default function FlashcardPage() {
       )}
       
       {showStats && (
-        <Statistics
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Statistics</h2>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowStats(false)}
+                  className="h-8 w-8 p-0"
+                >
+                  ×
+                </Button>
+              </div>
+              {currentMode === 'conjugation' ? (
+                <ConjugationStats moduleName={moduleName} />
+              ) : (
+                <Statistics
+                  moduleName={moduleName}
+                  onClose={() => setShowStats(false)}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Conjugation Settings Modal */}
+      {showConjugationSettings && (
+        <ConjugationSettings
+          isOpen={showConjugationSettings}
+          onClose={() => setShowConjugationSettings(false)}
+          selectedForm={selectedConjugationForm}
+          onFormChange={setSelectedConjugationForm}
           moduleName={moduleName}
-          onClose={() => setShowStats(false)}
         />
       )}
     </div>

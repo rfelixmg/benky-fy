@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { AuthGuard, UserMenu } from '@/components/auth-guard';
 import { useAuth } from '@/lib/hooks';
 import { FloatingElements } from '@/components/floating-elements';
+import { RomajiInput } from '@/components/japanese/romaji-input';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Brain, Target, TrendingUp, Clock, Award } from 'lucide-react';
+import { BookOpen, Brain, Target, TrendingUp, Clock, Award, Search } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -23,6 +25,8 @@ const stats = [
 
 export default function DashboardPage() {
   const { data: authData } = useAuth();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [useRomajiInput, setUseRomajiInput] = useState(false);
 
   return (
     <AuthGuard>
@@ -54,6 +58,57 @@ export default function DashboardPage() {
           )}
         </div>
         
+        {/* Quick Search */}
+        <div className="relative z-10 px-6 pb-6">
+          <div className="max-w-6xl mx-auto mb-6">
+            <div className="bg-background/10 backdrop-blur-sm rounded-lg p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Search className="w-4 h-4 text-primary-foreground" />
+                <h3 className="text-sm font-semibold text-primary-foreground">Quick Search</h3>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-2 text-primary-foreground/80 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={useRomajiInput}
+                    onChange={(e) => setUseRomajiInput(e.target.checked)}
+                    className="rounded border-white/30 bg-white/20 text-white focus:ring-white/50"
+                  />
+                  Romaji
+                </label>
+                
+                {useRomajiInput ? (
+                  <RomajiInput
+                    value={searchTerm}
+                    onChange={setSearchTerm}
+                    placeholder="Search modules..."
+                    showPreview={true}
+                    outputType="auto"
+                    className="text-sm flex-1"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search modules..."
+                    className="flex-1 px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent text-sm"
+                  />
+                )}
+                
+                {searchTerm && (
+                  <Link href={`/modules?search=${encodeURIComponent(searchTerm)}`}>
+                    <Button size="sm" className="bg-white text-primary hover:bg-white/90">
+                      Go
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Main Content */}
         <div className="relative z-10 px-6 pb-6">
           <div className="max-w-6xl mx-auto">
