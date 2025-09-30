@@ -18,40 +18,41 @@ export function FlashcardDisplay({
   isUserInteraction, 
   mode 
 }: FlashcardDisplayProps) {
-  const [showAnswer, setShowAnswer] = useState(false);
-  const [isFlipping, setIsFlipping] = useState(false);
-
-  useEffect(() => {
-    setShowAnswer(false);
-  }, [item.id]);
-
-  const handleFlip = () => {
-    if (isFlipping) return;
-    
-    setIsFlipping(true);
-    setShowAnswer(true);
-    
-    setTimeout(() => {
-      setIsFlipping(false);
-    }, 600);
-  };
-
+  // Remove flip functionality - flashcards should always show the question side
+  const showAnswer = false;
+  console.log('Item:', item);
+  console.log('Settings:', settings);
+  console.log('Mode:', mode);
+  console.log('Is User Interaction:', isUserInteraction);
   const renderJapaneseText = (text: string, furigana?: string) => {
-    if (settings.furiganaEnabled && furigana) {
+    // Debug settings
+    console.log('FlashcardDisplay settings:', settings);
+
+    console.log('renderJapaneseText:', { text, furigana, furigana_style: settings.furigana_style });
+    
+    // Use the new Furigana component with mode prop
+    if (furigana) {
+      const furiganaStyle = settings.furigana_style || 'ruby';
+      console.log('Using furigana with style:', furiganaStyle);
+      
       return (
         <Furigana
           kanji={text}
           furigana={furigana}
-          showFurigana={settings.furiganaEnabled}
+          showFurigana={true}
+          mode={furiganaStyle as 'hover' | 'inline' | 'brackets' | 'ruby'}
           className="text-white"
         />
       );
     }
+
+    console.log('NOT USING FURIGANA');
+
     
     return (
       <JapaneseText
         text={text}
-        showFurigana={settings.furiganaEnabled}
+        showFurigana={settings.furigana_style === 'hover'}
         className="text-white"
       />
     );
@@ -71,44 +72,54 @@ export function FlashcardDisplay({
 
   const renderContent = () => {
     if (mode === 'flashcard') {
+      const displayMode = settings.display_mode || 'kana';
+      const kanaType = settings.kana_type || 'hiragana';
+      
+      const renderDisplayText = () => {
+        switch (displayMode) {
+          case 'kanji':
+            return item.kanji ? renderJapaneseText(item.kanji, item.furigana) : null;
+          case 'kanji_furigana':
+            return item.kanji ? renderJapaneseText(item.kanji, item.furigana) : null;
+          case 'english':
+            return <span className="text-white">{item.english}</span>;
+          case 'kana':
+          default:
+            // Show hiragana or katakana based on kana_type setting
+            if (kanaType === 'katakana' && item.katakana) {
+              return renderJapaneseText(item.katakana, item.furigana);
+            } else if (item.hiragana) {
+              return renderJapaneseText(item.hiragana, item.furigana);
+            } else if (item.katakana) {
+              return renderJapaneseText(item.katakana, item.furigana);
+            }
+            return null;
+        }
+      };
+
       if (showAnswer) {
         return (
           <>
             <div className="text-4xl md:text-6xl font-bold text-white mb-4">
-              {item.kanji && (
-                <div className="mb-2">
-                  {renderJapaneseText(item.kanji, item.furigana)}
-                </div>
-              )}
-              {item.hiragana && (
-                <div className="mb-2">
-                  {renderJapaneseText(item.hiragana, item.furigana)}
-                </div>
-              )}
-              <div className="text-2xl text-white/80">
-                {item.english}
+              <div className="mb-2">
+                {renderDisplayText()}
               </div>
+              {displayMode !== 'english' && (
+                <div className="text-2xl text-white/80">
+                  {item.english}
+                </div>
+              )}
             </div>
             <div className="text-sm text-white/70">Answer</div>
           </>
         );
       } else {
         return (
-          <>
-            <div className="text-4xl md:text-6xl font-bold text-white mb-4">
-              {item.kanji && (
-                <div className="mb-2">
-                  {renderJapaneseText(item.kanji, item.furigana)}
-                </div>
-              )}
-              {item.hiragana && (
-                <div className="mb-2">
-                  {renderJapaneseText(item.hiragana, item.furigana)}
-                </div>
-              )}
+          <div className="text-4xl md:text-6xl font-bold text-white mb-4">
+            <div className="mb-2">
+              {renderDisplayText()}
             </div>
-            <div className="text-sm text-white/70">Question</div>
-          </>
+          </div>
         );
       }
     } else {
@@ -136,30 +147,13 @@ export function FlashcardDisplay({
       <div 
         className={cn(
           "relative bg-gradient-to-br from-primary-purple/20 to-secondary-purple/20 backdrop-blur-sm rounded-lg p-8 min-h-[300px] flex items-center justify-center transition-all duration-300 border border-primary-purple/30 shadow-lg",
-          isFlipping && "transform scale-105 shadow-xl",
           isUserInteraction && "opacity-75"
         )}
-        onClick={handleFlip}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleFlip();
-          }
-        }}
-        aria-label="Click to flip flashcard"
       >
         <div className="text-center">
           {renderContent()}
         </div>
-        
-        {/* Flip indicator */}
-        <div className="absolute bottom-4 right-4 text-primary-foreground/50 text-sm">
-          Click to flip
-        </div>
       </div>
-      
     </div>
   );
 }

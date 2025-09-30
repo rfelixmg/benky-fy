@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { useWordsData, validateAnswer } from '@/lib/hooks';
+import { useWordsData, validateAnswer, useTrackAnswer, AnswerResult } from '@/lib/hooks';
 import { useSettingsStore } from '@/lib/settings-store';
 import { FlashcardDisplay } from '@/components/flashcard/flashcard-display';
 import { AnswerInput } from '@/components/flashcard/answer-input';
@@ -39,8 +39,10 @@ export default function FlashcardPage() {
   
   const { data: wordsData, isLoading, error } = useWordsData(moduleName);
   const { getSettings } = useSettingsStore();
+  const trackAnswerMutation = useTrackAnswer();
   
   const settings = getSettings(moduleName);
+  console.log('Flashcard page settings:', settings);
 
   const currentItem = wordsData?.find((item, index) => index === currentItemId - 1);
 
@@ -70,6 +72,29 @@ export default function FlashcardPage() {
     const newAttempts = currentAttempts + 1;
     setCurrentAttempts(newAttempts);
     setIsCorrect(answerIsCorrect);
+    
+    // Track answer result for future database storage
+    const answerResult: AnswerResult = {
+      moduleName,
+      itemId: currentItem.id,
+      userAnswer,
+      isCorrect: answerIsCorrect,
+      matchedType: validationResult.matchedType,
+      attempts: newAttempts,
+      timestamp: new Date().toISOString(),
+      settings: {
+        input_hiragana: settings.input_hiragana,
+        input_katakana: settings.input_katakana,
+        input_english: settings.input_english,
+        input_kanji: settings.input_kanji,
+        input_romaji: settings.input_romaji,
+        display_mode: settings.display_mode,
+        furigana_style: settings.furigana_style,
+      }
+    };
+    
+    // Track the answer result (currently logs to console, ready for backend)
+    trackAnswerMutation.mutate(answerResult);
     
     // Handle feedback display
     if (answerIsCorrect) {
@@ -264,6 +289,7 @@ export default function FlashcardPage() {
                 lastAnswer={lastAnswer}
                 lastMatchedType={lastMatchedType}
                 lastConvertedAnswer={lastConvertedAnswer}
+                moduleName={moduleName}
               />
 
               {/* Action Buttons */}

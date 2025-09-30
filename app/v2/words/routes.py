@@ -52,7 +52,9 @@ word_model = api.model('Word', {
     'kanji': fields.String(description='Japanese kanji characters'),
     'hiragana': fields.String(description='Japanese hiragana characters'),
     'english': fields.String(description='English translation'),
-    'type': fields.String(description='Word type (verb, adjective, noun, etc.)')
+    'type': fields.String(description='Word type (verb, adjective, noun, etc.)'),
+    'furigana': fields.String(description='Furigana reading for kanji'),
+    'romaji': fields.String(description='Romaji reading')
 })
 
 words_response_model = api.model('WordsResponse', {
@@ -121,12 +123,23 @@ class WordsResource(Resource):
         words = _load_module_data(module)
         
         # Transform data to V2 format
-        formatted_words = [{
-            "id": _generate_deterministic_id(word),
-            "kanji": word.get("kanji", ""),
-            "hiragana": word.get("hiragana", ""),
-            "english": word.get("english", ""),
-            "type": word.get("type", "noun")
-        } for word in words]
+        formatted_words = []
+        for word in words:
+            # Handle different furigana data structures
+            furigana = ""
+            if "kanji_analysis" in word and "furigana_text" in word["kanji_analysis"]:
+                furigana = word["kanji_analysis"]["furigana_text"]
+            elif "furigana_text" in word:
+                furigana = word["furigana_text"]
+            
+            formatted_words.append({
+                "id": _generate_deterministic_id(word),
+                "kanji": word.get("kanji", ""),
+                "hiragana": word.get("hiragana", ""),
+                "english": word.get("english", ""),
+                "type": word.get("type", "noun"),
+                "furigana": furigana,
+                "romaji": word.get("romaji", "")
+            })
         
         return {"words": formatted_words}
