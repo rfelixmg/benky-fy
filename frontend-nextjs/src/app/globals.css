@@ -3,40 +3,69 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #2d3748;
-  --primary: #667eea;
+  /* Primary Colors */
+  --primary-purple: #6A0DAD;
+  --secondary-purple: #6A28D7;
+  --accent-blue: #667eea;
+  --accent-purple: #764ba2;
+  
+  /* Neutral Colors */
+  --dark-text: #1A1A1A;
+  --medium-text: #333333;
+  --light-text: #555555;
+  
+  /* Background Colors */
+  --light-bg: #ffffff;
+  --dark-bg: #1A1A1A;
+  
+  /* Text Colors */
+  --text-light: #1A1A1A;
+  --text-dark: #f7fafc;
+  
+  /* Border Colors */
+  --border-light: #e2e8f0;
+  --border-dark: #555555;
+  
+  /* Status Colors */
+  --success: #48bb78;
+  --error: #f56565;
+  --warning: #f59e0b;
+  
+  /* Tailwind CSS Variables */
+  --background: var(--light-bg);
+  --foreground: var(--text-light);
+  --primary: var(--primary-purple);
   --primary-foreground: #ffffff;
-  --secondary: #764ba2;
+  --secondary: var(--secondary-purple);
   --secondary-foreground: #ffffff;
   --muted: #f8fafc;
-  --muted-foreground: #718096;
+  --muted-foreground: var(--light-text);
   --accent: #f1f5f9;
-  --accent-foreground: #2d3748;
-  --destructive: #f56565;
+  --accent-foreground: var(--text-light);
+  --destructive: var(--error);
   --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #667eea;
+  --border: var(--border-light);
+  --input: var(--border-light);
+  --ring: var(--primary-purple);
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: #1a202c;
-  --foreground: #f7fafc;
-  --primary: #667eea;
+  --background: var(--dark-bg);
+  --foreground: var(--text-dark);
+  --primary: var(--primary-purple);
   --primary-foreground: #ffffff;
-  --secondary: #764ba2;
+  --secondary: var(--secondary-purple);
   --secondary-foreground: #ffffff;
-  --muted: #2d3748;
-  --muted-foreground: #a0aec0;
-  --accent: #4a5568;
-  --accent-foreground: #f7fafc;
-  --destructive: #f56565;
+  --muted: var(--medium-text);
+  --muted-foreground: var(--light-text);
+  --accent: var(--medium-text);
+  --accent-foreground: var(--text-dark);
+  --destructive: var(--error);
   --destructive-foreground: #ffffff;
-  --border: #4a5568;
-  --input: #4a5568;
-  --ring: #667eea;
+  --border: var(--border-dark);
+  --input: var(--border-dark);
+  --ring: var(--primary-purple);
 }
 
 * {

@@ -2,16 +2,29 @@ import { FloatingElements } from '@/components/floating-elements';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Brain, Target, Zap } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
       <FloatingElements />
       
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Logo and Title */}
           <div className="mb-8">
+            <div className="mb-6">
+              <Link href="/dashboard">
+                <Image
+                  src="/logo2.webp"
+                  alt="BenkyoFY logo"
+                  width={200}
+                  height={120}
+                  className="mx-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  priority
+                />
+              </Link>
+            </div>
             <h1 className="text-6xl md:text-8xl font-bold text-primary-foreground mb-4">
               Benky-Fy
             </h1>

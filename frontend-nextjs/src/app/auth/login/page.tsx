@@ -19,32 +19,32 @@ export default function LoginPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
-          <p className="text-white">Redirecting...</p>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-foreground" />
+          <p className="text-primary-foreground">Redirecting...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
       <FloatingElements />
       
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         <div className="max-w-md mx-auto">
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold text-primary-foreground mb-4">
             Welcome to Benky-Fy
           </h1>
-          <p className="text-lg text-white/90 mb-8">
+          <p className="text-lg text-primary-foreground/90 mb-8">
             Redirecting to dashboard...
           </p>
           
           <Button
             onClick={() => window.location.href = '/dashboard'}
             size="lg"
-            className="bg-white text-primary hover:bg-white/90 px-8 py-3"
+            className="bg-background text-primary-purple hover:bg-background/90 px-8 py-3"
           >
             Go to Dashboard
           </Button>

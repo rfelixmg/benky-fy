@@ -131,8 +131,8 @@ export function FlashcardDisplay({
     <div className="w-full max-w-2xl mx-auto mb-8">
       <div 
         className={cn(
-          "relative bg-background/10 backdrop-blur-sm rounded-lg p-8 min-h-[300px] flex items-center justify-center transition-all duration-300",
-          isFlipping && "transform scale-105",
+          "relative bg-gradient-to-br from-primary-purple/20 to-secondary-purple/20 backdrop-blur-sm rounded-lg p-8 min-h-[300px] flex items-center justify-center transition-all duration-300 border border-primary-purple/30 shadow-lg",
+          isFlipping && "transform scale-105 shadow-xl",
           isUserInteraction && "opacity-75"
         )}
         onClick={handleFlip}
@@ -158,7 +158,7 @@ export function FlashcardDisplay({
       
       {/* Word type indicator */}
       <div className="flex justify-center mt-4">
-        <div className="bg-primary-foreground/20 text-primary-foreground px-3 py-1 rounded-full text-sm">
+        <div className="bg-primary-purple/20 text-primary-purple px-3 py-1 rounded-full text-sm border border-primary-purple/30">
           {item.type}
         </div>
       </div>

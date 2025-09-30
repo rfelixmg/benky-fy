@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/hooks';
 import { FloatingElements } from '@/components/floating-elements';
 import { BookOpen, Brain, Target, Zap, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const modules = [
   {
@@ -50,14 +51,25 @@ export default function ModulesPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
         <FloatingElements />
         
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-primary-foreground">Learning Modules</h1>
-            <p className="text-primary-foreground/80">Choose a module to start learning</p>
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard">
+              <Image
+                src="/logo1.webp"
+                alt="BenkoFY logo"
+                width={80}
+                height={48}
+                className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-primary-foreground">Learning Modules</h1>
+              <p className="text-primary-foreground/80">Choose a module to start learning</p>
+            </div>
           </div>
           
           {authData?.user && (

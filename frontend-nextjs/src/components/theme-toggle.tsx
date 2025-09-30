@@ -38,7 +38,7 @@ export function ThemeToggle({ variant = 'default', className }: ThemeToggleProps
       <Button 
         variant="outline" 
         size="sm" 
-        className={`border-primary/30 text-primary hover:bg-primary/10 ${className || ''}`}
+        className={`border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10 ${className || ''}`}
       >
         <Sun className="h-4 w-4" />
       </Button>
@@ -46,8 +46,8 @@ export function ThemeToggle({ variant = 'default', className }: ThemeToggleProps
   }
 
   const baseClasses = variant === 'floating' 
-    ? "fixed bottom-6 right-6 z-50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border-primary/30 text-primary hover:bg-primary/10 dark:border-primary/50 dark:text-primary dark:hover:bg-primary/20 bg-background/90 dark:bg-background/90 backdrop-blur-sm"
-    : "border-primary/30 text-primary hover:bg-primary/10 dark:border-primary/50 dark:text-primary dark:hover:bg-primary/20";
+    ? "fixed bottom-6 right-6 z-50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10 dark:border-primary-purple/50 dark:text-primary-purple dark:hover:bg-primary-purple/20 bg-background/90 dark:bg-background/90 backdrop-blur-sm"
+    : "border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10 dark:border-primary-purple/50 dark:text-primary-purple dark:hover:bg-primary-purple/20";
 
   return (
     <Button

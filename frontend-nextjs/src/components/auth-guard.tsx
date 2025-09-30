@@ -23,10 +23,10 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
-          <p className="text-white">Loading...</p>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-foreground" />
+          <p className="text-primary-foreground">Loading...</p>
         </div>
       </div>
     );
@@ -34,9 +34,9 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
-          <p className="text-white mb-4">Authentication error occurred</p>
+          <p className="text-primary-foreground mb-4">Authentication error occurred</p>
           <Button onClick={() => window.location.reload()}>
             Retry
           </Button>
@@ -47,10 +47,10 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
 
   if (!authData?.authenticated) {
     return fallback || (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary to-secondary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
-          <p className="text-white">Redirecting to login...</p>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-foreground" />
+          <p className="text-primary-foreground">Redirecting to login...</p>
         </div>
       </div>
     );
@@ -90,7 +90,7 @@ export function UserMenu({ user }: UserMenuProps) {
         variant="outline"
         size="sm"
         onClick={handleLogout}
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
       >
         <LogOut className="w-4 h-4" />
         Logout

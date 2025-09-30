@@ -6,6 +6,7 @@ import { FloatingElements } from '@/components/floating-elements';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Brain, Target, TrendingUp, Clock, Award } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const recentModules = [
   { id: 'hiragana', name: 'Hiragana', progress: 75, lastStudied: '2 hours ago' },
@@ -25,16 +26,27 @@ export default function DashboardPage() {
 
   return (
     <AuthGuard>
-      <div className="min-h-screen bg-gradient-to-br from-primary to-secondary relative overflow-hidden">
+      <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
         <FloatingElements />
         
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-primary-foreground">
-              Welcome back, {authData?.user?.name?.split(' ')[0] || 'Student'}!
-            </h1>
-            <p className="text-primary-foreground/80">Ready to continue your Japanese learning journey?</p>
+          <div className="flex items-center gap-4">
+            <Link href="/dashboard">
+              <Image
+                src="/logo1.webp"
+                alt="BenkoFY logo"
+                width={80}
+                height={48}
+                className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-primary-foreground">
+                Welcome back, {authData?.user?.name?.split(' ')[0] || 'Student'}!
+              </h1>
+              <p className="text-primary-foreground/80">Ready to continue your Japanese learning journey?</p>
+            </div>
           </div>
           
           {authData?.user && (

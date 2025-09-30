@@ -27,7 +27,7 @@ export function ActionButtons({
           onClick={onPrevious}
           disabled={disabled || !canGoPrevious}
           variant="outline"
-          className="border-white text-white hover:bg-white/10 disabled:opacity-50"
+          className="border-primary-purple/50 text-primary-purple hover:bg-primary-purple/10 disabled:opacity-50"
         >
           <ChevronLeft className="w-4 h-4 mr-2" />
           Previous
@@ -37,7 +37,7 @@ export function ActionButtons({
           onClick={onSkip}
           disabled={disabled}
           variant="outline"
-          className="border-white text-white hover:bg-white/10 disabled:opacity-50"
+          className="border-primary-purple/50 text-primary-purple hover:bg-primary-purple/10 disabled:opacity-50"
         >
           <SkipForward className="w-4 h-4 mr-2" />
           Skip
@@ -47,7 +47,7 @@ export function ActionButtons({
           onClick={onNext}
           disabled={disabled || !canGoNext}
           variant="outline"
-          className="border-white text-white hover:bg-white/10 disabled:opacity-50"
+          className="border-primary-purple/50 text-primary-purple hover:bg-primary-purple/10 disabled:opacity-50"
         >
           Next
           <ChevronRight className="w-4 h-4 ml-2" />
@@ -55,7 +55,7 @@ export function ActionButtons({
       </div>
       
       {/* Keyboard shortcuts hint */}
-      <div className="text-center text-white/50 text-xs mt-4">
+      <div className="text-center text-primary-purple/60 text-xs mt-4">
         <p>Use arrow keys to navigate • Space to skip</p>
       </div>
     </div>
