@@ -1,6 +1,7 @@
+import os
+import json
 from flask_restx import Api, Resource, fields
 from flask import Blueprint, request
-import json
 from typing import Dict, List, Any
 
 bp = Blueprint('v2_validation_api', __name__)
@@ -31,8 +32,14 @@ validation_response_model = api.model('ValidationResponse', {
 
 # Load stroke data
 def load_stroke_data() -> Dict[str, Any]:
-    with open('./datum/stroke_data.json', 'r', encoding='utf-8') as f:
-        return json.load(f)
+    file_path = "./datum/stroke_data.json"
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"Error loading stroke_data.json: {e}")
+        return {}
 
 def validate_strokes(character: str, stroke_data: Dict[str, Any], reference_data: Dict[str, Any]) -> List[str]:
     """Validate stroke order and direction."""

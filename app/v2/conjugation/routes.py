@@ -76,15 +76,19 @@ def _load_word_data(word_id: str) -> Dict[str, Any]:
     for module in modules:
         file_path = f"./datum/{module}.json"
         if os.path.exists(file_path):
-            with open(file_path, 'r', encoding='utf-8') as f:
-                words = json.load(f)
-                for word in words:
-                    # Generate deterministic ID for this word
-                    word_content = f"{word.get('kanji', '')}{word.get('hiragana', '')}{word.get('english', '')}"
-                    word_hash = hashlib.md5(word_content.encode()).hexdigest()
-                    generated_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, word_hash))
-                    if generated_id == word_id:
-                        return word
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    words = json.load(f)
+                    for word in words:
+                        # Generate deterministic ID for this word
+                        word_content = f"{word.get('kanji', '')}{word.get('hiragana', '')}{word.get('english', '')}"
+                        word_hash = hashlib.md5(word_content.encode()).hexdigest()
+                        generated_id = str(uuid.uuid5(uuid.NAMESPACE_DNS, word_hash))
+                        if generated_id == word_id:
+                            return word
+            except (json.JSONDecodeError, IOError) as e:
+                print(f"Error loading {module}.json: {e}")
+                continue
     return None
 
 def _generate_conjugations(word_data: Dict[str, Any]) -> List[Dict[str, Any]]:

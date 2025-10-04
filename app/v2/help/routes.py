@@ -42,19 +42,23 @@ def _search_word_in_modules(word: str) -> dict:
     for module in modules:
         file_path = f"./datum/{module}.json"
         if os.path.exists(file_path):
-            with open(file_path, 'r', encoding='utf-8') as f:
-                words = json.load(f)
-                for word_data in words:
-                    # Check if word matches kanji, hiragana, or english
-                    if (word_data.get('kanji', '').lower() == word.lower() or
-                        word_data.get('hiragana', '').lower() == word.lower() or
-                        word_data.get('english', '').lower() == word.lower()):
-                        return {
-                            'word': word,
-                            'found': True,
-                            'data': word_data,
-                            'module': module
-                        }
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    words = json.load(f)
+                    for word_data in words:
+                        # Check if word matches kanji, hiragana, or english
+                        if (word_data.get('kanji', '').lower() == word.lower() or
+                            word_data.get('hiragana', '').lower() == word.lower() or
+                            word_data.get('english', '').lower() == word.lower()):
+                            return {
+                                'word': word,
+                                'found': True,
+                                'data': word_data,
+                                'module': module
+                            }
+            except (json.JSONDecodeError, IOError) as e:
+                print(f"Error loading {module}.json: {e}")
+                continue
     
     return {
         'word': word,

@@ -67,12 +67,18 @@ words_response_model = api.model('WordsResponse', {
 
 def _load_module_data(module_name: str) -> list:
     """Load word data from JSON file."""
+    # Use relative path from project root
     file_path = f"./datum/{module_name}.json"
+    
     if not os.path.exists(file_path):
         return []
     
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"Error loading {module_name}.json: {e}")
+        return []
 
 def _generate_deterministic_id(word: dict) -> str:
     """Generate a deterministic ID for a word."""
