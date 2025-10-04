@@ -11,6 +11,15 @@ import Image from 'next/image';
 
 const modules = [
   {
+    id: 'colors',
+    name: 'Colors',
+    description: 'Learn Japanese color words with visual aids',
+    icon: BookOpen,
+    color: 'from-red-500 to-orange-500',
+    difficulty: 'Beginner',
+    cards: 10,
+  },
+  {
     id: 'hiragana',
     name: 'Hiragana',
     description: 'Learn the basic Japanese syllabary',
@@ -102,7 +111,7 @@ export default function ModulesPage() {
                 return (
                   <Link
                     key={module.id}
-                    href={`/flashcards/${module.id}`}
+                    href={module.id === 'colors' ? `/modules/${module.id}` : `/flashcards/${module.id}`}
                     className="group"
                   >
                     <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 hover:bg-background/20 transition-all duration-300 transform hover:scale-105">

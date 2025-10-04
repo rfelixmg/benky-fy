@@ -126,18 +126,6 @@ export function Furigana({
     }
     
     setCharacters(parsed);
-    
-    // Debug logging for furigana data (remove in production)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Furigana Debug:', {
-        kanji,
-        furigana,
-        hiragana,
-        mode,
-        parsed: parsed,
-        hasFurigana: parsed.some(char => char.hasFurigana)
-      });
-    }
   }, [kanji, furigana, hiragana, showFurigana, mode]);
 
   if (!showFurigana) {

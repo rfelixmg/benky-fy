@@ -42,11 +42,10 @@ export default function FlashcardPage() {
   const trackAnswerMutation = useTrackAnswer();
   
   const settings = getSettings(moduleName);
-  console.log('Flashcard page settings:', settings);
 
   const currentItem = wordsData?.find((item, index) => index === currentItemId - 1);
 
-  const handleAnswerSubmit = useCallback(async (userAnswer: string) => {
+  const handleAnswerSubmit = useCallback(async (userAnswer: string, serverValidationResult?: any) => {
     if (!currentItem) return;
     
     setIsUserInteraction(true);
@@ -59,9 +58,9 @@ export default function FlashcardPage() {
       kanji: currentItem.kanji,
     };
     
-    // Use comprehensive validation
+    // Use comprehensive validation (frontend fallback)
     const validationResult = validateAnswer(userAnswer, correctAnswers, settings);
-    const answerIsCorrect = validationResult.isCorrect;
+    const answerIsCorrect = serverValidationResult?.is_correct ?? validationResult.isCorrect;
     
     // Store answer information for feedback
     setLastAnswer(userAnswer);
@@ -282,14 +281,14 @@ export default function FlashcardPage() {
                 onSubmit={handleAnswerSubmit}
                 disabled={isUserInteraction}
                 settings={settings}
-                currentAttempts={currentAttempts}
-                maxAttempts={settings.max_answer_attempts}
                 isCorrect={isCorrect}
                 currentItem={currentItem}
                 lastAnswer={lastAnswer}
                 lastMatchedType={lastMatchedType}
                 lastConvertedAnswer={lastConvertedAnswer}
                 moduleName={moduleName}
+                enableServerValidation={true}
+                enableRealtimeFeedback={true}
               />
 
               {/* Action Buttons */}

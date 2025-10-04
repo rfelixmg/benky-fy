@@ -1,25 +1,28 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { UserSettings } from '@/lib/api-client';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { UserSettings, ValidationRequest } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { detectScript, romajiToHiragana, romajiToKatakana } from '@/lib/romaji-conversion';
 import { AnswerFeedback } from './answer-feedback';
 import { FlashcardItem } from '@/lib/api-client';
+import { useValidateInput } from '@/lib/hooks';
+import { Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { validateAnswer, ValidationResult, getFeedbackColor, validateWithSettings } from '@/lib/validation';
 
 interface AnswerInputProps {
-  onSubmit: (answer: string) => void;
+  onSubmit: (answer: string, validationResult?: any) => void;
   disabled: boolean;
   settings: UserSettings;
-  currentAttempts?: number;
-  maxAttempts?: number;
   isCorrect?: boolean;
   currentItem?: FlashcardItem;
   lastAnswer?: string;
   lastMatchedType?: string;
   lastConvertedAnswer?: string;
   moduleName?: string;
+  enableServerValidation?: boolean;
+  enableRealtimeFeedback?: boolean;
 }
 
 // Module type detection for context-aware input fields
@@ -60,18 +63,23 @@ export function AnswerInput({
   onSubmit, 
   disabled, 
   settings, 
-  currentAttempts = 0, 
-  maxAttempts = 3, 
   isCorrect = false,
   currentItem,
   lastAnswer,
   lastMatchedType,
   lastConvertedAnswer,
-  moduleName
+  moduleName,
+  enableServerValidation = true,
+  enableRealtimeFeedback = true
 }: AnswerInputProps) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [validationResult, setValidationResult] = useState<any>(null);
+  const [frontendValidationResult, setFrontendValidationResult] = useState<ValidationResult | null>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  
+  const validateInputMutation = useValidateInput();
 
   useEffect(() => {
     if (!disabled) {
@@ -83,28 +91,87 @@ export function AnswerInput({
     }
   }, [disabled]);
 
+  // Server-side validation function
+  const validateWithServer = useCallback(async (userInput: string, expectedCharacter: string) => {
+    if (!enableServerValidation || !currentItem) return null;
+
+    try {
+      const validationRequest: ValidationRequest = {
+        character: expectedCharacter,
+        input: userInput,
+      };
+
+      const result = await validateInputMutation.mutateAsync(validationRequest);
+      return result;
+    } catch (error) {
+      console.error('Server validation failed:', error);
+      return null;
+    }
+  }, [enableServerValidation, currentItem, validateInputMutation]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     const enabledModes = getEnabledInputModes();
-    const firstAnswer = answers[enabledModes[0]] || '';
+    const isMultipleInput = enabledModes.length > 1;
     
-    if (!firstAnswer.trim() || disabled || isSubmitting) return;
+    // Check if we have valid input(s)
+    const hasValidInput = enabledModes.some(mode => answers[mode]?.trim());
+    if (!hasValidInput || disabled || isSubmitting) return;
     
     setIsSubmitting(true);
+    setShowFeedback(false);
+    setValidationResult(null);
+    setFrontendValidationResult(null);
     
-    // Submit the first non-empty answer
-    await onSubmit(firstAnswer.trim());
-    setAnswers({});
-    setIsSubmitting(false);
-    
-    // Refocus input after submission
-    setTimeout(() => {
-      const firstInputRef = inputRefs.current[enabledModes[0]];
-      if (firstInputRef) {
-        firstInputRef.focus();
+    try {
+      let serverValidationResult = null;
+      let frontendResult: ValidationResult | null = null;
+      
+      // Perform frontend validation first
+      if (currentItem) {
+        if (isMultipleInput) {
+          // Multiple input mode - use comprehensive validation
+          frontendResult = validateWithSettings(answers, currentItem, enabledModes);
+        } else {
+          // Single input mode
+          const firstAnswer = answers[enabledModes[0]] || '';
+          frontendResult = validateAnswer(firstAnswer, currentItem, false);
+        }
+        
+        setFrontendValidationResult(frontendResult);
       }
-    }, 100);
+      
+      // Perform server-side validation if enabled
+      if (enableServerValidation && currentItem) {
+        const firstAnswer = answers[enabledModes[0]] || '';
+        const expectedCharacter = currentItem.hiragana || currentItem.kanji || currentItem.english || '';
+        serverValidationResult = await validateWithServer(firstAnswer.trim(), expectedCharacter);
+        setValidationResult(serverValidationResult);
+      }
+      
+      // Show feedback if enabled
+      if (enableRealtimeFeedback) {
+        setShowFeedback(true);
+      }
+      
+      // Submit with validation results
+      const firstAnswer = answers[enabledModes[0]] || '';
+      await onSubmit(firstAnswer.trim(), serverValidationResult);
+      
+    } catch (error) {
+      console.error('Submit error:', error);
+    } finally {
+      setIsSubmitting(false);
+      
+      // Refocus input after submission
+      setTimeout(() => {
+        const firstInputRef = inputRefs.current[enabledModes[0]];
+        if (firstInputRef) {
+          firstInputRef.focus();
+        }
+      }, 100);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -229,9 +296,29 @@ export function AnswerInput({
 
   const renderInput = () => {
     const enabledModes = getEnabledInputModes();
+    const isMultipleInput = enabledModes.length > 1;
+    
+    // Get feedback color for multiple input mode
+    const getInputFeedbackColor = (mode: string) => {
+      if (!frontendValidationResult || !showFeedback) return "";
+      
+      if (isMultipleInput && enabledModes.includes('english') && enabledModes.includes('hiragana')) {
+        // For multiple input mode, apply color based on individual field results
+        if (mode === 'english') {
+          const englishCorrect = frontendValidationResult.results[0];
+          return englishCorrect ? "bg-emerald-500/20 border-emerald-400 text-emerald-300" : "bg-red-500/20 border-red-400 text-red-300";
+        } else if (mode === 'hiragana') {
+          const hiraganaCorrect = frontendValidationResult.results[1];
+          return hiraganaCorrect ? "bg-emerald-500/20 border-emerald-400 text-emerald-300" : "bg-red-500/20 border-red-400 text-red-300";
+        }
+      }
+      
+      // For single input mode, use the overall feedback color
+      return frontendValidationResult.feedbackColor;
+    };
     
     // If multiple input modes are enabled, show table format like V1
-    if (enabledModes.length > 1) {
+    if (isMultipleInput) {
       return (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -262,7 +349,8 @@ export function AnswerInput({
                       disabled={disabled}
                       className={cn(
                         "w-full px-3 py-2 text-sm rounded bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-1 focus:ring-white/50 focus:border-transparent disabled:opacity-50",
-                        isSubmitting && "opacity-50"
+                        isSubmitting && "opacity-50",
+                        getInputFeedbackColor(mode)
                       )}
                     />
                   </td>
@@ -287,7 +375,8 @@ export function AnswerInput({
         disabled={disabled}
         className={cn(
           "w-full px-6 py-4 text-lg rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50",
-          isSubmitting && "opacity-50"
+          isSubmitting && "opacity-50",
+          getInputFeedbackColor(singleMode)
         )}
       />
     );
@@ -301,7 +390,7 @@ export function AnswerInput({
           
           {isSubmitting && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin text-white" />
             </div>
           )}
         </div>
@@ -312,15 +401,42 @@ export function AnswerInput({
             disabled={!Object.values(answers).some(answer => answer.trim()) || disabled || isSubmitting}
             className="bg-white text-primary hover:bg-white/90 px-8 py-2"
           >
-            {isSubmitting ? 'Checking...' : 'Submit Answer'}
+            {isSubmitting ? (
+              <div className="flex items-center">
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Validating...
+              </div>
+            ) : (
+              'Submit Answer'
+            )}
           </Button>
         </div>
       </form>
+
+      {/* Real-time feedback */}
+      {showFeedback && (validationResult || frontendValidationResult) && enableRealtimeFeedback && currentItem && (
+        <AnswerFeedback
+          item={currentItem}
+          userAnswer={answers[getEnabledInputModes()[0]] || ''}
+          isCorrect={validationResult?.is_correct || frontendValidationResult?.isCorrect || false}
+          matchedType={frontendValidationResult?.matchedType}
+          convertedAnswer={frontendValidationResult?.convertedAnswer}
+          settings={settings}
+          frontendValidationResult={frontendValidationResult}
+          userAnswers={Object.fromEntries(
+            getEnabledInputModes().map(mode => [mode, answers[mode] || ''])
+          )}
+          moduleName={moduleName}
+        />
+      )}
       
       {/* Input hints */}
       <div className="text-center text-white/60 text-sm mt-4">
         <p>Press Enter to submit your answer</p>
         <p className="mt-1">Hiragana/Katakana fields auto-convert romaji input</p>
+        {enableServerValidation && (
+          <p className="mt-1">Server-side validation enabled</p>
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import json
 import os
 import hashlib
 import uuid
+import random
+from collections import defaultdict
 
 # Create API blueprint
 bp = Blueprint('v2_words_api', __name__)
@@ -18,7 +20,8 @@ Pure JSON data delivery for Japanese learning words. No view logic - just clean 
 
 ## Quick Start
 1. **Get words**: `/v2/words/verbs` - Returns list of verbs with IDs
-2. **Use IDs**: Copy word IDs from response to test conjugation endpoint
+2. **Get random word**: `/v2/words/verbs/random` - Returns single random verb
+3. **Use IDs**: Copy word IDs from response to test conjugation endpoint
 
 ## Available Modules
 - `verbs` - Japanese verbs
@@ -37,8 +40,9 @@ Pure JSON data delivery for Japanese learning words. No view logic - just clean 
 
 ## Example Workflow
 1. GET `/v2/words/verbs` → Get verb list with IDs
-2. Copy a word ID from response
-3. GET `/v2/conjugation/{word_id}` → Get conjugation forms
+2. GET `/v2/words/verbs/random` → Get single random verb
+3. Copy a word ID from response
+4. GET `/v2/conjugation/{word_id}` → Get conjugation forms
 
 ## Response Format
 All responses are pure JSON with deterministic IDs for consistency.
@@ -75,6 +79,22 @@ def _generate_deterministic_id(word: dict) -> str:
     word_content = f"{word.get('kanji', '')}{word.get('hiragana', '')}{word.get('english', '')}"
     word_hash = hashlib.md5(word_content.encode()).hexdigest()
     return str(uuid.uuid5(uuid.NAMESPACE_DNS, word_hash))
+
+# Global queue management for random word selection
+_word_queues = defaultdict(list)
+
+def _get_random_word_from_queue(words: list, module: str) -> dict:
+    """Get a random word using queue-based selection to avoid repeats."""
+    global _word_queues
+    
+    # Initialize or refill queue if empty
+    if not _word_queues[module]:
+        _word_queues[module] = [i for i in range(len(words))]
+        random.shuffle(_word_queues[module])
+    
+    # Get next word index from queue
+    word_index = _word_queues[module].pop()
+    return words[word_index]
 
 @api.route('/words/<string:module>')
 class WordsResource(Resource):
@@ -143,3 +163,57 @@ class WordsResource(Resource):
             })
         
         return {"words": formatted_words}
+
+@api.route('/words/<string:module>/random')
+class RandomWordResource(Resource):
+    @api.doc('get_random_word', 
+             description='Get a single random word from a specific module',
+             params={'module': 'Module name (verbs, adjectives, hiragana, etc.)'},
+             responses={
+                 200: 'Success - Returns single random word',
+                 404: 'Module not found'
+             },
+             examples={
+                 'verbs': {
+                     'summary': 'Get random verb',
+                     'description': 'Returns a single random verb with deterministic ID',
+                     'value': {
+                         'word': {
+                             'id': 'a1e9e1b8-4846-5387-9b64-881e21bd7a0d',
+                             'kanji': '見る',
+                             'hiragana': 'みる',
+                             'english': 'to see',
+                             'type': 'verb'
+                         }
+                     }
+                 }
+             })
+    @api.marshal_with(word_model)
+    def get(self, module):
+        """Return a single random word from a module."""
+        words = _load_module_data(module)
+        
+        if not words:
+            api.abort(404, f"Module '{module}' not found")
+        
+        # Select random word using queue to avoid repeats
+        random_word = _get_random_word_from_queue(words, module)
+        
+        # Handle different furigana data structures
+        furigana = ""
+        if "kanji_analysis" in random_word and "furigana_text" in random_word["kanji_analysis"]:
+            furigana = random_word["kanji_analysis"]["furigana_text"]
+        elif "furigana_text" in random_word:
+            furigana = random_word["furigana_text"]
+        
+        formatted_word = {
+            "id": _generate_deterministic_id(random_word),
+            "kanji": random_word.get("kanji", ""),
+            "hiragana": random_word.get("hiragana", ""),
+            "english": random_word.get("english", ""),
+            "type": random_word.get("type", "noun"),
+            "furigana": furigana,
+            "romaji": random_word.get("romaji", "")
+        }
+        
+        return formatted_word

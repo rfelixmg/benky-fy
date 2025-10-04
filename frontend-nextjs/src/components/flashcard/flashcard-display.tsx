@@ -20,20 +20,11 @@ export function FlashcardDisplay({
 }: FlashcardDisplayProps) {
   // Remove flip functionality - flashcards should always show the question side
   const showAnswer = false;
-  console.log('Item:', item);
-  console.log('Settings:', settings);
-  console.log('Mode:', mode);
-  console.log('Is User Interaction:', isUserInteraction);
+  
   const renderJapaneseText = (text: string, furigana?: string) => {
-    // Debug settings
-    console.log('FlashcardDisplay settings:', settings);
-
-    console.log('renderJapaneseText:', { text, furigana, furigana_style: settings.furigana_style });
-    
     // Use the new Furigana component with mode prop
     if (furigana) {
       const furiganaStyle = settings.furigana_style || 'ruby';
-      console.log('Using furigana with style:', furiganaStyle);
       
       return (
         <Furigana
@@ -46,9 +37,6 @@ export function FlashcardDisplay({
       );
     }
 
-    console.log('NOT USING FURIGANA');
-
-    
     return (
       <JapaneseText
         text={text}

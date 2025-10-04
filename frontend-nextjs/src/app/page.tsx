@@ -76,7 +76,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <Link href="/modules">
-              <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary">
                 View Modules
               </Button>
             </Link>

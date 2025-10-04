@@ -67,13 +67,11 @@ export function SettingsModal({ moduleName, onClose }: SettingsModalProps) {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      console.log('Saving settings:', { moduleName, localSettings });
       updateSettings(moduleName, localSettings);
       await updateSettingsMutation.mutateAsync({
         moduleName,
         settings: localSettings,
       });
-      console.log('Settings saved successfully');
       onClose();
     } catch (error) {
       console.error('Failed to save settings:', error);
