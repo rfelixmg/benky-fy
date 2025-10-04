@@ -8,6 +8,7 @@ import { FlashcardDisplay } from '@/components/flashcard/flashcard-display';
 import { AnswerInput } from '@/components/flashcard/answer-input';
 import { ProgressSection } from '@/components/flashcard/progress-section';
 import { SettingsModal } from '@/components/flashcard/settings-modal';
+import { FloatingFeedback } from '@/components/flashcard/floating-feedback';
 import { HelpModal } from '@/components/flashcard/help-modal';
 import { Statistics } from '@/components/flashcard/statistics';
 import { ConjugationPractice } from '@/components/conjugation/conjugation-practice';
@@ -36,6 +37,8 @@ export default function FlashcardPage() {
   const [lastMatchedType, setLastMatchedType] = useState<string | undefined>();
   const [lastConvertedAnswer, setLastConvertedAnswer] = useState<string | undefined>();
   const [testedWord, setTestedWord] = useState<any>(null); // Store the word being tested
+  const [showFloatingFeedback, setShowFloatingFeedback] = useState(false);
+  const [lastValidationResult, setLastValidationResult] = useState<any>(null);
   const autoAdvanceTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   const { data: wordsData, isLoading, error } = useWordsData(moduleName);
@@ -118,6 +121,7 @@ export default function FlashcardPage() {
     setLastAnswer(userAnswer);
     setLastMatchedType(validationResult.matchedType);
     setLastConvertedAnswer(validationResult.convertedAnswer);
+    setLastValidationResult(validationResult);
     
     // Update attempt counter
     const newAttempts = currentAttempts + 1;
@@ -144,21 +148,22 @@ export default function FlashcardPage() {
       }
     };
     
-    // Handle feedback display - unified logic for all modules
-    autoAdvanceTimerRef.current = setTimeout(() => {
-      // Move to next item after feedback delay
-      navigateToNext();
-      
-      // Reset state for next item
-      setCurrentAttempts(0);
-      setIsCorrect(false);
-      setIsUserInteraction(false);
-      setTestedWord(null);
-      autoAdvanceTimerRef.current = null;
-    }, timerDuration);
+    // Show floating feedback instead of auto-advance timer
+    setShowFloatingFeedback(true);
   }, [currentItem, currentAttempts, settings, navigateToNext]);
 
-
+  // Handle floating feedback close and advance
+  const handleFloatingFeedbackClose = useCallback(() => {
+    setShowFloatingFeedback(false);
+    // Move to next item
+    navigateToNext();
+    
+    // Reset state for next item
+    setCurrentAttempts(0);
+    setIsCorrect(false);
+    setIsUserInteraction(false);
+    setTestedWord(null);
+  }, [navigateToNext]);
 
   useEffect(() => {
     if (wordsData && !isPageLoaded) {
@@ -300,7 +305,7 @@ export default function FlashcardPage() {
                 lastConvertedAnswer={lastConvertedAnswer}
                 moduleName={moduleName}
                 enableServerValidation={false}
-                enableRealtimeFeedback={true}
+                enableRealtimeFeedback={false}
               />
 
             </div>
@@ -367,6 +372,22 @@ export default function FlashcardPage() {
           selectedForm={selectedConjugationForm}
           onFormChange={setSelectedConjugationForm}
           moduleName={moduleName}
+        />
+      )}
+
+      {/* Floating Feedback Modal */}
+      {showFloatingFeedback && currentItem && (
+        <FloatingFeedback
+          item={currentItem}
+          userAnswer={lastAnswer}
+          isCorrect={isCorrect}
+          matchedType={lastMatchedType}
+          convertedAnswer={lastConvertedAnswer}
+          settings={settings}
+          frontendValidationResult={lastValidationResult}
+          moduleName={moduleName}
+          timerDuration={lastValidationResult?.timerDuration ?? 8000}
+          onClose={handleFloatingFeedbackClose}
         />
       )}
     </div>
