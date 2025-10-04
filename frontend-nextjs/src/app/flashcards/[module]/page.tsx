@@ -111,7 +111,9 @@ export default function FlashcardPage() {
     // Use comprehensive validation (frontend fallback)
     const validationResult = validateAnswer(userAnswer, correctAnswers, settings);
     const answerIsCorrect = serverValidationResult?.is_correct ?? validationResult.isCorrect;
-    const hasPartialCorrect = validationResult.matchedType === 'partial';
+    // Use timer duration from validation result (follows same logic as feedback color)
+    const timerDuration = validationResult.timerDuration ?? 10000;
+    console.log('timerDuration:', timerDuration, 'validationResult:', validationResult, 'answerIsCorrect:', answerIsCorrect);
     // Store answer information for feedback
     setLastAnswer(userAnswer);
     setLastMatchedType(validationResult.matchedType);
@@ -153,7 +155,7 @@ export default function FlashcardPage() {
       setIsUserInteraction(false);
       setTestedWord(null);
       autoAdvanceTimerRef.current = null;
-    }, answerIsCorrect ? 3000 : (hasPartialCorrect ? 8000 : 10000));
+    }, timerDuration);
   }, [currentItem, currentAttempts, settings, navigateToNext]);
 
 
