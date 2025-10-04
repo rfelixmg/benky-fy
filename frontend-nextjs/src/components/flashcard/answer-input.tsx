@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { UserSettings, ValidationRequest } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { detectScript, romajiToHiragana, romajiToKatakana } from '@/lib/romaji-conversion';
+import { detectScript, romajiToHiragana, romajiToKatakana, convertInputForField } from '@/lib/romaji-conversion';
 import { AnswerFeedback } from './answer-feedback';
 import { FlashcardItem } from '@/lib/api-client';
 import { useValidateInput } from '@/lib/hooks';
@@ -258,95 +258,16 @@ export function AnswerInput({
   const handleInputChange = (mode: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     
-    // If this is a hiragana field, always convert romaji to hiragana
-    if (mode === 'hiragana') {
-      const scriptType = detectScript(inputValue);
-      if (scriptType === 'romaji') {
-        const conversion = romajiToHiragana(inputValue);
-        setAnswers(prev => ({ ...prev, [mode]: conversion.converted }));
-        return;
-      } else if (scriptType === 'mixed') {
-        // For mixed input, extract and convert only the romaji parts
-        let result = '';
-        let i = 0;
-        while (i < inputValue.length) {
-          if (/[a-zA-Z]/.test(inputValue[i])) {
-            // Find the end of the romaji sequence
-            let j = i;
-            while (j < inputValue.length && /[a-zA-Z]/.test(inputValue[j])) {
-              j++;
-            }
-            const romajiPart = inputValue.substring(i, j);
-            const conversion = romajiToHiragana(romajiPart);
-            result += conversion.converted;
-            i = j;
-          } else {
-            result += inputValue[i];
-            i++;
-          }
-        }
-        setAnswers(prev => ({ ...prev, [mode]: result }));
-        return;
-      }
+    // Use smart conversion for hiragana, katakana, and romaji fields
+    if (['hiragana', 'katakana', 'romaji'].includes(mode)) {
+      const conversion = convertInputForField(inputValue, mode as any, {
+        romaji_output_type: settings.romaji_output_type as 'hiragana' | 'katakana'
+      });
+      setAnswers(prev => ({ ...prev, [mode]: conversion.converted }));
+      return;
     }
     
-    // If this is a katakana field, always convert romaji to katakana
-    if (mode === 'katakana') {
-      const scriptType = detectScript(inputValue);
-      if (scriptType === 'romaji') {
-        const conversion = romajiToKatakana(inputValue);
-        setAnswers(prev => ({ ...prev, [mode]: conversion.converted }));
-        return;
-      } else if (scriptType === 'mixed') {
-        // For mixed input, extract and convert only the romaji parts
-        let result = '';
-        let i = 0;
-        while (i < inputValue.length) {
-          if (/[a-zA-Z]/.test(inputValue[i])) {
-            // Find the end of the romaji sequence
-            let j = i;
-            while (j < inputValue.length && /[a-zA-Z]/.test(inputValue[j])) {
-              j++;
-            }
-            const romajiPart = inputValue.substring(i, j);
-            const conversion = romajiToKatakana(romajiPart);
-            result += conversion.converted;
-            i = j;
-          } else {
-            result += inputValue[i];
-            i++;
-          }
-        }
-        setAnswers(prev => ({ ...prev, [mode]: result }));
-        return;
-      }
-    }
-    
-    // If this is a romaji field, convert based on output type setting
-    if (mode === 'romaji') {
-      const scriptType = detectScript(inputValue);
-      if (scriptType === 'romaji') {
-        let converted = '';
-        if (settings.romaji_output_type === 'hiragana') {
-          const conversion = romajiToHiragana(inputValue);
-          converted = conversion.converted;
-        } else if (settings.romaji_output_type === 'katakana') {
-          const conversion = romajiToKatakana(inputValue);
-          converted = conversion.converted;
-        } else {
-          // Auto-detect: default to hiragana
-          const conversion = romajiToHiragana(inputValue);
-          converted = conversion.converted;
-        }
-        
-        if (converted) {
-          setAnswers(prev => ({ ...prev, [mode]: converted }));
-          return;
-        }
-      }
-    }
-    
-    // For non-romaji input or when conversion is disabled
+    // For other field types (kanji, english), no conversion needed
     setAnswers(prev => ({ ...prev, [mode]: inputValue }));
   };
 
