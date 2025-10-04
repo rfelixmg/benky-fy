@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/Card';
 import { CharacterGrid } from '@/components/japanese/CharacterGrid';
+import { Character } from '@/components/japanese/CharacterGrid';
 import { CharacterInput } from '@/components/japanese/CharacterInput';
 import { PracticeInterface } from '@/components/japanese/PracticeInterface';
 import { QuizInterface } from '@/components/japanese/QuizInterface';
@@ -98,7 +99,7 @@ function NumbersModule() {
     fetchModuleData();
   }, []);
 
-  const handleNumberClick = (number: NumberData) => {
+  const handleNumberClick = (character: Character) => {
     setProgress(prev => ({
       ...prev,
       total: prev.total + 1,
@@ -239,7 +240,7 @@ function NumbersModule() {
                 data.numbers.find(num => num.value === n)?.hiragana || ''
               ).join(', '),
               english: set.numbers.join(', '),
-              type: set.type,
+              type: 'noun' as const,
             }))}
             onComplete={() => setMode('quiz')}
             onProgress={handlePracticeProgress}

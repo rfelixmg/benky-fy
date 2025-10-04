@@ -58,18 +58,7 @@ export function QuizInterface({
     const buttons = document.querySelectorAll('[role="option"]');
     
     switch (e.key) {
-      case 'ArrowDown':
-        if (index < buttons.length - 1) {
-          (buttons[index + 1] as HTMLButtonElement).focus();
-        }
-        break;
-      case 'ArrowUp':
-        if (index > 0) {
-          (buttons[index - 1] as HTMLButtonElement).focus();
-        }
-        break;
       case 'Enter':
-      case ' ':
         handleAnswer(currentQuestion.options[index]);
         break;
       default:

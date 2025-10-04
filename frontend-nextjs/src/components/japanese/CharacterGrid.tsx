@@ -5,7 +5,7 @@ import { Card, CardGrid } from '@/components/ui/Card';
 import { Furigana } from './furigana';
 import { textStyles, tooltipStyles, interactionStyles } from '@/styles/components';
 
-interface Character {
+export interface Character {
   character: string;
   reading: string;
 }
@@ -30,28 +30,7 @@ export function CharacterGrid({
     if (!buttons) return;
 
     switch (e.key) {
-      case 'ArrowRight':
-        if (index < buttons.length - 1) {
-          (buttons[index + 1] as HTMLButtonElement).focus();
-        }
-        break;
-      case 'ArrowLeft':
-        if (index > 0) {
-          (buttons[index - 1] as HTMLButtonElement).focus();
-        }
-        break;
-      case 'ArrowDown':
-        if (index + columns < buttons.length) {
-          (buttons[index + columns] as HTMLButtonElement).focus();
-        }
-        break;
-      case 'ArrowUp':
-        if (index - columns >= 0) {
-          (buttons[index - columns] as HTMLButtonElement).focus();
-        }
-        break;
       case 'Enter':
-      case ' ':
         onCharacterClick(characters[index]);
         break;
       default:
