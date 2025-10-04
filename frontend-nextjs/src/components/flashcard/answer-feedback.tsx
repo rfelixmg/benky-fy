@@ -1,7 +1,7 @@
 'use client';
 
 import { FlashcardItem, UserSettings } from '@/lib/api-client';
-import { ValidationResult } from '@/lib/validation';
+import { ValidationResult, getFeedbackColor } from '@/lib/validation';
 
 interface AnswerFeedbackProps {
   item: FlashcardItem;
@@ -75,6 +75,25 @@ export function AnswerFeedback({
 
   const enabledModes = getEnabledInputModes();
   const isMultipleInput = enabledModes.length > 1;
+  
+  // Get feedback color for the container background
+  const getContainerFeedbackColor = () => {
+    if (frontendValidationResult && frontendValidationResult.results.length > 1) {
+      // Multiple input mode - use results array
+      const color = getFeedbackColor(frontendValidationResult.results);
+      console.log('Multiple input feedback color:', { results: frontendValidationResult.results, color });
+      return color;
+    } else if (frontendValidationResult) {
+      // Single input mode - use overall result
+      const color = getFeedbackColor([frontendValidationResult.isCorrect]);
+      console.log('Single input feedback color:', { isCorrect: frontendValidationResult.isCorrect, color });
+      return color;
+    }
+    // Fallback to overall isCorrect
+    const color = getFeedbackColor([isCorrect]);
+    console.log('Fallback feedback color:', { isCorrect, color });
+    return color;
+  };
 
   // Get expected values for each input type
   const getExpectedValue = (mode: string) => {
@@ -110,7 +129,7 @@ export function AnswerFeedback({
   };
 
   return (
-    <div className="mt-4 p-4 bg-white/10 rounded-lg">
+    <div className={`mt-4 p-4 rounded-lg border ${getContainerFeedbackColor()}`}>
       <h4 className="text-sm font-medium text-white mb-3">Answer Feedback</h4>
       
       {/* Feedback Table */}
