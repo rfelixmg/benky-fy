@@ -212,9 +212,11 @@ export function AnswerInput({
       // Perform server-side validation if enabled
       if (enableServerValidation && currentItem) {
         const firstAnswer = answers[enabledModes[0]] || '';
-        const expectedCharacter = currentItem.hiragana || currentItem.kanji || currentItem.english || '';
+        const expectedCharacter = (currentItem.hiragana || currentItem.kanji || currentItem.english || '').toString();
         serverValidationResult = await validateWithServer(firstAnswer.trim(), expectedCharacter);
-        setValidationResult(serverValidationResult);
+        if (serverValidationResult) {
+          setValidationResult(serverValidationResult);
+        }
       }
       
       // Show feedback if enabled
@@ -224,7 +226,7 @@ export function AnswerInput({
       
       // Submit with validation results
       const firstAnswer = answers[enabledModes[0]] || '';
-      await onSubmit(firstAnswer.trim(), serverValidationResult);
+      await onSubmit(firstAnswer.trim(), serverValidationResult || frontendResult);
       
     } catch (error) {
       console.error('Submit error:', error);
