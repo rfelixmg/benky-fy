@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
-import { useWordsData, useRandomWord, useTrackAnswer, AnswerResult } from '@/lib/hooks';
+import { useRandomWord, useTrackAnswer, AnswerResult } from '@/lib/hooks';
 import { validateAnswer } from '@/lib/validation';
 import { useSettingsStore } from '@/lib/settings-store';
 import { FlashcardDisplay } from '@/components/flashcard/flashcard-display';
@@ -43,29 +43,20 @@ export default function FlashcardPage() {
   const [lastUserAnswers, setLastUserAnswers] = useState<Record<string, string>>({});
   const autoAdvanceTimerRef = useRef<NodeJS.Timeout | null>(null);
   
-  const { data: wordsData, isLoading, error } = useWordsData(moduleName);
   const { data: randomWord, isLoading: isRandomLoading, error: randomError, refetch: refetchRandomWord } = useRandomWord(moduleName);
   const { getSettings } = useSettingsStore();
   const trackAnswerMutation = useTrackAnswer();
   
   const settings = getSettings(moduleName);
 
-  // Unified navigation function for all modules
+  // Unified navigation function for all modules - all use random API
   const navigateToNext = useCallback(() => {
-    if (moduleName === 'verbs') {
-      refetchRandomWord();
-    } else {
-      setCurrentItemId(prev => prev + 1);
-    }
-  }, [moduleName, refetchRandomWord]);
+    refetchRandomWord();
+  }, [refetchRandomWord]);
 
   const navigateToPrevious = useCallback(() => {
-    if (moduleName === 'verbs') {
-      refetchRandomWord(); // For verbs, "previous" means new random word
-    } else {
-      setCurrentItemId(prev => Math.max(1, prev - 1));
-    }
-  }, [moduleName, refetchRandomWord]);
+    refetchRandomWord(); // For random mode, "previous" means new random word
+  }, [refetchRandomWord]);
 
   // Manual advance function that clears timer and resets state
   const manualAdvance = useCallback(() => {
@@ -85,14 +76,13 @@ export default function FlashcardPage() {
     setTestedWord(null);
   }, [navigateToNext]);
 
-  // Use random word selection for verbs module, otherwise use traditional array-based selection
-  const isVerbsModule = moduleName === 'verbs';
-  const currentItem = isVerbsModule ? randomWord : wordsData?.find((item, index) => index === currentItemId - 1);
-  const isLoadingData = isVerbsModule ? isRandomLoading : isLoading;
+  // All modules now use random word selection
+  const currentItem = randomWord;
+  const isLoadingData = isRandomLoading;
   
   // Use testedWord for validation/feedback, currentItem for display
   const itemForValidation = testedWord || currentItem;
-  const dataError = isVerbsModule ? randomError : error;
+  const dataError = randomError;
 
 
   const handleAnswerSubmit = useCallback(async (userAnswer: string | { english: string; hiragana: string; katakana?: string; kanji?: string; romaji?: string }, serverValidationResult?: any) => {
@@ -185,10 +175,10 @@ export default function FlashcardPage() {
   }, [navigateToNext]);
 
   useEffect(() => {
-    if (wordsData && !isPageLoaded) {
+    if (randomWord && !isPageLoaded) {
       setIsPageLoaded(true);
     }
-  }, [wordsData, isPageLoaded]);
+  }, [randomWord, isPageLoaded]);
 
   if (isLoadingData) {
     return (
@@ -298,8 +288,8 @@ export default function FlashcardPage() {
             <div className="w-full max-w-4xl">
               {/* Progress Section */}
               <ProgressSection
-                currentItem={isVerbsModule ? 1 : currentItemId}
-                totalItems={isVerbsModule ? 1 : wordsData?.length || 0}
+                currentItem={1}
+                totalItems={1}
                 moduleName={moduleName}
               />
 

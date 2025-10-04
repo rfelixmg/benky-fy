@@ -62,34 +62,83 @@ function NumbersModule() {
   useEffect(() => {
     async function fetchModuleData() {
       try {
-        const response = await fetch('/flashcards/numbers-basic');
-        if (!response.ok) {
-          throw new Error('Failed to load module data');
+        console.log('Attempting to load numbers from v2 API...');
+        
+        // Load basic numbers
+        const basicResponse = await fetch('/api/v2/words/numbers_basic');
+        console.log('Basic numbers API response status:', basicResponse.status);
+        
+        let basicNumbers: any[] = [];
+        if (basicResponse.ok) {
+          const basicData = await basicResponse.json();
+          console.log('Basic numbers API data received:', basicData);
+          basicNumbers = basicData.words || [];
         }
-        const basicNumbers = await response.json();
 
-        const extendedResponse = await fetch('/flashcards/numbers-extended');
-        if (!extendedResponse.ok) {
-          throw new Error('Failed to load extended numbers');
+        // Load extended numbers
+        const extendedResponse = await fetch('/api/v2/words/numbers_extended');
+        console.log('Extended numbers API response status:', extendedResponse.status);
+        
+        let extendedNumbers: any[] = [];
+        if (extendedResponse.ok) {
+          const extendedData = await extendedResponse.json();
+          console.log('Extended numbers API data received:', extendedData);
+          extendedNumbers = extendedData.words || [];
         }
-        const extendedNumbers = await extendedResponse.json();
 
-        // Combine and categorize numbers
+        // Convert v2 API data to module format
+        const numbers: NumberData[] = [
+          ...basicNumbers.map((word: any) => ({
+            kanji: word.kanji || word.hiragana,
+            hiragana: word.hiragana,
+            value: parseInt(word.english) || 0,
+            category: 'basic' as const
+          })),
+          ...extendedNumbers.map((word: any) => ({
+            kanji: word.kanji || word.hiragana,
+            hiragana: word.hiragana,
+            value: parseInt(word.english) || 0,
+            category: 'extended' as const
+          }))
+        ];
+
+        const practice_sets = [
+          {
+            id: 'basic-reading',
+            numbers: basicNumbers.slice(0, 10).map((word: any) => parseInt(word.english) || 0),
+            type: 'reading' as const
+          },
+          {
+            id: 'extended-conversion',
+            numbers: extendedNumbers.slice(0, 5).map((word: any) => parseInt(word.english) || 0),
+            type: 'conversion' as const
+          }
+        ];
+
+        const quiz_questions = [
+          ...basicNumbers.slice(0, 5).map((word: any) => ({
+            id: word.id,
+            question: word.hiragana,
+            correctAnswer: word.english,
+            options: [word.english, 'Wrong 1', 'Wrong 2', 'Wrong 3'],
+            hint: word.romaji || word.hiragana
+          })),
+          ...extendedNumbers.slice(0, 5).map((word: any) => ({
+            id: word.id,
+            question: word.hiragana,
+            correctAnswer: word.english,
+            options: [word.english, 'Wrong 1', 'Wrong 2', 'Wrong 3'],
+            hint: word.romaji || word.hiragana
+          }))
+        ];
+
         setData({
-          numbers: [
-            ...basicNumbers.numbers.map((n: any) => ({ ...n, category: 'basic' })),
-            ...extendedNumbers.numbers.map((n: any) => ({ ...n, category: 'extended' })),
-          ],
-          practice_sets: [
-            ...basicNumbers.practice_sets,
-            ...extendedNumbers.practice_sets,
-          ],
-          quiz_questions: [
-            ...basicNumbers.quiz_questions,
-            ...extendedNumbers.quiz_questions,
-          ],
+          numbers,
+          practice_sets,
+          quiz_questions
         });
       } catch (err) {
+        console.error('Error loading numbers from v2 API:', err);
         setError(err instanceof Error ? err.message : 'Error loading module data');
       } finally {
         setLoading(false);

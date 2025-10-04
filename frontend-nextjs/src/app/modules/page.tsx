@@ -11,15 +11,6 @@ import Image from 'next/image';
 
 const modules = [
   {
-    id: 'colors',
-    name: 'Colors',
-    description: 'Learn Japanese color words with visual aids',
-    icon: BookOpen,
-    color: 'from-red-500 to-orange-500',
-    difficulty: 'Beginner',
-    cards: 10,
-  },
-  {
     id: 'hiragana',
     name: 'Hiragana',
     description: 'Learn the basic Japanese syllabary',
@@ -38,13 +29,31 @@ const modules = [
     cards: 46,
   },
   {
-    id: 'verbs',
-    name: 'Japanese Verbs',
-    description: 'Essential verbs with conjugations',
+    id: 'numbers_basic',
+    name: 'Basic Numbers',
+    description: 'Learn Japanese numbers 1-10',
     icon: Target,
-    color: 'from-purple-500 to-purple-600',
+    color: 'from-indigo-500 to-indigo-600',
+    difficulty: 'Beginner',
+    cards: 10,
+  },
+  {
+    id: 'numbers_extended',
+    name: 'Extended Numbers',
+    description: 'Master larger Japanese numbers',
+    icon: Target,
+    color: 'from-indigo-600 to-indigo-700',
     difficulty: 'Intermediate',
-    cards: 50,
+    cards: 20,
+  },
+  {
+    id: 'colors_basic',
+    name: 'Colors',
+    description: 'Learn Japanese color words',
+    icon: BookOpen,
+    color: 'from-red-500 to-orange-500',
+    difficulty: 'Beginner',
+    cards: 10,
   },
   {
     id: 'adjectives',
@@ -54,6 +63,78 @@ const modules = [
     color: 'from-orange-500 to-orange-600',
     difficulty: 'Intermediate',
     cards: 30,
+  },
+  {
+    id: 'base_nouns',
+    name: 'Basic Nouns',
+    description: 'Essential Japanese nouns',
+    icon: BookOpen,
+    color: 'from-teal-500 to-teal-600',
+    difficulty: 'Beginner',
+    cards: 25,
+  },
+  {
+    id: 'greetings_essential',
+    name: 'Greetings',
+    description: 'Essential Japanese greetings',
+    icon: BookOpen,
+    color: 'from-cyan-500 to-cyan-600',
+    difficulty: 'Beginner',
+    cards: 15,
+  },
+  {
+    id: 'question_words',
+    name: 'Question Words',
+    description: 'Learn Japanese question words',
+    icon: BookOpen,
+    color: 'from-emerald-500 to-emerald-600',
+    difficulty: 'Beginner',
+    cards: 12,
+  },
+  {
+    id: 'katakana_words',
+    name: 'Katakana Words',
+    description: 'Common katakana words',
+    icon: Brain,
+    color: 'from-green-600 to-green-700',
+    difficulty: 'Intermediate',
+    cards: 20,
+  },
+  {
+    id: 'days_of_week',
+    name: 'Days of Week',
+    description: 'Learn days of the week in Japanese',
+    icon: BookOpen,
+    color: 'from-violet-500 to-violet-600',
+    difficulty: 'Beginner',
+    cards: 7,
+  },
+  {
+    id: 'months_complete',
+    name: 'Months',
+    description: 'Learn months in Japanese',
+    icon: BookOpen,
+    color: 'from-purple-500 to-purple-600',
+    difficulty: 'Beginner',
+    cards: 12,
+  },
+  {
+    id: 'verbs',
+    name: 'Japanese Verbs',
+    description: 'Essential verbs with conjugations',
+    icon: Target,
+    color: 'from-purple-600 to-purple-700',
+    difficulty: 'Intermediate',
+    cards: 50,
+  },
+  {
+    id: 'vocab',
+    name: 'Vocabulary',
+    description: 'General Japanese vocabulary',
+    icon: BookOpen,
+    color: 'from-pink-500 to-pink-600',
+    difficulty: 'Intermediate',
+    cards: 40,
   },
 ];
 
@@ -113,7 +194,7 @@ export default function ModulesPage() {
                 return (
                   <Link
                     key={module.id}
-                    href={module.id === 'colors' ? `/modules/${module.id}` : `/flashcards/${module.id}`}
+                    href={`/flashcards/${module.id}`}
                     className="group"
                   >
                     <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 hover:bg-background/20 transition-all duration-300 transform hover:scale-105">

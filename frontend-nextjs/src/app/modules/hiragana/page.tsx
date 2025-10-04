@@ -53,13 +53,52 @@ export default function HiraganaModule() {
   useEffect(() => {
     async function fetchModuleData() {
       try {
-        const response = await fetch('/v2/modules/hiragana');
-        if (!response.ok) {
-          throw new Error('Failed to load module data');
+        console.log('Attempting to load hiragana from v2 API...');
+        const response = await fetch('/api/v2/words/hiragana');
+        console.log('API response status:', response.status);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('API data received:', data);
+          
+          if (data.words && data.words.length > 0) {
+            // Convert v2 API data to module format
+            const characters = data.words.map((word: any) => ({
+              character: word.hiragana,
+              reading: word.romaji || word.hiragana
+            }));
+            
+            const practice_words = data.words.map((word: any) => ({
+              id: word.id,
+              hiragana: word.hiragana,
+              english: Array.isArray(word.english) ? word.english.join(', ') : word.english
+            }));
+            
+            const quiz_questions = data.words.slice(0, 10).map((word: any) => ({
+              id: word.id,
+              question: word.hiragana,
+              correctAnswer: Array.isArray(word.english) ? word.english[0] : word.english,
+              options: [
+                Array.isArray(word.english) ? word.english[0] : word.english,
+                'Wrong Answer 1',
+                'Wrong Answer 2',
+                'Wrong Answer 3'
+              ],
+              hint: word.romaji || word.hiragana
+            }));
+            
+            setData({
+              characters,
+              practice_words,
+              quiz_questions
+            });
+          }
+        } else {
+          console.error('API response not ok:', response.status, response.statusText);
+          setError('Failed to load hiragana data');
         }
-        const result = await response.json();
-        setData(result);
       } catch (err) {
+        console.error('Error loading hiragana from v2 API:', err);
         setError(err instanceof Error ? err.message : 'Error loading module data');
       } finally {
         setLoading(false);

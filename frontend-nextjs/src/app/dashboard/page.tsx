@@ -12,8 +12,8 @@ import Image from 'next/image';
 
 const recentModules = [
   { id: 'hiragana', name: 'Hiragana', progress: 75, lastStudied: '2 hours ago' },
-  { id: 'verbs', name: 'Japanese Verbs', progress: 45, lastStudied: '1 day ago' },
   { id: 'katakana', name: 'Katakana', progress: 20, lastStudied: '3 days ago' },
+  { id: 'colors', name: 'Colors', progress: 60, lastStudied: '1 day ago' },
 ];
 
 const stats = [
@@ -181,10 +181,10 @@ export default function DashboardPage() {
                       Practice Hiragana
                     </Button>
                   </Link>
-                  <Link href="/flashcards/verbs">
+                  <Link href="/flashcards/colors">
                     <Button className="w-full justify-start bg-background text-primary hover:bg-background/90">
                       <Target className="w-4 h-4 mr-2" />
-                      Practice Verbs
+                      Practice Colors
                     </Button>
                   </Link>
                   <Link href="/modules">

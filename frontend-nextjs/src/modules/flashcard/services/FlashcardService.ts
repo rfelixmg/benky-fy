@@ -1,4 +1,4 @@
-import { FlashcardItem, FlashcardSearchCriteria, FlashcardFilterOptions } from '../types/FlashcardTypes';
+import { FlashcardItem, FlashcardSearchCriteria, FlashcardFilterOptions, WordType } from '../types/FlashcardTypes';
 import { FlashcardModel } from '../models/FlashcardModel';
 
 /**
@@ -9,7 +9,7 @@ export class FlashcardService {
   private baseUrl: string;
   private cache: Map<string, FlashcardItem[]> = new Map();
 
-  constructor(baseUrl: string = '/api/flashcards') {
+  constructor(baseUrl: string = '/api/v2/words') {
     this.baseUrl = baseUrl;
   }
 
@@ -20,7 +20,6 @@ export class FlashcardService {
    */
   async getFlashcards(moduleName: string): Promise<FlashcardItem[]> {
     try {
-      // Check cache first
       if (this.cache.has(moduleName)) {
         return this.cache.get(moduleName)!;
       }
@@ -32,11 +31,20 @@ export class FlashcardService {
       }
 
       const data = await response.json();
-      const flashcards = Array.isArray(data) ? data : data.flashcards || data.items || [];
+      const words = data.words || [];
       
-      // Cache the results
+      const flashcards = words.map((word: any) => ({
+        id: word.id,
+        hiragana: word.hiragana,
+        kanji: word.kanji,
+        english: Array.isArray(word.english) ? word.english.join(', ') : word.english,
+        type: word.type,
+        difficulty: 'beginner',
+        furigana: word.furigana || word.hiragana,
+        romaji: word.romaji || ''
+      }));
+      
       this.cache.set(moduleName, flashcards);
-      
       return flashcards;
     } catch (error) {
       console.error('Error fetching flashcards:', error);
