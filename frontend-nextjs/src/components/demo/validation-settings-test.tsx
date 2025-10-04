@@ -108,10 +108,7 @@ export function ValidationSettingsTest() {
         difficulty: 'beginner'
       } as UserSettings;
 
-      const result = validateAnswer(test.userAnswers, sampleItem, true, {
-        input_english: fullSettings.input_english,
-        input_hiragana: fullSettings.input_hiragana
-      });
+      const result = validateAnswer(test.userAnswers, sampleItem, fullSettings);
 
       return {
         ...test,

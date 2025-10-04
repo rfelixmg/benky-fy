@@ -10,11 +10,11 @@ import {
 import { 
   FlashcardDisplay,
   AnswerFeedback,
-  FloatingFeedback,
   FeedbackDisplay,
   ProgressSection,
   ProgressBar
 } from '@/modules/flashcard/views';
+import { FloatingFeedback } from '@/components/flashcard/floating-feedback';
 import { AnswerInput } from '@/components/flashcard/answer-input';
 import { SettingsModal } from '@/components/flashcard/settings-modal';
 import { HelpModal } from '@/components/flashcard/help-modal';
@@ -28,26 +28,11 @@ import { Loader2, Settings, HelpCircle } from 'lucide-react';
 import { FlashcardItem, WordType } from '@/modules/flashcard/types/FlashcardTypes';
 import { AnswerResult } from '@/modules/flashcard/types/AnswerTypes';
 import { ValidationResult } from '@/lib/validation';
+import { UserSettings } from '@/lib/api-client';
 
 export default function VerbsPage() {
   const moduleName = 'verbs';
   
-  // Initialize MVC hooks
-  const flashcardHook = useFlashcard();
-  const answerHook = useAnswer();
-  const progressHook = useProgress();
-  const settingsHook = useSettings();
-
-  // UI state
-  const [currentMode, setCurrentMode] = useState<'flashcard' | 'conjugation'>('flashcard');
-  const [showSettings, setShowSettings] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [showStats, setShowStats] = useState(false);
-  const [showConjugationSettings, setShowConjugationSettings] = useState(false);
-  const [selectedConjugationForm, setSelectedConjugationForm] = useState('polite');
-  const [showFloatingFeedback, setShowFloatingFeedback] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
-
   // Mock verbs data for comprehensive edge case testing
   const mockVerbs: FlashcardItem[] = [
     // Basic verbs
@@ -159,38 +144,107 @@ export default function VerbsPage() {
       romaji: 'oboeru'
     }
   ];
+  
+  // Initialize MVC hooks
+  const flashcardHook = useFlashcard();
+  const answerHook = useAnswer();
+  const progressHook = useProgress();
+  const settingsHook = useSettings();
 
-  // Initialize the MVC architecture with timeout
+  // Load settings and set current module on component mount
   useEffect(() => {
-    const initializeMVC = async () => {
+    settingsHook.loadSettings(moduleName);
+    progressHook.setCurrentModule(moduleName);
+  }, [moduleName]);
+
+  // State for API data
+  const [apiVerbs, setApiVerbs] = useState<FlashcardItem[]>([]);
+  const [currentFlashcard, setCurrentFlashcard] = useState<FlashcardItem | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const [hasFlashcards, setHasFlashcards] = useState(false);
+  
+  // UI state
+  const [currentMode, setCurrentMode] = useState<'flashcard' | 'conjugation'>('flashcard');
+  const [showSettings, setShowSettings] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [showStats, setShowStats] = useState(false);
+  const [showConjugationSettings, setShowConjugationSettings] = useState(false);
+  const [selectedConjugationForm, setSelectedConjugationForm] = useState('polite');
+  const [showFloatingFeedback, setShowFloatingFeedback] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Initialize with v2 API data
+  useEffect(() => {
+    const loadVerbsFromAPI = async () => {
       try {
-        // Load settings for verbs module
-        await settingsHook.loadSettings(moduleName);
+        console.log('Attempting to load verbs from v2 API...');
+        const response = await fetch('/api/v2/words/verbs');
+        console.log('API response status:', response.status);
+        console.log('Response headers:', response.headers);
         
-        // Load flashcards
-        await flashcardHook.loadFlashcards(moduleName);
-        
-        // Load progress
-        await progressHook.loadProgress(moduleName);
-        
-        setIsInitialized(true);
+        if (response.ok) {
+          const data = await response.json();
+          console.log('API data received:', data);
+          
+          if (data.words && data.words.length > 0) {
+            // Convert all v2 API verbs to FlashcardItem format
+            const convertedVerbs: FlashcardItem[] = data.words.map((verb: any) => ({
+              id: verb.id,
+              hiragana: verb.hiragana,
+              kanji: verb.kanji,
+              english: Array.isArray(verb.english) ? verb.english.join(', ') : verb.english,
+              type: verb.type === 'noun' ? WordType.VERB : verb.type as WordType, // API returns 'noun' for verbs
+              difficulty: 'beginner',
+              furigana: verb.furigana || verb.hiragana,
+              romaji: verb.romaji || ''
+            }));
+            
+            console.log('Converted verbs:', convertedVerbs.length);
+            console.log('Setting state with converted verbs...');
+            setApiVerbs(convertedVerbs);
+            setTotalCount(convertedVerbs.length);
+            setHasFlashcards(true);
+            setCurrentFlashcard(convertedVerbs[0]);
+            setCurrentIndex(0);
+            setIsInitialized(true);
+            console.log('State set successfully, isInitialized should be true');
+          }
+        } else {
+          console.error('API response not ok:', response.status, response.statusText);
+        }
       } catch (error) {
-        console.error('Error initializing MVC architecture:', error);
-        // Set to true even on error to show the page
-        setIsInitialized(true);
+        console.error('Error loading verbs from v2 API:', error);
+        // Fallback to mock data if API fails
+        if (mockVerbs.length > 0) {
+          console.log('Falling back to mock data');
+          setApiVerbs(mockVerbs);
+          setTotalCount(mockVerbs.length);
+          setHasFlashcards(true);
+          setCurrentFlashcard(mockVerbs[0]);
+          setCurrentIndex(0);
+          setIsInitialized(true);
+        }
       }
     };
 
-    // Set a timeout to force initialization after 5 seconds
+    // Set a timeout to force initialization after 3 seconds
     const timeoutId = setTimeout(() => {
-      console.log('MVC initialization timeout - forcing page load');
-      setIsInitialized(true);
-    }, 5000);
+      console.log('API timeout - forcing page load with mock data');
+      if (mockVerbs.length > 0) {
+        setApiVerbs(mockVerbs);
+        setTotalCount(mockVerbs.length);
+        setHasFlashcards(true);
+        setCurrentFlashcard(mockVerbs[0]);
+        setCurrentIndex(0);
+        setIsInitialized(true);
+      }
+    }, 3000);
 
-    initializeMVC().finally(() => {
+    loadVerbsFromAPI().finally(() => {
       clearTimeout(timeoutId);
     });
-  }, [moduleName]);
+  }, []);
 
   // Remove mock data injection - use API data directly
   // useEffect(() => {
@@ -202,7 +256,7 @@ export default function VerbsPage() {
   // }, []);
 
   const handleAnswerSubmit = useCallback(async (userAnswer: string | Record<string, string>) => {
-    if (!flashcardHook.currentFlashcard) return;
+    if (!currentFlashcard) return;
 
     try {
       // Submit answer using MVC architecture
@@ -210,7 +264,7 @@ export default function VerbsPage() {
         `${userAnswer.hiragana || ''} / ${userAnswer.english || ''}`.replace(/ \/ $/, '');
       
       // Set current flashcard before submitting answer
-      answerHook.setCurrentFlashcard(flashcardHook.currentFlashcard);
+      answerHook.setCurrentFlashcard(currentFlashcard);
       
       // Submit answer and wait for completion
       await answerHook.submitAnswer(answerString);
@@ -222,7 +276,7 @@ export default function VerbsPage() {
       // Create answer result for progress tracking
       const answerResult: AnswerResult = {
         id: `answer-${Date.now()}`,
-        flashcardId: flashcardHook.currentFlashcard.id,
+        flashcardId: currentFlashcard.id,
         userAnswer: answerString,
         isCorrect: isCorrect,
         validationResult: validationResult || {
@@ -249,41 +303,47 @@ export default function VerbsPage() {
       // Show error feedback even on failure
       setShowFloatingFeedback(true);
     }
-  }, [flashcardHook.currentFlashcard, answerHook, progressHook, moduleName]);
+  }, [currentFlashcard, answerHook, progressHook, moduleName]);
 
   const handleNextFlashcard = useCallback(() => {
-    flashcardHook.nextFlashcard();
-    if (flashcardHook.currentFlashcard) {
-      answerHook.setCurrentFlashcard(flashcardHook.currentFlashcard);
+    if (currentIndex < totalCount - 1 && apiVerbs.length > 0) {
+      const nextIndex = currentIndex + 1;
+      setCurrentIndex(nextIndex);
+      setCurrentFlashcard(apiVerbs[nextIndex]);
+      answerHook.setCurrentFlashcard(apiVerbs[nextIndex]);
       answerHook.clearAnswer();
     }
     setShowFloatingFeedback(false);
-  }, [flashcardHook, answerHook]);
+  }, [currentIndex, totalCount, apiVerbs, answerHook]);
 
   const handlePreviousFlashcard = useCallback(() => {
-    flashcardHook.previousFlashcard();
-    if (flashcardHook.currentFlashcard) {
-      answerHook.setCurrentFlashcard(flashcardHook.currentFlashcard);
+    if (currentIndex > 0 && apiVerbs.length > 0) {
+      const prevIndex = currentIndex - 1;
+      setCurrentIndex(prevIndex);
+      setCurrentFlashcard(apiVerbs[prevIndex]);
+      answerHook.setCurrentFlashcard(apiVerbs[prevIndex]);
       answerHook.clearAnswer();
     }
     setShowFloatingFeedback(false);
-  }, [flashcardHook, answerHook]);
+  }, [currentIndex, apiVerbs, answerHook]);
 
   const handleSkipFlashcard = useCallback(() => {
-    flashcardHook.skipFlashcard();
-    if (flashcardHook.currentFlashcard) {
-      answerHook.setCurrentFlashcard(flashcardHook.currentFlashcard);
+    if (currentIndex < totalCount - 1 && apiVerbs.length > 0) {
+      const nextIndex = currentIndex + 1;
+      setCurrentIndex(nextIndex);
+      setCurrentFlashcard(apiVerbs[nextIndex]);
+      answerHook.setCurrentFlashcard(apiVerbs[nextIndex]);
       answerHook.clearAnswer();
     }
     setShowFloatingFeedback(false);
-  }, [flashcardHook, answerHook]);
+  }, [currentIndex, totalCount, apiVerbs, answerHook]);
 
   const handleFloatingFeedbackClose = useCallback(() => {
     setShowFloatingFeedback(false);
     handleNextFlashcard();
   }, [handleNextFlashcard]);
 
-  if (!isInitialized || flashcardHook.isLoading || settingsHook.isLoading || progressHook.isLoading) {
+  if (!isInitialized) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
@@ -294,7 +354,7 @@ export default function VerbsPage() {
     );
   }
 
-  if (flashcardHook.error || settingsHook.error || progressHook.error) {
+  if (settingsHook.error || progressHook.error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
@@ -307,11 +367,12 @@ export default function VerbsPage() {
     );
   }
 
-  if (!flashcardHook.currentFlashcard) {
+  if (!currentFlashcard || !hasFlashcards) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
-          <p className="text-primary-foreground">No verbs available</p>
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-foreground" />
+          <p className="text-primary-foreground">Loading verbs...</p>
         </div>
       </div>
     );
@@ -389,56 +450,132 @@ export default function VerbsPage() {
             <div className="w-full max-w-4xl">
               {/* Progress Section */}
               <ProgressSection
-                currentItem={flashcardHook.currentIndex + 1}
-                totalItems={flashcardHook.totalCount}
+                currentItem={currentIndex + 1}
+                totalItems={totalCount}
                 progress={progressHook.progress || undefined}
                 metrics={progressHook.metrics || undefined}
-                settings={settingsHook.settings!}
+                settings={settingsHook.settings || { 
+                  flashcard_type: 'mixed',
+                  display_mode: 'mixed',
+                  kana_type: 'hiragana',
+                  input_hiragana: true,
+                  input_romaji: false,
+                  input_katakana: false,
+                  input_kanji: false,
+                  input_english: false,
+                  furigana_style: 'small',
+                  conjugation_forms: ['polite'],
+                  practice_mode: 'normal',
+                  priority_filter: 'all',
+                  learning_order: false,
+                  proportions: { kana: 0.3, kanji: 0.3, kanji_furigana: 0.2, english: 0.2 },
+                  romaji_enabled: false,
+                  romaji_output_type: 'hiragana',
+                  max_answer_attempts: 3
+                }}
                 moduleName={moduleName}
                 showMetrics={true}
                 showInsights={true}
               />
 
               {/* Flashcard Display */}
-              <FlashcardDisplay
-                flashcard={flashcardHook.currentFlashcard}
-                settings={settingsHook.settings!}
-                isUserInteraction={answerHook.isSubmitting}
-                mode={currentMode}
-                onNext={handleNextFlashcard}
-                onPrevious={handlePreviousFlashcard}
-                onSkip={handleSkipFlashcard}
-                disabled={answerHook.isSubmitting}
-                canGoPrevious={flashcardHook.currentIndex > 0}
-                canGoNext={flashcardHook.currentIndex < flashcardHook.totalCount - 1}
-              />
+              {currentFlashcard && (
+                <FlashcardDisplay
+                  flashcard={currentFlashcard}
+                  settings={settingsHook.settings || { 
+                  flashcard_type: 'mixed',
+                  display_mode: 'mixed',
+                  kana_type: 'hiragana',
+                  input_hiragana: true,
+                  input_romaji: false,
+                  input_katakana: false,
+                  input_kanji: false,
+                  input_english: false,
+                  furigana_style: 'small',
+                  conjugation_forms: ['polite'],
+                  practice_mode: 'normal',
+                  priority_filter: 'all',
+                  learning_order: false,
+                  proportions: { kana: 0.3, kanji: 0.3, kanji_furigana: 0.2, english: 0.2 },
+                  romaji_enabled: false,
+                  romaji_output_type: 'hiragana',
+                  max_answer_attempts: 3
+                }}
+                  isUserInteraction={answerHook.isSubmitting}
+                  mode={currentMode}
+                  onNext={handleNextFlashcard}
+                  onPrevious={handlePreviousFlashcard}
+                  onSkip={handleSkipFlashcard}
+                  disabled={answerHook.isSubmitting}
+                  canGoPrevious={currentIndex > 0}
+                  canGoNext={currentIndex < totalCount - 1}
+                />
+              )}
 
               {/* Answer Input */}
-              <AnswerInput
-                onSubmit={handleAnswerSubmit}
-                onAdvance={handleNextFlashcard}
-                disabled={answerHook.isSubmitting}
-                settings={settingsHook.settings!}
-                isCorrect={answerHook.isCurrentAnswerCorrect()}
-                currentItem={flashcardHook.currentFlashcard}
-                lastAnswer={answerHook.userAnswer}
-                lastMatchedType={answerHook.validationResult?.matchedType}
-                lastConvertedAnswer={answerHook.validationResult?.convertedAnswer}
-                moduleName={moduleName}
-                enableServerValidation={false}
-                enableRealtimeFeedback={false}
-              />
+              {currentFlashcard && (
+                <AnswerInput
+                  onSubmit={handleAnswerSubmit}
+                  onAdvance={handleNextFlashcard}
+                  disabled={answerHook.isSubmitting}
+                  settings={settingsHook.settings || { 
+                  flashcard_type: 'mixed',
+                  display_mode: 'mixed',
+                  kana_type: 'hiragana',
+                  input_hiragana: true,
+                  input_romaji: false,
+                  input_katakana: false,
+                  input_kanji: false,
+                  input_english: false,
+                  furigana_style: 'small',
+                  conjugation_forms: ['polite'],
+                  practice_mode: 'normal',
+                  priority_filter: 'all',
+                  learning_order: false,
+                  proportions: { kana: 0.3, kanji: 0.3, kanji_furigana: 0.2, english: 0.2 },
+                  romaji_enabled: false,
+                  romaji_output_type: 'hiragana',
+                  max_answer_attempts: 3
+                }}
+                  isCorrect={answerHook.isCurrentAnswerCorrect()}
+                  currentItem={currentFlashcard}
+                  lastAnswer={answerHook.userAnswer}
+                  lastMatchedType={answerHook.validationResult?.matchedType}
+                  lastConvertedAnswer={answerHook.validationResult?.convertedAnswer}
+                  moduleName={moduleName}
+                  enableServerValidation={false}
+                  enableRealtimeFeedback={false}
+                />
+              )}
 
               {/* Answer Feedback */}
               {answerHook.showFeedback && answerHook.validationResult && (
                 <FeedbackDisplay
                   feedbackData={{
-                    item: flashcardHook.currentFlashcard,
+                    item: currentFlashcard,
                     userAnswer: answerHook.userAnswer,
                     isCorrect: answerHook.isCurrentAnswerCorrect(),
                     validationResult: answerHook.validationResult
                   }}
-                  settings={settingsHook.settings!}
+                  settings={settingsHook.settings || { 
+                  flashcard_type: 'mixed',
+                  display_mode: 'mixed',
+                  kana_type: 'hiragana',
+                  input_hiragana: true,
+                  input_romaji: false,
+                  input_katakana: false,
+                  input_kanji: false,
+                  input_english: false,
+                  furigana_style: 'small',
+                  conjugation_forms: ['polite'],
+                  practice_mode: 'normal',
+                  priority_filter: 'all',
+                  learning_order: false,
+                  proportions: { kana: 0.3, kanji: 0.3, kanji_furigana: 0.2, english: 0.2 },
+                  romaji_enabled: false,
+                  romaji_output_type: 'hiragana',
+                  max_answer_attempts: 3
+                }}
                   onFeedbackClose={() => answerHook.clearAnswer()}
                   displayMode="both"
                   showFloating={true}
@@ -468,7 +605,7 @@ export default function VerbsPage() {
       {showHelp && (
         <HelpModal
           moduleName={moduleName}
-          currentItemId={flashcardHook.currentIndex + 1}
+          currentItemId={currentIndex + 1}
           onClose={() => setShowHelp(false)}
         />
       )}
@@ -513,14 +650,41 @@ export default function VerbsPage() {
       )}
 
       {/* Floating Feedback Modal */}
-      {showFloatingFeedback && answerHook.validationResult && (
+      {showFloatingFeedback && answerHook.validationResult && currentFlashcard && (
         <FloatingFeedback
-          validationResult={answerHook.validationResult}
-          isVisible={showFloatingFeedback}
+          item={currentFlashcard}
+          userAnswer={answerHook.userAnswer || ''}
+          isCorrect={answerHook.isCurrentAnswerCorrect()}
+          matchedType={answerHook.validationResult?.matchedType}
+          convertedAnswer={answerHook.validationResult?.convertedAnswer}
+          settings={settingsHook.settings || {
+            input_hiragana: true,
+            input_english: true,
+            input_kanji: false,
+            input_katakana: false,
+            input_romaji: false,
+            display_mode: 'mixed',
+            furigana_style: 'below',
+            practice_mode: 'flashcard',
+            priority_filter: 'all',
+            learning_order: false,
+            proportions: { kana: 0.3, kanji: 0.3, kanji_furigana: 0.2, english: 0.2 },
+            romaji_enabled: false,
+            romaji_output_type: 'hiragana',
+            flashcard_type: 'standard',
+            kana_type: 'hiragana',
+            furiganaEnabled: true,
+            romajiEnabled: false,
+            darkMode: false,
+            allowedInputModes: { hiragana: true, katakana: false, english: true, kanji: false, romaji: false },
+            max_answer_attempts: 3,
+            conjugation_forms: []
+          } as UserSettings}
+          frontendValidationResult={answerHook.validationResult}
+          userAnswers={{}}
+          moduleName="verbs"
+          timerDuration={3000}
           onClose={handleFloatingFeedbackClose}
-          position="top"
-          autoHide={true}
-          autoHideDelay={3000}
         />
       )}
     </div>

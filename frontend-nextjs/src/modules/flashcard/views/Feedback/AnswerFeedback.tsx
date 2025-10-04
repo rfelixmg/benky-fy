@@ -30,6 +30,8 @@ export const AnswerFeedback: React.FC<AnswerFeedbackProps> = ({
 }) => {
   // Get enabled input modes in the same order as AnswerInput component
   const getEnabledInputModes = () => {
+    if (!settings) return [];
+    
     const moduleType = getModuleType(moduleName);
     const modes = [];
     
@@ -80,7 +82,7 @@ export const AnswerFeedback: React.FC<AnswerFeedbackProps> = ({
   
   // Get feedback color for the container background (memoized)
   const containerFeedbackColor = useMemo(() => {
-    if (frontendValidationResult && frontendValidationResult.results.length > 1) {
+    if (frontendValidationResult && frontendValidationResult.results && frontendValidationResult.results.length > 1) {
       // Multiple input mode - use results array
       return getFeedbackColor(frontendValidationResult.results);
     } else if (frontendValidationResult) {
@@ -113,7 +115,7 @@ export const AnswerFeedback: React.FC<AnswerFeedbackProps> = ({
 
   // Get status for each input type
   const getStatus = (mode: string) => {
-    if (frontendValidationResult && frontendValidationResult.results.length > 1) {
+    if (frontendValidationResult && frontendValidationResult.results && frontendValidationResult.results.length > 1) {
       // Multiple input mode - check individual results
       const modeIndex = enabledModes.indexOf(mode);
       return frontendValidationResult.results[modeIndex] || false;

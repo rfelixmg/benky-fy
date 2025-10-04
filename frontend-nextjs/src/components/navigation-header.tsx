@@ -33,6 +33,7 @@ export function NavigationHeader({ currentPage, showUserMenu = true }: Navigatio
                 width={60}
                 height={36}
                 className="cursor-pointer hover:opacity-80 transition-opacity"
+                style={{ width: "auto", height: "auto" }}
                 priority
               />
             </Link>

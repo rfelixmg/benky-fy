@@ -331,7 +331,22 @@ export class AnswerController {
    * @returns string
    */
   private getModuleNameFromFlashcard(): string {
-    return this.currentFlashcard?.type || 'unknown';
+    // Map flashcard types to module names
+    const typeToModuleMap: Record<string, string> = {
+      'verb': 'verbs',
+      'adjective': 'adjectives', 
+      'noun': 'base_nouns',
+      'color': 'colors_basic',
+      'number': 'numbers_basic',
+      'greeting': 'greetings_essential',
+      'day': 'days_of_week',
+      'month': 'months_complete',
+      'question': 'question_words',
+      'vocab': 'vocab'
+    };
+    
+    const flashcardType = this.currentFlashcard?.type || 'unknown';
+    return typeToModuleMap[flashcardType] || 'unknown';
   }
 
   /**

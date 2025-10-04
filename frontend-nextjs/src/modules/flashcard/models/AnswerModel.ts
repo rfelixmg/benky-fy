@@ -3,7 +3,7 @@ import {
   AnswerSubmission, 
   InputType 
 } from '../types/AnswerTypes';
-import { ValidationResult } from '@/lib/validation';
+import { ExtendedValidationResult } from '@/lib/validation/core/ValidationResult';
 
 /**
  * AnswerModel - Data model for answer submissions and results
@@ -16,7 +16,7 @@ export class AnswerModel {
   public isCorrect: boolean;
   public matchedType?: InputType;
   public convertedAnswer?: string;
-  public validationResult: ValidationResult;
+  public validationResult: ExtendedValidationResult;
   public timestamp: Date;
   public attempts: number;
   public moduleName?: string;
@@ -31,9 +31,11 @@ export class AnswerModel {
     this.convertedAnswer = 'convertedAnswer' in data ? data.convertedAnswer : undefined;
     this.validationResult = 'validationResult' in data ? data.validationResult : {
       isCorrect: false,
-      feedback: ['No validation performed']
+      feedback: ['No validation performed'],
+      results: [false],
+      feedbackColor: 'text-red-500'
     };
-    this.timestamp = 'timestamp' in data ? new Date(data.timestamp) : new Date();
+    this.timestamp = 'timestamp' in data && data.timestamp ? new Date(data.timestamp) : new Date();
     this.attempts = 'attempts' in data ? data.attempts : 1;
     this.moduleName = data.moduleName;
     this.sessionId = data.sessionId;
@@ -131,7 +133,7 @@ export class AnswerModel {
    * Update validation result
    * @param validationResult New validation result
    */
-  updateValidation(validationResult: ValidationResult): void {
+  updateValidation(validationResult: ExtendedValidationResult): void {
     this.validationResult = validationResult;
     this.isCorrect = validationResult.isCorrect;
     this.matchedType = validationResult.matchedType as InputType;
@@ -154,6 +156,14 @@ export class AnswerModel {
       return this.userAnswer;
     }
     return Object.values(this.userAnswer).join(' / ');
+  }
+
+  /**
+   * Get validation result
+   * @returns ExtendedValidationResult
+   */
+  getValidationResult(): ExtendedValidationResult {
+    return this.validationResult;
   }
 
   /**

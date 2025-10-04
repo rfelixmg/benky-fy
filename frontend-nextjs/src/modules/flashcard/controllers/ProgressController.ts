@@ -24,6 +24,14 @@ export class ProgressController {
   }
 
   /**
+   * Set current module for progress tracking
+   * @param moduleName Module name
+   */
+  setCurrentModule(moduleName: string): void {
+    this.currentModule = moduleName;
+  }
+
+  /**
    * Update progress with answer result
    * @param answerResult Answer result to update progress with
    * @returns Promise<void>

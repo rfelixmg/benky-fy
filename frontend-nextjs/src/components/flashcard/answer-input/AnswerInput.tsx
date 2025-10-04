@@ -87,7 +87,14 @@ export const AnswerInput: React.FC<AnswerInputProps> = ({
 
       // Submit with validation results
       if (isMultipleInput) {
-        onSubmit(answers, validationResult);
+        const structuredAnswer = {
+          english: answers.english || '',
+          hiragana: answers.hiragana || '',
+          katakana: answers.katakana,
+          kanji: answers.kanji,
+          romaji: answers.romaji
+        };
+        onSubmit(structuredAnswer, validationResult);
       } else {
         onSubmit(answers[enabledModes[0]] || '', validationResult);
       }
@@ -125,7 +132,7 @@ export const AnswerInput: React.FC<AnswerInputProps> = ({
         onKeyDown={handleKeyDown}
         onFocus={handleFieldFocus}
         onBlur={handleFieldBlur}
-        inputRefs={inputRefs}
+        inputRefs={inputRefs.current as Record<string, React.Ref<HTMLInputElement>>}
       />
 
       {/* Submit Button */}

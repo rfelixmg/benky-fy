@@ -19,6 +19,7 @@ interface UseProgressReturn extends UseProgressState {
   getProgressMetrics: () => Promise<ProgressMetrics | null>;
   resetProgress: () => Promise<void>;
   loadProgress: (moduleName: string) => Promise<void>;
+  setCurrentModule: (moduleName: string) => void;
   getProgressSummary: () => ProgressSummary | null;
   getSessionStatistics: () => any;
   getProgressInsights: () => any[];
@@ -174,6 +175,17 @@ export const useProgress = (): UseProgressReturn => {
     }
   }, [updateState, handleError]);
 
+  const setCurrentModule = useCallback((moduleName: string) => {
+    if (!controllerRef.current) return;
+
+    try {
+      controllerRef.current.setCurrentModule(moduleName);
+      updateState({ currentModule: moduleName });
+    } catch (error) {
+      handleError(error as Error, 'setCurrentModule');
+    }
+  }, [updateState, handleError]);
+
   const getProgressSummary = useCallback(() => {
     if (!controllerRef.current) return null;
 
@@ -321,6 +333,7 @@ export const useProgress = (): UseProgressReturn => {
     getProgressMetrics,
     resetProgress,
     loadProgress,
+    setCurrentModule,
     getProgressSummary,
     getSessionStatistics,
     getProgressInsights,

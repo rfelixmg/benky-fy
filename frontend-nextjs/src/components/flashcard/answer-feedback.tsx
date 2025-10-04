@@ -79,7 +79,7 @@ export function AnswerFeedback({
   
   // Get feedback color for the container background (memoized)
   const containerFeedbackColor = useMemo(() => {
-    if (frontendValidationResult && frontendValidationResult.results.length > 1) {
+    if (frontendValidationResult && frontendValidationResult.results && frontendValidationResult.results.length > 1) {
       // Multiple input mode - use results array
       return getFeedbackColor(frontendValidationResult.results);
     } else if (frontendValidationResult) {

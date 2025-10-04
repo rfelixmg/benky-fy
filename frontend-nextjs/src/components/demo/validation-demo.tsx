@@ -63,7 +63,7 @@ export function ValidationDemo() {
   };
 
   const handleSingleValidation = () => {
-    const result = validateAnswer(singleAnswer, sampleItem, false);
+    const result = validateAnswer(singleAnswer, sampleItem, singleInputSettings);
     setSingleResult(result);
   };
 

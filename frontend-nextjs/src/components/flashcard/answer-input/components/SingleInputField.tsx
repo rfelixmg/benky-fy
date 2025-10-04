@@ -17,7 +17,7 @@ interface SingleInputFieldProps {
 /**
  * Single input field component for AnswerInput
  */
-export const SingleInputField: React.FC<SingleInputFieldProps> = React.forwardRef<
+export const SingleInputField = React.forwardRef<
   HTMLInputElement,
   SingleInputFieldProps
 >(({

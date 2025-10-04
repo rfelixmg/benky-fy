@@ -2,7 +2,7 @@
  * AnswerTypes - Type definitions for answer system
  */
 
-import { ValidationResult } from '@/lib/validation';
+import { ExtendedValidationResult } from '@/lib/validation/core/ValidationResult';
 
 /**
  * Input type enumeration
@@ -25,7 +25,7 @@ export interface AnswerResult {
   isCorrect: boolean;
   matchedType?: InputType;
   convertedAnswer?: string;
-  validationResult: ValidationResult;
+  validationResult: ExtendedValidationResult;
   timestamp: Date;
   attempts: number;
   moduleName?: string;

@@ -294,7 +294,7 @@ function TimeModule() {
                 english: set.units.map(u =>
                   currentUnits.find(cu => cu.kanji === u)?.english || u
                 ).join(', '),
-                type: set.type,
+                type: 'noun' as const,
               }))}
             onComplete={() => setMode('quiz')}
             onProgress={handlePracticeProgress}

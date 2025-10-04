@@ -34,6 +34,10 @@ export class SettingsModel {
   public autoAdvance: boolean;
   public soundEnabled: boolean;
   public difficulty: 'beginner' | 'intermediate' | 'advanced';
+  public feedbackDisplayMode: 'legacy' | 'floating' | 'both';
+  public floatingPosition: 'top' | 'bottom' | 'center' | 'modal';
+  public autoHideDelay: number;
+  public showDetailedFeedback: boolean;
 
   constructor(data: Partial<UserSettings> = {}) {
     this.inputHiragana = data.input_hiragana ?? true;
@@ -70,6 +74,10 @@ export class SettingsModel {
     this.autoAdvance = data.autoAdvance ?? false;
     this.soundEnabled = data.soundEnabled ?? false;
     this.difficulty = data.difficulty ?? 'beginner';
+    this.feedbackDisplayMode = data.feedbackDisplayMode ?? 'legacy';
+    this.floatingPosition = data.floatingPosition ?? 'top';
+    this.autoHideDelay = data.autoHideDelay ?? 3000;
+    this.showDetailedFeedback = data.showDetailedFeedback ?? false;
   }
 
   /**
@@ -102,7 +110,11 @@ export class SettingsModel {
       romajiConversionEnabled: this.romajiConversionEnabled,
       autoAdvance: this.autoAdvance,
       soundEnabled: this.soundEnabled,
-      difficulty: this.difficulty
+      difficulty: this.difficulty,
+      feedbackDisplayMode: this.feedbackDisplayMode,
+      floatingPosition: this.floatingPosition,
+      autoHideDelay: this.autoHideDelay,
+      showDetailedFeedback: this.showDetailedFeedback
     };
   }
 
@@ -198,7 +210,11 @@ export class SettingsModel {
       romajiConversionEnabled: this.romajiConversionEnabled,
       autoAdvance: this.autoAdvance,
       soundEnabled: this.soundEnabled,
-      difficulty: this.difficulty
+      difficulty: this.difficulty,
+      feedbackDisplayMode: this.feedbackDisplayMode,
+      floatingPosition: this.floatingPosition,
+      autoHideDelay: this.autoHideDelay,
+      showDetailedFeedback: this.showDetailedFeedback
     });
   }
 
@@ -326,5 +342,9 @@ export class SettingsModel {
     this.autoAdvance = false;
     this.soundEnabled = false;
     this.difficulty = 'beginner';
+    this.feedbackDisplayMode = 'legacy';
+    this.floatingPosition = 'top';
+    this.autoHideDelay = 3000;
+    this.showDetailedFeedback = false;
   }
 }
