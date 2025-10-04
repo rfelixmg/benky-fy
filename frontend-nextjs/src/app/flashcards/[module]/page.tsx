@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { useWordsData, validateAnswer, useTrackAnswer, AnswerResult } from '@/lib/hooks';
+import { useWordsData, useRandomWord, validateAnswer, useTrackAnswer, AnswerResult } from '@/lib/hooks';
 import { useSettingsStore } from '@/lib/settings-store';
 import { FlashcardDisplay } from '@/components/flashcard/flashcard-display';
 import { AnswerInput } from '@/components/flashcard/answer-input';
 import { ProgressSection } from '@/components/flashcard/progress-section';
-import { ActionButtons } from '@/components/flashcard/action-buttons';
 import { SettingsModal } from '@/components/flashcard/settings-modal';
 import { HelpModal } from '@/components/flashcard/help-modal';
 import { Statistics } from '@/components/flashcard/statistics';
@@ -36,26 +35,58 @@ export default function FlashcardPage() {
   const [lastAnswer, setLastAnswer] = useState('');
   const [lastMatchedType, setLastMatchedType] = useState<string | undefined>();
   const [lastConvertedAnswer, setLastConvertedAnswer] = useState<string | undefined>();
+  const [testedWord, setTestedWord] = useState<any>(null); // Store the word being tested
   
   const { data: wordsData, isLoading, error } = useWordsData(moduleName);
+  const { data: randomWord, isLoading: isRandomLoading, error: randomError, refetch: refetchRandomWord } = useRandomWord(moduleName);
   const { getSettings } = useSettingsStore();
   const trackAnswerMutation = useTrackAnswer();
   
   const settings = getSettings(moduleName);
 
-  const currentItem = wordsData?.find((item, index) => index === currentItemId - 1);
+  // Unified navigation function for all modules
+  const navigateToNext = useCallback(() => {
+    if (moduleName === 'verbs') {
+      refetchRandomWord();
+    } else {
+      setCurrentItemId(prev => prev + 1);
+    }
+  }, [moduleName, refetchRandomWord]);
+
+  const navigateToPrevious = useCallback(() => {
+    if (moduleName === 'verbs') {
+      refetchRandomWord(); // For verbs, "previous" means new random word
+    } else {
+      setCurrentItemId(prev => Math.max(1, prev - 1));
+    }
+  }, [moduleName, refetchRandomWord]);
+
+  // Use random word selection for verbs module, otherwise use traditional array-based selection
+  const isVerbsModule = moduleName === 'verbs';
+  const currentItem = isVerbsModule ? randomWord : wordsData?.find((item, index) => index === currentItemId - 1);
+  const isLoadingData = isVerbsModule ? isRandomLoading : isLoading;
+  
+  // Use testedWord for validation/feedback, currentItem for display
+  const itemForValidation = testedWord || currentItem;
+  const dataError = isVerbsModule ? randomError : error;
+
 
   const handleAnswerSubmit = useCallback(async (userAnswer: string, serverValidationResult?: any) => {
     if (!currentItem) return;
     
+    // Set the word being tested (only once per word)
+    if (!testedWord) {
+      setTestedWord(currentItem);
+    }
+    
     setIsUserInteraction(true);
     
-    // Prepare correct answers for validation
+    // Prepare correct answers for validation using the tested word
     const correctAnswers = {
-      hiragana: currentItem.hiragana,
-      katakana: currentItem.katakana,
-      english: currentItem.english,
-      kanji: currentItem.kanji,
+      hiragana: itemForValidation.hiragana,
+      katakana: itemForValidation.katakana,
+      english: itemForValidation.english,
+      kanji: itemForValidation.kanji,
     };
     
     // Use comprehensive validation (frontend fallback)
@@ -75,7 +106,7 @@ export default function FlashcardPage() {
     // Track answer result for future database storage
     const answerResult: AnswerResult = {
       moduleName,
-      itemId: currentItem.id,
+      itemId: itemForValidation.id,
       userAnswer,
       isCorrect: answerIsCorrect,
       matchedType: validationResult.matchedType,
@@ -92,63 +123,19 @@ export default function FlashcardPage() {
       }
     };
     
-    // Track the answer result (currently logs to console, ready for backend)
-    trackAnswerMutation.mutate(answerResult);
-    
-    // Handle feedback display
-    if (answerIsCorrect) {
-      // Move to next item after a delay
-      setTimeout(() => {
-        setCurrentItemId(prev => prev + 1);
-        setCurrentAttempts(0);
-        setIsCorrect(false);
-        setIsUserInteraction(false);
-      }, 1500);
-    } else {
-      // Check if max attempts reached
-      const maxAttempts = settings.max_answer_attempts;
-      const hasAttemptsLeft = maxAttempts === -1 || newAttempts < maxAttempts;
+    // Handle feedback display - unified logic for all modules
+    setTimeout(() => {
+      // Move to next item after feedback delay
+      navigateToNext();
       
-      if (!hasAttemptsLeft) {
-        // Max attempts reached - show correct answer and move to next
-        setTimeout(() => {
-          setCurrentItemId(prev => prev + 1);
-          setCurrentAttempts(0);
-          setIsCorrect(false);
-          setIsUserInteraction(false);
-        }, 3000);
-      } else {
-        // Show incorrect feedback but allow more attempts
-        setTimeout(() => {
-          setIsUserInteraction(false);
-        }, 2000);
-      }
-    }
-  }, [currentItem, currentAttempts, settings]);
+      // Reset state for next item
+      setCurrentAttempts(0);
+      setIsCorrect(false);
+      setIsUserInteraction(false);
+      setTestedWord(null);
+    }, answerIsCorrect ? 3000 : 10000);
+  }, [currentItem, currentAttempts, settings, navigateToNext]);
 
-  const handleNext = useCallback(() => {
-    setCurrentItemId(prev => prev + 1);
-    setCurrentAttempts(0);
-    setIsCorrect(false);
-    setLastAnswer('');
-    setLastMatchedType(undefined);
-    setLastConvertedAnswer(undefined);
-    setIsUserInteraction(false);
-  }, []);
-
-  const handlePrevious = useCallback(() => {
-    setCurrentItemId(prev => Math.max(1, prev - 1));
-    setCurrentAttempts(0);
-    setIsCorrect(false);
-    setLastAnswer('');
-    setLastMatchedType(undefined);
-    setLastConvertedAnswer(undefined);
-    setIsUserInteraction(false);
-  }, []);
-
-  const handleSkip = useCallback(() => {
-    handleNext();
-  }, [handleNext]);
 
 
   useEffect(() => {
@@ -157,7 +144,7 @@ export default function FlashcardPage() {
     }
   }, [wordsData, isPageLoaded]);
 
-  if (isLoading) {
+  if (isLoadingData) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
@@ -168,7 +155,7 @@ export default function FlashcardPage() {
     );
   }
 
-  if (error) {
+  if (dataError) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
@@ -181,7 +168,7 @@ export default function FlashcardPage() {
     );
   }
 
-  if (!wordsData || !currentItem) {
+  if (!currentItem) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
@@ -195,6 +182,8 @@ export default function FlashcardPage() {
     <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
       {/* Navigation Header */}
       <NavigationHeader currentPage={`/flashcards/${moduleName}`} />
+      
+      {/* Debug Component - Console Only */}
       
       {/* Page Content */}
       <div className="pt-16">
@@ -263,8 +252,8 @@ export default function FlashcardPage() {
             <div className="w-full max-w-4xl">
               {/* Progress Section */}
               <ProgressSection
-                currentItem={currentItemId}
-                totalItems={wordsData.length}
+                currentItem={isVerbsModule ? 1 : currentItemId}
+                totalItems={isVerbsModule ? 1 : wordsData?.length || 0}
                 moduleName={moduleName}
               />
 
@@ -282,24 +271,15 @@ export default function FlashcardPage() {
                 disabled={isUserInteraction}
                 settings={settings}
                 isCorrect={isCorrect}
-                currentItem={currentItem}
+                currentItem={itemForValidation}
                 lastAnswer={lastAnswer}
                 lastMatchedType={lastMatchedType}
                 lastConvertedAnswer={lastConvertedAnswer}
                 moduleName={moduleName}
-                enableServerValidation={true}
+                enableServerValidation={false}
                 enableRealtimeFeedback={true}
               />
 
-              {/* Action Buttons */}
-              <ActionButtons
-                onNext={handleNext}
-                onPrevious={handlePrevious}
-                onSkip={handleSkip}
-                disabled={isUserInteraction}
-                canGoPrevious={currentItemId > 1}
-                canGoNext={currentItemId < wordsData.length}
-              />
             </div>
           ) : (
             /* Conjugation Practice Mode */

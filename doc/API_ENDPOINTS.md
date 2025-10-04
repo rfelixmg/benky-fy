@@ -5,12 +5,16 @@
 - **Production**: `https://your-domain.com`
 
 ## API Versioning
-All API endpoints are versioned under the `/v1` prefix. For example:
+All API endpoints are versioned under the `/v1` or `/v2` prefix. For example:
 - `/auth/login` becomes `/v1/auth/login`
 - `/help/api/word-info` becomes `/v1/help/api/word-info`
-- `/begginer/hiragana` becomes `/v1/begginer/hiragana`
+- `/words/verbs` becomes `/v2/words/verbs`
+- `/feedback/answer` becomes `/v2/feedback/answer`
 
 This versioning ensures API stability and enables future updates without breaking existing integrations.
+
+**V1 APIs**: Legacy endpoints for existing functionality
+**V2 APIs**: Modern REST APIs with improved data structures and analytics
 
 ## Main Routes (`/`)
 
@@ -165,6 +169,147 @@ This versioning ensures API stability and enables future updates without breakin
 **Description**: Check user answers against correct answers  
 **Authentication**: Required  
 **Request Body**: Form data with user inputs
+
+---
+
+## V2 API Routes (`/v2`)
+
+### Words API (`/v2/words`)
+
+#### GET `/v2/words/{module}`
+**Description**: Get list of words for a specific module  
+**Authentication**: None required  
+**Parameters**:
+- `module` (string, required): Module name (verbs, adjectives, hiragana, etc.)
+
+**Response Format**:
+```json
+{
+  "words": [
+    {
+      "id": "a1e9e1b8-4846-5387-9b64-881e21bd7a0d",
+      "kanji": "見る",
+      "hiragana": "みる",
+      "english": "to see",
+      "type": "verb",
+      "furigana": "みる",
+      "romaji": "miru"
+    }
+  ]
+}
+```
+
+#### GET `/v2/words/{module}/random`
+**Description**: Get a single random word from a module (queue-based, no repeats)  
+**Authentication**: None required  
+**Parameters**:
+- `module` (string, required): Module name (verbs, adjectives, hiragana, etc.)
+
+**Response Format**:
+```json
+{
+  "id": "a1e9e1b8-4846-5387-9b64-881e21bd7a0d",
+  "kanji": "見る",
+  "hiragana": "みる",
+  "english": "to see",
+  "type": "verb",
+  "furigana": "みる",
+  "romaji": "miru"
+}
+```
+
+**Features**:
+- Queue-based selection ensures no immediate repeats
+- Exhausts all words before cycling
+- Per-module independent queues
+- Automatic reshuffling when queue is empty
+
+### Feedback API (`/v2/feedback`)
+
+#### POST `/v2/feedback/answer`
+**Description**: Record user answer feedback for analytics and progress tracking  
+**Authentication**: None required  
+**Request Body**:
+```json
+{
+  "moduleName": "verbs",
+  "itemId": "a1e9e1b8-4846-5387-9b64-881e21bd7a0d",
+  "userAnswer": "red",
+  "isCorrect": true,
+  "matchedType": "english",
+  "attempts": 1,
+  "timestamp": "2024-01-15T10:30:00Z",
+  "settings": {
+    "input_hiragana": true,
+    "input_katakana": false,
+    "input_english": true,
+    "input_kanji": false,
+    "input_romaji": true,
+    "display_mode": "kanji",
+    "furigana_style": "inline"
+  }
+}
+```
+
+**Response Format**:
+```json
+{
+  "success": true,
+  "message": "Feedback recorded successfully"
+}
+```
+
+**Use Cases**:
+- Progress tracking and analytics
+- Spaced repetition algorithm input
+- Learning pattern analysis
+- Performance optimization
+
+### Conjugation API (`/v2/conjugation`)
+
+#### GET `/v2/conjugation/{word_id}`
+**Description**: Get conjugation forms for a specific word  
+**Authentication**: None required  
+**Parameters**:
+- `word_id` (string, required): Word ID from words API
+
+**Response Format**:
+```json
+{
+  "word_id": "a1e9e1b8-4846-5387-9b64-881e21bd7a0d",
+  "base_form": "見る",
+  "conjugations": [
+    {
+      "form": "present_positive",
+      "kanji": "見る",
+      "hiragana": "みる",
+      "english": "to see"
+    }
+  ]
+}
+```
+
+### Help API (`/v2/help`)
+
+#### GET `/v2/help/word-info`
+**Description**: Search for word information across all modules  
+**Authentication**: None required  
+**Parameters**:
+- `word` (string, required): Word to search for
+
+**Response Format**:
+```json
+{
+  "word": "見る",
+  "found": true,
+  "data": {
+    "kanji": "見る",
+    "hiragana": "みる",
+    "english": "to see"
+  },
+  "module": "verbs"
+}
+```
 
 ---
 

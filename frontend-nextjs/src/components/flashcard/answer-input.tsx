@@ -77,7 +77,9 @@ export function AnswerInput({
   const [validationResult, setValidationResult] = useState<any>(null);
   const [frontendValidationResult, setFrontendValidationResult] = useState<ValidationResult | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackTimer, setFeedbackTimer] = useState(0);
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const feedbackTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   const validateInputMutation = useValidateInput();
 
@@ -90,6 +92,69 @@ export function AnswerInput({
       }
     }
   }, [disabled]);
+
+  // Reset feedback state when currentItem changes (navigation to new word)
+  useEffect(() => {
+    setShowFeedback(false);
+    setValidationResult(null);
+    setFrontendValidationResult(null);
+    setAnswers({});
+    setIsSubmitting(false);
+    setFeedbackTimer(0);
+    if (feedbackTimerRef.current) {
+      clearInterval(feedbackTimerRef.current);
+      feedbackTimerRef.current = null;
+    }
+  }, [currentItem?.id]);
+
+  // 10-second feedback timer
+  useEffect(() => {
+    if (showFeedback && enableRealtimeFeedback) {
+      setFeedbackTimer(10);
+      
+      feedbackTimerRef.current = setInterval(() => {
+        setFeedbackTimer(prev => {
+          if (prev <= 1) {
+            // Timer finished - auto advance
+            onSubmit('', validationResult || frontendValidationResult);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      if (feedbackTimerRef.current) {
+        clearInterval(feedbackTimerRef.current);
+        feedbackTimerRef.current = null;
+      }
+      setFeedbackTimer(0);
+    }
+    
+    return () => {
+      if (feedbackTimerRef.current) {
+        clearInterval(feedbackTimerRef.current);
+        feedbackTimerRef.current = null;
+      }
+    };
+  }, [showFeedback, enableRealtimeFeedback, onSubmit, validationResult, frontendValidationResult]);
+
+  // Enter key listener for navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && showFeedback) {
+        e.preventDefault();
+        onSubmit('', validationResult || frontendValidationResult);
+      }
+    };
+
+    if (showFeedback) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showFeedback, onSubmit, validationResult, frontendValidationResult]);
 
   // Server-side validation function
   const validateWithServer = useCallback(async (userInput: string, expectedCharacter: string) => {
@@ -430,14 +495,24 @@ export function AnswerInput({
         />
       )}
       
+      {/* Feedback timer display */}
+      {showFeedback && feedbackTimer > 0 && (
+        <div className="text-center text-white/80 text-sm mt-4">
+          <p>Auto-advancing in {feedbackTimer} seconds</p>
+          <p className="text-white/60 mt-1">Press Enter to advance now</p>
+        </div>
+      )}
+      
       {/* Input hints */}
-      <div className="text-center text-white/60 text-sm mt-4">
-        <p>Press Enter to submit your answer</p>
-        <p className="mt-1">Hiragana/Katakana fields auto-convert romaji input</p>
-        {enableServerValidation && (
-          <p className="mt-1">Server-side validation enabled</p>
-        )}
-      </div>
+      {!showFeedback && (
+        <div className="text-center text-white/60 text-sm mt-4">
+          <p>Press Enter to submit your answer</p>
+          <p className="mt-1">Hiragana/Katakana fields auto-convert romaji input</p>
+          {enableServerValidation && (
+            <p className="mt-1">Server-side validation enabled</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

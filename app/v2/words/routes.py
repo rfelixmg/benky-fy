@@ -188,7 +188,6 @@ class RandomWordResource(Resource):
                      }
                  }
              })
-    @api.marshal_with(word_model)
     def get(self, module):
         """Return a single random word from a module."""
         words = _load_module_data(module)
@@ -216,4 +215,4 @@ class RandomWordResource(Resource):
             "romaji": random_word.get("romaji", "")
         }
         
-        return formatted_word
+        return {"word": formatted_word}

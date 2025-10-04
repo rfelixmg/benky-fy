@@ -43,6 +43,8 @@ export default function DashboardPage() {
                 width={80}
                 height={48}
                 className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                priority
+                style={{ width: "auto", height: "auto" }}
               />
             </Link>
             <div>
