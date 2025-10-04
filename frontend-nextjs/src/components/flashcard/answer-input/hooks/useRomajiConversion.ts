@@ -23,9 +23,9 @@ export const useRomajiConversion = () => {
 
     let converted: string;
     if (targetScript === 'hiragana') {
-      converted = romajiToHiragana(input);
+      converted = romajiToHiragana(input).converted;
     } else {
-      converted = romajiToKatakana(input);
+      converted = romajiToKatakana(input).converted;
     }
 
     // Store conversion history
@@ -54,8 +54,8 @@ export const useRomajiConversion = () => {
    * @param fieldType Field type ('hiragana', 'katakana', etc.)
    * @returns Normalized and converted input
    */
-  const normalizeInput = useCallback((input: string, fieldType: string): string => {
-    return convertInputForField(input, fieldType);
+  const normalizeInput = useCallback((input: string, fieldType: 'hiragana' | 'katakana' | 'romaji'): string => {
+    return convertInputForField(input, fieldType).converted;
   }, []);
 
   /**

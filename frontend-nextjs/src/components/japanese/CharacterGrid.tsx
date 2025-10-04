@@ -47,7 +47,7 @@ export function CharacterGrid({
   }
 
   return (
-    <CardGrid columns={columns} gap="md" ref={gridRef}>
+    <CardGrid columns={columns} gap="md">
       {characters.map((char, index) => (
         <Card
           key={`${char.character}-${index}`}

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { ValidationResult } from '@/lib/validation';
+import { ValidationResult } from '@/lib/validation/core/ValidationResult';
 import { FlashcardItem, UserSettings } from '@/lib/api-client';
 import { ModuleValidatorFactory } from '@/lib/validation/factories/ModuleValidatorFactory';
 import { AnswerSet } from '@/lib/validation/activity-types/ActivityValidator';

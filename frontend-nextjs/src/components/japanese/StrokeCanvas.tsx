@@ -107,7 +107,7 @@ export function StrokeCanvas({
     const strokeData = {
       strokes: strokes.map(stroke =>
         stroke.points.map(point => [Math.round(point.x), Math.round(point.y)])
-      ),
+      ).flat(),
       timing: strokes.map(stroke =>
         stroke.points.map(point => point.time)
       ).flat(),
