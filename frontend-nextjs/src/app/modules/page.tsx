@@ -121,7 +121,7 @@ const modules = [
   {
     id: 'verbs',
     name: 'Japanese Verbs',
-    description: 'Essential verbs with conjugations',
+    description: 'Essential Japanese verbs',
     icon: Target,
     color: 'from-purple-600 to-purple-700',
     difficulty: 'Intermediate',

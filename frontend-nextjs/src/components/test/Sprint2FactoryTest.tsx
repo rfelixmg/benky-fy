@@ -1,8 +1,7 @@
 import { ValidatorFactory } from '@/lib/validation/factories/ValidatorFactory';
 import { ModuleValidatorFactory } from '@/lib/validation/factories/ModuleValidatorFactory';
 import { FlashcardValidator } from '@/lib/validation/activity-types/FlashcardValidator';
-import { ConjugationValidator } from '@/lib/validation/activity-types/ConjugationValidator';
-import { AnswerSet, UserSettings, ConjugationForm } from '@/lib/validation/activity-types/ActivityValidator';
+import { AnswerSet, UserSettings } from '@/lib/validation/activity-types/ActivityValidator';
 
 /**
  * Test component to verify Sprint 2 factory system works correctly
@@ -81,27 +80,11 @@ export function Sprint2FactoryTest() {
     console.log('Enabled input types:', enabledTypes);
   };
 
-  const testConjugationValidator = () => {
-    console.log('=== Testing ConjugationValidator ===');
-    
-    const validator = new ConjugationValidator();
-    
-    const conjugationForm: ConjugationForm = {
-      form: 'present',
-      hiragana: 'かいます',
-      english: 'buy'
-    };
-    
-    // Test conjugation validation
-    const result = validator.validateConjugation('かいます', conjugationForm);
-    console.log('Conjugation validation result:', result);
-  };
 
   const runAllTests = () => {
     testValidatorFactory();
     testModuleValidatorFactory();
     testFlashcardValidator();
-    testConjugationValidator();
   };
 
   return (
@@ -125,12 +108,6 @@ export function Sprint2FactoryTest() {
           className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 mr-2"
         >
           Test FlashcardValidator
-        </button>
-        <button 
-          onClick={testConjugationValidator}
-          className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 mr-2"
-        >
-          Test ConjugationValidator
         </button>
         <button 
           onClick={runAllTests}

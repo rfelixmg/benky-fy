@@ -11,7 +11,7 @@ interface FlashcardDisplayProps {
   flashcard: FlashcardItem;
   settings: UserSettings;
   isUserInteraction: boolean;
-  mode: 'flashcard' | 'conjugation';
+  mode: 'flashcard';
   onNext?: () => void;
   onPrevious?: () => void;
   onSkip?: () => void;

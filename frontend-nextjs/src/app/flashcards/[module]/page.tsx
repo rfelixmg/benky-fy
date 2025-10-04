@@ -12,9 +12,6 @@ import { SettingsModal } from '@/components/flashcard/settings-modal';
 import { FloatingFeedback } from '@/components/flashcard/floating-feedback';
 import { HelpModal } from '@/components/flashcard/help-modal';
 import { Statistics } from '@/components/flashcard/statistics';
-import { ConjugationPractice } from '@/components/conjugation/conjugation-practice';
-import { ConjugationSettings } from '@/components/conjugation/conjugation-settings';
-import { ConjugationStats } from '@/components/conjugation/conjugation-stats';
 import { NavigationHeader } from '@/components/navigation-header';
 import { Button } from '@/components/ui/button';
 import { Loader2, Settings, HelpCircle } from 'lucide-react';
@@ -26,12 +23,10 @@ export default function FlashcardPage() {
   const [currentItemId, setCurrentItemId] = useState(1);
   const [isUserInteraction, setIsUserInteraction] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
-  const [currentMode, setCurrentMode] = useState<'flashcard' | 'conjugation'>('flashcard');
+  const [currentMode, setCurrentMode] = useState<'flashcard'>('flashcard');
   const [showSettings, setShowSettings] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showStats, setShowStats] = useState(false);
-  const [showConjugationSettings, setShowConjugationSettings] = useState(false);
-  const [selectedConjugationForm, setSelectedConjugationForm] = useState('polite');
   const [currentAttempts, setCurrentAttempts] = useState(0);
   const [isCorrect, setIsCorrect] = useState(false);
   const [lastAnswer, setLastAnswer] = useState('');
@@ -229,28 +224,9 @@ export default function FlashcardPage() {
             <h1 className="text-2xl font-bold text-primary-foreground capitalize">
               {moduleName} Flashcards
             </h1>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentMode(prev => prev === 'flashcard' ? 'conjugation' : 'flashcard')}
-              className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
-            >
-              {currentMode === 'flashcard' ? 'Switch to Conjugation' : 'Switch to Flashcards'}
-            </Button>
           </div>
           
           <div className="flex items-center gap-2">
-            {currentMode === 'conjugation' && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowConjugationSettings(true)}
-                className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                Conjugation Settings
-              </Button>
-            )}
             <Button
               variant="outline"
               size="sm"
@@ -284,48 +260,38 @@ export default function FlashcardPage() {
 
         {/* Main Content */}
         <div className="relative z-10 flex flex-col items-center justify-center min-h-[calc(100vh-200px)] px-4">
-          {currentMode === 'flashcard' ? (
-            <div className="w-full max-w-4xl">
-              {/* Progress Section */}
-              <ProgressSection
-                currentItem={1}
-                totalItems={1}
-                moduleName={moduleName}
-              />
-
-              {/* Flashcard Display */}
-              <FlashcardDisplay
-                item={currentItem}
-                settings={settings}
-                isUserInteraction={isUserInteraction}
-                mode={currentMode}
-              />
-
-              {/* Answer Input */}
-              <AnswerInput
-                onSubmit={handleAnswerSubmit}
-                onAdvance={manualAdvance}
-                disabled={isUserInteraction}
-                settings={settings}
-                isCorrect={isCorrect}
-                currentItem={itemForValidation}
-                lastAnswer={lastAnswer}
-                lastMatchedType={lastMatchedType}
-                lastConvertedAnswer={lastConvertedAnswer}
-                moduleName={moduleName}
-                enableServerValidation={false}
-                enableRealtimeFeedback={false}
-              />
-
-            </div>
-          ) : (
-            /* Conjugation Practice Mode */
-            <ConjugationPractice
+          <div className="w-full max-w-4xl">
+            {/* Progress Section */}
+            <ProgressSection
+              currentItem={1}
+              totalItems={1}
               moduleName={moduleName}
-              initialForm={selectedConjugationForm}
-              onComplete={() => setCurrentMode('flashcard')}
             />
-          )}
+
+            {/* Flashcard Display */}
+            <FlashcardDisplay
+              item={currentItem}
+              settings={settings}
+              isUserInteraction={isUserInteraction}
+              mode={currentMode}
+            />
+
+            {/* Answer Input */}
+            <AnswerInput
+              onSubmit={handleAnswerSubmit}
+              onAdvance={manualAdvance}
+              disabled={isUserInteraction}
+              settings={settings}
+              isCorrect={isCorrect}
+              currentItem={itemForValidation}
+              lastAnswer={lastAnswer}
+              lastMatchedType={lastMatchedType}
+              lastConvertedAnswer={lastConvertedAnswer}
+              moduleName={moduleName}
+              enableServerValidation={false}
+              enableRealtimeFeedback={false}
+            />
+          </div>
         </div>
       </div>
 
@@ -360,29 +326,15 @@ export default function FlashcardPage() {
                   ×
                 </Button>
               </div>
-              {currentMode === 'conjugation' ? (
-                <ConjugationStats moduleName={moduleName} />
-              ) : (
-                <Statistics
-                  moduleName={moduleName}
-                  onClose={() => setShowStats(false)}
-                />
-              )}
+              <Statistics
+                moduleName={moduleName}
+                onClose={() => setShowStats(false)}
+              />
             </div>
           </div>
         </div>
       )}
 
-      {/* Conjugation Settings Modal */}
-      {showConjugationSettings && (
-        <ConjugationSettings
-          isOpen={showConjugationSettings}
-          onClose={() => setShowConjugationSettings(false)}
-          selectedForm={selectedConjugationForm}
-          onFormChange={setSelectedConjugationForm}
-          moduleName={moduleName}
-        />
-      )}
 
       {/* Floating Feedback Modal */}
       {showFloatingFeedback && currentItem && (

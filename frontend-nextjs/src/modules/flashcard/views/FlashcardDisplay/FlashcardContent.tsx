@@ -9,7 +9,7 @@ interface FlashcardContentProps {
   flashcard: FlashcardItem;
   settings: UserSettings;
   displayMode: 'question' | 'answer';
-  mode: 'flashcard' | 'conjugation';
+  mode: 'flashcard';
 }
 
 export const FlashcardContent: React.FC<FlashcardContentProps> = ({

@@ -9,7 +9,7 @@ interface FlashcardDisplayProps {
   item: FlashcardItem;
   settings: UserSettings;
   isUserInteraction: boolean;
-  mode: 'flashcard' | 'conjugation';
+  mode: 'flashcard';
 }
 
 export function FlashcardDisplay({ 
