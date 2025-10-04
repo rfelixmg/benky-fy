@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useWordsData, useRandomWord, validateAnswer, useTrackAnswer, AnswerResult } from '@/lib/hooks';
 import { useSettingsStore } from '@/lib/settings-store';
@@ -36,6 +36,7 @@ export default function FlashcardPage() {
   const [lastMatchedType, setLastMatchedType] = useState<string | undefined>();
   const [lastConvertedAnswer, setLastConvertedAnswer] = useState<string | undefined>();
   const [testedWord, setTestedWord] = useState<any>(null); // Store the word being tested
+  const autoAdvanceTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   const { data: wordsData, isLoading, error } = useWordsData(moduleName);
   const { data: randomWord, isLoading: isRandomLoading, error: randomError, refetch: refetchRandomWord } = useRandomWord(moduleName);
@@ -60,6 +61,24 @@ export default function FlashcardPage() {
       setCurrentItemId(prev => Math.max(1, prev - 1));
     }
   }, [moduleName, refetchRandomWord]);
+
+  // Manual advance function that clears timer and resets state
+  const manualAdvance = useCallback(() => {
+    // Clear any pending auto-advance timer
+    if (autoAdvanceTimerRef.current) {
+      clearTimeout(autoAdvanceTimerRef.current);
+      autoAdvanceTimerRef.current = null;
+    }
+    
+    // Navigate to next item
+    navigateToNext();
+    
+    // Reset state for next item
+    setCurrentAttempts(0);
+    setIsCorrect(false);
+    setIsUserInteraction(false);
+    setTestedWord(null);
+  }, [navigateToNext]);
 
   // Use random word selection for verbs module, otherwise use traditional array-based selection
   const isVerbsModule = moduleName === 'verbs';
@@ -124,7 +143,7 @@ export default function FlashcardPage() {
     };
     
     // Handle feedback display - unified logic for all modules
-    setTimeout(() => {
+    autoAdvanceTimerRef.current = setTimeout(() => {
       // Move to next item after feedback delay
       navigateToNext();
       
@@ -133,6 +152,7 @@ export default function FlashcardPage() {
       setIsCorrect(false);
       setIsUserInteraction(false);
       setTestedWord(null);
+      autoAdvanceTimerRef.current = null;
     }, answerIsCorrect ? 3000 : 10000);
   }, [currentItem, currentAttempts, settings, navigateToNext]);
 
@@ -268,6 +288,7 @@ export default function FlashcardPage() {
               {/* Answer Input */}
               <AnswerInput
                 onSubmit={handleAnswerSubmit}
+                onAdvance={manualAdvance}
                 disabled={isUserInteraction}
                 settings={settings}
                 isCorrect={isCorrect}

@@ -13,6 +13,7 @@ import { validateAnswer, ValidationResult, getFeedbackColor, validateWithSetting
 
 interface AnswerInputProps {
   onSubmit: (answer: string, validationResult?: any) => void;
+  onAdvance?: () => void;
   disabled: boolean;
   settings: UserSettings;
   isCorrect?: boolean;
@@ -61,6 +62,7 @@ const getModuleType = (moduleName?: string) => {
 
 export function AnswerInput({ 
   onSubmit, 
+  onAdvance,
   disabled, 
   settings, 
   isCorrect = false,
@@ -141,9 +143,9 @@ export function AnswerInput({
   // Enter key listener for navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' && showFeedback) {
+      if (e.key === 'Enter' && showFeedback && onAdvance) {
         e.preventDefault();
-        onSubmit('', validationResult || frontendValidationResult);
+        onAdvance();
       }
     };
 
@@ -154,7 +156,7 @@ export function AnswerInput({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [showFeedback, onSubmit, validationResult, frontendValidationResult]);
+  }, [showFeedback, onAdvance]);
 
   // Server-side validation function
   const validateWithServer = useCallback(async (userInput: string, expectedCharacter: string) => {
@@ -240,13 +242,13 @@ export function AnswerInput({
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !showFeedback) {
       handleSubmit(e);
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !showFeedback) {
       handleSubmit(e);
     }
   };
