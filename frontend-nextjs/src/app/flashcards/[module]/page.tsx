@@ -111,7 +111,8 @@ export default function FlashcardPage() {
     // Use comprehensive validation (frontend fallback)
     const validationResult = validateAnswer(userAnswer, correctAnswers, settings);
     const answerIsCorrect = serverValidationResult?.is_correct ?? validationResult.isCorrect;
-    const hasPartialCorrect = validationResult.matchedType === 'partial';
+    const matchedType = validationResult.matchedType;
+    const timerDuration = validationResult.timerDuration;
     // Store answer information for feedback
     setLastAnswer(userAnswer);
     setLastMatchedType(validationResult.matchedType);
@@ -129,6 +130,7 @@ export default function FlashcardPage() {
       userAnswer,
       isCorrect: answerIsCorrect,
       matchedType: validationResult.matchedType,
+      timerDuration: validationResult.timerDuration,
       attempts: newAttempts,
       timestamp: new Date().toISOString(),
       settings: {
@@ -141,7 +143,7 @@ export default function FlashcardPage() {
         furigana_style: settings.furigana_style,
       }
     };
-    
+   
     // Handle feedback display - unified logic for all modules
     autoAdvanceTimerRef.current = setTimeout(() => {
       // Move to next item after feedback delay
@@ -153,7 +155,7 @@ export default function FlashcardPage() {
       setIsUserInteraction(false);
       setTestedWord(null);
       autoAdvanceTimerRef.current = null;
-    }, answerIsCorrect ? 3000 : (hasPartialCorrect ? 8000 : 10000));
+    }, timerDuration);
   }, [currentItem, currentAttempts, settings, navigateToNext]);
 
 

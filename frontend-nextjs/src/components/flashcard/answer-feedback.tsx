@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { FlashcardItem, UserSettings } from '@/lib/api-client';
 import { ValidationResult, getFeedbackColor } from '@/lib/validation';
 
@@ -76,8 +77,8 @@ export function AnswerFeedback({
   const enabledModes = getEnabledInputModes();
   const isMultipleInput = enabledModes.length > 1;
   
-  // Get feedback color for the container background
-  const getContainerFeedbackColor = () => {
+  // Get feedback color for the container background (memoized)
+  const containerFeedbackColor = useMemo(() => {
     if (frontendValidationResult && frontendValidationResult.results.length > 1) {
       // Multiple input mode - use results array
       return getFeedbackColor(frontendValidationResult.results);
@@ -87,7 +88,7 @@ export function AnswerFeedback({
     }
     // Fallback to overall isCorrect
     return getFeedbackColor([isCorrect]);
-  };
+  }, [frontendValidationResult, isCorrect]);
 
   // Get expected values for each input type
   const getExpectedValue = (mode: string) => {
@@ -123,7 +124,7 @@ export function AnswerFeedback({
   };
 
   return (
-    <div className={`mt-4 p-4 rounded-lg border ${getContainerFeedbackColor()}`}>
+    <div className={`mt-4 p-4 rounded-lg border ${containerFeedbackColor}`}>
       <h4 className="text-sm font-medium text-white mb-3">Answer Feedback</h4>
       
       {/* Feedback Table */}
