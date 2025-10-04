@@ -70,14 +70,22 @@ export function FloatingFeedback({
     return () => document.removeEventListener('keydown', handleKeyPress, true);
   }, [onClose]);
 
-  // Get enabled input modes
+  // Get enabled input modes (considering both user settings AND module support)
   const getEnabledModes = () => {
+    const moduleSupports = {
+      katakana: moduleName === 'katakana' || moduleName === 'katakana_words',
+      kanji: !['hiragana', 'katakana', 'katakana_words'].includes(moduleName || ''),
+      english: true, // All modules support English
+      hiragana: true, // All modules support Hiragana
+      romaji: true // All modules support Romaji
+    };
+    
     const modes = [];
-    if (settings.input_hiragana) modes.push('hiragana');
-    if (settings.input_katakana) modes.push('katakana');
-    if (settings.input_kanji) modes.push('kanji');
-    if (settings.input_english) modes.push('english');
-    if (settings.input_romaji) modes.push('romaji');
+    if (settings.input_hiragana && moduleSupports.hiragana) modes.push('hiragana');
+    if (settings.input_katakana && moduleSupports.katakana) modes.push('katakana');
+    if (settings.input_kanji && moduleSupports.kanji) modes.push('kanji');
+    if (settings.input_english && moduleSupports.english) modes.push('english');
+    if (settings.input_romaji && moduleSupports.romaji) modes.push('romaji');
     return modes;
   };
 

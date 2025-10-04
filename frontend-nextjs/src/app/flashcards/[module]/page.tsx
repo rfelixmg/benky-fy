@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
-import { useWordsData, useRandomWord, validateAnswer, useTrackAnswer, AnswerResult } from '@/lib/hooks';
+import { useWordsData, useRandomWord, useTrackAnswer, AnswerResult } from '@/lib/hooks';
+import { validateAnswer } from '@/lib/validation';
 import { useSettingsStore } from '@/lib/settings-store';
 import { FlashcardDisplay } from '@/components/flashcard/flashcard-display';
 import { AnswerInput } from '@/components/flashcard/answer-input';
@@ -39,6 +40,7 @@ export default function FlashcardPage() {
   const [testedWord, setTestedWord] = useState<any>(null); // Store the word being tested
   const [showFloatingFeedback, setShowFloatingFeedback] = useState(false);
   const [lastValidationResult, setLastValidationResult] = useState<any>(null);
+  const [lastUserAnswers, setLastUserAnswers] = useState<Record<string, string>>({});
   const autoAdvanceTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   const { data: wordsData, isLoading, error } = useWordsData(moduleName);
@@ -93,13 +95,13 @@ export default function FlashcardPage() {
   const dataError = isVerbsModule ? randomError : error;
 
 
-  const handleAnswerSubmit = useCallback(async (userAnswer: string, serverValidationResult?: any) => {
+  const handleAnswerSubmit = useCallback(async (userAnswer: string | { english: string; hiragana: string; katakana?: string; kanji?: string; romaji?: string }, serverValidationResult?: any) => {
     if (!currentItem) return;
     
-    // Set the word being tested (only once per word)
-    if (!testedWord) {
-      setTestedWord(currentItem);
-    }
+    // // Set the word being tested (only once per word)
+    // if (!testedWord) {
+    //   setTestedWord(currentItem);
+    // }
     
     setIsUserInteraction(true);
     
@@ -112,15 +114,33 @@ export default function FlashcardPage() {
     };
     
     // Use comprehensive validation (frontend fallback)
-    const validationResult = validateAnswer(userAnswer, correctAnswers, settings);
+    const validationResult = validateAnswer(userAnswer, correctAnswers, settings, moduleName);
     const answerIsCorrect = serverValidationResult?.is_correct ?? validationResult.isCorrect;
-    const matchedType = validationResult.matchedType;
-    const timerDuration = validationResult.timerDuration;
     // Store answer information for feedback
-    setLastAnswer(userAnswer);
+    const answerString = typeof userAnswer === 'string' ? userAnswer : 
+      `${userAnswer.hiragana || ''} / ${userAnswer.english || ''}`.replace(/ \/ $/, '');
+    setLastAnswer(answerString);
     setLastMatchedType(validationResult.matchedType);
     setLastConvertedAnswer(validationResult.convertedAnswer);
     setLastValidationResult(validationResult);
+    
+    // Store individual user answers for floating feedback
+    if (typeof userAnswer === 'object') {
+      setLastUserAnswers({
+        hiragana: userAnswer.hiragana || '',
+        katakana: userAnswer.katakana || '',
+        english: userAnswer.english || '',
+        kanji: userAnswer.kanji || '',
+        romaji: userAnswer.romaji || ''
+      });
+    } else {
+      // For single input, determine which field was used based on matched type
+      const singleAnswer = { hiragana: '', katakana: '', english: '', kanji: '', romaji: '' };
+      if (validationResult.matchedType) {
+        singleAnswer[validationResult.matchedType as keyof typeof singleAnswer] = userAnswer;
+      }
+      setLastUserAnswers(singleAnswer);
+    }
     
     // Update attempt counter
     const newAttempts = currentAttempts + 1;
@@ -131,7 +151,7 @@ export default function FlashcardPage() {
     const answerResult: AnswerResult = {
       moduleName,
       itemId: itemForValidation.id,
-      userAnswer,
+      userAnswer: answerString,
       isCorrect: answerIsCorrect,
       matchedType: validationResult.matchedType,
       timerDuration: validationResult.timerDuration,
@@ -148,18 +168,8 @@ export default function FlashcardPage() {
       }
     };
     
-    // Handle feedback display - unified logic for all modules
-    autoAdvanceTimerRef.current = setTimeout(() => {
-      // Move to next item after feedback delay
-      navigateToNext();
-      
-      // Reset state for next item
-      setCurrentAttempts(0);
-      setIsCorrect(false);
-      setIsUserInteraction(false);
-      setTestedWord(null);
-      autoAdvanceTimerRef.current = null;
-    }, timerDuration);
+    // Console log detailed comparison table
+    setShowFloatingFeedback(true);
   }, [currentItem, currentAttempts, settings, navigateToNext]);
 
   // Handle floating feedback close and advance
@@ -167,12 +177,11 @@ export default function FlashcardPage() {
     setShowFloatingFeedback(false);
     // Move to next item
     navigateToNext();
-    
     // Reset state for next item
-    setCurrentAttempts(0);
     setIsCorrect(false);
     setIsUserInteraction(false);
     setTestedWord(null);
+    setLastUserAnswers({});
   }, [navigateToNext]);
 
   useEffect(() => {
@@ -395,8 +404,9 @@ export default function FlashcardPage() {
           convertedAnswer={lastConvertedAnswer}
           settings={settings}
           frontendValidationResult={lastValidationResult}
+          userAnswers={lastUserAnswers}
           moduleName={moduleName}
-          timerDuration={lastValidationResult?.timerDuration ?? 8000}
+          timerDuration={lastValidationResult?.timerDuration ?? 10_000}
           onClose={handleFloatingFeedbackClose}
         />
       )}

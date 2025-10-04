@@ -12,7 +12,7 @@ import { Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { validateAnswer, ValidationResult, getFeedbackColor, validateWithSettings } from '@/lib/validation';
 
 interface AnswerInputProps {
-  onSubmit: (answer: string, validationResult?: any) => void;
+  onSubmit: (answer: string | { english: string; hiragana: string; katakana?: string; kanji?: string; romaji?: string }, validationResult?: any) => void;
   onAdvance?: () => void;
   disabled: boolean;
   settings: UserSettings;
@@ -203,7 +203,7 @@ export function AnswerInput({
         } else {
           // Single input mode
           const firstAnswer = answers[enabledModes[0]] || '';
-          frontendResult = validateAnswer(firstAnswer, currentItem, false);
+          frontendResult = validateAnswer(firstAnswer, currentItem, settings);
         }
         
         setFrontendValidationResult(frontendResult);
@@ -226,7 +226,20 @@ export function AnswerInput({
       
       // Submit with validation results
       const firstAnswer = answers[enabledModes[0]] || '';
-      await onSubmit(firstAnswer.trim(), serverValidationResult || frontendResult);
+      
+      // For multiple input mode, pass all answers as an object
+      if (isMultipleInput) {
+        const allAnswers = {
+          english: answers.english || '',
+          hiragana: answers.hiragana || '',
+          katakana: answers.katakana || '',
+          kanji: answers.kanji || '',
+          romaji: answers.romaji || ''
+        };
+        await onSubmit(allAnswers, serverValidationResult || frontendResult);
+      } else {
+        await onSubmit(firstAnswer.trim(), serverValidationResult || frontendResult);
+      }
       
     } catch (error) {
       console.error('Submit error:', error);
