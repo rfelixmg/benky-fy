@@ -111,7 +111,7 @@ export default function FlashcardPage() {
     // Use comprehensive validation (frontend fallback)
     const validationResult = validateAnswer(userAnswer, correctAnswers, settings);
     const answerIsCorrect = serverValidationResult?.is_correct ?? validationResult.isCorrect;
-    
+    const hasPartialCorrect = validationResult.matchedType === 'partial';
     // Store answer information for feedback
     setLastAnswer(userAnswer);
     setLastMatchedType(validationResult.matchedType);
@@ -153,7 +153,7 @@ export default function FlashcardPage() {
       setIsUserInteraction(false);
       setTestedWord(null);
       autoAdvanceTimerRef.current = null;
-    }, answerIsCorrect ? 3000 : 10000);
+    }, answerIsCorrect ? 3000 : (hasPartialCorrect ? 8000 : 10000));
   }, [currentItem, currentAttempts, settings, navigateToNext]);
 
 

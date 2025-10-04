@@ -55,7 +55,7 @@ word_model = api.model('Word', {
     'id': fields.String(required=True, description='Unique word identifier'),
     'kanji': fields.String(description='Japanese kanji characters'),
     'hiragana': fields.String(description='Japanese hiragana characters'),
-    'english': fields.String(description='English translation'),
+    'english': fields.Raw(description='English translation(s) - string or array of strings'),
     'type': fields.String(description='Word type (verb, adjective, noun, etc.)'),
     'furigana': fields.String(description='Furigana reading for kanji'),
     'romaji': fields.String(description='Romaji reading')
@@ -96,6 +96,21 @@ def _get_random_word_from_queue(words: list, module: str) -> dict:
     word_index = _word_queues[module].pop()
     return words[word_index]
 
+def _parse_multiple_meanings(english_text: str) -> list:
+    """Parse multiple meanings separated by '/' or ',' into a list."""
+    if not english_text or not isinstance(english_text, str):
+        return [english_text] if english_text else []
+    
+    # Split by '/' first, then by ','
+    meanings = []
+    for part in english_text.split('/'):
+        for meaning in part.split(','):
+            cleaned = meaning.strip()
+            if cleaned:
+                meanings.append(cleaned)
+    
+    return meanings if meanings else [english_text]
+
 @api.route('/words/<string:module>')
 class WordsResource(Resource):
     @api.doc('get_words', 
@@ -115,7 +130,7 @@ class WordsResource(Resource):
                                  'id': 'a1e9e1b8-4846-5387-9b64-881e21bd7a0d',
                                  'kanji': '見る',
                                  'hiragana': 'みる',
-                                 'english': 'to see',
+                                 'english': ['to see'],
                                  'type': 'verb'
                              }
                          ]
@@ -130,7 +145,7 @@ class WordsResource(Resource):
                                  'id': '24d3c3c6-a023-5d86-aa11-955d46acd2d1',
                                  'kanji': '大きい',
                                  'hiragana': 'おおきい',
-                                 'english': 'big',
+                                 'english': ['big'],
                                  'type': 'adjective'
                              }
                          ]
@@ -156,7 +171,7 @@ class WordsResource(Resource):
                 "id": _generate_deterministic_id(word),
                 "kanji": word.get("kanji", ""),
                 "hiragana": word.get("hiragana", ""),
-                "english": word.get("english", ""),
+                "english": _parse_multiple_meanings(word.get("english", "")),
                 "type": word.get("type", "noun"),
                 "furigana": furigana,
                 "romaji": word.get("romaji", "")
@@ -178,13 +193,11 @@ class RandomWordResource(Resource):
                      'summary': 'Get random verb',
                      'description': 'Returns a single random verb with deterministic ID',
                      'value': {
-                         'word': {
-                             'id': 'a1e9e1b8-4846-5387-9b64-881e21bd7a0d',
-                             'kanji': '見る',
-                             'hiragana': 'みる',
-                             'english': 'to see',
-                             'type': 'verb'
-                         }
+                         'id': 'a1e9e1b8-4846-5387-9b64-881e21bd7a0d',
+                         'kanji': '見る',
+                         'hiragana': 'みる',
+                         'english': ['to see'],
+                         'type': 'verb'
                      }
                  }
              })
@@ -209,10 +222,10 @@ class RandomWordResource(Resource):
             "id": _generate_deterministic_id(random_word),
             "kanji": random_word.get("kanji", ""),
             "hiragana": random_word.get("hiragana", ""),
-            "english": random_word.get("english", ""),
+            "english": _parse_multiple_meanings(random_word.get("english", "")),
             "type": random_word.get("type", "noun"),
             "furigana": furigana,
             "romaji": random_word.get("romaji", "")
         }
         
-        return {"word": formatted_word}
+        return formatted_word

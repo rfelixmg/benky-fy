@@ -80,19 +80,13 @@ export function AnswerFeedback({
   const getContainerFeedbackColor = () => {
     if (frontendValidationResult && frontendValidationResult.results.length > 1) {
       // Multiple input mode - use results array
-      const color = getFeedbackColor(frontendValidationResult.results);
-      console.log('Multiple input feedback color:', { results: frontendValidationResult.results, color });
-      return color;
+      return getFeedbackColor(frontendValidationResult.results);
     } else if (frontendValidationResult) {
       // Single input mode - use overall result
-      const color = getFeedbackColor([frontendValidationResult.isCorrect]);
-      console.log('Single input feedback color:', { isCorrect: frontendValidationResult.isCorrect, color });
-      return color;
+      return getFeedbackColor([frontendValidationResult.isCorrect]);
     }
     // Fallback to overall isCorrect
-    const color = getFeedbackColor([isCorrect]);
-    console.log('Fallback feedback color:', { isCorrect, color });
-    return color;
+    return getFeedbackColor([isCorrect]);
   };
 
   // Get expected values for each input type

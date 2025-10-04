@@ -190,7 +190,7 @@ This versioning ensures API stability and enables future updates without breakin
       "id": "a1e9e1b8-4846-5387-9b64-881e21bd7a0d",
       "kanji": "見る",
       "hiragana": "みる",
-      "english": "to see",
+      "english": ["to see"],
       "type": "verb",
       "furigana": "みる",
       "romaji": "miru"
@@ -211,7 +211,7 @@ This versioning ensures API stability and enables future updates without breakin
   "id": "a1e9e1b8-4846-5387-9b64-881e21bd7a0d",
   "kanji": "見る",
   "hiragana": "みる",
-  "english": "to see",
+  "english": ["to see"],
   "type": "verb",
   "furigana": "みる",
   "romaji": "miru"
@@ -223,6 +223,7 @@ This versioning ensures API stability and enables future updates without breakin
 - Exhausts all words before cycling
 - Per-module independent queues
 - Automatic reshuffling when queue is empty
+- Multiple meanings parsed into arrays (e.g., "to buy / to pay" → ["to buy", "to pay"])
 
 ### Feedback API (`/v2/feedback`)
 

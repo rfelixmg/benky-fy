@@ -31,6 +31,8 @@ def test_get_words_endpoint(client):
         assert 'hiragana' in word
         assert 'english' in word
         assert 'type' in word
+        # Verify english is now an array
+        assert isinstance(word['english'], list)
 
 def test_get_words_nonexistent_module(client):
     """Test the V2 words endpoint with a nonexistent module."""
@@ -59,7 +61,7 @@ def test_get_random_word_endpoint(client):
     assert isinstance(word['id'], str)
     assert isinstance(word['kanji'], str)
     assert isinstance(word['hiragana'], str)
-    assert isinstance(word['english'], str)
+    assert isinstance(word['english'], list)  # Now an array
     assert isinstance(word['type'], str)
 
 def test_get_random_word_nonexistent_module(client):
@@ -129,3 +131,17 @@ def test_random_word_queue_exhaustion(client):
         assert response.status_code == 200
         random_word_data = json.loads(response.data)
         assert 'id' in random_word_data
+
+def test_multiple_meanings_parsing(client):
+    """Test that multiple meanings are parsed into arrays."""
+    # This test would need actual data with multiple meanings
+    # For now, we'll test the parsing function directly
+    from benky_fy.app.v2.words.routes import _parse_multiple_meanings
+    
+    # Test various formats
+    assert _parse_multiple_meanings("to buy / to pay") == ["to buy", "to pay"]
+    assert _parse_multiple_meanings("to buy, to pay") == ["to buy", "to pay"]
+    assert _parse_multiple_meanings("to buy / to pay, to purchase") == ["to buy", "to pay", "to purchase"]
+    assert _parse_multiple_meanings("single meaning") == ["single meaning"]
+    assert _parse_multiple_meanings("") == []
+    assert _parse_multiple_meanings(None) == []
