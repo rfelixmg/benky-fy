@@ -13,6 +13,11 @@ def create_app() -> Flask:
     # Configure app
     app.secret_key = os.environ.get("FLASK_SECRET_KEY", "superkey-benky-fy")
 
+    # Health check endpoint
+    @app.route('/health')
+    def health_check():
+        return jsonify({'status': 'healthy', 'service': 'benky-fy-backend'}), 200
+
     # Global error handlers
     @app.errorhandler(404)
     def not_found(error):
