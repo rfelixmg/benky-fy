@@ -1,4 +1,4 @@
-import { ValidationResult } from '@/lib/validation';
+import { ValidationResult } from '@/core/validation/core/ValidationResult';
 import { AnswerSubmission, AnswerResult, AnswerFeedback, InputType } from '../types/AnswerTypes';
 import { AnswerModel } from '../models/AnswerModel';
 import { ValidationService } from '../services/ValidationService';

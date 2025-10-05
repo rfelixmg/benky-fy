@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchFromBackend } from '@/lib/api-utils';
+import { fetchFromBackend } from '@/core/api-utils';
 
 export async function GET(
   request: Request,

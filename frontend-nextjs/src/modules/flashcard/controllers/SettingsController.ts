@@ -1,4 +1,4 @@
-import { UserSettings } from '@/lib/api-client';
+import { UserSettings } from '@/core/api-client';
 import { SettingsModel } from '../models/SettingsModel';
 import { SettingsService } from '../services/SettingsService';
 import { InputType } from '../types/AnswerTypes';
@@ -160,7 +160,7 @@ export class SettingsController {
     }
     
     return Object.keys(this.currentSettings.allowedInputModes).filter(
-      type => this.currentSettings.allowedInputModes[type]
+      type => this.currentSettings!.allowedInputModes[type]
     ) as InputType[];
   }
 
@@ -299,7 +299,14 @@ export class SettingsController {
     }
     
     // Simple validation - check if required fields exist
-    return this.currentSettings.displayMode && this.currentSettings.practiceMode && this.currentSettings.difficulty;
+    const isValid = !!(this.currentSettings.displayMode && this.currentSettings.practiceMode && this.currentSettings.difficulty);
+    const errors: string[] = [];
+    
+    if (!this.currentSettings.displayMode) errors.push('Display mode is required');
+    if (!this.currentSettings.practiceMode) errors.push('Practice mode is required');
+    if (!this.currentSettings.difficulty) errors.push('Difficulty is required');
+    
+    return { isValid, errors };
   }
 
   /**

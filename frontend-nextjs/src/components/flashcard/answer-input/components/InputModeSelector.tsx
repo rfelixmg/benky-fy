@@ -1,7 +1,7 @@
 import React from 'react';
-import { UserSettings } from '@/lib/api-client';
+import { UserSettings } from '@/core/api-client';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/core/utils';
 
 interface InputModeSelectorProps {
   enabledModes: string[];

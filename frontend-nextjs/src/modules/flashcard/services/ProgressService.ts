@@ -105,7 +105,7 @@ export class ProgressService {
         timePerItem: progressModel.getAverageTimePerItem(),
         streakDays: progress.streakDays || 0,
         totalTimeSpent: progress.totalTimeSpent || 0,
-        improvementRate: this.calculateImprovementRate(moduleName),
+        improvementRate: await this.calculateImprovementRate(moduleName),
         difficultyDistribution: await this.getDifficultyDistribution(moduleName),
         mistakePatterns: await this.getMistakePatterns(moduleName)
       };

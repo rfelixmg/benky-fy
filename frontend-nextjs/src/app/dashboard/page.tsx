@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AuthGuard, UserMenu } from '@/components/auth-guard';
-import { useAuth } from '@/lib/hooks';
+import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
 import { RomajiInput } from '@/components/japanese/romaji-input';
 import { Button } from '@/components/ui/button';

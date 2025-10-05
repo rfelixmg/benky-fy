@@ -1,6 +1,7 @@
-import { ValidationResult } from '@/lib/validation';
-import { AnswerSet, UserSettings } from '../types/AnswerTypes';
-import { ModuleValidatorFactory } from '@/lib/validation/factories/ModuleValidatorFactory';
+import { ValidationResult } from '@/core/validation/core/ValidationResult';
+import { AnswerSet } from '@/core/validation/core/ActivityValidator';
+import { UserSettings } from '@/core/api-client';
+import { ModuleValidatorFactory } from '@/core/validation/factories/ModuleValidatorFactory';
 import { AnswerModel } from '../models/AnswerModel';
 
 /**
@@ -8,10 +9,10 @@ import { AnswerModel } from '../models/AnswerModel';
  * Implements MVC pattern for validation business logic
  */
 export class ValidationService {
-  private validatorFactory: typeof ModuleValidatorFactory;
+  private validatorFactory: ModuleValidatorFactory;
 
   constructor() {
-    this.validatorFactory = ModuleValidatorFactory;
+    this.validatorFactory = new ModuleValidatorFactory();
   }
 
   /**
@@ -33,7 +34,7 @@ export class ValidationService {
       const moduleValidator = this.validatorFactory.createModuleValidator(moduleName || 'colors');
       
       // Validate the answer
-      const result = moduleValidator.validateAnswer(userAnswer, correctAnswers, settings);
+      const result = moduleValidator.validateAnswer(userAnswer, correctAnswers);
       
       return result;
     } catch (error) {
@@ -64,7 +65,7 @@ export class ValidationService {
       const moduleValidator = this.validatorFactory.createModuleValidator(moduleName || 'colors');
       
       // Validate multiple inputs
-      const results = moduleValidator.validateMultipleInputs(inputs, correctAnswers, settings);
+      const results = moduleValidator.validateMultipleInputs(inputs, correctAnswers);
       
       return results;
     } catch (error) {
@@ -124,6 +125,7 @@ export class ValidationService {
     const answerSubmission = {
       flashcardId,
       userAnswer,
+      inputTypes: [], // TODO: Extract input types from userAnswer
       moduleName,
       timestamp: new Date()
     };

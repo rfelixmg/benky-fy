@@ -3,7 +3,7 @@
 import { useState, useCallback, KeyboardEvent } from 'react';
 import { Card } from '@/components/ui/Card';
 import { EnhancedFurigana } from './furigana';
-import { romajiToHiragana } from '@/lib/romaji-conversion';
+import { romajiToHiragana } from '@/core/romaji-conversion';
 import { textStyles, layoutStyles, progressStyles, formStyles } from '@/styles/components';
 
 interface Question {

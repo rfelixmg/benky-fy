@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Home, LayoutDashboard, BookOpen, User, Settings } from 'lucide-react';
-import { useAuth } from '@/lib/hooks';
+import { useAuth } from '@/core/hooks';
 
 interface NavigationHeaderProps {
   currentPage?: string;

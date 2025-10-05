@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { UserSettings, ValidationRequest } from '@/lib/api-client';
+import { UserSettings, ValidationRequest } from '@/core/api-client';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { detectScript, romajiToHiragana, romajiToKatakana, convertInputForField } from '@/lib/romaji-conversion';
+import { cn } from '@/core/utils';
+import { detectScript, romajiToHiragana, romajiToKatakana, convertInputForField } from '@/core/romaji-conversion';
 import { AnswerFeedback } from './answer-feedback';
-import { FlashcardItem } from '@/lib/api-client';
-import { useValidateInput } from '@/lib/hooks';
+import { FlashcardItem } from '@/core/api-client';
+import { useValidateInput } from '@/core/hooks';
 import { Loader2, CheckCircle, XCircle } from 'lucide-react';
-import { validateAnswer, ValidationResult, getFeedbackColor, validateWithSettings } from '@/lib/validation';
+import { validateAnswer, ValidationResult, getFeedbackColor, validateWithSettings } from '@/core/validation';
 
 interface AnswerInputProps {
   onSubmit: (answer: string | { english: string; hiragana: string; katakana?: string; kanji?: string; romaji?: string }, validationResult?: any) => void;
@@ -307,10 +307,10 @@ export function AnswerInput({
       
       if (isMultipleInput && enabledModes.includes('english') && enabledModes.includes('hiragana')) {
         // For multiple input mode, apply color based on individual field results
-        if (mode === 'english') {
+        if (mode === 'english' && frontendValidationResult.results) {
           const englishCorrect = frontendValidationResult.results[0];
           return englishCorrect ? "bg-emerald-500/20 border-emerald-400 text-emerald-300" : "bg-red-500/20 border-red-400 text-red-300";
-        } else if (mode === 'hiragana') {
+        } else if (mode === 'hiragana' && frontendValidationResult.results) {
           const hiraganaCorrect = frontendValidationResult.results[1];
           return hiraganaCorrect ? "bg-emerald-500/20 border-emerald-400 text-emerald-300" : "bg-red-500/20 border-red-400 text-red-300";
         }

@@ -3,7 +3,7 @@ import {
   AnswerSubmission, 
   InputType 
 } from '../types/AnswerTypes';
-import { ExtendedValidationResult } from '@/lib/validation/core/ValidationResult';
+import { ValidationResult } from '@/core/validation/core/ValidationResult';
 
 /**
  * AnswerModel - Data model for answer submissions and results
@@ -16,7 +16,7 @@ export class AnswerModel {
   public isCorrect: boolean;
   public matchedType?: InputType;
   public convertedAnswer?: string;
-  public validationResult: ExtendedValidationResult;
+  public validationResult: ValidationResult;
   public timestamp: Date;
   public attempts: number;
   public moduleName?: string;
@@ -32,8 +32,6 @@ export class AnswerModel {
     this.validationResult = 'validationResult' in data ? data.validationResult : {
       isCorrect: false,
       feedback: ['No validation performed'],
-      results: [false],
-      feedbackColor: 'text-red-500'
     };
     this.timestamp = 'timestamp' in data && data.timestamp ? new Date(data.timestamp) : new Date();
     this.attempts = 'attempts' in data ? data.attempts : 1;
@@ -133,7 +131,7 @@ export class AnswerModel {
    * Update validation result
    * @param validationResult New validation result
    */
-  updateValidation(validationResult: ExtendedValidationResult): void {
+  updateValidation(validationResult: ValidationResult): void {
     this.validationResult = validationResult;
     this.isCorrect = validationResult.isCorrect;
     this.matchedType = validationResult.matchedType as InputType;
@@ -160,9 +158,9 @@ export class AnswerModel {
 
   /**
    * Get validation result
-   * @returns ExtendedValidationResult
+   * @returns ValidationResult
    */
-  getValidationResult(): ExtendedValidationResult {
+  getValidationResult(): ValidationResult {
     return this.validationResult;
   }
 

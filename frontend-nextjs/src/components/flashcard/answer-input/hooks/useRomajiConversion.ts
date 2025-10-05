@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { detectScript, romajiToHiragana, romajiToKatakana, convertInputForField } from '@/lib/romaji-conversion';
+import { detectScript, romajiToHiragana, romajiToKatakana, convertInputForField } from '@/core/romaji-conversion';
 
 /**
  * Custom hook for romaji conversion logic

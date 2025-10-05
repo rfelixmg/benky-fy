@@ -1,8 +1,8 @@
 import { useState, useCallback } from 'react';
-import { ValidationResult } from '@/lib/validation/core/ValidationResult';
-import { FlashcardItem, UserSettings } from '@/lib/api-client';
-import { ModuleValidatorFactory } from '@/lib/validation/factories/ModuleValidatorFactory';
-import { AnswerSet } from '@/lib/validation/activity-types/ActivityValidator';
+import { ValidationResult } from '@/core/validation/core/ValidationResult';
+import { ModuleValidatorFactory } from '@/core/validation/factories/ModuleValidatorFactory';
+import { AnswerSet } from '@/core/validation/core/ActivityValidator';
+import { FlashcardItem, UserSettings } from '@/core/api-client';
 
 /**
  * Custom hook for input validation logic
@@ -37,7 +37,8 @@ export const useInputValidation = () => {
 
     try {
       // Create module-specific validator
-      const moduleValidator = ModuleValidatorFactory.createModuleValidator(moduleName || 'colors');
+      const factory = new ModuleValidatorFactory();
+      const moduleValidator = factory.createModuleValidator(moduleName || 'colors');
       
       // Convert FlashcardItem to AnswerSet
       const answerSet: AnswerSet = {
@@ -50,11 +51,11 @@ export const useInputValidation = () => {
       // Validate based on input type
       let result: ValidationResult;
       if (typeof userAnswer === 'string') {
-        result = moduleValidator.validateAnswer(userAnswer, answerSet, settings);
+        result = moduleValidator.validateAnswer(userAnswer, answerSet);
       } else {
         // Multiple inputs - validate each one
-        const results = moduleValidator.validateMultipleInputs(userAnswer, answerSet, settings);
-        const allCorrect = results.every(r => r.isCorrect);
+        const results = moduleValidator.validateMultipleInputs(userAnswer, answerSet);
+        const allCorrect = results.every((r: ValidationResult) => r.isCorrect);
         result = {
           isCorrect: allCorrect,
           feedback: allCorrect ? ['All inputs correct!'] : ['Some inputs are incorrect']

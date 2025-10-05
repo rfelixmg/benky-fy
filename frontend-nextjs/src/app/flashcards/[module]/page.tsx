@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
-import { useRandomWord, useTrackAnswer, AnswerResult } from '@/lib/hooks';
-import { validateAnswer } from '@/lib/validation';
-import { useSettingsStore } from '@/lib/settings-store';
+import { useRandomWord, useTrackAnswer, AnswerResult } from '@/core/hooks';
+import { validateAnswer } from '@/core/validation';
+import { useSettingsStore } from '@/core/settings-store';
 import { FlashcardDisplay } from '@/components/flashcard/flashcard-display';
 import { AnswerInput } from '@/components/flashcard/answer-input';
 import { ProgressSection } from '@/components/flashcard/progress-section';

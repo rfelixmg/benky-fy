@@ -4,7 +4,7 @@ import { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';
 import { Card } from '@/components/ui/Card';
 import { Furigana } from './furigana';
 import { JapaneseText } from './furigana';
-import { romajiToHiragana } from '@/lib/romaji-conversion';
+import { romajiToHiragana } from '@/core/romaji-conversion';
 import { textStyles, formStyles, progressStyles, layoutStyles } from '@/styles/components';
 
 interface Word {

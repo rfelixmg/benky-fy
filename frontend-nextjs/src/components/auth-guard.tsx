@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useAuth } from '@/lib/hooks';
-import { apiClient } from '@/lib/api-client';
+import { useAuth } from '@/core/hooks';
+import { apiClient } from '@/core/api-client';
 import { Button } from '@/components/ui/button';
 import { Loader2, User, LogOut } from 'lucide-react';
 

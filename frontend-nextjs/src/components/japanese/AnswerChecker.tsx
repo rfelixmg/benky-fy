@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';
-import { romajiToHiragana } from '@/lib/romaji-conversion';
+import { romajiToHiragana } from '@/core/romaji-conversion';
 import { Furigana } from './furigana';
 
 interface AnswerCheckerProps {

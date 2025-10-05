@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { AuthGuard, UserMenu } from '@/components/auth-guard';
-import { useAuth } from '@/lib/hooks';
+import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
 import { RomajiInput } from '@/components/japanese/romaji-input';
 import { BookOpen, Brain, Target, Zap, ArrowRight, Search } from 'lucide-react';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FlashcardItem } from '../../types/FlashcardTypes';
-import { UserSettings } from '@/lib/api-client';
+import { UserSettings } from '@/core/api-client';
 import { Furigana, JapaneseText } from '@/components/japanese/furigana';
 
 interface FlashcardContentProps {

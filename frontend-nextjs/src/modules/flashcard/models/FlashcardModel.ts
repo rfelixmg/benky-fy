@@ -36,8 +36,8 @@ export class FlashcardModel {
     this.pronunciation = data.pronunciation;
     this.difficulty = data.difficulty || 'beginner';
     this.tags = data.tags || [];
-    this.createdAt = 'createdAt' in data ? new Date(data.createdAt) : new Date();
-    this.updatedAt = 'updatedAt' in data ? new Date(data.updatedAt) : new Date();
+    this.createdAt = 'createdAt' in data && data.createdAt ? new Date(data.createdAt) : new Date();
+    this.updatedAt = 'updatedAt' in data && data.updatedAt ? new Date(data.updatedAt) : new Date();
   }
 
   /**

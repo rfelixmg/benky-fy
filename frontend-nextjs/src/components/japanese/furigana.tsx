@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { romajiToHiragana, detectScript } from '@/lib/romaji-conversion';
+import { romajiToHiragana, detectScript } from '@/core/romaji-conversion';
 
 type FuriganaMode = 'hover' | 'inline' | 'brackets' | 'ruby';
 

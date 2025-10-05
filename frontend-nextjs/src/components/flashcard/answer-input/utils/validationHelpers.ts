@@ -1,4 +1,4 @@
-import { ValidationResult } from '@/lib/validation';
+import { ValidationResult } from '@/core/validation/core/ValidationResult';
 
 /**
  * Format validation result for display

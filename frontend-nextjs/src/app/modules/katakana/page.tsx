@@ -8,7 +8,7 @@ import { PracticeInterface } from '@/components/japanese/PracticeInterface';
 import { QuizInterface } from '@/components/japanese/QuizInterface';
 import { ProgressTracker } from '@/components/japanese/ProgressTracker';
 import { textStyles, layoutStyles, formStyles } from '@/styles/components';
-import { withPerformanceTracking } from '@/lib/performance';
+import { withPerformanceTracking } from '@/core/performance';
 
 type LearningMode = 'characters' | 'practice' | 'quiz' | 'write';
 

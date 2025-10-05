@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FlashcardItem, UserSettings } from '@/lib/api-client';
-import { ValidationResult } from '@/lib/validation';
+import { FlashcardItem, UserSettings } from '@/core/api-client';
+import { ValidationResult } from '@/core/validation';
 
 interface FloatingFeedbackProps {
   item: FlashcardItem;

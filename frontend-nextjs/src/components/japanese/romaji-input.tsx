@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { romajiToHiragana, romajiToKatakana, detectScript } from '@/lib/romaji-conversion';
+import { romajiToHiragana, romajiToKatakana, detectScript } from '@/core/romaji-conversion';
 
 interface RomajiInputProps {
   value: string;

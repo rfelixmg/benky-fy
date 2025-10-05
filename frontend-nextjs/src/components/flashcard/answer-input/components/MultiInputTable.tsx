@@ -1,7 +1,7 @@
 import React from 'react';
-import { UserSettings } from '@/lib/api-client';
+import { UserSettings } from '@/core/api-client';
 import { SingleInputField } from './SingleInputField';
-import { cn } from '@/lib/utils';
+import { cn } from '@/core/utils';
 
 interface MultiInputTableProps {
   inputs: Record<string, string>;

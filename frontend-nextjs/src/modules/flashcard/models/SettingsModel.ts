@@ -1,4 +1,4 @@
-import { UserSettings } from '@/lib/api-client';
+import { UserSettings } from '@/core/api-client';
 import { InputType } from '../types/AnswerTypes';
 
 /**
@@ -45,11 +45,11 @@ export class SettingsModel {
     this.inputEnglish = data.input_english ?? true;
     this.inputKanji = data.input_kanji ?? false;
     this.inputRomaji = data.input_romaji ?? false;
-    this.displayMode = data.display_mode ?? 'kanji';
-    this.furiganaStyle = data.furigana_style ?? 'above';
+    this.displayMode = (data.display_mode as 'kanji' | 'hiragana' | 'katakana' | 'english' | 'mixed') ?? 'kanji';
+    this.furiganaStyle = (data.furigana_style as 'above' | 'below' | 'inline' | 'none') ?? 'above';
     this.maxAttempts = data.max_answer_attempts ?? 3;
-    this.practiceMode = data.practice_mode ?? 'flashcard';
-    this.priorityFilter = data.priority_filter ?? 'all';
+    this.practiceMode = (data.practice_mode as 'flashcard' | 'quiz' | 'review') ?? 'flashcard';
+    this.priorityFilter = (data.priority_filter as 'all' | 'difficult' | 'recent' | 'favorites') ?? 'all';
     this.learningOrder = data.learning_order ?? false;
     this.proportions = data.proportions ?? {
       kana: 0.3,
@@ -58,9 +58,9 @@ export class SettingsModel {
       english: 0.2
     };
     this.romajiEnabled = data.romaji_enabled ?? false;
-    this.romajiOutputType = data.romaji_output_type ?? 'hiragana';
-    this.flashcardType = data.flashcard_type ?? 'standard';
-    this.kanaType = data.kana_type ?? 'hiragana';
+    this.romajiOutputType = (data.romaji_output_type as 'hiragana' | 'katakana') ?? 'hiragana';
+    this.flashcardType = (data.flashcard_type as 'standard' | 'reverse' | 'mixed') ?? 'standard';
+    this.kanaType = (data.kana_type as 'hiragana' | 'katakana' | 'both') ?? 'hiragana';
     this.furiganaEnabled = data.furiganaEnabled ?? false;
     this.darkMode = data.darkMode ?? false;
     this.allowedInputModes = data.allowedInputModes ?? {
@@ -73,9 +73,9 @@ export class SettingsModel {
     this.romajiConversionEnabled = data.romajiConversionEnabled ?? false;
     this.autoAdvance = data.autoAdvance ?? false;
     this.soundEnabled = data.soundEnabled ?? false;
-    this.difficulty = data.difficulty ?? 'beginner';
-    this.feedbackDisplayMode = data.feedbackDisplayMode ?? 'legacy';
-    this.floatingPosition = data.floatingPosition ?? 'top';
+    this.difficulty = (data.difficulty as 'beginner' | 'intermediate' | 'advanced') ?? 'beginner';
+    this.feedbackDisplayMode = (data.feedbackDisplayMode as 'legacy' | 'floating' | 'both') ?? 'legacy';
+    this.floatingPosition = (data.floatingPosition as 'top' | 'bottom' | 'center' | 'modal') ?? 'top';
     this.autoHideDelay = data.autoHideDelay ?? 3000;
     this.showDetailedFeedback = data.showDetailedFeedback ?? false;
   }

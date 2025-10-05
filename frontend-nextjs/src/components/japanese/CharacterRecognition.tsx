@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, KeyboardEvent } from 'react';
-import { detectScript, isHiragana, isKatakana } from '@/lib/romaji-conversion';
+import { detectScript, isHiragana, isKatakana } from '@/core/romaji-conversion';
 
 interface CharacterInfo {
   character: string;

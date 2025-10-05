@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FlashcardItem, UserSettings } from '@/lib/api-client';
-import { cn } from '@/lib/utils';
+import { FlashcardItem, UserSettings } from '@/core/api-client';
+import { cn } from '@/core/utils';
 import { Furigana, JapaneseText } from '@/components/japanese/furigana';
 
 interface FlashcardDisplayProps {

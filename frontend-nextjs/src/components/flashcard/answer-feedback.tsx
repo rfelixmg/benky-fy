@@ -1,8 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import { FlashcardItem, UserSettings } from '@/lib/api-client';
-import { ValidationResult, getFeedbackColor } from '@/lib/validation';
+import { FlashcardItem, UserSettings } from '@/core/api-client';
+import { ValidationResult, getFeedbackColor } from '@/core/validation';
 
 interface AnswerFeedbackProps {
   item: FlashcardItem;
@@ -112,7 +112,7 @@ export function AnswerFeedback({
 
   // Get status for each input type
   const getStatus = (mode: string) => {
-    if (frontendValidationResult && frontendValidationResult.results.length > 1) {
+    if (frontendValidationResult && frontendValidationResult.results && frontendValidationResult.results.length > 1) {
       // Multiple input mode - check individual results
       const modeIndex = enabledModes.indexOf(mode);
       return frontendValidationResult.results[modeIndex] || false;

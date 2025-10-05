@@ -1,4 +1,4 @@
-import { UserSettings } from '@/lib/api-client';
+import { UserSettings } from '@/core/api-client';
 import { SettingsModel } from '../models/SettingsModel';
 import { InputType } from '../types/AnswerTypes';
 
@@ -200,7 +200,7 @@ export class SettingsService {
         enabledInputTypes: settingsModel.getEnabledInputTypes(),
         displayMode: settings.display_mode,
         practiceMode: settings.practice_mode,
-        difficulty: settings.difficulty,
+        difficulty: settings.difficulty || 'beginner',
         lastUpdated: new Date() // This would come from the server in a real implementation
       };
     } catch (error) {

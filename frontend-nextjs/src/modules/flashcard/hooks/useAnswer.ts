@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { AnswerController } from '../controllers/AnswerController';
-import { ValidationResult } from '@/lib/validation';
+import { ValidationResult } from '@/core/validation/core/ValidationResult';
 import { AnswerFeedback } from '../types/AnswerTypes';
 import { FlashcardItem } from '../types/FlashcardTypes';
 
@@ -12,6 +12,7 @@ interface UseAnswerState {
   currentAnswer: any | null;
   answerHistory: any[];
   sessionId: string;
+  error: string | null;
 }
 
 interface UseAnswerReturn extends UseAnswerState {
@@ -39,7 +40,8 @@ export const useAnswer = (): UseAnswerReturn => {
     showFeedback: false,
     currentAnswer: null,
     answerHistory: [],
-    sessionId: ''
+    sessionId: '',
+    error: null
   });
 
   const controllerRef = useRef<AnswerController | null>(null);

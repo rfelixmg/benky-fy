@@ -9,7 +9,7 @@ import { PracticeInterface } from '@/components/japanese/PracticeInterface';
 import { QuizInterface } from '@/components/japanese/QuizInterface';
 import { ProgressTracker } from '@/components/japanese/ProgressTracker';
 import { textStyles, layoutStyles, formStyles } from '@/styles/components';
-import { withPerformanceTracking } from '@/lib/performance';
+import { withPerformanceTracking } from '@/core/performance';
 
 type TimeCategory = 'days' | 'months';
 type LearningMode = 'explore' | 'write' | 'practice' | 'quiz';
