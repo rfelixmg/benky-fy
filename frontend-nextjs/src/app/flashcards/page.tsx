@@ -7,8 +7,7 @@ import { FloatingElements } from '@/components/floating-elements';
 import { BookOpen, Brain, Target, Zap, ArrowRight, Search, Clock, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Card } from '@/components/ui/Card';
-import { Button } from '@/components/ui/button';
+import { CompactFlashcardCard } from '@/components/flashcard/compact-flashcard-card';
 
 const flashcardCategories = [
   {
@@ -146,25 +145,22 @@ export default function FlashcardsPage() {
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {category.modules.map((module) => (
-                      <Link key={module.id} href={`/flashcards/${module.id}`}>
-                        <Card className="p-4 hover:scale-105 transition-all duration-300 bg-background/20 backdrop-blur-sm border-primary-foreground/20">
-                          <h3 className="font-semibold text-primary-foreground mb-2">{module.name}</h3>
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="text-xs bg-primary-foreground/20 text-primary-foreground px-2 py-1 rounded-full">
-                              {module.difficulty}
-                            </span>
-                            <span className="text-xs text-primary-foreground/60">{module.progress}%</span>
-                          </div>
-                          <div className="w-full bg-primary-foreground/20 rounded-full h-2">
-                            <div className="bg-primary-purple h-2 rounded-full" style={{width: `${module.progress}%`}}></div>
-                          </div>
-                          <div className="mt-2 text-xs text-primary-foreground/60">
-                            {module.cards} cards
-                          </div>
-                        </Card>
-                      </Link>
-                    ))}
+                    {category.modules.map((module) => {
+                      const enhancedModule = {
+                        ...module,
+                        description: '',
+                        color: category.color,
+                        icon: category.icon,
+                        estimatedTime: '10-15 min',
+                        mastery: Math.floor(module.progress * 0.8),
+                        streak: Math.floor(Math.random() * 5),
+                        difficulty: module.difficulty as 'Beginner' | 'Intermediate' | 'Advanced'
+                      };
+                      
+                      return (
+                        <CompactFlashcardCard key={module.id} module={enhancedModule} />
+                      );
+                    })}
                   </div>
                 </div>
               );
