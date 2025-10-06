@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, SkipForward } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, SkipForward } from "lucide-react";
 
 interface ActionButtonsProps {
   onNext: () => void;
@@ -32,7 +32,7 @@ export function ActionButtons({
           <ChevronLeft className="w-4 h-4 mr-2" />
           Previous
         </Button>
-        
+
         <Button
           onClick={onSkip}
           disabled={disabled}
@@ -42,7 +42,7 @@ export function ActionButtons({
           <SkipForward className="w-4 h-4 mr-2" />
           Skip
         </Button>
-        
+
         <Button
           onClick={onNext}
           disabled={disabled || !canGoNext}
@@ -53,7 +53,7 @@ export function ActionButtons({
           <ChevronRight className="w-4 h-4 ml-2" />
         </Button>
       </div>
-      
+
       {/* Keyboard shortcuts hint */}
       <div className="text-center text-primary-purple/60 text-xs mt-4">
         <p>Use arrow keys to navigate • Space to skip</p>

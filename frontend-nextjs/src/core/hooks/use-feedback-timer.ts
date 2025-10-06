@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 interface UseFeedbackTimerProps {
   showFeedback: boolean;
@@ -13,7 +13,7 @@ export function useFeedbackTimer({
   enableRealtimeFeedback,
   onSubmit,
   validationResult,
-  frontendValidationResult
+  frontendValidationResult,
 }: UseFeedbackTimerProps) {
   const [feedbackTimer, setFeedbackTimer] = useState(0);
   const feedbackTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -22,12 +22,12 @@ export function useFeedbackTimer({
   useEffect(() => {
     if (showFeedback && enableRealtimeFeedback) {
       setFeedbackTimer(10);
-      
+
       feedbackTimerRef.current = setInterval(() => {
-        setFeedbackTimer(prev => {
+        setFeedbackTimer((prev) => {
           if (prev <= 1) {
             // Timer finished - auto advance
-            onSubmit('', validationResult || frontendValidationResult);
+            onSubmit("", validationResult || frontendValidationResult);
             return 0;
           }
           return prev - 1;
@@ -40,14 +40,20 @@ export function useFeedbackTimer({
       }
       setFeedbackTimer(0);
     }
-    
+
     return () => {
       if (feedbackTimerRef.current) {
         clearInterval(feedbackTimerRef.current);
         feedbackTimerRef.current = null;
       }
     };
-  }, [showFeedback, enableRealtimeFeedback, onSubmit, validationResult, frontendValidationResult]);
+  }, [
+    showFeedback,
+    enableRealtimeFeedback,
+    onSubmit,
+    validationResult,
+    frontendValidationResult,
+  ]);
 
   const resetTimer = () => {
     setFeedbackTimer(0);
@@ -59,6 +65,6 @@ export function useFeedbackTimer({
 
   return {
     feedbackTimer,
-    resetTimer
+    resetTimer,
   };
 }

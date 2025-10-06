@@ -1,7 +1,7 @@
-import React from 'react';
-import { UserSettings } from '@/core/api-client';
-import { SingleInputField } from './SingleInputField';
-import { cn } from '@/core/utils';
+import React from "react";
+import { UserSettings } from "@/core/api-client";
+import { SingleInputField } from "./SingleInputField";
+import { cn } from "@/core/utils";
 
 interface MultiInputTableProps {
   inputs: Record<string, string>;
@@ -27,15 +27,18 @@ export const MultiInputTable: React.FC<MultiInputTableProps> = ({
   onKeyDown,
   onFocus,
   onBlur,
-  inputRefs = {}
+  inputRefs = {},
 }) => {
   const getEnabledFields = () => {
     const fields = [];
-    if (settings.input_hiragana) fields.push({ key: 'hiragana', label: 'Hiragana' });
-    if (settings.input_katakana) fields.push({ key: 'katakana', label: 'Katakana' });
-    if (settings.input_english) fields.push({ key: 'english', label: 'English' });
-    if (settings.input_kanji) fields.push({ key: 'kanji', label: 'Kanji' });
-    if (settings.input_romaji) fields.push({ key: 'romaji', label: 'Romaji' });
+    if (settings.input_hiragana)
+      fields.push({ key: "hiragana", label: "Hiragana" });
+    if (settings.input_katakana)
+      fields.push({ key: "katakana", label: "Katakana" });
+    if (settings.input_english)
+      fields.push({ key: "english", label: "English" });
+    if (settings.input_kanji) fields.push({ key: "kanji", label: "Kanji" });
+    if (settings.input_romaji) fields.push({ key: "romaji", label: "Romaji" });
     return fields;
   };
 
@@ -47,11 +50,11 @@ export const MultiInputTable: React.FC<MultiInputTableProps> = ({
     if (!field) return null;
 
     return (
-      <div className={cn('w-full', className)}>
+      <div className={cn("w-full", className)}>
         <SingleInputField
           ref={inputRefs[field.key]}
           type={field.key}
-          value={inputs[field.key] || ''}
+          value={inputs[field.key] || ""}
           onChange={(value) => onInputChange(field.key, value)}
           disabled={disabled}
           onKeyDown={(e) => onKeyDown?.(e, field.key)}
@@ -64,7 +67,7 @@ export const MultiInputTable: React.FC<MultiInputTableProps> = ({
 
   // Multi-input mode - render as table
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn("w-full", className)}>
       <div className="grid grid-cols-1 gap-4">
         {enabledFields.map((field) => (
           <div key={field.key} className="flex flex-col space-y-1">
@@ -74,7 +77,7 @@ export const MultiInputTable: React.FC<MultiInputTableProps> = ({
             <SingleInputField
               ref={inputRefs[field.key]}
               type={field.key}
-              value={inputs[field.key] || ''}
+              value={inputs[field.key] || ""}
               onChange={(value) => onInputChange(field.key, value)}
               disabled={disabled}
               onKeyDown={(e) => onKeyDown?.(e, field.key)}

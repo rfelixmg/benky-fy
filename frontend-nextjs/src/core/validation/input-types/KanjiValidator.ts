@@ -2,8 +2,14 @@
  * Kanji Validator - Handles kanji character validation
  */
 
-import { ValidationStrategy, ValidationResult } from '../core/ValidationStrategy';
-import { createSuccessResult, createFailureResult } from '../core/ValidationResult';
+import {
+  ValidationStrategy,
+  ValidationResult,
+} from "../core/ValidationStrategy";
+import {
+  createSuccessResult,
+  createFailureResult,
+} from "../core/ValidationResult";
 
 export class KanjiValidator implements ValidationStrategy {
   /**
@@ -18,29 +24,34 @@ export class KanjiValidator implements ValidationStrategy {
 
     // Direct match
     if (normalizedInput === normalizedExpected) {
-      return createSuccessResult('kanji', normalizedInput);
+      return createSuccessResult("kanji", normalizedInput);
     }
 
     // Check if input is hiragana/katakana that matches expected kanji reading
     const inputReading = this.getKanjiReading(normalizedInput);
     const expectedReading = this.getKanjiReading(normalizedExpected);
-    
+
     if (inputReading && expectedReading && inputReading === expectedReading) {
-      return createSuccessResult('kanji', normalizedInput, 0.8);
+      return createSuccessResult("kanji", normalizedInput, 0.8);
     }
 
     // Check for furigana matching
     if (this.hasFuriganaMatch(normalizedInput, normalizedExpected)) {
-      return createSuccessResult('kanji', normalizedInput, 0.9);
+      return createSuccessResult("kanji", normalizedInput, 0.9);
     }
 
     // Partial match check
-    const similarity = this.calculateSimilarity(normalizedInput, normalizedExpected);
+    const similarity = this.calculateSimilarity(
+      normalizedInput,
+      normalizedExpected,
+    );
     if (similarity > 0.7) {
       return {
         isCorrect: false,
-        matchedType: 'kanji',
-        feedback: [`Close! Expected: ${normalizedExpected}, Got: ${normalizedInput}`],
+        matchedType: "kanji",
+        feedback: [
+          `Close! Expected: ${normalizedExpected}, Got: ${normalizedInput}`,
+        ],
         confidence: similarity,
       };
     }
@@ -56,7 +67,7 @@ export class KanjiValidator implements ValidationStrategy {
    * @returns Array of supported types
    */
   getSupportedTypes(): string[] {
-    return ['kanji', 'hiragana', 'katakana'];
+    return ["kanji", "hiragana", "katakana"];
   }
 
   /**
@@ -85,18 +96,18 @@ export class KanjiValidator implements ValidationStrategy {
   private getKanjiReading(text: string): string | null {
     // This is a simplified implementation
     // In a real system, you'd use a kanji dictionary
-    
+
     // Check if text contains kanji
     if (/[\u4E00-\u9FAF]/.test(text)) {
       // For now, return the text as-is for kanji
       return text;
     }
-    
+
     // Check if text is hiragana/katakana
     if (/[\u3040-\u309F\u30A0-\u30FF]/.test(text)) {
       return text;
     }
-    
+
     return null;
   }
 
@@ -109,20 +120,20 @@ export class KanjiValidator implements ValidationStrategy {
   private hasFuriganaMatch(input: string, expected: string): boolean {
     // This is a simplified furigana matching
     // In a real system, you'd have a comprehensive furigana database
-    
+
     // Check if input contains furigana notation (kanji[hiragana])
     const furiganaPattern = /([\u4E00-\u9FAF]+)\[([\u3040-\u309F]+)\]/g;
     const furiganaMatches = Array.from(input.matchAll(furiganaPattern));
-    
+
     for (const match of furiganaMatches) {
       const kanji = match[1];
       const reading = match[2];
-      
+
       if (expected.includes(kanji)) {
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -152,7 +163,9 @@ export class KanjiValidator implements ValidationStrategy {
    * @returns Edit distance
    */
   private levenshteinDistance(str1: string, str2: string): number {
-    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+    const matrix = Array(str2.length + 1)
+      .fill(null)
+      .map(() => Array(str1.length + 1).fill(null));
 
     for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
     for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
@@ -161,9 +174,9 @@ export class KanjiValidator implements ValidationStrategy {
       for (let i = 1; i <= str1.length; i++) {
         const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
         matrix[j][i] = Math.min(
-          matrix[j][i - 1] + 1,     // deletion
-          matrix[j - 1][i] + 1,     // insertion
-          matrix[j - 1][i - 1] + indicator // substitution
+          matrix[j][i - 1] + 1, // deletion
+          matrix[j - 1][i] + 1, // insertion
+          matrix[j - 1][i - 1] + indicator, // substitution
         );
       }
     }

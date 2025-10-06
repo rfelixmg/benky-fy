@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useCallback, KeyboardEvent } from 'react';
-import { detectScript, isHiragana, isKatakana } from '@/core/romaji-conversion';
+import { useState, useCallback, KeyboardEvent } from "react";
+import { detectScript, isHiragana, isKatakana } from "@/core/romaji-conversion";
 
 interface CharacterInfo {
   character: string;
-  type: 'hiragana' | 'katakana' | 'kanji' | 'unknown';
+  type: "hiragana" | "katakana" | "kanji" | "unknown";
   reading: string;
 }
 
@@ -17,12 +17,12 @@ interface CharacterRecognitionProps {
 
 // Kanji readings mapping (simplified for demo)
 const KANJI_READINGS: Record<string, string> = {
-  '私': 'わたし',
-  '日': 'に',
-  '本': 'ほん',
-  '語': 'ご',
-  '勉': 'べん',
-  '強': 'きょう',
+  私: "わたし",
+  日: "に",
+  本: "ほん",
+  語: "ご",
+  勉: "べん",
+  強: "きょう",
 };
 
 export function CharacterRecognition({
@@ -37,7 +37,7 @@ export function CharacterRecognition({
     if (isHiragana(char)) {
       return {
         character: char,
-        type: 'hiragana',
+        type: "hiragana",
         reading: char,
       };
     }
@@ -45,7 +45,7 @@ export function CharacterRecognition({
     if (isKatakana(char)) {
       return {
         character: char,
-        type: 'katakana',
+        type: "katakana",
         reading: char.toLowerCase(), // Simplified for demo
       };
     }
@@ -53,47 +53,53 @@ export function CharacterRecognition({
     if (KANJI_READINGS[char]) {
       return {
         character: char,
-        type: 'kanji',
+        type: "kanji",
         reading: KANJI_READINGS[char],
       };
     }
 
     return {
       character: char,
-      type: 'unknown',
+      type: "unknown",
       reading: char,
     };
   }, []);
 
-  const handleCharacterClick = useCallback((char: string) => {
-    const info = identifyCharacter(char);
-    if (info.type === 'unknown') {
-      onError('Unknown character type');
-    } else {
-      onCharacterIdentified(info);
-    }
-  }, [identifyCharacter, onCharacterIdentified, onError]);
+  const handleCharacterClick = useCallback(
+    (char: string) => {
+      const info = identifyCharacter(char);
+      if (info.type === "unknown") {
+        onError("Unknown character type");
+      } else {
+        onCharacterIdentified(info);
+      }
+    },
+    [identifyCharacter, onCharacterIdentified, onError],
+  );
 
-  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        handleCharacterClick(text[index]);
-        break;
-      case 'ArrowLeft':
-        setFocusedIndex(Math.max(0, index - 1));
-        break;
-      case 'ArrowRight':
-        setFocusedIndex(Math.min(text.length - 1, index + 1));
-        break;
-      default:
-        break;
-    }
-  }, [text, handleCharacterClick]);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+      switch (e.key) {
+        case "Enter":
+        case " ":
+          handleCharacterClick(text[index]);
+          break;
+        case "ArrowLeft":
+          setFocusedIndex(Math.max(0, index - 1));
+          break;
+        case "ArrowRight":
+          setFocusedIndex(Math.min(text.length - 1, index + 1));
+          break;
+        default:
+          break;
+      }
+    },
+    [text, handleCharacterClick],
+  );
 
   return (
     <div className="flex flex-wrap gap-1 p-4">
-      {text.split('').map((char, index) => {
+      {text.split("").map((char, index) => {
         const info = identifyCharacter(char);
         const isFocused = index === focusedIndex;
 
@@ -103,7 +109,7 @@ export function CharacterRecognition({
             className={`
               relative p-2 min-w-[2.5rem] h-10 text-lg
               rounded-lg border-2 transition-colors
-              ${isFocused ? 'border-blue-500' : 'border-transparent'}
+              ${isFocused ? "border-blue-500" : "border-transparent"}
               hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500
             `}
             onClick={() => handleCharacterClick(char)}

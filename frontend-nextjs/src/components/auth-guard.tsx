@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useAuth } from '@/core/hooks';
-import { apiClient } from '@/core/api-client';
-import { Button } from '@/components/ui/button';
-import { Loader2, User, LogOut } from 'lucide-react';
+import { useEffect } from "react";
+import { useAuth } from "@/core/hooks";
+import { apiClient } from "@/core/api-client";
+import { Button } from "@/components/ui/button";
+import { Loader2, User, LogOut } from "lucide-react";
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -36,23 +36,25 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
-          <p className="text-primary-foreground mb-4">Authentication error occurred</p>
-          <Button onClick={() => window.location.reload()}>
-            Retry
-          </Button>
+          <p className="text-primary-foreground mb-4">
+            Authentication error occurred
+          </p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
         </div>
       </div>
     );
   }
 
   if (!authData?.authenticated) {
-    return fallback || (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-foreground" />
-          <p className="text-primary-foreground">Redirecting to login...</p>
+    return (
+      fallback || (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-primary-foreground" />
+            <p className="text-primary-foreground">Redirecting to login...</p>
+          </div>
         </div>
-      </div>
+      )
     );
   }
 
@@ -70,7 +72,7 @@ interface UserMenuProps {
 export function UserMenu({ user }: UserMenuProps) {
   const handleLogout = () => {
     // Redirect to logout route
-    window.location.href = '/auth/logout';
+    window.location.href = "/auth/logout";
   };
 
   return (

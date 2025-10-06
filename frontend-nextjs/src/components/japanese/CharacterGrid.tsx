@@ -1,9 +1,13 @@
-'use client';
+"use client";
 
-import { useCallback, useRef, KeyboardEvent } from 'react';
-import { Card, CardGrid } from '@/components/ui/Card';
-import { Furigana } from './furigana';
-import { textStyles, tooltipStyles, interactionStyles } from '@/styles/components';
+import { useCallback, useRef, KeyboardEvent } from "react";
+import { Card, CardGrid } from "@/components/ui/Card";
+import { Furigana } from "./furigana";
+import {
+  textStyles,
+  tooltipStyles,
+  interactionStyles,
+} from "@/styles/components";
 
 export interface Character {
   character: string;
@@ -25,18 +29,21 @@ export function CharacterGrid({
 }: CharacterGridProps): JSX.Element {
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const buttons = gridRef.current?.querySelectorAll('button');
-    if (!buttons) return;
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+      const buttons = gridRef.current?.querySelectorAll("button");
+      if (!buttons) return;
 
-    switch (e.key) {
-      case 'Enter':
-        onCharacterClick(characters[index]);
-        break;
-      default:
-        break;
-    }
-  }, [columns, characters, onCharacterClick]);
+      switch (e.key) {
+        case "Enter":
+          onCharacterClick(characters[index]);
+          break;
+        default:
+          break;
+      }
+    },
+    [columns, characters, onCharacterClick],
+  );
 
   if (characters.length === 0) {
     return (
@@ -65,7 +72,7 @@ export function CharacterGrid({
             onKeyDown={(e) => handleKeyDown(e, index)}
             aria-label={`Character ${char.character} (${char.reading})`}
           >
-            <div className={textStyles['2xl']}>
+            <div className={textStyles["2xl"]}>
               <Furigana
                 kanji={char.character}
                 hiragana={char.reading}
@@ -78,12 +85,14 @@ export function CharacterGrid({
                 {char.reading}
               </div>
             )}
-            <div className={`
+            <div
+              className={`
               ${tooltipStyles.base}
               ${tooltipStyles.top}
               ${tooltipStyles.content}
               ${tooltipStyles.animation}
-            `}>
+            `}
+            >
               {char.reading}
             </div>
           </button>

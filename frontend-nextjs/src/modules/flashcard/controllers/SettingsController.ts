@@ -1,7 +1,7 @@
-import { UserSettings } from '@/core/api-client';
-import { SettingsModel } from '../models/SettingsModel';
-import { SettingsService } from '../services/SettingsService';
-import { InputType } from '../types/AnswerTypes';
+import { UserSettings } from "@/core/api-client";
+import { SettingsModel } from "../models/SettingsModel";
+import { SettingsService } from "../services/SettingsService";
+import { InputType } from "../types/AnswerTypes";
 
 /**
  * SettingsController - Controller layer for settings user interactions
@@ -27,8 +27,10 @@ export class SettingsController {
       const settingsData = await this.settingsService.getSettings(moduleName);
       this.currentSettings = new SettingsModel(settingsData);
     } catch (error) {
-      console.error('Error loading settings:', error);
-      throw new Error(`Failed to load settings for module ${moduleName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error loading settings:", error);
+      throw new Error(
+        `Failed to load settings for module ${moduleName}: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -39,18 +41,19 @@ export class SettingsController {
    */
   async updateSettings(settings: UserSettings): Promise<void> {
     if (!this.currentModule) {
-      throw new Error('No current module set for settings update');
+      throw new Error("No current module set for settings update");
     }
 
     try {
       await this.settingsService.updateSettings(this.currentModule, settings);
-      
+
       // Update current settings model
       this.currentSettings = new SettingsModel(settings);
-      
     } catch (error) {
-      console.error('Error updating settings:', error);
-      throw new Error(`Failed to update settings: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error updating settings:", error);
+      throw new Error(
+        `Failed to update settings: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -60,18 +63,19 @@ export class SettingsController {
    */
   async resetSettings(): Promise<void> {
     if (!this.currentModule) {
-      throw new Error('No current module set for settings reset');
+      throw new Error("No current module set for settings reset");
     }
 
     try {
       await this.settingsService.resetSettings(this.currentModule);
-      
+
       // Load default settings
       await this.loadSettings(this.currentModule);
-      
     } catch (error) {
-      console.error('Error resetting settings:', error);
-      throw new Error(`Failed to reset settings: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error resetting settings:", error);
+      throw new Error(
+        `Failed to reset settings: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -81,9 +85,9 @@ export class SettingsController {
    */
   getSettings(): UserSettings {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     return this.currentSettings.toJSON();
   }
 
@@ -118,9 +122,9 @@ export class SettingsController {
    */
   enableInputType(inputType: InputType): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     this.currentSettings.allowedInputModes[inputType] = true;
   }
 
@@ -131,9 +135,9 @@ export class SettingsController {
    */
   disableInputType(inputType: InputType): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     this.currentSettings.allowedInputModes[inputType] = false;
   }
 
@@ -146,7 +150,7 @@ export class SettingsController {
     if (!this.currentSettings) {
       return false;
     }
-    
+
     return this.currentSettings.allowedInputModes[inputType] || false;
   }
 
@@ -158,9 +162,9 @@ export class SettingsController {
     if (!this.currentSettings) {
       return [];
     }
-    
+
     return Object.keys(this.currentSettings.allowedInputModes).filter(
-      type => this.currentSettings!.allowedInputModes[type]
+      (type) => this.currentSettings!.allowedInputModes[type],
     ) as InputType[];
   }
 
@@ -171,9 +175,9 @@ export class SettingsController {
    */
   setDisplayMode(displayMode: string): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     this.currentSettings.displayMode = displayMode as any;
   }
 
@@ -183,9 +187,9 @@ export class SettingsController {
    */
   getDisplayMode(): string {
     if (!this.currentSettings) {
-      return 'mixed';
+      return "mixed";
     }
-    
+
     return this.currentSettings.displayMode;
   }
 
@@ -196,9 +200,9 @@ export class SettingsController {
    */
   setPracticeMode(practiceMode: string): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     this.currentSettings.practiceMode = practiceMode as any;
   }
 
@@ -208,9 +212,9 @@ export class SettingsController {
    */
   getPracticeMode(): string {
     if (!this.currentSettings) {
-      return 'normal';
+      return "normal";
     }
-    
+
     return this.currentSettings.practiceMode;
   }
 
@@ -221,9 +225,9 @@ export class SettingsController {
    */
   setDifficulty(difficulty: string): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     this.currentSettings.difficulty = difficulty as any;
   }
 
@@ -233,9 +237,9 @@ export class SettingsController {
    */
   getDifficulty(): string {
     if (!this.currentSettings) {
-      return 'beginner';
+      return "beginner";
     }
-    
+
     return this.currentSettings.difficulty;
   }
 
@@ -245,9 +249,9 @@ export class SettingsController {
    */
   toggleFeedback(): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     // Toggle feedback - using autoAdvance as proxy
     this.currentSettings.autoAdvance = !this.currentSettings.autoAdvance;
   }
@@ -260,7 +264,7 @@ export class SettingsController {
     if (!this.currentSettings) {
       return true;
     }
-    
+
     return this.currentSettings.autoAdvance;
   }
 
@@ -270,9 +274,9 @@ export class SettingsController {
    */
   toggleStrictMode(): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
-    
+
     // Toggle strict mode - using soundEnabled as proxy
     this.currentSettings.soundEnabled = !this.currentSettings.soundEnabled;
   }
@@ -285,7 +289,7 @@ export class SettingsController {
     if (!this.currentSettings) {
       return false;
     }
-    
+
     return this.currentSettings.soundEnabled;
   }
 
@@ -295,17 +299,23 @@ export class SettingsController {
    */
   validateSettings(): { isValid: boolean; errors: string[] } {
     if (!this.currentSettings) {
-      return { isValid: false, errors: ['No settings loaded'] };
+      return { isValid: false, errors: ["No settings loaded"] };
     }
-    
+
     // Simple validation - check if required fields exist
-    const isValid = !!(this.currentSettings.displayMode && this.currentSettings.practiceMode && this.currentSettings.difficulty);
+    const isValid = !!(
+      this.currentSettings.displayMode &&
+      this.currentSettings.practiceMode &&
+      this.currentSettings.difficulty
+    );
     const errors: string[] = [];
-    
-    if (!this.currentSettings.displayMode) errors.push('Display mode is required');
-    if (!this.currentSettings.practiceMode) errors.push('Practice mode is required');
-    if (!this.currentSettings.difficulty) errors.push('Difficulty is required');
-    
+
+    if (!this.currentSettings.displayMode)
+      errors.push("Display mode is required");
+    if (!this.currentSettings.practiceMode)
+      errors.push("Practice mode is required");
+    if (!this.currentSettings.difficulty) errors.push("Difficulty is required");
+
     return { isValid, errors };
   }
 
@@ -324,13 +334,13 @@ export class SettingsController {
   } {
     if (!this.currentSettings || !this.currentModule) {
       return {
-        moduleName: 'unknown',
+        moduleName: "unknown",
         enabledInputTypes: [],
-        displayMode: 'mixed',
-        practiceMode: 'normal',
-        difficulty: 'beginner',
+        displayMode: "mixed",
+        practiceMode: "normal",
+        difficulty: "beginner",
         feedbackEnabled: true,
-        strictModeEnabled: false
+        strictModeEnabled: false,
       };
     }
 
@@ -341,7 +351,7 @@ export class SettingsController {
       practiceMode: this.getPracticeMode(),
       difficulty: this.getDifficulty(),
       feedbackEnabled: this.isFeedbackEnabled(),
-      strictModeEnabled: this.isStrictModeEnabled()
+      strictModeEnabled: this.isStrictModeEnabled(),
     };
   }
 
@@ -350,38 +360,40 @@ export class SettingsController {
    * @param preset Preset name to apply
    * @returns void
    */
-  applyPreset(preset: 'beginner' | 'intermediate' | 'advanced' | 'custom'): void {
+  applyPreset(
+    preset: "beginner" | "intermediate" | "advanced" | "custom",
+  ): void {
     if (!this.currentSettings) {
-      throw new Error('No settings loaded. Call loadSettings() first.');
+      throw new Error("No settings loaded. Call loadSettings() first.");
     }
 
     switch (preset) {
-      case 'beginner':
-        this.currentSettings.difficulty = 'beginner';
-        this.currentSettings.practiceMode = 'flashcard';
+      case "beginner":
+        this.currentSettings.difficulty = "beginner";
+        this.currentSettings.practiceMode = "flashcard";
         this.currentSettings.allowedInputModes[InputType.HIRAGANA] = true;
         this.currentSettings.allowedInputModes[InputType.ENGLISH] = true;
         this.currentSettings.allowedInputModes[InputType.KANJI] = false;
         break;
-      
-      case 'intermediate':
-        this.currentSettings.difficulty = 'intermediate';
-        this.currentSettings.practiceMode = 'flashcard';
+
+      case "intermediate":
+        this.currentSettings.difficulty = "intermediate";
+        this.currentSettings.practiceMode = "flashcard";
         this.currentSettings.allowedInputModes[InputType.HIRAGANA] = true;
         this.currentSettings.allowedInputModes[InputType.KATAKANA] = true;
         this.currentSettings.allowedInputModes[InputType.ENGLISH] = true;
         break;
-      
-      case 'advanced':
-        this.currentSettings.difficulty = 'advanced';
-        this.currentSettings.practiceMode = 'quiz';
+
+      case "advanced":
+        this.currentSettings.difficulty = "advanced";
+        this.currentSettings.practiceMode = "quiz";
         this.currentSettings.allowedInputModes[InputType.HIRAGANA] = true;
         this.currentSettings.allowedInputModes[InputType.KATAKANA] = true;
         this.currentSettings.allowedInputModes[InputType.KANJI] = true;
         this.currentSettings.allowedInputModes[InputType.ENGLISH] = true;
         break;
-      
-      case 'custom':
+
+      case "custom":
         // Keep current settings
         break;
     }
@@ -402,15 +414,20 @@ export class SettingsController {
    */
   async saveCurrentSettings(): Promise<void> {
     if (!this.currentSettings || !this.currentModule) {
-      throw new Error('No settings or module loaded');
+      throw new Error("No settings or module loaded");
     }
 
     try {
       const settingsData = this.currentSettings.toJSON();
-      await this.settingsService.updateSettings(this.currentModule, settingsData);
+      await this.settingsService.updateSettings(
+        this.currentModule,
+        settingsData,
+      );
     } catch (error) {
-      console.error('Error saving current settings:', error);
-      throw new Error(`Failed to save settings: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error saving current settings:", error);
+      throw new Error(
+        `Failed to save settings: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -419,12 +436,16 @@ export class SettingsController {
    * @param moduleNames Array of module names
    * @returns Promise<Record<string, UserSettings>>
    */
-  async getMultipleSettings(moduleNames: string[]): Promise<Record<string, UserSettings>> {
+  async getMultipleSettings(
+    moduleNames: string[],
+  ): Promise<Record<string, UserSettings>> {
     try {
       return await this.settingsService.getMultipleSettings(moduleNames);
     } catch (error) {
-      console.error('Error getting multiple settings:', error);
-      throw new Error(`Failed to get multiple settings: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error getting multiple settings:", error);
+      throw new Error(
+        `Failed to get multiple settings: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -433,12 +454,16 @@ export class SettingsController {
    * @param settingsMap Record of module name to settings
    * @returns Promise<void>
    */
-  async updateMultipleSettings(settingsMap: Record<string, UserSettings>): Promise<void> {
+  async updateMultipleSettings(
+    settingsMap: Record<string, UserSettings>,
+  ): Promise<void> {
     try {
       await this.settingsService.updateMultipleSettings(settingsMap);
     } catch (error) {
-      console.error('Error updating multiple settings:', error);
-      throw new Error(`Failed to update multiple settings: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error updating multiple settings:", error);
+      throw new Error(
+        `Failed to update multiple settings: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 }

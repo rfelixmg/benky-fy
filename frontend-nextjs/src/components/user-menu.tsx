@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import { User, LogOut, Settings, BarChart3 } from 'lucide-react';
+import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import { User, LogOut, Settings, BarChart3 } from "lucide-react";
 
 interface UserMenuProps {
   user: {
@@ -30,14 +30,14 @@ export function UserMenu({ user }: UserMenuProps) {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
     setIsLoggingOut(true);
     setIsMenuOpen(false);
-    window.location.href = '/auth/logout';
+    window.location.href = "/auth/logout";
   };
 
   return (
@@ -61,17 +61,19 @@ export function UserMenu({ user }: UserMenuProps) {
             <User className="w-5 h-5 text-primary-foreground" />
           </div>
         )}
-        <span className="text-sm font-medium text-primary-foreground hidden sm:block">{user.name}</span>
+        <span className="text-sm font-medium text-primary-foreground hidden sm:block">
+          {user.name}
+        </span>
       </button>
 
       {isMenuOpen && (
         <>
           {/* Invisible overlay to handle clicks outside */}
-          <div 
+          <div
             className="fixed inset-0 z-40"
             onClick={() => setIsMenuOpen(false)}
           />
-          
+
           {/* Menu dropdown */}
           <div
             ref={menuRef}
@@ -81,13 +83,17 @@ export function UserMenu({ user }: UserMenuProps) {
             aria-labelledby="user-menu"
           >
             <div className="px-4 py-2 border-b border-primary-foreground/10">
-              <p className="text-sm font-medium text-primary-foreground">{user.name}</p>
-              <p className="text-xs text-primary-foreground/70 truncate">{user.email}</p>
+              <p className="text-sm font-medium text-primary-foreground">
+                {user.name}
+              </p>
+              <p className="text-xs text-primary-foreground/70 truncate">
+                {user.email}
+              </p>
             </div>
-            
+
             <nav className="py-1">
-              <Link 
-                href="/profile" 
+              <Link
+                href="/profile"
                 className="block w-full text-left px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/10"
                 role="menuitem"
               >
@@ -96,8 +102,8 @@ export function UserMenu({ user }: UserMenuProps) {
                   Profile
                 </span>
               </Link>
-              <Link 
-                href="/stats" 
+              <Link
+                href="/stats"
                 className="block w-full text-left px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/10"
                 role="menuitem"
               >
@@ -106,8 +112,8 @@ export function UserMenu({ user }: UserMenuProps) {
                   Statistics
                 </span>
               </Link>
-              <Link 
-                href="/settings" 
+              <Link
+                href="/settings"
                 className="block w-full text-left px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/10"
                 role="menuitem"
               >
@@ -123,15 +129,17 @@ export function UserMenu({ user }: UserMenuProps) {
                 onClick={handleLogout}
                 disabled={isLoggingOut}
                 className={`block w-full text-left px-4 py-2 text-sm ${
-                  isLoggingOut 
-                    ? 'text-red-300 cursor-not-allowed' 
-                    : 'text-red-500 hover:bg-red-500/10'
+                  isLoggingOut
+                    ? "text-red-300 cursor-not-allowed"
+                    : "text-red-500 hover:bg-red-500/10"
                 }`}
                 role="menuitem"
               >
                 <span className="flex items-center gap-2">
-                  <LogOut className={`w-4 h-4 ${isLoggingOut ? 'animate-spin' : ''}`} />
-                  {isLoggingOut ? 'Logging out...' : 'Logout'}
+                  <LogOut
+                    className={`w-4 h-4 ${isLoggingOut ? "animate-spin" : ""}`}
+                  />
+                  {isLoggingOut ? "Logging out..." : "Logout"}
                 </span>
               </button>
             </div>

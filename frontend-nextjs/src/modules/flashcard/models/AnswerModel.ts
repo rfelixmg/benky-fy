@@ -1,9 +1,9 @@
-import { 
-  AnswerResult, 
-  AnswerSubmission, 
-  InputType 
-} from '../types/AnswerTypes';
-import { ValidationResult } from '@/core/validation/core/ValidationResult';
+import {
+  AnswerResult,
+  AnswerSubmission,
+  InputType,
+} from "../types/AnswerTypes";
+import { ValidationResult } from "@/core/validation/core/ValidationResult";
 
 /**
  * AnswerModel - Data model for answer submissions and results
@@ -23,18 +23,25 @@ export class AnswerModel {
   public sessionId?: string;
 
   constructor(data: AnswerSubmission | AnswerResult) {
-    this.id = 'id' in data ? data.id : this.generateId();
+    this.id = "id" in data ? data.id : this.generateId();
     this.flashcardId = data.flashcardId;
     this.userAnswer = data.userAnswer;
-    this.isCorrect = 'isCorrect' in data ? data.isCorrect : false;
-    this.matchedType = 'matchedType' in data ? data.matchedType : undefined;
-    this.convertedAnswer = 'convertedAnswer' in data ? data.convertedAnswer : undefined;
-    this.validationResult = 'validationResult' in data ? data.validationResult : {
-      isCorrect: false,
-      feedback: ['No validation performed'],
-    };
-    this.timestamp = 'timestamp' in data && data.timestamp ? new Date(data.timestamp) : new Date();
-    this.attempts = 'attempts' in data ? data.attempts : 1;
+    this.isCorrect = "isCorrect" in data ? data.isCorrect : false;
+    this.matchedType = "matchedType" in data ? data.matchedType : undefined;
+    this.convertedAnswer =
+      "convertedAnswer" in data ? data.convertedAnswer : undefined;
+    this.validationResult =
+      "validationResult" in data
+        ? data.validationResult
+        : {
+            isCorrect: false,
+            feedback: ["No validation performed"],
+          };
+    this.timestamp =
+      "timestamp" in data && data.timestamp
+        ? new Date(data.timestamp)
+        : new Date();
+    this.attempts = "attempts" in data ? data.attempts : 1;
     this.moduleName = data.moduleName;
     this.sessionId = data.sessionId;
   }
@@ -55,7 +62,7 @@ export class AnswerModel {
       timestamp: this.timestamp,
       attempts: this.attempts,
       moduleName: this.moduleName,
-      sessionId: this.sessionId
+      sessionId: this.sessionId,
     };
   }
 
@@ -75,33 +82,39 @@ export class AnswerModel {
   validate(): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
-    if (!this.id || this.id.trim() === '') {
-      errors.push('ID is required');
+    if (!this.id || this.id.trim() === "") {
+      errors.push("ID is required");
     }
 
-    if (!this.flashcardId || this.flashcardId.trim() === '') {
-      errors.push('Flashcard ID is required');
+    if (!this.flashcardId || this.flashcardId.trim() === "") {
+      errors.push("Flashcard ID is required");
     }
 
-    if (!this.userAnswer || (typeof this.userAnswer === 'string' && this.userAnswer.trim() === '')) {
-      errors.push('User answer is required');
+    if (
+      !this.userAnswer ||
+      (typeof this.userAnswer === "string" && this.userAnswer.trim() === "")
+    ) {
+      errors.push("User answer is required");
     }
 
     if (this.attempts < 1) {
-      errors.push('Attempts must be at least 1');
+      errors.push("Attempts must be at least 1");
     }
 
-    if (this.matchedType && !Object.values(InputType).includes(this.matchedType)) {
-      errors.push('Invalid matched type');
+    if (
+      this.matchedType &&
+      !Object.values(InputType).includes(this.matchedType)
+    ) {
+      errors.push("Invalid matched type");
     }
 
     if (!this.validationResult) {
-      errors.push('Validation result is required');
+      errors.push("Validation result is required");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -113,9 +126,10 @@ export class AnswerModel {
     return new AnswerModel({
       id: this.id,
       flashcardId: this.flashcardId,
-      userAnswer: typeof this.userAnswer === 'string' 
-        ? this.userAnswer 
-        : { ...this.userAnswer },
+      userAnswer:
+        typeof this.userAnswer === "string"
+          ? this.userAnswer
+          : { ...this.userAnswer },
       isCorrect: this.isCorrect,
       matchedType: this.matchedType,
       convertedAnswer: this.convertedAnswer,
@@ -123,7 +137,7 @@ export class AnswerModel {
       timestamp: new Date(this.timestamp),
       attempts: this.attempts,
       moduleName: this.moduleName,
-      sessionId: this.sessionId
+      sessionId: this.sessionId,
     });
   }
 
@@ -150,10 +164,10 @@ export class AnswerModel {
    * @returns Answer as string
    */
   getAnswerAsString(): string {
-    if (typeof this.userAnswer === 'string') {
+    if (typeof this.userAnswer === "string") {
       return this.userAnswer;
     }
-    return Object.values(this.userAnswer).join(' / ');
+    return Object.values(this.userAnswer).join(" / ");
   }
 
   /**
@@ -170,10 +184,10 @@ export class AnswerModel {
    * @returns Answer for the input type
    */
   getAnswerForType(inputType: InputType): string {
-    if (typeof this.userAnswer === 'string') {
+    if (typeof this.userAnswer === "string") {
       return this.userAnswer;
     }
-    return this.userAnswer[inputType] || '';
+    return this.userAnswer[inputType] || "";
   }
 
   /**
@@ -181,7 +195,7 @@ export class AnswerModel {
    * @returns True if answer is for multiple types
    */
   isMultipleInput(): boolean {
-    return typeof this.userAnswer === 'object';
+    return typeof this.userAnswer === "object";
   }
 
   /**
@@ -189,7 +203,7 @@ export class AnswerModel {
    * @returns Array of input types
    */
   getInputTypes(): InputType[] {
-    if (typeof this.userAnswer === 'string') {
+    if (typeof this.userAnswer === "string") {
       return this.matchedType ? [this.matchedType] : [];
     }
     return Object.keys(this.userAnswer) as InputType[];

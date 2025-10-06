@@ -1,14 +1,14 @@
-import { FloatingElements } from '@/components/floating-elements';
-import { Button } from '@/components/ui/button';
-import { BookOpen, Brain, Target, Zap } from 'lucide-react';
-import Link from 'next/link';
-import Image from 'next/image';
+import { FloatingElements } from "@/components/floating-elements";
+import { Button } from "@/components/ui/button";
+import { BookOpen, Brain, Target, Zap } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
       <FloatingElements />
-      
+
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Logo and Title */}
@@ -43,7 +43,7 @@ export default function LandingPage() {
                 AI-driven spaced repetition for optimal learning
               </p>
             </div>
-            
+
             <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 text-primary-foreground">
               <Target className="w-8 h-8 mx-auto mb-3 text-primary-foreground" />
               <h3 className="font-semibold mb-2">Active Recall</h3>
@@ -51,7 +51,7 @@ export default function LandingPage() {
                 Type-based answers for real memory retention
               </p>
             </div>
-            
+
             <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 text-primary-foreground">
               <BookOpen className="w-8 h-8 mx-auto mb-3 text-primary-foreground" />
               <h3 className="font-semibold mb-2">Comprehensive</h3>
@@ -59,7 +59,7 @@ export default function LandingPage() {
                 Hiragana, Katakana, Verbs, and Grammar
               </p>
             </div>
-            
+
             <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 text-primary-foreground">
               <Zap className="w-8 h-8 mx-auto mb-3 text-primary-foreground" />
               <h3 className="font-semibold mb-2">Adaptive</h3>
@@ -72,12 +72,19 @@ export default function LandingPage() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/modules">
-              <Button size="lg" className="bg-background text-primary hover:bg-background/90">
+              <Button
+                size="lg"
+                className="bg-background text-primary hover:bg-background/90"
+              >
                 Explore Modules
               </Button>
             </Link>
             <Link href="/auth/login">
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/10 hover:text-primary"
+              >
                 Sign in to Track Progress
               </Button>
             </Link>
@@ -86,7 +93,8 @@ export default function LandingPage() {
           {/* Additional Info */}
           <div className="mt-16 text-primary-foreground/70">
             <p className="text-sm">
-              Join thousands of learners mastering Japanese with AI-powered flashcards
+              Join thousands of learners mastering Japanese with AI-powered
+              flashcards
             </p>
           </div>
         </div>

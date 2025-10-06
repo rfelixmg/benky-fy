@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
 interface MobileMenuProps {
   items: {
     icon: React.ElementType;
@@ -13,14 +13,18 @@ interface MobileMenuProps {
   className?: string;
 }
 
-export function MobileMenu({ items, trigger, className = '' }: MobileMenuProps) {
+export function MobileMenu({
+  items,
+  trigger,
+  className = "",
+}: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState(0);
 
   // Update menu position when opened
   useEffect(() => {
     if (isOpen) {
-      const menuTrigger = document.getElementById('mobile-menu');
+      const menuTrigger = document.getElementById("mobile-menu");
       if (menuTrigger) {
         const rect = menuTrigger.getBoundingClientRect();
         setMenuPosition(rect.bottom + window.scrollY);
@@ -31,22 +35,20 @@ export function MobileMenu({ items, trigger, className = '' }: MobileMenuProps) 
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const menu = document.getElementById('mobile-menu');
+      const menu = document.getElementById("mobile-menu");
       if (menu && !menu.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className="relative" id="mobile-menu">
       {trigger ? (
-        <div onClick={() => setIsOpen(!isOpen)}>
-          {trigger}
-        </div>
+        <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
       ) : (
         <Button
           variant="ghost"
@@ -60,14 +62,16 @@ export function MobileMenu({ items, trigger, className = '' }: MobileMenuProps) 
       )}
 
       <div
-        style={{ 
+        style={{
           zIndex: 9999,
-          position: 'fixed',
+          position: "fixed",
           top: menuPosition,
-          right: '1rem'
+          right: "1rem",
         }}
         className={`w-48 rounded-lg shadow-lg bg-background/95 backdrop-blur-md border border-primary-purple/10 transition-all duration-300 ease-in-out ${
-          isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[10px] pointer-events-none'
+          isOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-[10px] pointer-events-none"
         }`}
       >
         <div className="py-1">

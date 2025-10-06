@@ -1,8 +1,13 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import { Card } from '@/components/ui/Card';
-import { textStyles, progressStyles, layoutStyles, formStyles } from '@/styles/components';
+import { useMemo } from "react";
+import { Card } from "@/components/ui/Card";
+import {
+  textStyles,
+  progressStyles,
+  layoutStyles,
+  formStyles,
+} from "@/styles/components";
 
 interface ProgressStats {
   correct: number;
@@ -30,23 +35,26 @@ export function ProgressTracker({
   }, [stats.correct, stats.total]);
 
   const progressColor = useMemo(() => {
-    if (accuracy >= 80) return 'bg-green-500';
-    if (accuracy >= 60) return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (accuracy >= 80) return "bg-green-500";
+    if (accuracy >= 60) return "bg-yellow-500";
+    return "bg-red-500";
   }, [accuracy]);
 
   const encouragementMessage = useMemo(() => {
-    if (accuracy >= 80) return 'Great progress! Keep it up!';
-    if (accuracy >= 60) return 'Good work! Room for improvement.';
-    if (stats.total === 0) return 'Start practicing to track your progress!';
-    return 'Keep practicing! You\'ll get better.';
+    if (accuracy >= 80) return "Great progress! Keep it up!";
+    if (accuracy >= 60) return "Good work! Room for improvement.";
+    if (stats.total === 0) return "Start practicing to track your progress!";
+    return "Keep practicing! You'll get better.";
   }, [accuracy, stats.total]);
 
   return (
-    <Card variant="primary" className={`${layoutStyles.col} ${layoutStyles.gap.md}`}>
+    <Card
+      variant="primary"
+      className={`${layoutStyles.col} ${layoutStyles.gap.md}`}
+    >
       {/* Progress Bar */}
       <div className={progressStyles.bar.container}>
-        <div 
+        <div
           className={`${progressStyles.bar.progress} ${progressColor}`}
           style={{ width: `${accuracy}%` }}
           role="progressbar"
@@ -57,7 +65,9 @@ export function ProgressTracker({
       </div>
 
       {/* Main Stats */}
-      <div className={`${layoutStyles.row} ${layoutStyles.between} ${layoutStyles.center}`}>
+      <div
+        className={`${layoutStyles.row} ${layoutStyles.between} ${layoutStyles.center}`}
+      >
         <div className={`${textStyles.lg} ${textStyles.primary}`}>
           {accuracy}%
         </div>
@@ -76,15 +86,21 @@ export function ProgressTracker({
         <div className={`${layoutStyles.col} ${layoutStyles.gap.sm} mt-2`}>
           <div className={`${layoutStyles.row} ${layoutStyles.between}`}>
             <div className={textStyles.secondary}>Current Streak:</div>
-            <div className={`${textStyles.primary} font-medium`}>{stats.streakCount}</div>
+            <div className={`${textStyles.primary} font-medium`}>
+              {stats.streakCount}
+            </div>
           </div>
           <div className={`${layoutStyles.row} ${layoutStyles.between}`}>
             <div className={textStyles.secondary}>Best Streak:</div>
-            <div className={`${textStyles.primary} font-medium`}>{stats.bestStreak}</div>
+            <div className={`${textStyles.primary} font-medium`}>
+              {stats.bestStreak}
+            </div>
           </div>
           <div className={`${layoutStyles.row} ${layoutStyles.between}`}>
             <div className={textStyles.secondary}>Average Time:</div>
-            <div className={`${textStyles.primary} font-medium`}>{stats.averageTime.toFixed(1)}s</div>
+            <div className={`${textStyles.primary} font-medium`}>
+              {stats.averageTime.toFixed(1)}s
+            </div>
           </div>
         </div>
       )}

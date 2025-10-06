@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface ScrollState {
   y: number;
   lastY: number;
-  direction: 'up' | 'down' | null;
+  direction: "up" | "down" | null;
 }
 
 export function useWindowScroll() {
@@ -15,7 +15,7 @@ export function useWindowScroll() {
 
   useEffect(() => {
     // Skip if not in browser environment
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     let ticking = false;
     let lastKnownScrollY = window.scrollY;
@@ -24,10 +24,10 @@ export function useWindowScroll() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
-          setScroll(prev => ({
+          setScroll((prev) => ({
             y: currentScrollY,
             lastY: prev.y,
-            direction: currentScrollY > prev.y ? 'down' : 'up',
+            direction: currentScrollY > prev.y ? "down" : "up",
           }));
           lastKnownScrollY = currentScrollY;
           ticking = false;
@@ -36,8 +36,8 @@ export function useWindowScroll() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return scroll;

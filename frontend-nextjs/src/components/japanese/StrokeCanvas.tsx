@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useRef, useEffect, useState } from 'react';
-import { textStyles, layoutStyles } from '@/styles/components';
+import { useRef, useEffect, useState } from "react";
+import { textStyles, layoutStyles } from "@/styles/components";
 
 interface Point {
   x: number;
@@ -38,34 +38,34 @@ export function StrokeCanvas({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Clear and set up canvas
     ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = "black";
     ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
 
     // Draw guide character
-    ctx.font = '48px serif';
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.font = "48px serif";
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillText(character, width / 2, height / 2);
 
     // Draw existing strokes
-    strokes.forEach(stroke => {
+    strokes.forEach((stroke) => {
       if (stroke.points.length < 2) return;
-      
+
       ctx.beginPath();
       ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
-      
+
       for (let i = 1; i < stroke.points.length; i++) {
         ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
       }
-      
+
       ctx.stroke();
     });
   }, [character, strokes, width, height]);
@@ -80,12 +80,12 @@ export function StrokeCanvas({
   const continueStroke = (x: number, y: number) => {
     if (!isDrawing) return;
 
-    setCurrentStroke(prev => ({
+    setCurrentStroke((prev) => ({
       points: [...prev.points, { x, y, time: Date.now() }],
     }));
 
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
     if (!ctx) return;
 
     const points = currentStroke.points;
@@ -101,16 +101,21 @@ export function StrokeCanvas({
     if (!isDrawing) return;
 
     setIsDrawing(false);
-    setStrokes(prev => [...prev, currentStroke]);
+    setStrokes((prev) => [...prev, currentStroke]);
 
     // Convert strokes to API format
     const strokeData = {
-      strokes: strokes.map(stroke =>
-        stroke.points.map(point => [Math.round(point.x), Math.round(point.y)])
-      ).flat(),
-      timing: strokes.map(stroke =>
-        stroke.points.map(point => point.time)
-      ).flat(),
+      strokes: strokes
+        .map((stroke) =>
+          stroke.points.map((point) => [
+            Math.round(point.x),
+            Math.round(point.y),
+          ]),
+        )
+        .flat(),
+      timing: strokes
+        .map((stroke) => stroke.points.map((point) => point.time))
+        .flat(),
     };
 
     onStrokeComplete(strokeData);
@@ -119,7 +124,7 @@ export function StrokeCanvas({
   const handleClear = () => {
     setStrokes([]);
     const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
+    const ctx = canvas?.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, width, height);
   };
@@ -131,37 +136,25 @@ export function StrokeCanvas({
         width={width}
         height={height}
         className="border border-white/20 rounded-lg bg-white/5"
-        onMouseDown={e => {
+        onMouseDown={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
-          startStroke(
-            e.clientX - rect.left,
-            e.clientY - rect.top
-          );
+          startStroke(e.clientX - rect.left, e.clientY - rect.top);
         }}
-        onMouseMove={e => {
+        onMouseMove={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
-          continueStroke(
-            e.clientX - rect.left,
-            e.clientY - rect.top
-          );
+          continueStroke(e.clientX - rect.left, e.clientY - rect.top);
         }}
         onMouseUp={endStroke}
         onMouseLeave={endStroke}
-        onTouchStart={e => {
+        onTouchStart={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const touch = e.touches[0];
-          startStroke(
-            touch.clientX - rect.left,
-            touch.clientY - rect.top
-          );
+          startStroke(touch.clientX - rect.left, touch.clientY - rect.top);
         }}
-        onTouchMove={e => {
+        onTouchMove={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const touch = e.touches[0];
-          continueStroke(
-            touch.clientX - rect.left,
-            touch.clientY - rect.top
-          );
+          continueStroke(touch.clientX - rect.left, touch.clientY - rect.top);
         }}
         onTouchEnd={endStroke}
       />

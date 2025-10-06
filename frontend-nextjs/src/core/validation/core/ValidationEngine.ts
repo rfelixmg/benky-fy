@@ -2,7 +2,7 @@
  * Validation Engine - Central registry and coordinator for all validators
  */
 
-import { ValidationStrategy, ValidationResult } from './ValidationStrategy';
+import { ValidationStrategy, ValidationResult } from "./ValidationStrategy";
 
 export class ValidationEngine implements ValidationStrategy {
   private validators: Map<string, ValidationStrategy> = new Map();
@@ -23,9 +23,13 @@ export class ValidationEngine implements ValidationStrategy {
    * @param type Input type identifier
    * @returns ValidationResult with validation details
    */
-  validateWithType(input: string, expected: string, type: string): ValidationResult {
+  validateWithType(
+    input: string,
+    expected: string,
+    type: string,
+  ): ValidationResult {
     const validator = this.getValidator(type);
-    
+
     if (!validator) {
       return {
         isCorrect: false,
@@ -38,7 +42,7 @@ export class ValidationEngine implements ValidationStrategy {
     } catch (error) {
       return {
         isCorrect: false,
-        feedback: ['Validation error occurred'],
+        feedback: ["Validation error occurred"],
       };
     }
   }
@@ -69,7 +73,7 @@ export class ValidationEngine implements ValidationStrategy {
   validate(input: string, expected: string): ValidationResult {
     // Try to auto-detect the type based on the expected value
     const detectedType = this.detectType(expected);
-    
+
     if (detectedType) {
       return this.validateWithType(input, expected, detectedType);
     }
@@ -89,7 +93,7 @@ export class ValidationEngine implements ValidationStrategy {
 
     return {
       isCorrect: false,
-      feedback: ['No matching validator found'],
+      feedback: ["No matching validator found"],
     };
   }
 
@@ -129,27 +133,27 @@ export class ValidationEngine implements ValidationStrategy {
 
     // Check for hiragana (ひらがな)
     if (/[\u3040-\u309F]/.test(normalized)) {
-      return 'hiragana';
+      return "hiragana";
     }
 
     // Check for katakana (カタカナ)
     if (/[\u30A0-\u30FF]/.test(normalized)) {
-      return 'katakana';
+      return "katakana";
     }
 
     // Check for kanji (漢字)
     if (/[\u4E00-\u9FAF]/.test(normalized)) {
-      return 'kanji';
+      return "kanji";
     }
 
     // Check for English (basic Latin characters)
     if (/^[a-zA-Z\s\-'.,!?]+$/.test(normalized)) {
-      return 'english';
+      return "english";
     }
 
     // Check for romaji (basic Latin with Japanese-like patterns)
     if (/^[a-zA-Z\s\-']+$/.test(normalized) && normalized.length > 0) {
-      return 'romaji';
+      return "romaji";
     }
 
     return null;

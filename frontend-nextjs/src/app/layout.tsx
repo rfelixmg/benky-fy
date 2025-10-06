@@ -8,8 +8,16 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Benky-Fy - Japanese Learning Platform",
-  description: "AI-powered Japanese learning with flashcards, conjugation practice, and adaptive learning paths",
-  keywords: ["Japanese", "learning", "flashcards", "conjugation", "language", "education"],
+  description:
+    "AI-powered Japanese learning with flashcards, conjugation practice, and adaptive learning paths",
+  keywords: [
+    "Japanese",
+    "learning",
+    "flashcards",
+    "conjugation",
+    "language",
+    "education",
+  ],
   authors: [{ name: "Benky-Fy Team" }],
 };
 

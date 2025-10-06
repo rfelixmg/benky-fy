@@ -1,5 +1,5 @@
-import '@testing-library/jest-dom';
-import { expect } from '@jest/globals';
+import "@testing-library/jest-dom";
+import { expect } from "@jest/globals";
 
 // Extend Jest matchers
 declare global {

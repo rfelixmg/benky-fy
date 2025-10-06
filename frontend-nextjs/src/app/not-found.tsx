@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { FloatingElements } from '@/components/floating-elements';
-import { Home, BookOpen, ArrowLeft } from 'lucide-react';
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { FloatingElements } from "@/components/floating-elements";
+import { Home, BookOpen, ArrowLeft } from "lucide-react";
 
 export default function NotFoundPage() {
   const router = useRouter();
@@ -12,14 +12,14 @@ export default function NotFoundPage() {
     if (window.history.length > 1) {
       router.back();
     } else {
-      router.push('/dashboard');
+      router.push("/dashboard");
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
       <FloatingElements />
-      
+
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         <div className="max-w-md mx-auto">
           {/* Error Section */}
@@ -35,29 +35,30 @@ export default function NotFoundPage() {
 
           {/* Helpful Message */}
           <p className="text-base text-primary-foreground/80 mb-8">
-            The page might have been moved, deleted, or you entered the wrong URL.
+            The page might have been moved, deleted, or you entered the wrong
+            URL.
           </p>
 
           {/* Navigation Options */}
           <div className="space-y-3">
             <Button
-              onClick={() => router.push('/dashboard')}
+              onClick={() => router.push("/dashboard")}
               className="w-full bg-background text-primary-purple hover:bg-background/90 px-8 py-3"
               size="lg"
             >
               <Home className="w-4 h-4 mr-2" />
               Go to Dashboard
             </Button>
-            
+
             <Button
-              onClick={() => router.push('/modules')}
+              onClick={() => router.push("/modules")}
               variant="secondary"
               className="w-full px-6 py-3"
             >
               <BookOpen className="w-4 h-4 mr-2" />
               Browse Learning Modules
             </Button>
-            
+
             <Button
               onClick={handleGoBack}
               variant="outline"

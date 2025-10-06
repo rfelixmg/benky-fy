@@ -1,5 +1,5 @@
-import { UserSettings } from '@/core/api-client';
-import { InputType } from '../types/AnswerTypes';
+import { UserSettings } from "@/core/api-client";
+import { InputType } from "../types/AnswerTypes";
 
 /**
  * SettingsModel - Data model for user settings
@@ -11,11 +11,11 @@ export class SettingsModel {
   public inputEnglish: boolean;
   public inputKanji: boolean;
   public inputRomaji: boolean;
-  public displayMode: 'kanji' | 'hiragana' | 'katakana' | 'english' | 'mixed';
-  public furiganaStyle: 'above' | 'below' | 'inline' | 'none';
+  public displayMode: "kanji" | "hiragana" | "katakana" | "english" | "mixed";
+  public furiganaStyle: "above" | "below" | "inline" | "none";
   public maxAttempts: number;
-  public practiceMode: 'flashcard' | 'quiz' | 'review';
-  public priorityFilter: 'all' | 'difficult' | 'recent' | 'favorites';
+  public practiceMode: "flashcard" | "quiz" | "review";
+  public priorityFilter: "all" | "difficult" | "recent" | "favorites";
   public learningOrder: boolean;
   public proportions: {
     kana: number;
@@ -24,18 +24,18 @@ export class SettingsModel {
     english: number;
   };
   public romajiEnabled: boolean;
-  public romajiOutputType: 'hiragana' | 'katakana';
-  public flashcardType: 'standard' | 'reverse' | 'mixed';
-  public kanaType: 'hiragana' | 'katakana' | 'both';
+  public romajiOutputType: "hiragana" | "katakana";
+  public flashcardType: "standard" | "reverse" | "mixed";
+  public kanaType: "hiragana" | "katakana" | "both";
   public furiganaEnabled: boolean;
   public darkMode: boolean;
   public allowedInputModes: Record<string, boolean>;
   public romajiConversionEnabled: boolean;
   public autoAdvance: boolean;
   public soundEnabled: boolean;
-  public difficulty: 'beginner' | 'intermediate' | 'advanced';
-  public feedbackDisplayMode: 'legacy' | 'floating' | 'both';
-  public floatingPosition: 'top' | 'bottom' | 'center' | 'modal';
+  public difficulty: "beginner" | "intermediate" | "advanced";
+  public feedbackDisplayMode: "legacy" | "floating" | "both";
+  public floatingPosition: "top" | "bottom" | "center" | "modal";
   public autoHideDelay: number;
   public showDetailedFeedback: boolean;
 
@@ -45,22 +45,35 @@ export class SettingsModel {
     this.inputEnglish = data.input_english ?? true;
     this.inputKanji = data.input_kanji ?? false;
     this.inputRomaji = data.input_romaji ?? false;
-    this.displayMode = (data.display_mode as 'kanji' | 'hiragana' | 'katakana' | 'english' | 'mixed') ?? 'kanji';
-    this.furiganaStyle = (data.furigana_style as 'above' | 'below' | 'inline' | 'none') ?? 'above';
+    this.displayMode =
+      (data.display_mode as
+        | "kanji"
+        | "hiragana"
+        | "katakana"
+        | "english"
+        | "mixed") ?? "kanji";
+    this.furiganaStyle =
+      (data.furigana_style as "above" | "below" | "inline" | "none") ?? "above";
     this.maxAttempts = data.max_answer_attempts ?? 3;
-    this.practiceMode = (data.practice_mode as 'flashcard' | 'quiz' | 'review') ?? 'flashcard';
-    this.priorityFilter = (data.priority_filter as 'all' | 'difficult' | 'recent' | 'favorites') ?? 'all';
+    this.practiceMode =
+      (data.practice_mode as "flashcard" | "quiz" | "review") ?? "flashcard";
+    this.priorityFilter =
+      (data.priority_filter as "all" | "difficult" | "recent" | "favorites") ??
+      "all";
     this.learningOrder = data.learning_order ?? false;
     this.proportions = data.proportions ?? {
       kana: 0.3,
       kanji: 0.3,
       kanji_furigana: 0.2,
-      english: 0.2
+      english: 0.2,
     };
     this.romajiEnabled = data.romaji_enabled ?? false;
-    this.romajiOutputType = (data.romaji_output_type as 'hiragana' | 'katakana') ?? 'hiragana';
-    this.flashcardType = (data.flashcard_type as 'standard' | 'reverse' | 'mixed') ?? 'standard';
-    this.kanaType = (data.kana_type as 'hiragana' | 'katakana' | 'both') ?? 'hiragana';
+    this.romajiOutputType =
+      (data.romaji_output_type as "hiragana" | "katakana") ?? "hiragana";
+    this.flashcardType =
+      (data.flashcard_type as "standard" | "reverse" | "mixed") ?? "standard";
+    this.kanaType =
+      (data.kana_type as "hiragana" | "katakana" | "both") ?? "hiragana";
     this.furiganaEnabled = data.furiganaEnabled ?? false;
     this.darkMode = data.darkMode ?? false;
     this.allowedInputModes = data.allowedInputModes ?? {
@@ -68,14 +81,18 @@ export class SettingsModel {
       katakana: false,
       english: true,
       kanji: false,
-      romaji: false
+      romaji: false,
     };
     this.romajiConversionEnabled = data.romajiConversionEnabled ?? false;
     this.autoAdvance = data.autoAdvance ?? false;
     this.soundEnabled = data.soundEnabled ?? false;
-    this.difficulty = (data.difficulty as 'beginner' | 'intermediate' | 'advanced') ?? 'beginner';
-    this.feedbackDisplayMode = (data.feedbackDisplayMode as 'legacy' | 'floating' | 'both') ?? 'legacy';
-    this.floatingPosition = (data.floatingPosition as 'top' | 'bottom' | 'center' | 'modal') ?? 'top';
+    this.difficulty =
+      (data.difficulty as "beginner" | "intermediate" | "advanced") ??
+      "beginner";
+    this.feedbackDisplayMode =
+      (data.feedbackDisplayMode as "legacy" | "floating" | "both") ?? "legacy";
+    this.floatingPosition =
+      (data.floatingPosition as "top" | "bottom" | "center" | "modal") ?? "top";
     this.autoHideDelay = data.autoHideDelay ?? 3000;
     this.showDetailedFeedback = data.showDetailedFeedback ?? false;
   }
@@ -114,7 +131,7 @@ export class SettingsModel {
       feedbackDisplayMode: this.feedbackDisplayMode,
       floatingPosition: this.floatingPosition,
       autoHideDelay: this.autoHideDelay,
-      showDetailedFeedback: this.showDetailedFeedback
+      showDetailedFeedback: this.showDetailedFeedback,
     };
   }
 
@@ -135,50 +152,59 @@ export class SettingsModel {
     const errors: string[] = [];
 
     if (this.maxAttempts < 1 || this.maxAttempts > 10) {
-      errors.push('Max attempts must be between 1 and 10');
+      errors.push("Max attempts must be between 1 and 10");
     }
 
-    if (!['kanji', 'hiragana', 'katakana', 'english', 'mixed'].includes(this.displayMode)) {
-      errors.push('Invalid display mode');
+    if (
+      !["kanji", "hiragana", "katakana", "english", "mixed"].includes(
+        this.displayMode,
+      )
+    ) {
+      errors.push("Invalid display mode");
     }
 
-    if (!['above', 'below', 'inline', 'none'].includes(this.furiganaStyle)) {
-      errors.push('Invalid furigana style');
+    if (!["above", "below", "inline", "none"].includes(this.furiganaStyle)) {
+      errors.push("Invalid furigana style");
     }
 
-    if (!['flashcard', 'quiz', 'review'].includes(this.practiceMode)) {
-      errors.push('Invalid practice mode');
+    if (!["flashcard", "quiz", "review"].includes(this.practiceMode)) {
+      errors.push("Invalid practice mode");
     }
 
-    if (!['all', 'difficult', 'recent', 'favorites'].includes(this.priorityFilter)) {
-      errors.push('Invalid priority filter');
+    if (
+      !["all", "difficult", "recent", "favorites"].includes(this.priorityFilter)
+    ) {
+      errors.push("Invalid priority filter");
     }
 
-    if (!['hiragana', 'katakana'].includes(this.romajiOutputType)) {
-      errors.push('Invalid romaji output type');
+    if (!["hiragana", "katakana"].includes(this.romajiOutputType)) {
+      errors.push("Invalid romaji output type");
     }
 
-    if (!['standard', 'reverse', 'mixed'].includes(this.flashcardType)) {
-      errors.push('Invalid flashcard type');
+    if (!["standard", "reverse", "mixed"].includes(this.flashcardType)) {
+      errors.push("Invalid flashcard type");
     }
 
-    if (!['hiragana', 'katakana', 'both'].includes(this.kanaType)) {
-      errors.push('Invalid kana type');
+    if (!["hiragana", "katakana", "both"].includes(this.kanaType)) {
+      errors.push("Invalid kana type");
     }
 
-    if (!['beginner', 'intermediate', 'advanced'].includes(this.difficulty)) {
-      errors.push('Invalid difficulty level');
+    if (!["beginner", "intermediate", "advanced"].includes(this.difficulty)) {
+      errors.push("Invalid difficulty level");
     }
 
     // Validate proportions sum to 1
-    const proportionSum = Object.values(this.proportions).reduce((sum, val) => sum + val, 0);
+    const proportionSum = Object.values(this.proportions).reduce(
+      (sum, val) => sum + val,
+      0,
+    );
     if (Math.abs(proportionSum - 1) > 0.01) {
-      errors.push('Proportions must sum to 1');
+      errors.push("Proportions must sum to 1");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -214,7 +240,7 @@ export class SettingsModel {
       feedbackDisplayMode: this.feedbackDisplayMode,
       floatingPosition: this.floatingPosition,
       autoHideDelay: this.autoHideDelay,
-      showDetailedFeedback: this.showDetailedFeedback
+      showDetailedFeedback: this.showDetailedFeedback,
     });
   }
 
@@ -224,13 +250,13 @@ export class SettingsModel {
    */
   getEnabledInputTypes(): InputType[] {
     const enabledTypes: InputType[] = [];
-    
+
     if (this.inputHiragana) enabledTypes.push(InputType.HIRAGANA);
     if (this.inputKatakana) enabledTypes.push(InputType.KATAKANA);
     if (this.inputEnglish) enabledTypes.push(InputType.ENGLISH);
     if (this.inputKanji) enabledTypes.push(InputType.KANJI);
     if (this.inputRomaji) enabledTypes.push(InputType.ROMAJI);
-    
+
     return enabledTypes;
   }
 
@@ -313,22 +339,22 @@ export class SettingsModel {
     this.inputEnglish = true;
     this.inputKanji = false;
     this.inputRomaji = false;
-    this.displayMode = 'kanji';
-    this.furiganaStyle = 'above';
+    this.displayMode = "kanji";
+    this.furiganaStyle = "above";
     this.maxAttempts = 3;
-    this.practiceMode = 'flashcard';
-    this.priorityFilter = 'all';
+    this.practiceMode = "flashcard";
+    this.priorityFilter = "all";
     this.learningOrder = false;
     this.proportions = {
       kana: 0.3,
       kanji: 0.3,
       kanji_furigana: 0.2,
-      english: 0.2
+      english: 0.2,
     };
     this.romajiEnabled = false;
-    this.romajiOutputType = 'hiragana';
-    this.flashcardType = 'standard';
-    this.kanaType = 'hiragana';
+    this.romajiOutputType = "hiragana";
+    this.flashcardType = "standard";
+    this.kanaType = "hiragana";
     this.furiganaEnabled = false;
     this.darkMode = false;
     this.allowedInputModes = {
@@ -336,14 +362,14 @@ export class SettingsModel {
       katakana: false,
       english: true,
       kanji: false,
-      romaji: false
+      romaji: false,
     };
     this.romajiConversionEnabled = false;
     this.autoAdvance = false;
     this.soundEnabled = false;
-    this.difficulty = 'beginner';
-    this.feedbackDisplayMode = 'legacy';
-    this.floatingPosition = 'top';
+    this.difficulty = "beginner";
+    this.feedbackDisplayMode = "legacy";
+    this.floatingPosition = "top";
     this.autoHideDelay = 3000;
     this.showDetailedFeedback = false;
   }

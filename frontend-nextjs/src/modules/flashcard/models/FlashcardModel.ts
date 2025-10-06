@@ -1,9 +1,9 @@
-import { 
-  FlashcardItem, 
-  FlashcardCreateData, 
-  FlashcardUpdateData, 
-  WordType 
-} from '../types/FlashcardTypes';
+import {
+  FlashcardItem,
+  FlashcardCreateData,
+  FlashcardUpdateData,
+  WordType,
+} from "../types/FlashcardTypes";
 
 /**
  * FlashcardModel - Data model for flashcard items
@@ -19,13 +19,13 @@ export class FlashcardModel {
   public furigana?: string;
   public romaji?: string;
   public pronunciation?: string;
-  public difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  public difficulty?: "beginner" | "intermediate" | "advanced";
   public tags?: string[];
   public createdAt: Date;
   public updatedAt: Date;
 
   constructor(data: FlashcardCreateData | FlashcardItem) {
-    this.id = 'id' in data ? data.id : this.generateId();
+    this.id = "id" in data ? data.id : this.generateId();
     this.kanji = data.kanji;
     this.hiragana = data.hiragana;
     this.katakana = data.katakana;
@@ -34,10 +34,16 @@ export class FlashcardModel {
     this.furigana = data.furigana;
     this.romaji = data.romaji;
     this.pronunciation = data.pronunciation;
-    this.difficulty = data.difficulty || 'beginner';
+    this.difficulty = data.difficulty || "beginner";
     this.tags = data.tags || [];
-    this.createdAt = 'createdAt' in data && data.createdAt ? new Date(data.createdAt) : new Date();
-    this.updatedAt = 'updatedAt' in data && data.updatedAt ? new Date(data.updatedAt) : new Date();
+    this.createdAt =
+      "createdAt" in data && data.createdAt
+        ? new Date(data.createdAt)
+        : new Date();
+    this.updatedAt =
+      "updatedAt" in data && data.updatedAt
+        ? new Date(data.updatedAt)
+        : new Date();
   }
 
   /**
@@ -58,7 +64,7 @@ export class FlashcardModel {
       difficulty: this.difficulty,
       tags: this.tags,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     };
   }
 
@@ -78,29 +84,35 @@ export class FlashcardModel {
   validate(): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
-    if (!this.id || this.id.trim() === '') {
-      errors.push('ID is required');
+    if (!this.id || this.id.trim() === "") {
+      errors.push("ID is required");
     }
 
-    if (!this.english || (typeof this.english === 'string' && this.english.trim() === '')) {
-      errors.push('English translation is required');
+    if (
+      !this.english ||
+      (typeof this.english === "string" && this.english.trim() === "")
+    ) {
+      errors.push("English translation is required");
     }
 
     if (!this.type || !Object.values(WordType).includes(this.type)) {
-      errors.push('Valid word type is required');
+      errors.push("Valid word type is required");
     }
 
-    if (this.difficulty && !['beginner', 'intermediate', 'advanced'].includes(this.difficulty)) {
-      errors.push('Difficulty must be beginner, intermediate, or advanced');
+    if (
+      this.difficulty &&
+      !["beginner", "intermediate", "advanced"].includes(this.difficulty)
+    ) {
+      errors.push("Difficulty must be beginner, intermediate, or advanced");
     }
 
     if (this.tags && !Array.isArray(this.tags)) {
-      errors.push('Tags must be an array');
+      errors.push("Tags must be an array");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -122,7 +134,7 @@ export class FlashcardModel {
       difficulty: this.difficulty,
       tags: this.tags ? [...this.tags] : undefined,
       createdAt: new Date(this.createdAt),
-      updatedAt: new Date(this.updatedAt)
+      updatedAt: new Date(this.updatedAt),
     });
   }
 
@@ -138,10 +150,11 @@ export class FlashcardModel {
     if (data.type !== undefined) this.type = data.type;
     if (data.furigana !== undefined) this.furigana = data.furigana;
     if (data.romaji !== undefined) this.romaji = data.romaji;
-    if (data.pronunciation !== undefined) this.pronunciation = data.pronunciation;
+    if (data.pronunciation !== undefined)
+      this.pronunciation = data.pronunciation;
     if (data.difficulty !== undefined) this.difficulty = data.difficulty;
     if (data.tags !== undefined) this.tags = data.tags;
-    
+
     this.updatedAt = new Date();
   }
 
@@ -152,18 +165,20 @@ export class FlashcardModel {
    */
   getDisplayText(field: string): string {
     switch (field) {
-      case 'kanji':
-        return this.kanji || '';
-      case 'hiragana':
-        return this.hiragana || '';
-      case 'katakana':
-        return this.katakana || '';
-      case 'english':
-        return Array.isArray(this.english) ? this.english.join(' / ') : this.english;
-      case 'romaji':
-        return this.romaji || '';
+      case "kanji":
+        return this.kanji || "";
+      case "hiragana":
+        return this.hiragana || "";
+      case "katakana":
+        return this.katakana || "";
+      case "english":
+        return Array.isArray(this.english)
+          ? this.english.join(" / ")
+          : this.english;
+      case "romaji":
+        return this.romaji || "";
       default:
-        return '';
+        return "";
     }
   }
 
@@ -174,7 +189,7 @@ export class FlashcardModel {
    */
   hasField(field: string): boolean {
     const value = this.getDisplayText(field);
-    return value.trim() !== '';
+    return value.trim() !== "";
   }
 
   /**

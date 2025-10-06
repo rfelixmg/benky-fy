@@ -2,10 +2,10 @@
  * Flashcard Validator - Handles flashcard activity validation
  */
 
-import { ActivityValidator, AnswerSet } from '../core/ActivityValidator';
-import { UserSettings } from '@/core/api-client';
-import { ValidationResult } from '../core/ValidationResult';
-import { ValidatorFactory } from '../factories/ValidatorFactory';
+import { ActivityValidator, AnswerSet } from "../core/ActivityValidator";
+import { UserSettings } from "@/core/api-client";
+import { ValidationResult } from "../core/ValidationResult";
+import { ValidatorFactory } from "../factories/ValidatorFactory";
 
 export class FlashcardValidator implements ActivityValidator {
   private validatorFactory: ValidatorFactory;
@@ -20,14 +20,17 @@ export class FlashcardValidator implements ActivityValidator {
    * @param correctAnswers Set of correct answers
    * @returns ValidationResult
    */
-  validateAnswer(userAnswer: string, correctAnswers: AnswerSet): ValidationResult {
+  validateAnswer(
+    userAnswer: string,
+    correctAnswers: AnswerSet,
+  ): ValidationResult {
     // Try to validate against each available answer type
     const answerTypes = this.getAvailableAnswerTypes(correctAnswers);
-    
+
     for (const answerType of answerTypes) {
       const validator = this.validatorFactory.getValidator(answerType);
       const expectedAnswer = this.getAnswerForType(correctAnswers, answerType);
-      
+
       if (expectedAnswer) {
         const result = validator.validate(userAnswer, expectedAnswer);
         if (result.isCorrect) {
@@ -39,7 +42,7 @@ export class FlashcardValidator implements ActivityValidator {
     // If no match found, return failure
     return {
       isCorrect: false,
-      feedback: ['Incorrect answer'],
+      feedback: ["Incorrect answer"],
       confidence: 0,
     };
   }
@@ -51,13 +54,13 @@ export class FlashcardValidator implements ActivityValidator {
    */
   getEnabledInputTypes(settings: UserSettings): string[] {
     const enabledTypes: string[] = [];
-    
-    if (settings.input_english) enabledTypes.push('english');
-    if (settings.input_hiragana) enabledTypes.push('hiragana');
-    if (settings.input_katakana) enabledTypes.push('katakana');
-    if (settings.input_kanji) enabledTypes.push('kanji');
-    if (settings.input_romaji) enabledTypes.push('romaji');
-    
+
+    if (settings.input_english) enabledTypes.push("english");
+    if (settings.input_hiragana) enabledTypes.push("hiragana");
+    if (settings.input_katakana) enabledTypes.push("katakana");
+    if (settings.input_kanji) enabledTypes.push("kanji");
+    if (settings.input_romaji) enabledTypes.push("romaji");
+
     return enabledTypes;
   }
 
@@ -67,14 +70,17 @@ export class FlashcardValidator implements ActivityValidator {
    * @param correctAnswers Set of correct answers
    * @returns Array of ValidationResults
    */
-  validateMultipleInputs(inputs: Record<string, string>, correctAnswers: AnswerSet): ValidationResult[] {
+  validateMultipleInputs(
+    inputs: Record<string, string>,
+    correctAnswers: AnswerSet,
+  ): ValidationResult[] {
     const results: ValidationResult[] = [];
-    
+
     for (const [inputType, userInput] of Object.entries(inputs)) {
       if (userInput.trim()) {
         const validator = this.validatorFactory.getValidator(inputType);
         const expectedAnswer = this.getAnswerForType(correctAnswers, inputType);
-        
+
         if (expectedAnswer) {
           const result = validator.validate(userInput, expectedAnswer);
           results.push(result);
@@ -87,7 +93,7 @@ export class FlashcardValidator implements ActivityValidator {
         }
       }
     }
-    
+
     return results;
   }
 
@@ -98,13 +104,13 @@ export class FlashcardValidator implements ActivityValidator {
    */
   private getAvailableAnswerTypes(answers: AnswerSet): string[] {
     const types: string[] = [];
-    
-    if (answers.english) types.push('english');
-    if (answers.hiragana) types.push('hiragana');
-    if (answers.katakana) types.push('katakana');
-    if (answers.kanji) types.push('kanji');
-    if (answers.romaji) types.push('romaji');
-    
+
+    if (answers.english) types.push("english");
+    if (answers.hiragana) types.push("hiragana");
+    if (answers.katakana) types.push("katakana");
+    if (answers.kanji) types.push("kanji");
+    if (answers.romaji) types.push("romaji");
+
     return types;
   }
 
@@ -116,15 +122,17 @@ export class FlashcardValidator implements ActivityValidator {
    */
   private getAnswerForType(answers: AnswerSet, type: string): string | null {
     switch (type.toLowerCase()) {
-      case 'english':
-        return Array.isArray(answers.english) ? answers.english.join(' / ') : answers.english || null;
-      case 'hiragana':
+      case "english":
+        return Array.isArray(answers.english)
+          ? answers.english.join(" / ")
+          : answers.english || null;
+      case "hiragana":
         return answers.hiragana || null;
-      case 'katakana':
+      case "katakana":
         return answers.katakana || null;
-      case 'kanji':
+      case "kanji":
         return answers.kanji || null;
-      case 'romaji':
+      case "romaji":
         return answers.romaji || null;
       default:
         return null;
@@ -138,7 +146,11 @@ export class FlashcardValidator implements ActivityValidator {
    * @param inputType Input type
    * @returns ValidationResult
    */
-  validateWithType(userInput: string, expectedAnswer: string, inputType: string): ValidationResult {
+  validateWithType(
+    userInput: string,
+    expectedAnswer: string,
+    inputType: string,
+  ): ValidationResult {
     const validator = this.validatorFactory.getValidator(inputType);
     return validator.validate(userInput, expectedAnswer);
   }
@@ -149,9 +161,12 @@ export class FlashcardValidator implements ActivityValidator {
    * @param correctAnswers Correct answers
    * @returns True if all inputs are correct
    */
-  areAllInputsCorrect(inputs: Record<string, string>, correctAnswers: AnswerSet): boolean {
+  areAllInputsCorrect(
+    inputs: Record<string, string>,
+    correctAnswers: AnswerSet,
+  ): boolean {
     const results = this.validateMultipleInputs(inputs, correctAnswers);
-    return results.every(result => result.isCorrect);
+    return results.every((result) => result.isCorrect);
   }
 
   /**
@@ -160,16 +175,19 @@ export class FlashcardValidator implements ActivityValidator {
    * @param correctAnswers Correct answers
    * @returns Object with correct and incorrect counts
    */
-  getValidationSummary(inputs: Record<string, string>, correctAnswers: AnswerSet): {
+  getValidationSummary(
+    inputs: Record<string, string>,
+    correctAnswers: AnswerSet,
+  ): {
     total: number;
     correct: number;
     incorrect: number;
     results: ValidationResult[];
   } {
     const results = this.validateMultipleInputs(inputs, correctAnswers);
-    const correct = results.filter(r => r.isCorrect).length;
-    const incorrect = results.filter(r => !r.isCorrect).length;
-    
+    const correct = results.filter((r) => r.isCorrect).length;
+    const incorrect = results.filter((r) => !r.isCorrect).length;
+
     return {
       total: results.length,
       correct,

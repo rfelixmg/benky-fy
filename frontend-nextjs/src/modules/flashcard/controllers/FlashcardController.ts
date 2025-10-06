@@ -1,5 +1,5 @@
-import { FlashcardItem, WordType } from '../types/FlashcardTypes';
-import { FlashcardService } from '../services/FlashcardService';
+import { FlashcardItem, WordType } from "../types/FlashcardTypes";
+import { FlashcardService } from "../services/FlashcardService";
 
 /**
  * FlashcardController - Controller layer for flashcard user interactions
@@ -26,15 +26,17 @@ export class FlashcardController {
       this.currentModule = moduleName;
       this.flashcards = await this.flashcardService.getFlashcards(moduleName);
       this.currentIndex = 0;
-      
+
       if (this.flashcards.length > 0) {
         this.currentFlashcard = this.flashcards[0];
       } else {
         this.currentFlashcard = null;
       }
     } catch (error) {
-      console.error('Error loading flashcards:', error);
-      throw new Error(`Failed to load flashcards for module ${moduleName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error loading flashcards:", error);
+      throw new Error(
+        `Failed to load flashcards for module ${moduleName}: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -46,20 +48,23 @@ export class FlashcardController {
   async loadRandomFlashcard(moduleName: string): Promise<void> {
     try {
       this.currentModule = moduleName;
-      this.currentFlashcard = await this.flashcardService.getRandomFlashcard(moduleName);
-      
+      this.currentFlashcard =
+        await this.flashcardService.getRandomFlashcard(moduleName);
+
       // Find the index of the random flashcard in the loaded flashcards
       if (this.flashcards.length > 0) {
         this.currentIndex = this.flashcards.findIndex(
-          card => card.id === this.currentFlashcard?.id
+          (card) => card.id === this.currentFlashcard?.id,
         );
         if (this.currentIndex === -1) {
           this.currentIndex = 0;
         }
       }
     } catch (error) {
-      console.error('Error loading random flashcard:', error);
-      throw new Error(`Failed to load random flashcard for module ${moduleName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error loading random flashcard:", error);
+      throw new Error(
+        `Failed to load random flashcard for module ${moduleName}: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -85,9 +90,10 @@ export class FlashcardController {
       return;
     }
 
-    this.currentIndex = this.currentIndex === 0 
-      ? this.flashcards.length - 1 
-      : this.currentIndex - 1;
+    this.currentIndex =
+      this.currentIndex === 0
+        ? this.flashcards.length - 1
+        : this.currentIndex - 1;
     this.currentFlashcard = this.flashcards[this.currentIndex];
   }
 
@@ -161,7 +167,7 @@ export class FlashcardController {
    * @returns FlashcardItem[]
    */
   getFlashcardsByType(type: WordType): FlashcardItem[] {
-    return this.flashcards.filter(flashcard => flashcard.type === type);
+    return this.flashcards.filter((flashcard) => flashcard.type === type);
   }
 
   /**
@@ -169,8 +175,12 @@ export class FlashcardController {
    * @param difficulty Difficulty level to filter by
    * @returns FlashcardItem[]
    */
-  getFlashcardsByDifficulty(difficulty: 'beginner' | 'intermediate' | 'advanced'): FlashcardItem[] {
-    return this.flashcards.filter(flashcard => flashcard.difficulty === difficulty);
+  getFlashcardsByDifficulty(
+    difficulty: "beginner" | "intermediate" | "advanced",
+  ): FlashcardItem[] {
+    return this.flashcards.filter(
+      (flashcard) => flashcard.difficulty === difficulty,
+    );
   }
 
   /**
@@ -193,7 +203,7 @@ export class FlashcardController {
    * @returns boolean Success status
    */
   jumpToFlashcardById(id: string): boolean {
-    const index = this.flashcards.findIndex(flashcard => flashcard.id === id);
+    const index = this.flashcards.findIndex((flashcard) => flashcard.id === id);
     if (index !== -1) {
       return this.jumpToFlashcard(index);
     }
@@ -237,7 +247,7 @@ export class FlashcardController {
       currentModule: this.currentModule,
       currentIndex: this.currentIndex,
       totalCount: this.flashcards.length,
-      hasFlashcards: this.flashcards.length > 0
+      hasFlashcards: this.flashcards.length > 0,
     };
   }
 }

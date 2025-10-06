@@ -1,5 +1,10 @@
-import { FlashcardItem, FlashcardSearchCriteria, FlashcardFilterOptions, WordType } from '../types/FlashcardTypes';
-import { FlashcardModel } from '../models/FlashcardModel';
+import {
+  FlashcardItem,
+  FlashcardSearchCriteria,
+  FlashcardFilterOptions,
+  WordType,
+} from "../types/FlashcardTypes";
+import { FlashcardModel } from "../models/FlashcardModel";
 
 /**
  * FlashcardService - Service layer for flashcard data operations
@@ -9,7 +14,7 @@ export class FlashcardService {
   private baseUrl: string;
   private cache: Map<string, FlashcardItem[]> = new Map();
 
-  constructor(baseUrl: string = '/api/v2/words') {
+  constructor(baseUrl: string = "/api/v2/words") {
     this.baseUrl = baseUrl;
   }
 
@@ -25,30 +30,34 @@ export class FlashcardService {
       }
 
       const response = await fetch(`${this.baseUrl}/${moduleName}`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch flashcards for module: ${moduleName}`);
       }
 
       const data = await response.json();
       const words = data.words || [];
-      
+
       const flashcards = words.map((word: any) => ({
         id: word.id,
         hiragana: word.hiragana,
         kanji: word.kanji,
-        english: Array.isArray(word.english) ? word.english.join(', ') : word.english,
+        english: Array.isArray(word.english)
+          ? word.english.join(", ")
+          : word.english,
         type: word.type,
-        difficulty: 'beginner',
+        difficulty: "beginner",
         furigana: word.furigana || word.hiragana,
-        romaji: word.romaji || ''
+        romaji: word.romaji || "",
       }));
-      
+
       this.cache.set(moduleName, flashcards);
       return flashcards;
     } catch (error) {
-      console.error('Error fetching flashcards:', error);
-      throw new Error(`Failed to fetch flashcards: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error fetching flashcards:", error);
+      throw new Error(
+        `Failed to fetch flashcards: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -60,7 +69,7 @@ export class FlashcardService {
   async getRandomFlashcard(moduleName: string): Promise<FlashcardItem> {
     try {
       const flashcards = await this.getFlashcards(moduleName);
-      
+
       if (flashcards.length === 0) {
         throw new Error(`No flashcards found for module: ${moduleName}`);
       }
@@ -68,8 +77,10 @@ export class FlashcardService {
       const randomIndex = Math.floor(Math.random() * flashcards.length);
       return flashcards[randomIndex];
     } catch (error) {
-      console.error('Error getting random flashcard:', error);
-      throw new Error(`Failed to get random flashcard: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error getting random flashcard:", error);
+      throw new Error(
+        `Failed to get random flashcard: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -81,7 +92,7 @@ export class FlashcardService {
   async getFlashcardById(id: string): Promise<FlashcardItem> {
     try {
       const response = await fetch(`${this.baseUrl}/item/${id}`);
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch flashcard with ID: ${id}`);
       }
@@ -89,8 +100,10 @@ export class FlashcardService {
       const flashcard = await response.json();
       return flashcard;
     } catch (error) {
-      console.error('Error fetching flashcard by ID:', error);
-      throw new Error(`Failed to fetch flashcard: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error fetching flashcard by ID:", error);
+      throw new Error(
+        `Failed to fetch flashcard: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -102,24 +115,24 @@ export class FlashcardService {
    * @returns Promise<FlashcardItem[]> Array of matching flashcard items
    */
   async searchFlashcards(
-    query: string, 
-    moduleName: string, 
-    criteria?: FlashcardSearchCriteria
+    query: string,
+    moduleName: string,
+    criteria?: FlashcardSearchCriteria,
   ): Promise<FlashcardItem[]> {
     try {
       const flashcards = await this.getFlashcards(moduleName);
-      
+
       if (!query.trim()) {
         return flashcards;
       }
 
       const searchTerm = query.toLowerCase();
-      const filtered = flashcards.filter(flashcard => {
+      const filtered = flashcards.filter((flashcard) => {
         // Search in English
-        const english = Array.isArray(flashcard.english) 
-          ? flashcard.english.join(' ') 
+        const english = Array.isArray(flashcard.english)
+          ? flashcard.english.join(" ")
           : flashcard.english;
-        
+
         if (english.toLowerCase().includes(searchTerm)) {
           return true;
         }
@@ -134,7 +147,10 @@ export class FlashcardService {
         if (flashcard.katakana && flashcard.katakana.includes(searchTerm)) {
           return true;
         }
-        if (flashcard.romaji && flashcard.romaji.toLowerCase().includes(searchTerm)) {
+        if (
+          flashcard.romaji &&
+          flashcard.romaji.toLowerCase().includes(searchTerm)
+        ) {
           return true;
         }
 
@@ -148,8 +164,10 @@ export class FlashcardService {
 
       return filtered;
     } catch (error) {
-      console.error('Error searching flashcards:', error);
-      throw new Error(`Failed to search flashcards: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error searching flashcards:", error);
+      throw new Error(
+        `Failed to search flashcards: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -159,46 +177,49 @@ export class FlashcardService {
    * @param criteria Search criteria
    * @returns Filtered array of flashcards
    */
-  private applySearchCriteria(flashcards: FlashcardItem[], criteria: FlashcardSearchCriteria): FlashcardItem[] {
-    return flashcards.filter(flashcard => {
+  private applySearchCriteria(
+    flashcards: FlashcardItem[],
+    criteria: FlashcardSearchCriteria,
+  ): FlashcardItem[] {
+    return flashcards.filter((flashcard) => {
       if (criteria.type && flashcard.type !== criteria.type) {
         return false;
       }
-      
+
       if (criteria.difficulty && flashcard.difficulty !== criteria.difficulty) {
         return false;
       }
-      
+
       if (criteria.hasKanji !== undefined) {
         const hasKanji = !!flashcard.kanji;
         if (hasKanji !== criteria.hasKanji) {
           return false;
         }
       }
-      
+
       if (criteria.hasHiragana !== undefined) {
         const hasHiragana = !!flashcard.hiragana;
         if (hasHiragana !== criteria.hasHiragana) {
           return false;
         }
       }
-      
+
       if (criteria.hasKatakana !== undefined) {
         const hasKatakana = !!flashcard.katakana;
         if (hasKatakana !== criteria.hasKatakana) {
           return false;
         }
       }
-      
+
       if (criteria.tags && criteria.tags.length > 0) {
-        const hasMatchingTag = criteria.tags.some(tag => 
-          flashcard.tags?.includes(tag)
+        const hasMatchingTag = criteria.tags.some((tag) =>
+          flashcard.tags?.includes(tag),
         );
         if (!hasMatchingTag) {
           return false;
         }
       }
-      
+
       return true;
     });
   }
@@ -210,61 +231,67 @@ export class FlashcardService {
    * @returns Promise<FlashcardItem[]> Filtered and sorted flashcards
    */
   async getFlashcardsWithOptions(
-    moduleName: string, 
-    options: FlashcardFilterOptions
+    moduleName: string,
+    options: FlashcardFilterOptions,
   ): Promise<FlashcardItem[]> {
     try {
       const flashcards = await this.getFlashcards(moduleName);
-      
+
       let filtered = [...flashcards];
-      
+
       // Apply sorting
       if (options.sortBy) {
         filtered.sort((a, b) => {
           let aValue: any;
           let bValue: any;
-          
+
           switch (options.sortBy) {
-            case 'createdAt':
+            case "createdAt":
               aValue = new Date(a.createdAt || 0).getTime();
               bValue = new Date(b.createdAt || 0).getTime();
               break;
-            case 'updatedAt':
+            case "updatedAt":
               aValue = new Date(a.updatedAt || 0).getTime();
               bValue = new Date(b.updatedAt || 0).getTime();
               break;
-            case 'difficulty':
-              const difficultyOrder = { 'beginner': 1, 'intermediate': 2, 'advanced': 3 };
-              aValue = difficultyOrder[a.difficulty || 'beginner'];
-              bValue = difficultyOrder[b.difficulty || 'beginner'];
+            case "difficulty":
+              const difficultyOrder = {
+                beginner: 1,
+                intermediate: 2,
+                advanced: 3,
+              };
+              aValue = difficultyOrder[a.difficulty || "beginner"];
+              bValue = difficultyOrder[b.difficulty || "beginner"];
               break;
-            case 'type':
+            case "type":
               aValue = a.type;
               bValue = b.type;
               break;
             default:
               return 0;
           }
-          
-          if (options.sortOrder === 'desc') {
+
+          if (options.sortOrder === "desc") {
             return bValue > aValue ? 1 : bValue < aValue ? -1 : 0;
           } else {
             return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
           }
         });
       }
-      
+
       // Apply pagination
       if (options.offset || options.limit) {
         const offset = options.offset || 0;
         const limit = options.limit || filtered.length;
         filtered = filtered.slice(offset, offset + limit);
       }
-      
+
       return filtered;
     } catch (error) {
-      console.error('Error getting flashcards with options:', error);
-      throw new Error(`Failed to get flashcards with options: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error getting flashcards with options:", error);
+      throw new Error(
+        `Failed to get flashcards with options: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -287,7 +314,7 @@ export class FlashcardService {
   getCacheStats(): { size: number; modules: string[] } {
     return {
       size: this.cache.size,
-      modules: Array.from(this.cache.keys())
+      modules: Array.from(this.cache.keys()),
     };
   }
 }

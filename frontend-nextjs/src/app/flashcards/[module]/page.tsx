@@ -1,49 +1,58 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { Menu } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useRandomWord, useTrackAnswer, AnswerResult } from '@/core/hooks';
-import { validateAnswer } from '@/core/validation';
-import { useSettingsStore } from '@/core/settings-store';
-import { FlashcardDisplay } from '@/components/flashcard/flashcard-display';
-import { AnswerInput } from '@/components/flashcard/answer-input';
-import { ProgressSection } from '@/components/flashcard/progress-section';
-import { SettingsModal } from '@/components/flashcard/settings-modal';
-import { FloatingFeedback } from '@/components/flashcard/floating-feedback';
-import { HelpModal } from '@/components/flashcard/help-modal';
-import { Statistics } from '@/components/flashcard/statistics';
-import { NavigationHeader } from '@/components/navigation-header';
-import { MobileMenu } from '@/components/ui/mobile-menu';
-import { Button } from '@/components/ui/button';
-import { Loader2, Settings, HelpCircle, BarChart3 } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { Menu } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useRandomWord, useTrackAnswer, AnswerResult } from "@/core/hooks";
+import { validateAnswer } from "@/core/validation";
+import { useSettingsStore } from "@/core/settings-store";
+import { FlashcardDisplay } from "@/components/flashcard/flashcard-display";
+import { AnswerInput } from "@/components/flashcard/answer-input";
+import { ProgressSection } from "@/components/flashcard/progress-section";
+import { SettingsModal } from "@/components/flashcard/settings-modal";
+import { FloatingFeedback } from "@/components/flashcard/floating-feedback";
+import { HelpModal } from "@/components/flashcard/help-modal";
+import { Statistics } from "@/components/flashcard/statistics";
+import { NavigationHeader } from "@/components/navigation-header";
+import { MobileMenu } from "@/components/ui/mobile-menu";
+import { Button } from "@/components/ui/button";
+import { Loader2, Settings, HelpCircle, BarChart3 } from "lucide-react";
 
 export default function FlashcardPage() {
   const params = useParams();
   const moduleName = params?.module as string;
-  
+
   const [currentItemId, setCurrentItemId] = useState(1);
   const [isUserInteraction, setIsUserInteraction] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
-  const [currentMode, setCurrentMode] = useState<'flashcard'>('flashcard');
+  const [currentMode, setCurrentMode] = useState<"flashcard">("flashcard");
   const [showSettings, setShowSettings] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const [currentAttempts, setCurrentAttempts] = useState(0);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [lastAnswer, setLastAnswer] = useState('');
+  const [lastAnswer, setLastAnswer] = useState("");
   const [lastMatchedType, setLastMatchedType] = useState<string | undefined>();
-  const [lastConvertedAnswer, setLastConvertedAnswer] = useState<string | undefined>();
+  const [lastConvertedAnswer, setLastConvertedAnswer] = useState<
+    string | undefined
+  >();
   const [testedWord, setTestedWord] = useState<any>(null); // Store the word being tested
   const [showFloatingFeedback, setShowFloatingFeedback] = useState(false);
   const [lastValidationResult, setLastValidationResult] = useState<any>(null);
-  const [lastUserAnswers, setLastUserAnswers] = useState<Record<string, string>>({});
+  const [lastUserAnswers, setLastUserAnswers] = useState<
+    Record<string, string>
+  >({});
   const autoAdvanceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  
-  const { data: randomWord, isLoading: isRandomLoading, error: randomError, refetch: refetchRandomWord } = useRandomWord(moduleName);
+
+  const {
+    data: randomWord,
+    isLoading: isRandomLoading,
+    error: randomError,
+    refetch: refetchRandomWord,
+  } = useRandomWord(moduleName);
   const { getSettings } = useSettingsStore();
   const trackAnswerMutation = useTrackAnswer();
-  
+
   const settings = getSettings(moduleName);
 
   // Unified navigation function for all modules - all use random API
@@ -62,10 +71,10 @@ export default function FlashcardPage() {
       clearTimeout(autoAdvanceTimerRef.current);
       autoAdvanceTimerRef.current = null;
     }
-    
+
     // Navigate to next item
     navigateToNext();
-    
+
     // Reset state for next item
     setCurrentAttempts(0);
     setIsCorrect(false);
@@ -76,88 +85,120 @@ export default function FlashcardPage() {
   // All modules now use random word selection
   const currentItem = randomWord;
   const isLoadingData = isRandomLoading;
-  
+
   // Use testedWord for validation/feedback, currentItem for display
   const itemForValidation = testedWord || currentItem;
   const dataError = randomError;
 
+  const handleAnswerSubmit = useCallback(
+    async (
+      userAnswer:
+        | string
+        | {
+            english: string;
+            hiragana: string;
+            katakana?: string;
+            kanji?: string;
+            romaji?: string;
+          },
+      serverValidationResult?: any,
+    ) => {
+      if (!currentItem) return;
 
-  const handleAnswerSubmit = useCallback(async (userAnswer: string | { english: string; hiragana: string; katakana?: string; kanji?: string; romaji?: string }, serverValidationResult?: any) => {
-    if (!currentItem) return;
-    
-    // // Set the word being tested (only once per word)
-    // if (!testedWord) {
-    //   setTestedWord(currentItem);
-    // }
-    
-    setIsUserInteraction(true);
-    
-    // Prepare correct answers for validation using the tested word
-    const correctAnswers = {
-      hiragana: itemForValidation.hiragana,
-      katakana: itemForValidation.katakana,
-      english: itemForValidation.english,
-      kanji: itemForValidation.kanji,
-    };
-    
-    // Use comprehensive validation (frontend fallback)
-    const validationResult = validateAnswer(userAnswer, correctAnswers, settings, moduleName);
-    const answerIsCorrect = serverValidationResult?.is_correct ?? validationResult.isCorrect;
-    // Store answer information for feedback
-    const answerString = typeof userAnswer === 'string' ? userAnswer : 
-      `${userAnswer.hiragana || ''} / ${userAnswer.english || ''}`.replace(/ \/ $/, '');
-    setLastAnswer(answerString);
-    setLastMatchedType(validationResult.matchedType);
-    setLastConvertedAnswer(validationResult.convertedAnswer);
-    setLastValidationResult(validationResult);
-    
-    // Store individual user answers for floating feedback
-    if (typeof userAnswer === 'object') {
-      setLastUserAnswers({
-        hiragana: userAnswer.hiragana || '',
-        katakana: userAnswer.katakana || '',
-        english: userAnswer.english || '',
-        kanji: userAnswer.kanji || '',
-        romaji: userAnswer.romaji || ''
-      });
-    } else {
-      // For single input, determine which field was used based on matched type
-      const singleAnswer = { hiragana: '', katakana: '', english: '', kanji: '', romaji: '' };
-      if (validationResult.matchedType) {
-        singleAnswer[validationResult.matchedType as keyof typeof singleAnswer] = userAnswer;
+      // // Set the word being tested (only once per word)
+      // if (!testedWord) {
+      //   setTestedWord(currentItem);
+      // }
+
+      setIsUserInteraction(true);
+
+      // Prepare correct answers for validation using the tested word
+      const correctAnswers = {
+        hiragana: itemForValidation.hiragana,
+        katakana: itemForValidation.katakana,
+        english: itemForValidation.english,
+        kanji: itemForValidation.kanji,
+      };
+
+      // Use comprehensive validation (frontend fallback)
+      const validationResult = validateAnswer(
+        userAnswer,
+        correctAnswers,
+        settings,
+        moduleName,
+      );
+      const answerIsCorrect =
+        serverValidationResult?.is_correct ?? validationResult.isCorrect;
+      // Store answer information for feedback
+      const answerString =
+        typeof userAnswer === "string"
+          ? userAnswer
+          : `${userAnswer.hiragana || ""} / ${userAnswer.english || ""}`.replace(
+              / \/ $/,
+              "",
+            );
+      setLastAnswer(answerString);
+      setLastMatchedType(validationResult.matchedType);
+      setLastConvertedAnswer(validationResult.convertedAnswer);
+      setLastValidationResult(validationResult);
+
+      // Store individual user answers for floating feedback
+      if (typeof userAnswer === "object") {
+        setLastUserAnswers({
+          hiragana: userAnswer.hiragana || "",
+          katakana: userAnswer.katakana || "",
+          english: userAnswer.english || "",
+          kanji: userAnswer.kanji || "",
+          romaji: userAnswer.romaji || "",
+        });
+      } else {
+        // For single input, determine which field was used based on matched type
+        const singleAnswer = {
+          hiragana: "",
+          katakana: "",
+          english: "",
+          kanji: "",
+          romaji: "",
+        };
+        if (validationResult.matchedType) {
+          singleAnswer[
+            validationResult.matchedType as keyof typeof singleAnswer
+          ] = userAnswer;
+        }
+        setLastUserAnswers(singleAnswer);
       }
-      setLastUserAnswers(singleAnswer);
-    }
-    
-    // Update attempt counter
-    const newAttempts = currentAttempts + 1;
-    setCurrentAttempts(newAttempts);
-    setIsCorrect(answerIsCorrect);
-    
-    // Track answer result for future database storage
-    const answerResult: AnswerResult = {
-      moduleName,
-      itemId: itemForValidation.id,
-      userAnswer: answerString,
-      isCorrect: answerIsCorrect,
-      matchedType: validationResult.matchedType,
-      timerDuration: validationResult.timerDuration,
-      attempts: newAttempts,
-      timestamp: new Date().toISOString(),
-      settings: {
-        input_hiragana: settings.input_hiragana,
-        input_katakana: settings.input_katakana,
-        input_english: settings.input_english,
-        input_kanji: settings.input_kanji,
-        input_romaji: settings.input_romaji,
-        display_mode: settings.display_mode,
-        furigana_style: settings.furigana_style,
-      }
-    };
-    
-    // Console log detailed comparison table
-    setShowFloatingFeedback(true);
-  }, [currentItem, currentAttempts, settings, navigateToNext]);
+
+      // Update attempt counter
+      const newAttempts = currentAttempts + 1;
+      setCurrentAttempts(newAttempts);
+      setIsCorrect(answerIsCorrect);
+
+      // Track answer result for future database storage
+      const answerResult: AnswerResult = {
+        moduleName,
+        itemId: itemForValidation.id,
+        userAnswer: answerString,
+        isCorrect: answerIsCorrect,
+        matchedType: validationResult.matchedType,
+        timerDuration: validationResult.timerDuration,
+        attempts: newAttempts,
+        timestamp: new Date().toISOString(),
+        settings: {
+          input_hiragana: settings.input_hiragana,
+          input_katakana: settings.input_katakana,
+          input_english: settings.input_english,
+          input_kanji: settings.input_kanji,
+          input_romaji: settings.input_romaji,
+          display_mode: settings.display_mode,
+          furigana_style: settings.furigana_style,
+        },
+      };
+
+      // Console log detailed comparison table
+      setShowFloatingFeedback(true);
+    },
+    [currentItem, currentAttempts, settings, navigateToNext],
+  );
 
   // Handle floating feedback close and advance
   const handleFloatingFeedbackClose = useCallback(() => {
@@ -192,10 +233,10 @@ export default function FlashcardPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
         <div className="text-center">
-          <p className="text-primary-foreground mb-4">Error loading flashcards</p>
-          <Button onClick={() => window.location.reload()}>
-            Retry
-          </Button>
+          <p className="text-primary-foreground mb-4">
+            Error loading flashcards
+          </p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
         </div>
       </div>
     );
@@ -215,9 +256,9 @@ export default function FlashcardPage() {
     <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
       {/* Navigation Header */}
       <NavigationHeader currentPage={`/flashcards/${moduleName}`} />
-      
+
       {/* Debug Component - Console Only */}
-      
+
       {/* Page Content */}
       <div className="pt-16">
         {/* Module Header */}
@@ -227,7 +268,7 @@ export default function FlashcardPage() {
               {moduleName} Flashcards
             </h1>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-2">
             {/* Mobile Menu */}
             <div className="sm:hidden">
@@ -235,19 +276,25 @@ export default function FlashcardPage() {
                 items={[
                   {
                     icon: BarChart3,
-                    label: 'Statistics',
-                    onClick: () => {setShowStats(true)}
+                    label: "Statistics",
+                    onClick: () => {
+                      setShowStats(true);
+                    },
                   },
                   {
                     icon: HelpCircle,
-                    label: 'Help',
-                    onClick: () => setShowHelp(true)
+                    label: "Help",
+                    onClick: () => setShowHelp(true),
                   },
-                  ...(currentMode === 'flashcard' ? [{
-                    icon: Settings,
-                    label: 'Settings',
-                    onClick: () => setShowSettings(true)
-                  }] : [])
+                  ...(currentMode === "flashcard"
+                    ? [
+                        {
+                          icon: Settings,
+                          label: "Settings",
+                          onClick: () => setShowSettings(true),
+                        },
+                      ]
+                    : []),
                 ]}
                 trigger={
                   <Button
@@ -282,7 +329,7 @@ export default function FlashcardPage() {
                 <HelpCircle className="w-4 h-4 mr-2" />
                 Help
               </Button>
-              {currentMode === 'flashcard' && (
+              {currentMode === "flashcard" && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -341,7 +388,7 @@ export default function FlashcardPage() {
           onClose={() => setShowSettings(false)}
         />
       )}
-      
+
       {showHelp && (
         <HelpModal
           moduleName={moduleName}
@@ -349,13 +396,15 @@ export default function FlashcardPage() {
           onClose={() => setShowHelp(false)}
         />
       )}
-      
+
       {showStats && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Statistics</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Statistics
+                </h2>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -373,7 +422,6 @@ export default function FlashcardPage() {
           </div>
         </div>
       )}
-
 
       {/* Floating Feedback Modal */}
       {showFloatingFeedback && currentItem && (

@@ -1,7 +1,11 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { cardStyles, layoutStyles, interactionStyles } from '@/styles/components';
+import { ReactNode } from "react";
+import {
+  cardStyles,
+  layoutStyles,
+  interactionStyles,
+} from "@/styles/components";
 
 interface CardProps {
   children: ReactNode;
@@ -14,10 +18,10 @@ interface CardProps {
 
 export function Card({
   children,
-  variant = 'primary',
+  variant = "primary",
   interactive = false,
   elevated = false,
-  className = '',
+  className = "",
   onClick,
 }: CardProps): JSX.Element {
   const baseStyles = [
@@ -27,13 +31,15 @@ export function Card({
     interactive && cardStyles.interactive,
     interactive && interactionStyles.focus.ring,
     layoutStyles.padding.md,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div
       className={`${baseStyles} ${className}`}
       onClick={interactive ? onClick : undefined}
-      role={interactive ? 'button' : undefined}
+      role={interactive ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
     >
       {children}
@@ -51,18 +57,14 @@ interface CardGridProps {
 export function CardGrid({
   children,
   columns = 2,
-  gap = 'md',
-  className = '',
+  gap = "md",
+  className = "",
 }: CardGridProps): JSX.Element {
   const gridStyles = [
     layoutStyles.grid.base,
     layoutStyles.grid[`cols${columns}` as keyof typeof layoutStyles.grid],
     layoutStyles.gap[gap],
-  ].join(' ');
+  ].join(" ");
 
-  return (
-    <div className={`${gridStyles} ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`${gridStyles} ${className}`}>{children}</div>;
 }

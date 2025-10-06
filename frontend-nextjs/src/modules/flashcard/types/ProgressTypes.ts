@@ -6,11 +6,11 @@
  * Progress status enumeration
  */
 export enum ProgressStatus {
-  NOT_STARTED = 'not_started',
-  IN_PROGRESS = 'in_progress',
-  COMPLETED = 'completed',
-  MASTERED = 'mastered',
-  NEEDS_REVIEW = 'needs_review'
+  NOT_STARTED = "not_started",
+  IN_PROGRESS = "in_progress",
+  COMPLETED = "completed",
+  MASTERED = "mastered",
+  NEEDS_REVIEW = "needs_review",
 }
 
 /**
@@ -47,7 +47,7 @@ export interface ProgressMetrics {
   mistakePatterns: Array<{
     pattern: string;
     frequency: number;
-    severity: 'low' | 'medium' | 'high';
+    severity: "low" | "medium" | "high";
   }>;
 }
 
@@ -102,7 +102,7 @@ export interface ProgressAnalytics {
   performanceInsights: Array<{
     insight: string;
     recommendation: string;
-    priority: 'low' | 'medium' | 'high';
+    priority: "low" | "medium" | "high";
   }>;
 }
 

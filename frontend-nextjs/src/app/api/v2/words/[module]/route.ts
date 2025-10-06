@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
-import { fetchFromBackend } from '@/core/api-utils';
+import { NextResponse } from "next/server";
+import { fetchFromBackend } from "@/core/api-utils";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ module: string }> }
+  { params }: { params: Promise<{ module: string }> },
 ) {
   try {
     const { module } = await params;
@@ -13,7 +13,7 @@ export async function GET(
     console.error(`Error fetching words from backend:`, error);
     return NextResponse.json(
       { error: `Failed to fetch words` },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

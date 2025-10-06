@@ -1,21 +1,22 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 // Paths that don't require authentication
 const publicPaths = [
-  '/',
-  '/auth/login',
-  '/api/auth/google',
-  '/api/auth/google/callback',
-  '/auth/logout',
+  "/",
+  "/auth/login",
+  "/api/auth/google",
+  "/api/auth/google/callback",
+  "/auth/logout",
 ];
 
 export function middleware(request: NextRequest) {
   // Check if the path is public
-  const isPublicPath = publicPaths.some(path => 
-    request.nextUrl.pathname === path || // Exact match
-    request.nextUrl.pathname.startsWith('/api/') || // All API routes
-    request.nextUrl.pathname.startsWith(path + '/') // Subpaths
+  const isPublicPath = publicPaths.some(
+    (path) =>
+      request.nextUrl.pathname === path || // Exact match
+      request.nextUrl.pathname.startsWith("/api/") || // All API routes
+      request.nextUrl.pathname.startsWith(path + "/"), // Subpaths
   );
 
   // Allow public paths without session
@@ -24,11 +25,11 @@ export function middleware(request: NextRequest) {
   }
 
   // Get session token from cookies
-  const session = request.cookies.get('benkyfy_session');
+  const session = request.cookies.get("benkyfy_session");
 
   // Redirect to login if no session
   if (!session) {
-    const loginUrl = new URL('/auth/login', request.url);
+    const loginUrl = new URL("/auth/login", request.url);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -44,6 +45,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder
      */
-    '/((?!_next/static|_next/image|favicon.ico|public/).*)',
+    "/((?!_next/static|_next/image|favicon.ico|public/).*)",
   ],
 };

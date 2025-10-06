@@ -1,142 +1,152 @@
-'use client';
+"use client";
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from './api-client';
-import type { UserSettings } from './api-client';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiClient } from "./api-client";
+import type { UserSettings } from "./api-client";
 
 // Authentication hooks
 export const useAuth = () => {
   return useQuery({
-    queryKey: ['auth'],
+    queryKey: ["auth"],
     queryFn: async () => {
       try {
         // Try to get session from cookie first
-        const cookies = document.cookie.split(';');
-        console.log('All cookies:', cookies);
-        const sessionCookie = cookies.find(c => c.trim().startsWith('benkyfy_session='));
-        console.log('Found session cookie:', sessionCookie);
-        
+        const cookies = document.cookie.split(";");
+        console.log("All cookies:", cookies);
+        const sessionCookie = cookies.find((c) =>
+          c.trim().startsWith("benkyfy_session="),
+        );
+        console.log("Found session cookie:", sessionCookie);
+
         if (sessionCookie) {
           try {
-            const cookieValue = sessionCookie.split('=')[1];
-            console.log('Cookie value:', cookieValue);
+            const cookieValue = sessionCookie.split("=")[1];
+            console.log("Cookie value:", cookieValue);
             const sessionData = JSON.parse(decodeURIComponent(cookieValue));
-            console.log('Parsed session data:', sessionData);
-            
+            console.log("Parsed session data:", sessionData);
+
             // Check if session is expired
             if (sessionData.expires && sessionData.expires > Date.now()) {
               return {
                 authenticated: true,
                 user: {
                   ...sessionData.user,
-                  joinDate: sessionData.user.joinDate || new Date().toISOString().split('T')[0],
-                  currentLevel: sessionData.user.currentLevel || 'Beginner',
-                  totalStudyTime: sessionData.user.totalStudyTime || '0 hours',
+                  joinDate:
+                    sessionData.user.joinDate ||
+                    new Date().toISOString().split("T")[0],
+                  currentLevel: sessionData.user.currentLevel || "Beginner",
+                  totalStudyTime: sessionData.user.totalStudyTime || "0 hours",
                   streakDays: sessionData.user.streakDays || 0,
                   totalWordsLearned: sessionData.user.totalWordsLearned || 0,
-                  favoriteModules: sessionData.user.favoriteModules || ['Hiragana', 'Basic Words', 'Common Phrases'],
-                  provider: sessionData.provider || 'google'
+                  favoriteModules: sessionData.user.favoriteModules || [
+                    "Hiragana",
+                    "Basic Words",
+                    "Common Phrases",
+                  ],
+                  provider: sessionData.provider || "google",
                 },
-                session_keys: ['user'],
-                google_authorized: sessionData.provider === 'google'
+                session_keys: ["user"],
+                google_authorized: sessionData.provider === "google",
               };
             }
           } catch (parseError) {
-            console.error('Failed to parse session cookie:', parseError);
+            console.error("Failed to parse session cookie:", parseError);
           }
         }
-        
+
         // Development fallback - only if no cookie exists
-        if (process.env.NODE_ENV === 'development' && !cookies.find(c => c.trim().startsWith('benkyfy_session='))) {
-          console.log('Using development fallback - no session cookie found');
+        if (
+          process.env.NODE_ENV === "development" &&
+          !cookies.find((c) => c.trim().startsWith("benkyfy_session="))
+        ) {
+          console.log("Using development fallback - no session cookie found");
           return {
             authenticated: true,
             user: {
-              name: 'Test User',
-              email: 'test@example.com',
-              picture: '/user_icon.svg',
-              joinDate: new Date().toISOString().split('T')[0],
-              currentLevel: 'Beginner',
-              totalStudyTime: '0 hours',
+              name: "Test User",
+              email: "test@example.com",
+              picture: "/user_icon.svg",
+              joinDate: new Date().toISOString().split("T")[0],
+              currentLevel: "Beginner",
+              totalStudyTime: "0 hours",
               streakDays: 0,
               totalWordsLearned: 0,
-              favoriteModules: ['Hiragana', 'Basic Words', 'Common Phrases'],
-              provider: 'development'
+              favoriteModules: ["Hiragana", "Basic Words", "Common Phrases"],
+              provider: "development",
             },
-            session_keys: ['user'],
-            google_authorized: true
+            session_keys: ["user"],
+            google_authorized: true,
           };
         }
-        
+
         // Fallback to backend check
         const response = await apiClient.checkAuth();
         if (response.success && response.data?.authenticated) {
           return response.data;
         }
       } catch (error) {
-        console.error('Auth check failed:', error);
+        console.error("Auth check failed:", error);
       }
-      
+
       // Return unauthenticated state
       return {
         authenticated: false,
         user: undefined,
         session_keys: [],
-        google_authorized: false
+        google_authorized: false,
       };
     },
-    staleTime: 5 * 60 * 1000 // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
 
 // Flashcard hooks
 export const useWordsData = (moduleName: string) => {
   return useQuery({
-    queryKey: ['words', moduleName],
+    queryKey: ["words", moduleName],
     queryFn: async () => {
       const response = await apiClient.getWordsData(moduleName);
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to fetch words data');
+        throw new Error(response.error || "Failed to fetch words data");
       }
       return response.data;
     },
-    enabled: !!moduleName
+    enabled: !!moduleName,
   });
 };
 
 // Random word selection hook
 export const useRandomWord = (moduleName: string) => {
   return useQuery({
-    queryKey: ['randomWord', moduleName],
+    queryKey: ["randomWord", moduleName],
     queryFn: async () => {
       const response = await apiClient.getRandomWord(moduleName);
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to fetch random word');
+        throw new Error(response.error || "Failed to fetch random word");
       }
       return response.data;
     },
     enabled: !!moduleName,
     staleTime: 0, // Always fetch fresh random word
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   });
 };
 
 // Settings hooks
 export const useSettings = (moduleName: string) => {
   return useQuery({
-    queryKey: ['settings', moduleName],
+    queryKey: ["settings", moduleName],
     queryFn: async () => {
       const response = await apiClient.getSettings(moduleName);
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to fetch settings');
+        throw new Error(response.error || "Failed to fetch settings");
       }
       return response.data;
     },
     enabled: !!moduleName,
-    staleTime: 10 * 60 * 1000 // 10 minutes
+    staleTime: 10 * 60 * 1000, // 10 minutes
   });
 };
-
 
 interface UpdateSettingsParams {
   moduleName: string;
@@ -145,34 +155,34 @@ interface UpdateSettingsParams {
 
 export const useUpdateSettings = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ moduleName, settings }: UpdateSettingsParams) => {
       const response = await apiClient.updateSettings(moduleName, settings);
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to update settings');
+        throw new Error(response.error || "Failed to update settings");
       }
       return response.data;
     },
     onSuccess: (data, variables: UpdateSettingsParams) => {
-      queryClient.setQueryData(['settings', variables.moduleName], data);
-    }
+      queryClient.setQueryData(["settings", variables.moduleName], data);
+    },
   });
 };
 
 // Help hooks
 export const useWordInfo = (word: string) => {
   return useQuery({
-    queryKey: ['wordInfo', word],
+    queryKey: ["wordInfo", word],
     queryFn: async () => {
       const response = await apiClient.getWordInfo(word);
       if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch word info');
+        throw new Error(response.error || "Failed to fetch word info");
       }
       return response.data;
     },
     enabled: !!word && word.length > 0,
-    staleTime: 30 * 60 * 1000 // 30 minutes
+    staleTime: 30 * 60 * 1000, // 30 minutes
   });
 };
 
@@ -216,23 +226,23 @@ export const useTrackAnswer = () => {
           input_english: result.settings.input_english || false,
           input_kanji: result.settings.input_kanji || false,
           input_romaji: result.settings.input_romaji || false,
-          display_mode: result.settings.display_mode || 'kanji_furigana',
-          furigana_style: result.settings.furigana_style || 'ruby'
-        }
+          display_mode: result.settings.display_mode || "kanji_furigana",
+          furigana_style: result.settings.furigana_style || "ruby",
+        },
       });
-      
+
       return response;
     },
     onError: (error) => {
-      console.error('Failed to track answer result:', error);
-    }
+      console.error("Failed to track answer result:", error);
+    },
   });
 };
 
 // Validation types
 export interface ValidationRequest {
   input: string;
-  type: 'hiragana' | 'katakana' | 'kanji' | 'english' | 'romaji';
+  type: "hiragana" | "katakana" | "kanji" | "english" | "romaji";
   moduleName: string;
   itemId?: string;
   character?: string; // Required for stroke order validation
@@ -251,16 +261,16 @@ export const useValidateInput = () => {
     mutationFn: async (request: ValidationRequest) => {
       const response = await apiClient.validateInput({
         ...request,
-        character: request.character || request.input // Fallback to input if character not provided
+        character: request.character || request.input, // Fallback to input if character not provided
       });
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to validate input');
+        throw new Error(response.error || "Failed to validate input");
       }
       return response.data;
     },
     onError: (error) => {
-      console.error('Input validation failed:', error);
-    }
+      console.error("Input validation failed:", error);
+    },
   });
 };
 
@@ -269,15 +279,15 @@ export const useValidateStrokeOrder = () => {
     mutationFn: async (request: ValidationRequest) => {
       const response = await apiClient.validateStrokeOrder({
         ...request,
-        character: request.character || request.input // Fallback to input if character not provided
+        character: request.character || request.input, // Fallback to input if character not provided
       });
       if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to validate stroke order');
+        throw new Error(response.error || "Failed to validate stroke order");
       }
       return response.data;
     },
     onError: (error) => {
-      console.error('Stroke order validation failed:', error);
-    }
+      console.error("Stroke order validation failed:", error);
+    },
   });
 };

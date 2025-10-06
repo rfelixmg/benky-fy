@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { X, HelpCircle, Loader2 } from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { X, HelpCircle, Loader2 } from "lucide-react";
 
 interface HelpModalProps {
   moduleName: string;
@@ -11,7 +11,7 @@ interface HelpModalProps {
 }
 
 export function HelpModal({ onClose }: HelpModalProps) {
-  const [searchWord, setSearchWord] = useState('');
+  const [searchWord, setSearchWord] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -42,7 +42,7 @@ export function HelpModal({ onClose }: HelpModalProps) {
             <X className="w-4 h-4" />
           </Button>
         </div>
-        
+
         <div className="p-6 space-y-6">
           {/* Word Search */}
           <div>
@@ -60,7 +60,7 @@ export function HelpModal({ onClose }: HelpModalProps) {
               </Button>
             </form>
           </div>
-          
+
           {/* Word Information Display */}
           {isSearching ? (
             <div className="text-center py-8">
@@ -68,22 +68,26 @@ export function HelpModal({ onClose }: HelpModalProps) {
               <p className="text-sm text-muted-foreground">Searching...</p>
             </div>
           ) : null}
-          
+
           {/* Help Content */}
           <div>
             <h3 className="font-medium mb-4">How to Use Flashcards</h3>
             <div className="text-sm space-y-3 text-muted-foreground">
               <div>
-                <strong>Answering:</strong> Type your answer in the input field and press Enter or click Submit.
+                <strong>Answering:</strong> Type your answer in the input field
+                and press Enter or click Submit.
               </div>
               <div>
-                <strong>Navigation:</strong> Use the Previous/Next buttons or arrow keys to navigate between cards.
+                <strong>Navigation:</strong> Use the Previous/Next buttons or
+                arrow keys to navigate between cards.
               </div>
               <div>
-                <strong>Skip:</strong> Use the Skip button or Space key to skip difficult cards.
+                <strong>Skip:</strong> Use the Skip button or Space key to skip
+                difficult cards.
               </div>
               <div>
-                <strong>Settings:</strong> Adjust display options like furigana and romaji in the settings panel.
+                <strong>Settings:</strong> Adjust display options like furigana
+                and romaji in the settings panel.
               </div>
             </div>
           </div>

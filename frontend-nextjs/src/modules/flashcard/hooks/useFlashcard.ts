@@ -1,6 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { FlashcardController } from '../controllers/FlashcardController';
-import { FlashcardItem } from '../types/FlashcardTypes';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { FlashcardController } from "../controllers/FlashcardController";
+import { FlashcardItem } from "../types/FlashcardTypes";
 
 interface UseFlashcardState {
   currentFlashcard: FlashcardItem | null;
@@ -31,7 +31,7 @@ export const useFlashcard = (): UseFlashcardReturn => {
     error: null,
     currentIndex: 0,
     totalCount: 0,
-    hasFlashcards: false
+    hasFlashcards: false,
   });
 
   const controllerRef = useRef<FlashcardController | null>(null);
@@ -44,77 +44,86 @@ export const useFlashcard = (): UseFlashcardReturn => {
   }, []);
 
   const updateState = useCallback((updates: Partial<UseFlashcardState>) => {
-    setState(prev => ({ ...prev, ...updates }));
+    setState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const handleError = useCallback((error: Error, context: string) => {
-    console.error(`useFlashcard ${context}:`, error);
-    updateState({
-      error: `${context}: ${error.message}`,
-      isLoading: false
-    });
-  }, [updateState]);
-
-  const loadFlashcards = useCallback(async (moduleName: string) => {
-    if (!controllerRef.current) return;
-
-    try {
-      updateState({ isLoading: true, error: null });
-
-      await controllerRef.current.loadFlashcards(moduleName);
-      
-      const controllerState = controllerRef.current.getState();
-      
+  const handleError = useCallback(
+    (error: Error, context: string) => {
+      console.error(`useFlashcard ${context}:`, error);
       updateState({
-        currentFlashcard: controllerState.currentFlashcard,
-        currentIndex: controllerState.currentIndex,
-        totalCount: controllerState.totalCount,
-        hasFlashcards: controllerState.hasFlashcards,
+        error: `${context}: ${error.message}`,
         isLoading: false,
-        error: null
       });
-    } catch (error) {
-      handleError(error as Error, 'loadFlashcards');
-    }
-  }, [updateState, handleError]);
+    },
+    [updateState],
+  );
 
-  const loadRandomFlashcard = useCallback(async (moduleName: string) => {
-    if (!controllerRef.current) return;
+  const loadFlashcards = useCallback(
+    async (moduleName: string) => {
+      if (!controllerRef.current) return;
 
-    try {
-      updateState({ isLoading: true, error: null });
+      try {
+        updateState({ isLoading: true, error: null });
 
-      await controllerRef.current.loadRandomFlashcard(moduleName);
-      
-      const controllerState = controllerRef.current.getState();
-      
-      updateState({
-        currentFlashcard: controllerState.currentFlashcard,
-        currentIndex: controllerState.currentIndex,
-        totalCount: controllerState.totalCount,
-        hasFlashcards: controllerState.hasFlashcards,
-        isLoading: false,
-        error: null
-      });
-    } catch (error) {
-      handleError(error as Error, 'loadRandomFlashcard');
-    }
-  }, [updateState, handleError]);
+        await controllerRef.current.loadFlashcards(moduleName);
+
+        const controllerState = controllerRef.current.getState();
+
+        updateState({
+          currentFlashcard: controllerState.currentFlashcard,
+          currentIndex: controllerState.currentIndex,
+          totalCount: controllerState.totalCount,
+          hasFlashcards: controllerState.hasFlashcards,
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "loadFlashcards");
+      }
+    },
+    [updateState, handleError],
+  );
+
+  const loadRandomFlashcard = useCallback(
+    async (moduleName: string) => {
+      if (!controllerRef.current) return;
+
+      try {
+        updateState({ isLoading: true, error: null });
+
+        await controllerRef.current.loadRandomFlashcard(moduleName);
+
+        const controllerState = controllerRef.current.getState();
+
+        updateState({
+          currentFlashcard: controllerState.currentFlashcard,
+          currentIndex: controllerState.currentIndex,
+          totalCount: controllerState.totalCount,
+          hasFlashcards: controllerState.hasFlashcards,
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "loadRandomFlashcard");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const nextFlashcard = useCallback(() => {
     if (!controllerRef.current) return;
 
     try {
       controllerRef.current.nextFlashcard();
-      
+
       const controllerState = controllerRef.current.getState();
-      
+
       updateState({
         currentFlashcard: controllerState.currentFlashcard,
-        currentIndex: controllerState.currentIndex
+        currentIndex: controllerState.currentIndex,
       });
     } catch (error) {
-      handleError(error as Error, 'nextFlashcard');
+      handleError(error as Error, "nextFlashcard");
     }
   }, [updateState, handleError]);
 
@@ -123,15 +132,15 @@ export const useFlashcard = (): UseFlashcardReturn => {
 
     try {
       controllerRef.current.previousFlashcard();
-      
+
       const controllerState = controllerRef.current.getState();
-      
+
       updateState({
         currentFlashcard: controllerState.currentFlashcard,
-        currentIndex: controllerState.currentIndex
+        currentIndex: controllerState.currentIndex,
       });
     } catch (error) {
-      handleError(error as Error, 'previousFlashcard');
+      handleError(error as Error, "previousFlashcard");
     }
   }, [updateState, handleError]);
 
@@ -140,61 +149,67 @@ export const useFlashcard = (): UseFlashcardReturn => {
 
     try {
       controllerRef.current.skipFlashcard();
-      
+
       const controllerState = controllerRef.current.getState();
-      
+
       updateState({
         currentFlashcard: controllerState.currentFlashcard,
-        currentIndex: controllerState.currentIndex
+        currentIndex: controllerState.currentIndex,
       });
     } catch (error) {
-      handleError(error as Error, 'skipFlashcard');
+      handleError(error as Error, "skipFlashcard");
     }
   }, [updateState, handleError]);
 
-  const jumpToFlashcard = useCallback((index: number) => {
-    if (!controllerRef.current) return false;
+  const jumpToFlashcard = useCallback(
+    (index: number) => {
+      if (!controllerRef.current) return false;
 
-    try {
-      const success = controllerRef.current.jumpToFlashcard(index);
-      
-      if (success) {
-        const controllerState = controllerRef.current.getState();
-        
-        updateState({
-          currentFlashcard: controllerState.currentFlashcard,
-          currentIndex: controllerState.currentIndex
-        });
+      try {
+        const success = controllerRef.current.jumpToFlashcard(index);
+
+        if (success) {
+          const controllerState = controllerRef.current.getState();
+
+          updateState({
+            currentFlashcard: controllerState.currentFlashcard,
+            currentIndex: controllerState.currentIndex,
+          });
+        }
+
+        return success;
+      } catch (error) {
+        handleError(error as Error, "jumpToFlashcard");
+        return false;
       }
-      
-      return success;
-    } catch (error) {
-      handleError(error as Error, 'jumpToFlashcard');
-      return false;
-    }
-  }, [updateState, handleError]);
+    },
+    [updateState, handleError],
+  );
 
-  const jumpToFlashcardById = useCallback((id: string) => {
-    if (!controllerRef.current) return false;
+  const jumpToFlashcardById = useCallback(
+    (id: string) => {
+      if (!controllerRef.current) return false;
 
-    try {
-      const success = controllerRef.current.jumpToFlashcardById(id);
-      
-      if (success) {
-        const controllerState = controllerRef.current.getState();
-        
-        updateState({
-          currentFlashcard: controllerState.currentFlashcard,
-          currentIndex: controllerState.currentIndex
-        });
+      try {
+        const success = controllerRef.current.jumpToFlashcardById(id);
+
+        if (success) {
+          const controllerState = controllerRef.current.getState();
+
+          updateState({
+            currentFlashcard: controllerState.currentFlashcard,
+            currentIndex: controllerState.currentIndex,
+          });
+        }
+
+        return success;
+      } catch (error) {
+        handleError(error as Error, "jumpToFlashcardById");
+        return false;
       }
-      
-      return success;
-    } catch (error) {
-      handleError(error as Error, 'jumpToFlashcardById');
-      return false;
-    }
-  }, [updateState, handleError]);
+    },
+    [updateState, handleError],
+  );
 
   const refreshFlashcards = useCallback(async () => {
     if (!controllerRef.current) return;
@@ -203,19 +218,19 @@ export const useFlashcard = (): UseFlashcardReturn => {
       updateState({ isLoading: true, error: null });
 
       await controllerRef.current.refreshFlashcards();
-      
+
       const controllerState = controllerRef.current.getState();
-      
+
       updateState({
         currentFlashcard: controllerState.currentFlashcard,
         currentIndex: controllerState.currentIndex,
         totalCount: controllerState.totalCount,
         hasFlashcards: controllerState.hasFlashcards,
         isLoading: false,
-        error: null
+        error: null,
       });
     } catch (error) {
-      handleError(error as Error, 'refreshFlashcards');
+      handleError(error as Error, "refreshFlashcards");
     }
   }, [updateState, handleError]);
 
@@ -224,17 +239,17 @@ export const useFlashcard = (): UseFlashcardReturn => {
 
     try {
       controllerRef.current.reset();
-      
+
       updateState({
         currentFlashcard: null,
         isLoading: false,
         error: null,
         currentIndex: 0,
         totalCount: 0,
-        hasFlashcards: false
+        hasFlashcards: false,
       });
     } catch (error) {
-      handleError(error as Error, 'reset');
+      handleError(error as Error, "reset");
     }
   }, [updateState, handleError]);
 
@@ -253,7 +268,7 @@ export const useFlashcard = (): UseFlashcardReturn => {
     jumpToFlashcardById,
     refreshFlashcards,
     reset,
-    getState
+    getState,
   };
 };
 

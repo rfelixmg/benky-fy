@@ -6,27 +6,27 @@
  * Word type enumeration
  */
 export enum WordType {
-  VERB = 'verb',
-  ADJECTIVE = 'adjective',
-  NOUN = 'noun',
-  COLOR = 'color',
-  NUMBER = 'number',
-  GREETING = 'greeting',
-  DAY = 'day',
-  MONTH = 'month',
-  QUESTION = 'question',
-  VOCAB = 'vocab'
+  VERB = "verb",
+  ADJECTIVE = "adjective",
+  NOUN = "noun",
+  COLOR = "color",
+  NUMBER = "number",
+  GREETING = "greeting",
+  DAY = "day",
+  MONTH = "month",
+  QUESTION = "question",
+  VOCAB = "vocab",
 }
 
 /**
  * Flashcard display mode enumeration
  */
 export enum FlashcardDisplayMode {
-  KANJI = 'kanji',
-  HIRAGANA = 'hiragana',
-  KATAKANA = 'katakana',
-  ENGLISH = 'english',
-  MIXED = 'mixed'
+  KANJI = "kanji",
+  HIRAGANA = "hiragana",
+  KATAKANA = "katakana",
+  ENGLISH = "english",
+  MIXED = "mixed",
 }
 
 /**
@@ -42,7 +42,7 @@ export interface FlashcardItem {
   furigana?: string;
   romaji?: string;
   pronunciation?: string;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  difficulty?: "beginner" | "intermediate" | "advanced";
   tags?: string[];
   createdAt?: Date;
   updatedAt?: Date;
@@ -58,7 +58,7 @@ export interface FlashcardModule {
   type: WordType;
   items: FlashcardItem[];
   totalItems: number;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: "beginner" | "intermediate" | "advanced";
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -76,7 +76,7 @@ export interface FlashcardCreateData {
   furigana?: string;
   romaji?: string;
   pronunciation?: string;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  difficulty?: "beginner" | "intermediate" | "advanced";
   tags?: string[];
 }
 
@@ -92,7 +92,7 @@ export interface FlashcardUpdateData {
   furigana?: string;
   romaji?: string;
   pronunciation?: string;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  difficulty?: "beginner" | "intermediate" | "advanced";
   tags?: string[];
 }
 
@@ -101,7 +101,7 @@ export interface FlashcardUpdateData {
  */
 export interface FlashcardSearchCriteria {
   type?: WordType;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  difficulty?: "beginner" | "intermediate" | "advanced";
   tags?: string[];
   hasKanji?: boolean;
   hasHiragana?: boolean;
@@ -113,8 +113,8 @@ export interface FlashcardSearchCriteria {
  * Flashcard filter options interface
  */
 export interface FlashcardFilterOptions {
-  sortBy?: 'createdAt' | 'updatedAt' | 'difficulty' | 'type';
-  sortOrder?: 'asc' | 'desc';
+  sortBy?: "createdAt" | "updatedAt" | "difficulty" | "type";
+  sortOrder?: "asc" | "desc";
   limit?: number;
   offset?: number;
 }

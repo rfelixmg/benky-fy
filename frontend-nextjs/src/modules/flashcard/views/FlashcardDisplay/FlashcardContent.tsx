@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { FlashcardItem } from '../../types/FlashcardTypes';
-import { UserSettings } from '@/core/api-client';
-import { Furigana, JapaneseText } from '@/components/japanese/furigana';
+import React from "react";
+import { FlashcardItem } from "../../types/FlashcardTypes";
+import { UserSettings } from "@/core/api-client";
+import { Furigana, JapaneseText } from "@/components/japanese/furigana";
 
 interface FlashcardContentProps {
   flashcard: FlashcardItem;
   settings: UserSettings;
-  displayMode: 'question' | 'answer';
-  mode: 'flashcard';
+  displayMode: "question" | "answer";
+  mode: "flashcard";
 }
 
 export const FlashcardContent: React.FC<FlashcardContentProps> = ({
   flashcard,
   settings,
   displayMode,
-  mode
+  mode,
 }) => {
   const renderJapaneseText = (text: string, furigana?: string) => {
     if (furigana) {
-      const furiganaStyle = settings.furigana_style || 'ruby';
-      
+      const furiganaStyle = settings.furigana_style || "ruby";
+
       return (
         <Furigana
           kanji={text}
           furigana={furigana}
           showFurigana={true}
-          mode={furiganaStyle as 'hover' | 'inline' | 'brackets' | 'ruby'}
+          mode={furiganaStyle as "hover" | "inline" | "brackets" | "ruby"}
           className="text-white"
         />
       );
@@ -36,7 +36,7 @@ export const FlashcardContent: React.FC<FlashcardContentProps> = ({
     return (
       <JapaneseText
         text={text}
-        showFurigana={settings.furigana_style === 'hover'}
+        showFurigana={settings.furigana_style === "hover"}
         className="text-white"
       />
     );
@@ -47,28 +47,28 @@ export const FlashcardContent: React.FC<FlashcardContentProps> = ({
       return null;
     }
 
-    return (
-      <div className="text-sm text-white/70 mt-2">
-        {romaji}
-      </div>
-    );
+    return <div className="text-sm text-white/70 mt-2">{romaji}</div>;
   };
 
   const renderDisplayText = () => {
-    const displayModeSetting = settings.display_mode || 'kana';
-    const kanaType = settings.kana_type || 'hiragana';
-    
+    const displayModeSetting = settings.display_mode || "kana";
+    const kanaType = settings.kana_type || "hiragana";
+
     switch (displayModeSetting) {
-      case 'kanji':
-        return flashcard.kanji ? renderJapaneseText(flashcard.kanji, flashcard.furigana) : null;
-      case 'kanji_furigana':
-        return flashcard.kanji ? renderJapaneseText(flashcard.kanji, flashcard.furigana) : null;
-      case 'english':
+      case "kanji":
+        return flashcard.kanji
+          ? renderJapaneseText(flashcard.kanji, flashcard.furigana)
+          : null;
+      case "kanji_furigana":
+        return flashcard.kanji
+          ? renderJapaneseText(flashcard.kanji, flashcard.furigana)
+          : null;
+      case "english":
         return <span className="text-white">{flashcard.english}</span>;
-      case 'kana':
+      case "kana":
       default:
         // Show hiragana or katakana based on kana_type setting
-        if (kanaType === 'katakana' && flashcard.katakana) {
+        if (kanaType === "katakana" && flashcard.katakana) {
           return renderJapaneseText(flashcard.katakana, flashcard.furigana);
         } else if (flashcard.hiragana) {
           return renderJapaneseText(flashcard.hiragana, flashcard.furigana);
@@ -80,15 +80,13 @@ export const FlashcardContent: React.FC<FlashcardContentProps> = ({
   };
 
   const renderFlashcardContent = () => {
-    if (mode === 'flashcard') {
-      if (displayMode === 'answer') {
+    if (mode === "flashcard") {
+      if (displayMode === "answer") {
         return (
           <>
             <div className="text-4xl md:text-6xl font-bold text-white mb-4">
-              <div className="mb-2">
-                {renderDisplayText()}
-              </div>
-              {settings.display_mode !== 'english' && (
+              <div className="mb-2">{renderDisplayText()}</div>
+              {settings.display_mode !== "english" && (
                 <div className="text-2xl text-white/80">
                   {flashcard.english}
                 </div>
@@ -100,10 +98,11 @@ export const FlashcardContent: React.FC<FlashcardContentProps> = ({
       } else {
         return (
           <div className="text-4xl md:text-6xl font-bold text-white mb-4">
-            <div className="mb-2">
-              {renderDisplayText()}
-            </div>
-            {renderRomaji(flashcard.hiragana || flashcard.katakana || '', flashcard.romaji)}
+            <div className="mb-2">{renderDisplayText()}</div>
+            {renderRomaji(
+              flashcard.hiragana || flashcard.katakana || "",
+              flashcard.romaji,
+            )}
           </div>
         );
       }
@@ -117,7 +116,7 @@ export const FlashcardContent: React.FC<FlashcardContentProps> = ({
           <div className="text-lg text-white/80 mb-2">
             {flashcard.type} - {flashcard.english}
           </div>
-          {displayMode === 'answer' && (
+          {displayMode === "answer" && (
             <div className="text-2xl text-white font-semibold">
               Conjugation forms available
             </div>
@@ -127,11 +126,7 @@ export const FlashcardContent: React.FC<FlashcardContentProps> = ({
     }
   };
 
-  return (
-    <div className="text-center">
-      {renderFlashcardContent()}
-    </div>
-  );
+  return <div className="text-center">{renderFlashcardContent()}</div>;
 };
 
 export default FlashcardContent;

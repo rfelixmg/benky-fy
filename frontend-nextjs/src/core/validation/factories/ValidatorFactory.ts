@@ -2,15 +2,16 @@
  * Validator Factory - Creates and manages input-type validators
  */
 
-import { ValidationStrategy } from '../core/ValidationStrategy';
-import { HiraganaValidator } from '../input-types/HiraganaValidator';
-import { EnglishValidator } from '../input-types/EnglishValidator';
-import { KatakanaValidator } from '../input-types/KatakanaValidator';
-import { KanjiValidator } from '../input-types/KanjiValidator';
+import { ValidationStrategy } from "../core/ValidationStrategy";
+import { HiraganaValidator } from "../input-types/HiraganaValidator";
+import { EnglishValidator } from "../input-types/EnglishValidator";
+import { KatakanaValidator } from "../input-types/KatakanaValidator";
+import { KanjiValidator } from "../input-types/KanjiValidator";
 
 export class ValidatorFactory {
   private validators: Map<string, ValidationStrategy> = new Map();
-  private validatorClasses: Map<string, new () => ValidationStrategy> = new Map();
+  private validatorClasses: Map<string, new () => ValidationStrategy> =
+    new Map();
 
   constructor() {
     this.registerDefaultValidators();
@@ -23,7 +24,7 @@ export class ValidatorFactory {
    */
   createValidator(type: string): ValidationStrategy {
     const normalizedType = type.toLowerCase();
-    
+
     if (this.validators.has(normalizedType)) {
       return this.validators.get(normalizedType)!;
     }
@@ -61,7 +62,10 @@ export class ValidatorFactory {
    * @param type Input type identifier
    * @param ValidatorClass Validator class to register
    */
-  registerValidatorClass(type: string, ValidatorClass: new () => ValidationStrategy): void {
+  registerValidatorClass(
+    type: string,
+    ValidatorClass: new () => ValidationStrategy,
+  ): void {
     const normalizedType = type.toLowerCase();
     this.validatorClasses.set(normalizedType, ValidatorClass);
   }
@@ -88,9 +92,9 @@ export class ValidatorFactory {
    * Register default validators
    */
   private registerDefaultValidators(): void {
-    this.registerValidatorClass('hiragana', HiraganaValidator);
-    this.registerValidatorClass('katakana', KatakanaValidator);
-    this.registerValidatorClass('english', EnglishValidator);
-    this.registerValidatorClass('kanji', KanjiValidator);
+    this.registerValidatorClass("hiragana", HiraganaValidator);
+    this.registerValidatorClass("katakana", KatakanaValidator);
+    this.registerValidatorClass("english", EnglishValidator);
+    this.registerValidatorClass("kanji", KanjiValidator);
   }
 }

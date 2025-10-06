@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { cn } from '@/core/utils';
+import React from "react";
+import { cn } from "@/core/utils";
 
 interface ProgressBarProps {
   progress: number;
   total: number;
   showPercentage?: boolean;
   color?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   animated?: boolean;
   label?: string;
 }
@@ -17,34 +17,35 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
   total,
   showPercentage = true,
-  color = 'from-blue-500 to-cyan-500',
-  size = 'md',
+  color = "from-blue-500 to-cyan-500",
+  size = "md",
   animated = true,
-  label
+  label,
 }) => {
-  const percentage = total > 0 ? Math.min(Math.max((progress / total) * 100, 0), 100) : 0;
-  
+  const percentage =
+    total > 0 ? Math.min(Math.max((progress / total) * 100, 0), 100) : 0;
+
   const getSizeClasses = () => {
     switch (size) {
-      case 'sm':
-        return 'h-1';
-      case 'lg':
-        return 'h-3';
-      case 'md':
+      case "sm":
+        return "h-1";
+      case "lg":
+        return "h-3";
+      case "md":
       default:
-        return 'h-2';
+        return "h-2";
     }
   };
 
   const getTextSize = () => {
     switch (size) {
-      case 'sm':
-        return 'text-xs';
-      case 'lg':
-        return 'text-sm';
-      case 'md':
+      case "sm":
+        return "text-xs";
+      case "lg":
+        return "text-sm";
+      case "md":
       default:
-        return 'text-xs';
+        return "text-xs";
     }
   };
 
@@ -53,9 +54,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       {/* Label */}
       {label && (
         <div className="flex justify-between items-center mb-2">
-          <span className="text-white/80 text-sm font-medium">
-            {label}
-          </span>
+          <span className="text-white/80 text-sm font-medium">{label}</span>
           {showPercentage && (
             <span className={`text-white/70 ${getTextSize()}`}>
               {Math.round(percentage)}%
@@ -65,15 +64,17 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       )}
 
       {/* Progress Bar Container */}
-      <div className={cn(
-        "w-full bg-white/20 rounded-full overflow-hidden",
-        getSizeClasses()
-      )}>
+      <div
+        className={cn(
+          "w-full bg-white/20 rounded-full overflow-hidden",
+          getSizeClasses(),
+        )}
+      >
         <div
           className={cn(
             "h-full rounded-full transition-all duration-500 ease-out",
             `bg-gradient-to-r ${color}`,
-            animated && "animate-pulse"
+            animated && "animate-pulse",
           )}
           style={{ width: `${percentage}%` }}
         />

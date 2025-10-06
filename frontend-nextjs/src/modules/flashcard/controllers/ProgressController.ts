@@ -1,13 +1,13 @@
-import { 
-  ProgressData, 
-  ProgressUpdate, 
-  ProgressMetrics, 
+import {
+  ProgressData,
+  ProgressUpdate,
+  ProgressMetrics,
   ProgressStatus,
-  ProgressSummary 
-} from '../types/ProgressTypes';
-import { ProgressModel } from '../models/ProgressModel';
-import { ProgressService } from '../services/ProgressService';
-import { AnswerResult } from '../types/AnswerTypes';
+  ProgressSummary,
+} from "../types/ProgressTypes";
+import { ProgressModel } from "../models/ProgressModel";
+import { ProgressService } from "../services/ProgressService";
+import { AnswerResult } from "../types/AnswerTypes";
 
 /**
  * ProgressController - Controller layer for progress user interactions
@@ -38,19 +38,23 @@ export class ProgressController {
    */
   async updateProgress(answerResult: AnswerResult): Promise<void> {
     if (!this.currentModule) {
-      throw new Error('No current module set for progress update');
+      throw new Error("No current module set for progress update");
     }
 
     try {
       // Update progress through service
-      await this.progressService.updateProgress(this.currentModule, answerResult);
-      
+      await this.progressService.updateProgress(
+        this.currentModule,
+        answerResult,
+      );
+
       // Refresh current progress
       await this.loadProgress(this.currentModule);
-      
     } catch (error) {
-      console.error('Error updating progress:', error);
-      throw new Error(`Failed to update progress: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error updating progress:", error);
+      throw new Error(
+        `Failed to update progress: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -60,9 +64,9 @@ export class ProgressController {
    */
   getProgress(): ProgressData {
     if (!this.currentProgress) {
-      throw new Error('No progress loaded. Call loadProgress() first.');
+      throw new Error("No progress loaded. Call loadProgress() first.");
     }
-    
+
     return this.currentProgress.toJSON();
   }
 
@@ -72,14 +76,16 @@ export class ProgressController {
    */
   async getProgressMetrics(): Promise<ProgressMetrics> {
     if (!this.currentModule) {
-      throw new Error('No current module set for progress metrics');
+      throw new Error("No current module set for progress metrics");
     }
 
     try {
       return await this.progressService.getProgressMetrics(this.currentModule);
     } catch (error) {
-      console.error('Error getting progress metrics:', error);
-      throw new Error(`Failed to get progress metrics: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error getting progress metrics:", error);
+      throw new Error(
+        `Failed to get progress metrics: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -89,15 +95,17 @@ export class ProgressController {
    */
   async resetProgress(): Promise<void> {
     if (!this.currentModule) {
-      throw new Error('No current module set for progress reset');
+      throw new Error("No current module set for progress reset");
     }
 
     try {
       await this.progressService.resetProgress(this.currentModule);
       await this.loadProgress(this.currentModule);
     } catch (error) {
-      console.error('Error resetting progress:', error);
-      throw new Error(`Failed to reset progress: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error resetting progress:", error);
+      throw new Error(
+        `Failed to reset progress: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -113,8 +121,10 @@ export class ProgressController {
       this.currentProgress = new ProgressModel(progressData);
       this.sessionStartTime = new Date();
     } catch (error) {
-      console.error('Error loading progress:', error);
-      throw new Error(`Failed to load progress for module ${moduleName}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error loading progress:", error);
+      throw new Error(
+        `Failed to load progress for module ${moduleName}: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -140,11 +150,11 @@ export class ProgressController {
    */
   getProgressSummary(): ProgressSummary {
     if (!this.currentProgress) {
-      throw new Error('No progress loaded. Call loadProgress() first.');
+      throw new Error("No progress loaded. Call loadProgress() first.");
     }
 
     const progressData = this.currentProgress.toJSON();
-    
+
     return {
       moduleName: progressData.moduleName,
       totalItems: progressData.totalItems,
@@ -153,7 +163,7 @@ export class ProgressController {
       status: progressData.status,
       lastActivity: progressData.lastUpdated,
       estimatedTimeToComplete: this.calculateEstimatedTimeToComplete(),
-      recommendedNextActions: this.getRecommendedNextActions()
+      recommendedNextActions: this.getRecommendedNextActions(),
     };
   }
 
@@ -172,20 +182,21 @@ export class ProgressController {
         sessionDuration: 0,
         itemsCompleted: 0,
         accuracy: 0,
-        averageTimePerItem: 0
+        averageTimePerItem: 0,
       };
     }
 
     const sessionDuration = Date.now() - this.sessionStartTime.getTime();
     const progressData = this.currentProgress.toJSON();
-    
+
     return {
       sessionDuration,
       itemsCompleted: progressData.completedItems,
       accuracy: progressData.accuracy,
-      averageTimePerItem: progressData.completedItems > 0 
-        ? sessionDuration / progressData.completedItems 
-        : 0
+      averageTimePerItem:
+        progressData.completedItems > 0
+          ? sessionDuration / progressData.completedItems
+          : 0,
     };
   }
 
@@ -205,7 +216,7 @@ export class ProgressController {
     if (!this.currentProgress) {
       return ProgressStatus.NOT_STARTED;
     }
-    
+
     return this.currentProgress.toJSON().status;
   }
 
@@ -217,7 +228,7 @@ export class ProgressController {
     if (!this.currentProgress) {
       return 0;
     }
-    
+
     return this.currentProgress.getCompletionPercentage();
   }
 
@@ -229,7 +240,7 @@ export class ProgressController {
     if (!this.currentProgress) {
       return 0;
     }
-    
+
     return this.currentProgress.getAccuracy();
   }
 
@@ -241,7 +252,7 @@ export class ProgressController {
     if (!this.currentProgress) {
       return 0;
     }
-    
+
     return this.currentProgress.toJSON().streakDays || 0;
   }
 
@@ -253,7 +264,7 @@ export class ProgressController {
     if (!this.currentProgress) {
       return 0;
     }
-    
+
     return this.currentProgress.toJSON().totalTimeSpent || 0;
   }
 
@@ -265,7 +276,7 @@ export class ProgressController {
     if (!this.currentProgress) {
       return false;
     }
-    
+
     return this.getCompletionPercentage() >= 100;
   }
 
@@ -277,7 +288,7 @@ export class ProgressController {
     if (!this.currentProgress) {
       return false;
     }
-    
+
     const progressData = this.currentProgress.toJSON();
     return progressData.status === ProgressStatus.MASTERED;
   }
@@ -287,7 +298,7 @@ export class ProgressController {
    * @returns Array of progress insights
    */
   getProgressInsights(): Array<{
-    type: 'success' | 'warning' | 'info';
+    type: "success" | "warning" | "info";
     message: string;
     recommendation?: string;
   }> {
@@ -296,7 +307,7 @@ export class ProgressController {
     }
 
     const insights: Array<{
-      type: 'success' | 'warning' | 'info';
+      type: "success" | "warning" | "info";
       message: string;
       recommendation?: string;
     }> = [];
@@ -308,36 +319,36 @@ export class ProgressController {
     // Accuracy insights
     if (accuracy >= 90) {
       insights.push({
-        type: 'success',
+        type: "success",
         message: `Excellent accuracy: ${accuracy.toFixed(1)}%`,
-        recommendation: 'You\'re mastering this module!'
+        recommendation: "You're mastering this module!",
       });
     } else if (accuracy >= 70) {
       insights.push({
-        type: 'info',
+        type: "info",
         message: `Good accuracy: ${accuracy.toFixed(1)}%`,
-        recommendation: 'Keep practicing to improve further'
+        recommendation: "Keep practicing to improve further",
       });
     } else if (accuracy < 50) {
       insights.push({
-        type: 'warning',
+        type: "warning",
         message: `Accuracy needs improvement: ${accuracy.toFixed(1)}%`,
-        recommendation: 'Consider reviewing previous lessons'
+        recommendation: "Consider reviewing previous lessons",
       });
     }
 
     // Completion insights
     if (completionRate >= 100) {
       insights.push({
-        type: 'success',
-        message: 'Module completed!',
-        recommendation: 'Great job! Consider moving to the next module'
+        type: "success",
+        message: "Module completed!",
+        recommendation: "Great job! Consider moving to the next module",
       });
     } else if (completionRate >= 75) {
       insights.push({
-        type: 'info',
+        type: "info",
         message: `Almost there: ${completionRate.toFixed(1)}% complete`,
-        recommendation: 'You\'re close to finishing this module'
+        recommendation: "You're close to finishing this module",
       });
     }
 
@@ -364,14 +375,15 @@ export class ProgressController {
     }
 
     const progressData = this.currentProgress.toJSON();
-    const remainingItems = progressData.totalItems - progressData.completedItems;
-    
+    const remainingItems =
+      progressData.totalItems - progressData.completedItems;
+
     if (remainingItems <= 0) {
       return 0;
     }
 
-    const averageTimePerItem = progressData.totalTimeSpent 
-      ? progressData.totalTimeSpent / progressData.completedItems 
+    const averageTimePerItem = progressData.totalTimeSpent
+      ? progressData.totalTimeSpent / progressData.completedItems
       : 30000; // Default 30 seconds per item
 
     return remainingItems * averageTimePerItem;
@@ -383,7 +395,7 @@ export class ProgressController {
    */
   private getRecommendedNextActions(): string[] {
     if (!this.currentProgress) {
-      return ['Start practicing'];
+      return ["Start practicing"];
     }
 
     const actions: string[] = [];
@@ -392,17 +404,17 @@ export class ProgressController {
     const completionRate = this.getCompletionPercentage();
 
     if (completionRate < 25) {
-      actions.push('Continue with basic practice');
+      actions.push("Continue with basic practice");
     } else if (completionRate < 50) {
-      actions.push('Focus on accuracy improvement');
+      actions.push("Focus on accuracy improvement");
     } else if (completionRate < 75) {
-      actions.push('Review difficult items');
+      actions.push("Review difficult items");
     } else if (completionRate < 100) {
-      actions.push('Complete remaining items');
+      actions.push("Complete remaining items");
     } else if (accuracy < 80) {
-      actions.push('Review and practice weak areas');
+      actions.push("Review and practice weak areas");
     } else {
-      actions.push('Move to next module');
+      actions.push("Move to next module");
     }
 
     return actions;

@@ -2,17 +2,17 @@
  * AnswerTypes - Type definitions for answer system
  */
 
-import { ValidationResult } from '@/core/validation/core/ValidationResult';
+import { ValidationResult } from "@/core/validation/core/ValidationResult";
 
 /**
  * Input type enumeration
  */
 export enum InputType {
-  HIRAGANA = 'hiragana',
-  KATAKANA = 'katakana',
-  ENGLISH = 'english',
-  KANJI = 'kanji',
-  ROMAJI = 'romaji'
+  HIRAGANA = "hiragana",
+  KATAKANA = "katakana",
+  ENGLISH = "english",
+  KANJI = "kanji",
+  ROMAJI = "romaji",
 }
 
 /**

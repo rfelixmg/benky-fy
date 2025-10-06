@@ -2,10 +2,15 @@
  * Conjugation Validator - Handles verb conjugation validation
  */
 
-import { ActivityValidator, AnswerSet, ConjugationForm, Verb } from '../core/ActivityValidator';
-import { UserSettings } from '@/core/api-client';
-import { ValidationResult } from '../core/ValidationResult';
-import { ValidatorFactory } from '../factories/ValidatorFactory';
+import {
+  ActivityValidator,
+  AnswerSet,
+  ConjugationForm,
+  Verb,
+} from "../core/ActivityValidator";
+import { UserSettings } from "@/core/api-client";
+import { ValidationResult } from "../core/ValidationResult";
+import { ValidatorFactory } from "../factories/ValidatorFactory";
 
 export class ConjugationValidator implements ActivityValidator {
   private validatorFactory: ValidatorFactory;
@@ -20,14 +25,17 @@ export class ConjugationValidator implements ActivityValidator {
    * @param correctAnswers Set of correct answers
    * @returns ValidationResult
    */
-  validateAnswer(userAnswer: string, correctAnswers: AnswerSet): ValidationResult {
+  validateAnswer(
+    userAnswer: string,
+    correctAnswers: AnswerSet,
+  ): ValidationResult {
     // For conjugation, we typically validate against hiragana or kanji
     const answerTypes = this.getAvailableAnswerTypes(correctAnswers);
-    
+
     for (const answerType of answerTypes) {
       const validator = this.validatorFactory.getValidator(answerType);
       const expectedAnswer = this.getAnswerForType(correctAnswers, answerType);
-      
+
       if (expectedAnswer) {
         const result = validator.validate(userAnswer, expectedAnswer);
         if (result.isCorrect) {
@@ -38,7 +46,7 @@ export class ConjugationValidator implements ActivityValidator {
 
     return {
       isCorrect: false,
-      feedback: ['Incorrect conjugation'],
+      feedback: ["Incorrect conjugation"],
       confidence: 0,
     };
   }
@@ -50,11 +58,11 @@ export class ConjugationValidator implements ActivityValidator {
    */
   getEnabledInputTypes(settings: UserSettings): string[] {
     const enabledTypes: string[] = [];
-    
-    if (settings.input_hiragana) enabledTypes.push('hiragana');
-    if (settings.input_kanji) enabledTypes.push('kanji');
-    if (settings.input_romaji) enabledTypes.push('romaji');
-    
+
+    if (settings.input_hiragana) enabledTypes.push("hiragana");
+    if (settings.input_kanji) enabledTypes.push("kanji");
+    if (settings.input_romaji) enabledTypes.push("romaji");
+
     return enabledTypes;
   }
 
@@ -64,14 +72,17 @@ export class ConjugationValidator implements ActivityValidator {
    * @param correctAnswers Set of correct answers
    * @returns Array of ValidationResults
    */
-  validateMultipleInputs(inputs: Record<string, string>, correctAnswers: AnswerSet): ValidationResult[] {
+  validateMultipleInputs(
+    inputs: Record<string, string>,
+    correctAnswers: AnswerSet,
+  ): ValidationResult[] {
     const results: ValidationResult[] = [];
-    
+
     for (const [inputType, userInput] of Object.entries(inputs)) {
       if (userInput.trim()) {
         const validator = this.validatorFactory.getValidator(inputType);
         const expectedAnswer = this.getAnswerForType(correctAnswers, inputType);
-        
+
         if (expectedAnswer) {
           const result = validator.validate(userInput, expectedAnswer);
           results.push(result);
@@ -84,7 +95,7 @@ export class ConjugationValidator implements ActivityValidator {
         }
       }
     }
-    
+
     return results;
   }
 
@@ -94,8 +105,11 @@ export class ConjugationValidator implements ActivityValidator {
    * @param correctConjugation Correct conjugation form
    * @returns ValidationResult
    */
-  validateConjugation(userAnswer: string, correctConjugation: ConjugationForm): ValidationResult {
-    const validator = this.validatorFactory.getValidator('hiragana');
+  validateConjugation(
+    userAnswer: string,
+    correctConjugation: ConjugationForm,
+  ): ValidationResult {
+    const validator = this.validatorFactory.getValidator("hiragana");
     return validator.validate(userAnswer, correctConjugation.conjugation);
   }
 
@@ -115,18 +129,21 @@ export class ConjugationValidator implements ActivityValidator {
    * @returns Array of ValidationResults
    */
   validateMultipleConjugations(
-    inputs: Record<string, string>, 
-    correctConjugations: Record<string, ConjugationForm>
+    inputs: Record<string, string>,
+    correctConjugations: Record<string, ConjugationForm>,
   ): ValidationResult[] {
     const results: ValidationResult[] = [];
-    
+
     for (const [conjugationType, userInput] of Object.entries(inputs)) {
       if (userInput.trim() && correctConjugations[conjugationType]) {
-        const result = this.validateConjugation(userInput, correctConjugations[conjugationType]);
+        const result = this.validateConjugation(
+          userInput,
+          correctConjugations[conjugationType],
+        );
         results.push(result);
       }
     }
-    
+
     return results;
   }
 
@@ -137,11 +154,11 @@ export class ConjugationValidator implements ActivityValidator {
    */
   private getAvailableAnswerTypes(answers: AnswerSet): string[] {
     const types: string[] = [];
-    
-    if (answers.hiragana) types.push('hiragana');
-    if (answers.kanji) types.push('kanji');
-    if (answers.romaji) types.push('romaji');
-    
+
+    if (answers.hiragana) types.push("hiragana");
+    if (answers.kanji) types.push("kanji");
+    if (answers.romaji) types.push("romaji");
+
     return types;
   }
 
@@ -153,11 +170,11 @@ export class ConjugationValidator implements ActivityValidator {
    */
   private getAnswerForType(answers: AnswerSet, type: string): string | null {
     switch (type.toLowerCase()) {
-      case 'hiragana':
+      case "hiragana":
         return answers.hiragana || null;
-      case 'kanji':
+      case "kanji":
         return answers.kanji || null;
-      case 'romaji':
+      case "romaji":
         return answers.romaji || null;
       default:
         return null;
@@ -172,9 +189,9 @@ export class ConjugationValidator implements ActivityValidator {
    * @returns ValidationResult
    */
   validateConjugationWithType(
-    userInput: string, 
-    expectedConjugation: string, 
-    inputType: string
+    userInput: string,
+    expectedConjugation: string,
+    inputType: string,
   ): ValidationResult {
     const validator = this.validatorFactory.getValidator(inputType);
     return validator.validate(userInput, expectedConjugation);
@@ -187,11 +204,14 @@ export class ConjugationValidator implements ActivityValidator {
    * @returns True if all conjugations are correct
    */
   areAllConjugationsCorrect(
-    inputs: Record<string, string>, 
-    correctConjugations: Record<string, ConjugationForm>
+    inputs: Record<string, string>,
+    correctConjugations: Record<string, ConjugationForm>,
   ): boolean {
-    const results = this.validateMultipleConjugations(inputs, correctConjugations);
-    return results.every(result => result.isCorrect);
+    const results = this.validateMultipleConjugations(
+      inputs,
+      correctConjugations,
+    );
+    return results.every((result) => result.isCorrect);
   }
 
   /**
@@ -201,18 +221,21 @@ export class ConjugationValidator implements ActivityValidator {
    * @returns Object with validation summary
    */
   getConjugationValidationSummary(
-    inputs: Record<string, string>, 
-    correctConjugations: Record<string, ConjugationForm>
+    inputs: Record<string, string>,
+    correctConjugations: Record<string, ConjugationForm>,
   ): {
     total: number;
     correct: number;
     incorrect: number;
     results: ValidationResult[];
   } {
-    const results = this.validateMultipleConjugations(inputs, correctConjugations);
-    const correct = results.filter(r => r.isCorrect).length;
-    const incorrect = results.filter(r => !r.isCorrect).length;
-    
+    const results = this.validateMultipleConjugations(
+      inputs,
+      correctConjugations,
+    );
+    const correct = results.filter((r) => r.isCorrect).length;
+    const incorrect = results.filter((r) => !r.isCorrect).length;
+
     return {
       total: results.length,
       correct,

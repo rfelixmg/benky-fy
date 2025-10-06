@@ -27,14 +27,14 @@ export interface ValidationResult {
 export function createSuccessResult(
   matchedType: string,
   convertedAnswer?: string,
-  confidence: number = 1.0
+  confidence: number = 1.0,
 ): ValidationResult {
   return {
     isCorrect: true,
     matchedType,
     convertedAnswer,
     confidence,
-    feedback: ['Correct!'],
+    feedback: ["Correct!"],
   };
 }
 
@@ -45,8 +45,8 @@ export function createSuccessResult(
  * @returns ValidationResult for failed validation
  */
 export function createFailureResult(
-  feedback: string[] = ['Incorrect'],
-  error?: string
+  feedback: string[] = ["Incorrect"],
+  error?: string,
 ): ValidationResult {
   return {
     isCorrect: false,
@@ -66,7 +66,7 @@ export function createFailureResult(
 export function createPartialResult(
   matchedType: string,
   feedback: string[],
-  confidence: number = 0.5
+  confidence: number = 0.5,
 ): ValidationResult {
   return {
     isCorrect: false,

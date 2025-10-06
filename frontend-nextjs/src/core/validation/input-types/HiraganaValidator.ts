@@ -2,22 +2,64 @@
  * Hiragana Validator - Handles hiragana character validation
  */
 
-import { ValidationStrategy, ValidationResult } from '../core/ValidationStrategy';
-import { createSuccessResult, createFailureResult } from '../core/ValidationResult';
+import {
+  ValidationStrategy,
+  ValidationResult,
+} from "../core/ValidationStrategy";
+import {
+  createSuccessResult,
+  createFailureResult,
+} from "../core/ValidationResult";
 
 export class HiraganaValidator implements ValidationStrategy {
   private romajiToHiraganaMap: Map<string, string> = new Map([
     // Basic hiragana mappings
-    ['a', 'あ'], ['i', 'い'], ['u', 'う'], ['e', 'え'], ['o', 'お'],
-    ['ka', 'か'], ['ki', 'き'], ['ku', 'く'], ['ke', 'け'], ['ko', 'こ'],
-    ['sa', 'さ'], ['shi', 'し'], ['su', 'す'], ['se', 'せ'], ['so', 'そ'],
-    ['ta', 'た'], ['chi', 'ち'], ['tsu', 'つ'], ['te', 'て'], ['to', 'と'],
-    ['na', 'な'], ['ni', 'に'], ['nu', 'ぬ'], ['ne', 'ね'], ['no', 'の'],
-    ['ha', 'は'], ['hi', 'ひ'], ['fu', 'ふ'], ['he', 'へ'], ['ho', 'ほ'],
-    ['ma', 'ま'], ['mi', 'み'], ['mu', 'む'], ['me', 'め'], ['mo', 'も'],
-    ['ya', 'や'], ['yu', 'ゆ'], ['yo', 'よ'],
-    ['ra', 'ら'], ['ri', 'り'], ['ru', 'る'], ['re', 'れ'], ['ro', 'ろ'],
-    ['wa', 'わ'], ['wo', 'を'], ['n', 'ん'],
+    ["a", "あ"],
+    ["i", "い"],
+    ["u", "う"],
+    ["e", "え"],
+    ["o", "お"],
+    ["ka", "か"],
+    ["ki", "き"],
+    ["ku", "く"],
+    ["ke", "け"],
+    ["ko", "こ"],
+    ["sa", "さ"],
+    ["shi", "し"],
+    ["su", "す"],
+    ["se", "せ"],
+    ["so", "そ"],
+    ["ta", "た"],
+    ["chi", "ち"],
+    ["tsu", "つ"],
+    ["te", "て"],
+    ["to", "と"],
+    ["na", "な"],
+    ["ni", "に"],
+    ["nu", "ぬ"],
+    ["ne", "ね"],
+    ["no", "の"],
+    ["ha", "は"],
+    ["hi", "ひ"],
+    ["fu", "ふ"],
+    ["he", "へ"],
+    ["ho", "ほ"],
+    ["ma", "ま"],
+    ["mi", "み"],
+    ["mu", "む"],
+    ["me", "め"],
+    ["mo", "も"],
+    ["ya", "や"],
+    ["yu", "ゆ"],
+    ["yo", "よ"],
+    ["ra", "ら"],
+    ["ri", "り"],
+    ["ru", "る"],
+    ["re", "れ"],
+    ["ro", "ろ"],
+    ["wa", "わ"],
+    ["wo", "を"],
+    ["n", "ん"],
   ]);
 
   /**
@@ -32,28 +74,34 @@ export class HiraganaValidator implements ValidationStrategy {
 
     // Direct match
     if (normalizedInput === normalizedExpected) {
-      return createSuccessResult('hiragana', normalizedInput);
+      return createSuccessResult("hiragana", normalizedInput);
     }
 
     // Check if input is romaji that converts to expected hiragana
     const convertedHiragana = this.convertRomajiToHiragana(normalizedInput);
     if (convertedHiragana === normalizedExpected) {
-      return createSuccessResult('hiragana', convertedHiragana, 0.9);
+      return createSuccessResult("hiragana", convertedHiragana, 0.9);
     }
 
     // Check if expected is romaji that converts to input hiragana
-    const convertedFromExpected = this.convertRomajiToHiragana(normalizedExpected);
+    const convertedFromExpected =
+      this.convertRomajiToHiragana(normalizedExpected);
     if (normalizedInput === convertedFromExpected) {
-      return createSuccessResult('hiragana', normalizedInput, 0.9);
+      return createSuccessResult("hiragana", normalizedInput, 0.9);
     }
 
     // Partial match check
-    const similarity = this.calculateSimilarity(normalizedInput, normalizedExpected);
+    const similarity = this.calculateSimilarity(
+      normalizedInput,
+      normalizedExpected,
+    );
     if (similarity > 0.7) {
       return {
         isCorrect: false,
-        matchedType: 'hiragana',
-        feedback: [`Close! Expected: ${normalizedExpected}, Got: ${normalizedInput}`],
+        matchedType: "hiragana",
+        feedback: [
+          `Close! Expected: ${normalizedExpected}, Got: ${normalizedInput}`,
+        ],
         confidence: similarity,
       };
     }
@@ -69,7 +117,7 @@ export class HiraganaValidator implements ValidationStrategy {
    * @returns Array of supported types
    */
   getSupportedTypes(): string[] {
-    return ['hiragana', 'romaji'];
+    return ["hiragana", "romaji"];
   }
 
   /**
@@ -97,7 +145,7 @@ export class HiraganaValidator implements ValidationStrategy {
    */
   private convertRomajiToHiragana(romaji: string): string {
     const normalized = romaji.toLowerCase().trim();
-    
+
     // Check for exact match first
     if (this.romajiToHiraganaMap.has(normalized)) {
       return this.romajiToHiraganaMap.get(normalized)!;
@@ -139,7 +187,9 @@ export class HiraganaValidator implements ValidationStrategy {
    * @returns Edit distance
    */
   private levenshteinDistance(str1: string, str2: string): number {
-    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+    const matrix = Array(str2.length + 1)
+      .fill(null)
+      .map(() => Array(str1.length + 1).fill(null));
 
     for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
     for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
@@ -148,9 +198,9 @@ export class HiraganaValidator implements ValidationStrategy {
       for (let i = 1; i <= str1.length; i++) {
         const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
         matrix[j][i] = Math.min(
-          matrix[j][i - 1] + 1,     // deletion
-          matrix[j - 1][i] + 1,     // insertion
-          matrix[j - 1][i - 1] + indicator // substitution
+          matrix[j][i - 1] + 1, // deletion
+          matrix[j - 1][i] + 1, // insertion
+          matrix[j - 1][i - 1] + indicator, // substitution
         );
       }
     }

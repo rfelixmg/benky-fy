@@ -1,10 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useCallback, KeyboardEvent } from 'react';
-import { Card } from '@/components/ui/Card';
-import { EnhancedFurigana } from './furigana';
-import { romajiToHiragana } from '@/core/romaji-conversion';
-import { textStyles, layoutStyles, progressStyles, formStyles } from '@/styles/components';
+import { useState, useCallback, KeyboardEvent } from "react";
+import { Card } from "@/components/ui/Card";
+import { EnhancedFurigana } from "./furigana";
+import { romajiToHiragana } from "@/core/romaji-conversion";
+import {
+  textStyles,
+  layoutStyles,
+  progressStyles,
+  formStyles,
+} from "@/styles/components";
 
 interface Question {
   id: string;
@@ -34,37 +39,43 @@ export function QuizInterface({
 
   const currentQuestion = questions[currentIndex];
 
-  const handleAnswer = useCallback((answer: string) => {
-    setSelectedAnswer(answer);
-    setShowFeedback(true);
+  const handleAnswer = useCallback(
+    (answer: string) => {
+      setSelectedAnswer(answer);
+      setShowFeedback(true);
 
-    const isCorrect = answer === currentQuestion.correctAnswer;
+      const isCorrect = answer === currentQuestion.correctAnswer;
 
-    // Move to next question after delay
-    setTimeout(() => {
-      if (currentIndex < questions.length - 1) {
-        setCurrentIndex(prev => prev + 1);
-        setSelectedAnswer(null);
-        setShowFeedback(false);
-        setShowHint(false);
-        onProgress(currentIndex + 2, questions.length);
-      } else {
-        onComplete();
+      // Move to next question after delay
+      setTimeout(() => {
+        if (currentIndex < questions.length - 1) {
+          setCurrentIndex((prev) => prev + 1);
+          setSelectedAnswer(null);
+          setShowFeedback(false);
+          setShowHint(false);
+          onProgress(currentIndex + 2, questions.length);
+        } else {
+          onComplete();
+        }
+      }, 2000);
+    },
+    [currentIndex, currentQuestion, questions.length, onComplete, onProgress],
+  );
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+      const buttons = document.querySelectorAll('[role="option"]');
+
+      switch (e.key) {
+        case "Enter":
+          handleAnswer(currentQuestion.options[index]);
+          break;
+        default:
+          break;
       }
-    }, 2000);
-  }, [currentIndex, currentQuestion, questions.length, onComplete, onProgress]);
-
-  const handleKeyDown = useCallback((e: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const buttons = document.querySelectorAll('[role="option"]');
-    
-    switch (e.key) {
-      case 'Enter':
-        handleAnswer(currentQuestion.options[index]);
-        break;
-      default:
-        break;
-    }
-  }, [currentQuestion, handleAnswer]);
+    },
+    [currentQuestion, handleAnswer],
+  );
 
   if (questions.length === 0) {
     return (
@@ -78,7 +89,7 @@ export function QuizInterface({
     <div className={`${layoutStyles.col} ${layoutStyles.gap.lg}`}>
       {/* Progress */}
       <div className={progressStyles.bar.container}>
-        <div 
+        <div
           className={progressStyles.bar.progress}
           style={{ width: `${(currentIndex / questions.length) * 100}%` }}
           role="progressbar"
@@ -88,7 +99,9 @@ export function QuizInterface({
         />
       </div>
 
-      <div className={`${layoutStyles.row} ${layoutStyles.between} ${layoutStyles.center}`}>
+      <div
+        className={`${layoutStyles.row} ${layoutStyles.between} ${layoutStyles.center}`}
+      >
         <div className={textStyles.secondary}>
           {currentIndex + 1}/{questions.length}
         </div>
@@ -105,8 +118,11 @@ export function QuizInterface({
       </div>
 
       {/* Question */}
-      <Card variant="primary" className={`${layoutStyles.col} ${layoutStyles.center} ${layoutStyles.gap.md}`}>
-        <div className={textStyles['2xl']}>
+      <Card
+        variant="primary"
+        className={`${layoutStyles.col} ${layoutStyles.center} ${layoutStyles.gap.md}`}
+      >
+        <div className={textStyles["2xl"]}>
           <EnhancedFurigana
             kanji={currentQuestion.question}
             showRomaji={showRomaji}
@@ -132,10 +148,10 @@ export function QuizInterface({
               ${
                 showFeedback
                   ? option === currentQuestion.correctAnswer
-                    ? 'bg-green-500 text-white'
+                    ? "bg-green-500 text-white"
                     : option === selectedAnswer
-                    ? 'bg-red-500 text-white'
-                    : formStyles.button.disabled
+                      ? "bg-red-500 text-white"
+                      : formStyles.button.disabled
                   : formStyles.button.secondary
               }
             `}
@@ -143,12 +159,11 @@ export function QuizInterface({
             aria-selected={option === selectedAnswer}
           >
             <div className={layoutStyles.row}>
-              <EnhancedFurigana
-                kanji={option}
-                showRomaji={showRomaji}
-              />
+              <EnhancedFurigana kanji={option} showRomaji={showRomaji} />
               {showRomaji && (
-                <span className={`${textStyles.sm} ${textStyles.tertiary} ml-2`}>
+                <span
+                  className={`${textStyles.sm} ${textStyles.tertiary} ml-2`}
+                >
                   ({romajiToHiragana(option).converted})
                 </span>
               )}
@@ -159,16 +174,20 @@ export function QuizInterface({
 
       {/* Feedback */}
       {showFeedback && (
-        <div 
+        <div
           className={`
             ${textStyles.sm}
-            ${selectedAnswer === currentQuestion.correctAnswer
-              ? progressStyles.indicator.success
-              : progressStyles.indicator.error}
+            ${
+              selectedAnswer === currentQuestion.correctAnswer
+                ? progressStyles.indicator.success
+                : progressStyles.indicator.error
+            }
             text-center
           `}
         >
-          {selectedAnswer === currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect'}
+          {selectedAnswer === currentQuestion.correctAnswer
+            ? "Correct!"
+            : "Incorrect"}
         </div>
       )}
     </div>

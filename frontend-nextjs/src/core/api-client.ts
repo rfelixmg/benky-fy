@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './api-utils';
+import { API_BASE_URL } from "./api-utils";
 
 export interface ApiResponse<T = unknown> {
   success: boolean;
@@ -124,25 +124,25 @@ class ApiClient {
   private baseUrl: string;
 
   constructor(baseUrl?: string) {
-    this.baseUrl = baseUrl || API_BASE_URL || '';
+    this.baseUrl = baseUrl || API_BASE_URL || "";
     if (!this.baseUrl) {
-      throw new Error('API_BASE_URL environment variable is not set');
+      throw new Error("API_BASE_URL environment variable is not set");
     }
   }
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<ApiResponse<T>> {
     try {
       const url = `${this.baseUrl}${endpoint}`;
       const response = await fetch(url, {
         ...options,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...options.headers,
         },
-        credentials: 'include', // Include cookies for session management
+        credentials: "include", // Include cookies for session management
       });
 
       if (!response.ok) {
@@ -152,17 +152,17 @@ class ApiClient {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error("API request failed:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
   // Authentication endpoints
   async checkAuth(): Promise<ApiResponse<AuthResponse>> {
-    return this.request<AuthResponse>('/v2/auth/check-auth');
+    return this.request<AuthResponse>("/v2/auth/check-auth");
   }
 
   async login(): Promise<void> {
@@ -174,14 +174,16 @@ class ApiClient {
   }
 
   // V2 Words endpoints
-  async getWordsData(moduleName: string): Promise<ApiResponse<FlashcardItem[]>> {
+  async getWordsData(
+    moduleName: string,
+  ): Promise<ApiResponse<FlashcardItem[]>> {
     try {
       const url = `${this.baseUrl}/v2/words/${moduleName}`;
       const response = await fetch(url, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -189,21 +191,21 @@ class ApiClient {
       }
 
       const data = await response.json();
-      
+
       // V2 API returns { words: [...] } directly
       if (data.words && Array.isArray(data.words)) {
         return {
           success: true,
-          data: data.words
+          data: data.words,
         };
       }
-      
-      throw new Error('Invalid response format');
+
+      throw new Error("Invalid response format");
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error("API request failed:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -214,9 +216,9 @@ class ApiClient {
       const url = `${this.baseUrl}/v2/words/${moduleName}/random`;
       const response = await fetch(url, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -224,35 +226,37 @@ class ApiClient {
       }
 
       const data = await response.json();
-      
+
       // V2 API returns the word object directly, not wrapped in { word: {...} }
       if (data.id && data.english !== undefined) {
         // Transform english array to string for frontend compatibility
         const transformedWord = {
           ...data,
-          english: Array.isArray(data.english) 
-            ? data.english.join(' / ') 
-            : data.english
+          english: Array.isArray(data.english)
+            ? data.english.join(" / ")
+            : data.english,
         };
-        
+
         return {
           success: true,
-          data: transformedWord
+          data: transformedWord,
         };
       }
-      
-      throw new Error('Invalid response format');
+
+      throw new Error("Invalid response format");
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error("API request failed:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
   // V2 Conjugation endpoints
-  async getConjugationData(wordId: string): Promise<ApiResponse<ConjugationResponse>> {
+  async getConjugationData(
+    wordId: string,
+  ): Promise<ApiResponse<ConjugationResponse>> {
     return this.request<ConjugationResponse>(`/v2/conjugation/${wordId}`);
   }
 
@@ -264,16 +268,20 @@ class ApiClient {
   }
 
   // V2 Validation endpoints
-  async validateInput(request: ValidationRequest): Promise<ApiResponse<ValidationResponse>> {
-    return this.request<ValidationResponse>('/v2/validation/input', {
-      method: 'POST',
+  async validateInput(
+    request: ValidationRequest,
+  ): Promise<ApiResponse<ValidationResponse>> {
+    return this.request<ValidationResponse>("/v2/validation/input", {
+      method: "POST",
       body: JSON.stringify(request),
     });
   }
 
-  async validateStrokeOrder(request: ValidationRequest): Promise<ApiResponse<ValidationResponse>> {
-    return this.request<ValidationResponse>('/v2/validation/stroke-order', {
-      method: 'POST',
+  async validateStrokeOrder(
+    request: ValidationRequest,
+  ): Promise<ApiResponse<ValidationResponse>> {
+    return this.request<ValidationResponse>("/v2/validation/stroke-order", {
+      method: "POST",
       body: JSON.stringify(request),
     });
   }
@@ -297,8 +305,8 @@ class ApiClient {
       furigana_style: string;
     };
   }): Promise<ApiResponse<unknown>> {
-    return this.request('/v2/feedback/answer', {
-      method: 'POST',
+    return this.request("/v2/feedback/answer", {
+      method: "POST",
       body: JSON.stringify(feedbackData),
     });
   }
@@ -308,11 +316,11 @@ class ApiClient {
     try {
       const url = `${this.baseUrl}/v2/settings/${moduleName}`;
       const response = await fetch(url, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -320,39 +328,41 @@ class ApiClient {
       }
 
       const data = await response.json();
-      
+
       // Transform V2 API format to frontend format
-      const transformedSettings = this.transformV2SettingsToFrontend(data.settings);
-      
+      const transformedSettings = this.transformV2SettingsToFrontend(
+        data.settings,
+      );
+
       return {
         success: true,
-        data: transformedSettings
+        data: transformedSettings,
       };
     } catch (error) {
-      console.error('Settings GET failed:', error);
+      console.error("Settings GET failed:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
   async updateSettings(
     moduleName: string,
-    settings: Partial<UserSettings>
+    settings: Partial<UserSettings>,
   ): Promise<ApiResponse<UserSettings>> {
     try {
       const url = `${this.baseUrl}/v2/settings/${moduleName}`;
-      
+
       // Transform frontend format to V2 API format
       const transformedSettings = this.transformFrontendSettingsToV2(settings);
-      
+
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify(transformedSettings),
       });
 
@@ -361,19 +371,21 @@ class ApiClient {
       }
 
       const data = await response.json();
-      
+
       // Transform V2 API format back to frontend format
-      const transformedResponse = this.transformV2SettingsToFrontend(data.settings);
-      
+      const transformedResponse = this.transformV2SettingsToFrontend(
+        data.settings,
+      );
+
       return {
         success: true,
-        data: transformedResponse
+        data: transformedResponse,
       };
     } catch (error) {
-      console.error('Settings POST failed:', error);
+      console.error("Settings POST failed:", error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -381,46 +393,57 @@ class ApiClient {
   // Transformation methods
   private transformV2SettingsToFrontend(v2Settings: any): UserSettings {
     const inputModes = v2Settings.input_modes || [];
-    
+
     return {
       ...v2Settings,
       // Convert input_modes array to allowedInputModes object
       allowedInputModes: {
-        hiragana: inputModes.includes('hiragana'),
-        katakana: inputModes.includes('katakana'),
-        english: inputModes.includes('english'),
-        kanji: inputModes.includes('kanji'),
-        romaji: inputModes.includes('romaji'),
+        hiragana: inputModes.includes("hiragana"),
+        katakana: inputModes.includes("katakana"),
+        english: inputModes.includes("english"),
+        kanji: inputModes.includes("kanji"),
+        romaji: inputModes.includes("romaji"),
       },
       // Map other V2 properties to frontend properties
       furiganaEnabled: v2Settings.furigana_enabled || false,
       romajiEnabled: v2Settings.romaji_enabled || false,
       romajiConversionEnabled: v2Settings.romaji_enabled || false,
-      romajiOutputType: v2Settings.romaji_output_type || 'hiragana',
+      romajiOutputType: v2Settings.romaji_output_type || "hiragana",
       maxAnswerAttempts: v2Settings.max_answer_attempts || 3,
     };
   }
 
-  private transformFrontendSettingsToV2(frontendSettings: Partial<UserSettings>): any {
+  private transformFrontendSettingsToV2(
+    frontendSettings: Partial<UserSettings>,
+  ): any {
     const transformed: any = {
       ...frontendSettings,
     };
-    
+
     // Convert allowedInputModes object to individual input_* boolean properties
     if (frontendSettings.allowedInputModes) {
-      transformed.input_hiragana = frontendSettings.allowedInputModes.hiragana || false;
-      transformed.input_katakana = frontendSettings.allowedInputModes.katakana || false;
-      transformed.input_english = frontendSettings.allowedInputModes.english || false;
-      transformed.input_kanji = frontendSettings.allowedInputModes.kanji || false;
-      transformed.input_romaji = frontendSettings.allowedInputModes.romaji || false;
+      transformed.input_hiragana =
+        frontendSettings.allowedInputModes.hiragana || false;
+      transformed.input_katakana =
+        frontendSettings.allowedInputModes.katakana || false;
+      transformed.input_english =
+        frontendSettings.allowedInputModes.english || false;
+      transformed.input_kanji =
+        frontendSettings.allowedInputModes.kanji || false;
+      transformed.input_romaji =
+        frontendSettings.allowedInputModes.romaji || false;
     }
-    
+
     // Convert frontend properties to V2 API properties
     transformed.furigana_enabled = frontendSettings.furiganaEnabled || false;
-    transformed.romaji_enabled = frontendSettings.romajiEnabled || frontendSettings.romajiConversionEnabled || false;
-    transformed.romaji_output_type = frontendSettings.romaji_output_type || 'hiragana';
+    transformed.romaji_enabled =
+      frontendSettings.romajiEnabled ||
+      frontendSettings.romajiConversionEnabled ||
+      false;
+    transformed.romaji_output_type =
+      frontendSettings.romaji_output_type || "hiragana";
     transformed.max_answer_attempts = frontendSettings.max_answer_attempts || 3;
-    
+
     // Remove frontend-specific properties that don't exist in V2 API
     delete transformed.allowedInputModes;
     delete transformed.furiganaEnabled;
@@ -432,7 +455,7 @@ class ApiClient {
     delete transformed.autoAdvance;
     delete transformed.soundEnabled;
     delete transformed.difficulty;
-    
+
     return transformed;
   }
 }

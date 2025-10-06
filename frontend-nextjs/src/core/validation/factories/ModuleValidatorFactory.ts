@@ -2,13 +2,14 @@
  * Module Validator Factory - Creates and manages module-specific validators
  */
 
-import { ActivityValidator } from '../core/ActivityValidator';
-import { FlashcardValidator } from '../activity-types/FlashcardValidator';
-import { ConjugationValidator } from '../activity-types/ConjugationValidator';
+import { ActivityValidator } from "../core/ActivityValidator";
+import { FlashcardValidator } from "../activity-types/FlashcardValidator";
+import { ConjugationValidator } from "../activity-types/ConjugationValidator";
 
 export class ModuleValidatorFactory {
   private validators: Map<string, ActivityValidator> = new Map();
-  private validatorClasses: Map<string, new () => ActivityValidator> = new Map();
+  private validatorClasses: Map<string, new () => ActivityValidator> =
+    new Map();
 
   constructor() {
     this.registerDefaultValidators();
@@ -21,7 +22,7 @@ export class ModuleValidatorFactory {
    */
   createModuleValidator(moduleName: string): ActivityValidator {
     const normalizedModule = moduleName.toLowerCase();
-    
+
     if (this.validators.has(normalizedModule)) {
       return this.validators.get(normalizedModule)!;
     }
@@ -34,7 +35,7 @@ export class ModuleValidatorFactory {
     }
 
     // Default to FlashcardValidator for unknown modules
-    return this.createModuleValidator('flashcard');
+    return this.createModuleValidator("flashcard");
   }
 
   /**
@@ -60,7 +61,10 @@ export class ModuleValidatorFactory {
    * @param moduleName Module name
    * @param ValidatorClass Validator class to register
    */
-  registerModuleClass(moduleName: string, ValidatorClass: new () => ActivityValidator): void {
+  registerModuleClass(
+    moduleName: string,
+    ValidatorClass: new () => ActivityValidator,
+  ): void {
     const normalizedModule = moduleName.toLowerCase();
     this.validatorClasses.set(normalizedModule, ValidatorClass);
   }
@@ -88,14 +92,14 @@ export class ModuleValidatorFactory {
    */
   private registerDefaultValidators(): void {
     // Register FlashcardValidator for general flashcard activities
-    this.registerModuleClass('flashcard', FlashcardValidator);
-    this.registerModuleClass('hiragana', FlashcardValidator);
-    this.registerModuleClass('katakana', FlashcardValidator);
-    this.registerModuleClass('colors', FlashcardValidator);
-    this.registerModuleClass('numbers', FlashcardValidator);
-    
+    this.registerModuleClass("flashcard", FlashcardValidator);
+    this.registerModuleClass("hiragana", FlashcardValidator);
+    this.registerModuleClass("katakana", FlashcardValidator);
+    this.registerModuleClass("colors", FlashcardValidator);
+    this.registerModuleClass("numbers", FlashcardValidator);
+
     // Register ConjugationValidator for verb conjugation activities
-    this.registerModuleClass('verbs', ConjugationValidator);
-    this.registerModuleClass('conjugation', ConjugationValidator);
+    this.registerModuleClass("verbs", ConjugationValidator);
+    this.registerModuleClass("conjugation", ConjugationValidator);
   }
 }

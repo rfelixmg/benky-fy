@@ -1,18 +1,23 @@
-'use client';
+"use client";
 
-import { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';
-import { Card } from '@/components/ui/Card';
-import { Furigana } from './furigana';
-import { JapaneseText } from './furigana';
-import { romajiToHiragana } from '@/core/romaji-conversion';
-import { textStyles, formStyles, progressStyles, layoutStyles } from '@/styles/components';
+import { useState, useCallback, KeyboardEvent, ChangeEvent } from "react";
+import { Card } from "@/components/ui/Card";
+import { Furigana } from "./furigana";
+import { JapaneseText } from "./furigana";
+import { romajiToHiragana } from "@/core/romaji-conversion";
+import {
+  textStyles,
+  formStyles,
+  progressStyles,
+  layoutStyles,
+} from "@/styles/components";
 
 interface Word {
   id: string;
   kanji: string;
   hiragana: string;
   english: string;
-  type: 'verb' | 'noun' | 'adjective';
+  type: "verb" | "noun" | "adjective";
 }
 
 interface PracticeInterfaceProps {
@@ -27,8 +32,10 @@ export function PracticeInterface({
   onProgress,
 }: PracticeInterfaceProps): JSX.Element {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answer, setAnswer] = useState('');
-  const [feedback, setFeedback] = useState<'correct' | 'incorrect' | null>(null);
+  const [answer, setAnswer] = useState("");
+  const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(
+    null,
+  );
   const [showAnswer, setShowAnswer] = useState(false);
 
   const currentWord = words[currentIndex];
@@ -40,19 +47,19 @@ export function PracticeInterface({
     const normalizedAnswer = currentWord.hiragana.toLowerCase();
     const romajiConverted = romajiToHiragana(normalizedInput).converted;
 
-    const isCorrect = 
-      normalizedInput === normalizedAnswer || 
+    const isCorrect =
+      normalizedInput === normalizedAnswer ||
       romajiConverted === normalizedAnswer;
 
     if (isCorrect) {
-      setFeedback('correct');
+      setFeedback("correct");
       setShowAnswer(false);
-      
+
       // Move to next word after delay
       setTimeout(() => {
         if (currentIndex < words.length - 1) {
-          setCurrentIndex(prev => prev + 1);
-          setAnswer('');
+          setCurrentIndex((prev) => prev + 1);
+          setAnswer("");
           setFeedback(null);
           onProgress(currentIndex + 2, words.length);
         } else {
@@ -60,7 +67,7 @@ export function PracticeInterface({
         }
       }, 1000);
     } else {
-      setFeedback('incorrect');
+      setFeedback("incorrect");
       setShowAnswer(true);
     }
   }, [answer, currentWord, currentIndex, words.length, onComplete, onProgress]);
@@ -72,7 +79,7 @@ export function PracticeInterface({
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       checkAnswer();
     }
   };
@@ -89,7 +96,7 @@ export function PracticeInterface({
     <div className={`${layoutStyles.col} ${layoutStyles.gap.lg}`}>
       {/* Progress */}
       <div className={progressStyles.bar.container}>
-        <div 
+        <div
           className={progressStyles.bar.progress}
           style={{ width: `${(currentIndex / words.length) * 100}%` }}
           role="progressbar"
@@ -99,7 +106,9 @@ export function PracticeInterface({
         />
       </div>
 
-      <div className={`${layoutStyles.row} ${layoutStyles.between} ${layoutStyles.center}`}>
+      <div
+        className={`${layoutStyles.row} ${layoutStyles.between} ${layoutStyles.center}`}
+      >
         <div className={textStyles.secondary}>
           {currentIndex + 1}/{words.length}
         </div>
@@ -109,17 +118,18 @@ export function PracticeInterface({
       </div>
 
       {/* Word Display */}
-      <Card variant="primary" className={`${layoutStyles.col} ${layoutStyles.center} ${layoutStyles.gap.md}`}>
-        <div className={textStyles['2xl']}>
+      <Card
+        variant="primary"
+        className={`${layoutStyles.col} ${layoutStyles.center} ${layoutStyles.gap.md}`}
+      >
+        <div className={textStyles["2xl"]}>
           <Furigana
             kanji={currentWord.kanji}
             mode="ruby"
             showFurigana={false}
           />
         </div>
-        <div className={textStyles.secondary}>
-          {currentWord.english}
-        </div>
+        <div className={textStyles.secondary}>{currentWord.english}</div>
       </Card>
 
       {/* Answer Input */}
@@ -133,7 +143,7 @@ export function PracticeInterface({
             className={`
               ${formStyles.input.base}
               ${formStyles.input.focus}
-              ${feedback === 'incorrect' && formStyles.input.error}
+              ${feedback === "incorrect" && formStyles.input.error}
               flex-1
             `}
             placeholder="Enter your answer..."
@@ -153,13 +163,13 @@ export function PracticeInterface({
 
         {/* Feedback */}
         {feedback && (
-          <div 
+          <div
             className={`
               ${textStyles.sm}
-              ${feedback === 'correct' ? progressStyles.indicator.success : progressStyles.indicator.error}
+              ${feedback === "correct" ? progressStyles.indicator.success : progressStyles.indicator.error}
             `}
           >
-            {feedback === 'correct' ? 'Correct!' : 'Incorrect, try again'}
+            {feedback === "correct" ? "Correct!" : "Incorrect, try again"}
           </div>
         )}
 

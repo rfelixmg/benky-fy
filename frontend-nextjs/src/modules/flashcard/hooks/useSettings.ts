@@ -1,7 +1,7 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { SettingsController } from '../controllers/SettingsController';
-import { UserSettings } from '@/core/api-client';
-import { InputType } from '../types/AnswerTypes';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { SettingsController } from "../controllers/SettingsController";
+import { UserSettings } from "@/core/api-client";
+import { InputType } from "../types/AnswerTypes";
 
 interface UseSettingsState {
   settings: UserSettings | null;
@@ -32,10 +32,16 @@ interface UseSettingsReturn extends UseSettingsState {
   isStrictModeEnabled: () => boolean;
   validateSettings: () => { isValid: boolean; errors: string[] };
   getSettingsSummary: () => any;
-  applyPreset: (preset: 'beginner' | 'intermediate' | 'advanced' | 'custom') => void;
+  applyPreset: (
+    preset: "beginner" | "intermediate" | "advanced" | "custom",
+  ) => void;
   saveCurrentSettings: () => Promise<void>;
-  getMultipleSettings: (moduleNames: string[]) => Promise<Record<string, UserSettings>>;
-  updateMultipleSettings: (settingsMap: Record<string, UserSettings>) => Promise<void>;
+  getMultipleSettings: (
+    moduleNames: string[],
+  ) => Promise<Record<string, UserSettings>>;
+  updateMultipleSettings: (
+    settingsMap: Record<string, UserSettings>,
+  ) => Promise<void>;
   reset: () => void;
   getState: () => UseSettingsState;
 }
@@ -47,14 +53,14 @@ export const useSettings = (): UseSettingsReturn => {
     error: null,
     currentModule: null,
     settingsSummary: {
-      moduleName: 'unknown',
+      moduleName: "unknown",
       enabledInputTypes: [],
-      displayMode: 'mixed',
-      practiceMode: 'normal',
-      difficulty: 'beginner',
+      displayMode: "mixed",
+      practiceMode: "normal",
+      difficulty: "beginner",
       feedbackEnabled: true,
-      strictModeEnabled: false
-    }
+      strictModeEnabled: false,
+    },
   });
 
   const controllerRef = useRef<SettingsController | null>(null);
@@ -67,61 +73,70 @@ export const useSettings = (): UseSettingsReturn => {
   }, []);
 
   const updateState = useCallback((updates: Partial<UseSettingsState>) => {
-    setState(prev => ({ ...prev, ...updates }));
+    setState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const handleError = useCallback((error: Error, context: string) => {
-    console.error(`useSettings ${context}:`, error);
-    updateState({
-      error: `${context}: ${error.message}`,
-      isLoading: false
-    });
-  }, [updateState]);
-
-  const loadSettings = useCallback(async (moduleName: string) => {
-    if (!controllerRef.current) return;
-
-    try {
-      updateState({ isLoading: true, error: null });
-
-      await controllerRef.current.loadSettings(moduleName);
-      
-      const settings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
+  const handleError = useCallback(
+    (error: Error, context: string) => {
+      console.error(`useSettings ${context}:`, error);
       updateState({
-        settings,
-        currentModule: moduleName,
-        settingsSummary: summary,
+        error: `${context}: ${error.message}`,
         isLoading: false,
-        error: null
       });
-    } catch (error) {
-      handleError(error as Error, 'loadSettings');
-    }
-  }, [updateState, handleError]);
+    },
+    [updateState],
+  );
 
-  const updateSettings = useCallback(async (settings: UserSettings) => {
-    if (!controllerRef.current) return;
+  const loadSettings = useCallback(
+    async (moduleName: string) => {
+      if (!controllerRef.current) return;
 
-    try {
-      updateState({ isLoading: true, error: null });
+      try {
+        updateState({ isLoading: true, error: null });
 
-      await controllerRef.current.updateSettings(settings);
-      
-      const updatedSettings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
-      updateState({
-        settings: updatedSettings,
-        settingsSummary: summary,
-        isLoading: false,
-        error: null
-      });
-    } catch (error) {
-      handleError(error as Error, 'updateSettings');
-    }
-  }, [updateState, handleError]);
+        await controllerRef.current.loadSettings(moduleName);
+
+        const settings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
+
+        updateState({
+          settings,
+          currentModule: moduleName,
+          settingsSummary: summary,
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "loadSettings");
+      }
+    },
+    [updateState, handleError],
+  );
+
+  const updateSettings = useCallback(
+    async (settings: UserSettings) => {
+      if (!controllerRef.current) return;
+
+      try {
+        updateState({ isLoading: true, error: null });
+
+        await controllerRef.current.updateSettings(settings);
+
+        const updatedSettings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
+
+        updateState({
+          settings: updatedSettings,
+          settingsSummary: summary,
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "updateSettings");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const resetSettings = useCallback(async () => {
     if (!controllerRef.current) return;
@@ -130,18 +145,18 @@ export const useSettings = (): UseSettingsReturn => {
       updateState({ isLoading: true, error: null });
 
       await controllerRef.current.resetSettings();
-      
+
       const settings = controllerRef.current.getSettings();
       const summary = controllerRef.current.getSettingsSummary();
-      
+
       updateState({
         settings,
         settingsSummary: summary,
         isLoading: false,
-        error: null
+        error: null,
       });
     } catch (error) {
-      handleError(error as Error, 'resetSettings');
+      handleError(error as Error, "resetSettings");
     }
   }, [updateState, handleError]);
 
@@ -151,57 +166,66 @@ export const useSettings = (): UseSettingsReturn => {
     try {
       return controllerRef.current.getSettings();
     } catch (error) {
-      handleError(error as Error, 'getSettings');
+      handleError(error as Error, "getSettings");
       return null;
     }
   }, [handleError]);
 
-  const enableInputType = useCallback((inputType: InputType) => {
-    if (!controllerRef.current) return;
+  const enableInputType = useCallback(
+    (inputType: InputType) => {
+      if (!controllerRef.current) return;
 
-    try {
-      controllerRef.current.enableInputType(inputType);
-      
-      const settings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
-      updateState({
-        settings,
-        settingsSummary: summary
-      });
-    } catch (error) {
-      handleError(error as Error, 'enableInputType');
-    }
-  }, [updateState, handleError]);
+      try {
+        controllerRef.current.enableInputType(inputType);
 
-  const disableInputType = useCallback((inputType: InputType) => {
-    if (!controllerRef.current) return;
+        const settings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
 
-    try {
-      controllerRef.current.disableInputType(inputType);
-      
-      const settings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
-      updateState({
-        settings,
-        settingsSummary: summary
-      });
-    } catch (error) {
-      handleError(error as Error, 'disableInputType');
-    }
-  }, [updateState, handleError]);
+        updateState({
+          settings,
+          settingsSummary: summary,
+        });
+      } catch (error) {
+        handleError(error as Error, "enableInputType");
+      }
+    },
+    [updateState, handleError],
+  );
 
-  const isInputTypeEnabled = useCallback((inputType: InputType) => {
-    if (!controllerRef.current) return false;
+  const disableInputType = useCallback(
+    (inputType: InputType) => {
+      if (!controllerRef.current) return;
 
-    try {
-      return controllerRef.current.isInputTypeEnabled(inputType);
-    } catch (error) {
-      handleError(error as Error, 'isInputTypeEnabled');
-      return false;
-    }
-  }, [handleError]);
+      try {
+        controllerRef.current.disableInputType(inputType);
+
+        const settings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
+
+        updateState({
+          settings,
+          settingsSummary: summary,
+        });
+      } catch (error) {
+        handleError(error as Error, "disableInputType");
+      }
+    },
+    [updateState, handleError],
+  );
+
+  const isInputTypeEnabled = useCallback(
+    (inputType: InputType) => {
+      if (!controllerRef.current) return false;
+
+      try {
+        return controllerRef.current.isInputTypeEnabled(inputType);
+      } catch (error) {
+        handleError(error as Error, "isInputTypeEnabled");
+        return false;
+      }
+    },
+    [handleError],
+  );
 
   const getEnabledInputTypes = useCallback(() => {
     if (!controllerRef.current) return [];
@@ -209,95 +233,104 @@ export const useSettings = (): UseSettingsReturn => {
     try {
       return controllerRef.current.getEnabledInputTypes();
     } catch (error) {
-      handleError(error as Error, 'getEnabledInputTypes');
+      handleError(error as Error, "getEnabledInputTypes");
       return [];
     }
   }, [handleError]);
 
-  const setDisplayMode = useCallback((displayMode: string) => {
-    if (!controllerRef.current) return;
+  const setDisplayMode = useCallback(
+    (displayMode: string) => {
+      if (!controllerRef.current) return;
 
-    try {
-      controllerRef.current.setDisplayMode(displayMode);
-      
-      const settings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
-      updateState({
-        settings,
-        settingsSummary: summary
-      });
-    } catch (error) {
-      handleError(error as Error, 'setDisplayMode');
-    }
-  }, [updateState, handleError]);
+      try {
+        controllerRef.current.setDisplayMode(displayMode);
+
+        const settings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
+
+        updateState({
+          settings,
+          settingsSummary: summary,
+        });
+      } catch (error) {
+        handleError(error as Error, "setDisplayMode");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const getDisplayMode = useCallback(() => {
-    if (!controllerRef.current) return 'mixed';
+    if (!controllerRef.current) return "mixed";
 
     try {
       return controllerRef.current.getDisplayMode();
     } catch (error) {
-      handleError(error as Error, 'getDisplayMode');
-      return 'mixed';
+      handleError(error as Error, "getDisplayMode");
+      return "mixed";
     }
   }, [handleError]);
 
-  const setPracticeMode = useCallback((practiceMode: string) => {
-    if (!controllerRef.current) return;
+  const setPracticeMode = useCallback(
+    (practiceMode: string) => {
+      if (!controllerRef.current) return;
 
-    try {
-      controllerRef.current.setPracticeMode(practiceMode);
-      
-      const settings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
-      updateState({
-        settings,
-        settingsSummary: summary
-      });
-    } catch (error) {
-      handleError(error as Error, 'setPracticeMode');
-    }
-  }, [updateState, handleError]);
+      try {
+        controllerRef.current.setPracticeMode(practiceMode);
+
+        const settings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
+
+        updateState({
+          settings,
+          settingsSummary: summary,
+        });
+      } catch (error) {
+        handleError(error as Error, "setPracticeMode");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const getPracticeMode = useCallback(() => {
-    if (!controllerRef.current) return 'normal';
+    if (!controllerRef.current) return "normal";
 
     try {
       return controllerRef.current.getPracticeMode();
     } catch (error) {
-      handleError(error as Error, 'getPracticeMode');
-      return 'normal';
+      handleError(error as Error, "getPracticeMode");
+      return "normal";
     }
   }, [handleError]);
 
-  const setDifficulty = useCallback((difficulty: string) => {
-    if (!controllerRef.current) return;
+  const setDifficulty = useCallback(
+    (difficulty: string) => {
+      if (!controllerRef.current) return;
 
-    try {
-      controllerRef.current.setDifficulty(difficulty);
-      
-      const settings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
-      updateState({
-        settings,
-        settingsSummary: summary
-      });
-    } catch (error) {
-      handleError(error as Error, 'setDifficulty');
-    }
-  }, [updateState, handleError]);
+      try {
+        controllerRef.current.setDifficulty(difficulty);
+
+        const settings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
+
+        updateState({
+          settings,
+          settingsSummary: summary,
+        });
+      } catch (error) {
+        handleError(error as Error, "setDifficulty");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const getDifficulty = useCallback(() => {
-    if (!controllerRef.current) return 'beginner';
+    if (!controllerRef.current) return "beginner";
 
     try {
       return controllerRef.current.getDifficulty();
     } catch (error) {
-      handleError(error as Error, 'getDifficulty');
-      return 'beginner';
+      handleError(error as Error, "getDifficulty");
+      return "beginner";
     }
   }, [handleError]);
 
@@ -306,16 +339,16 @@ export const useSettings = (): UseSettingsReturn => {
 
     try {
       controllerRef.current.toggleFeedback();
-      
+
       const settings = controllerRef.current.getSettings();
       const summary = controllerRef.current.getSettingsSummary();
-      
+
       updateState({
         settings,
-        settingsSummary: summary
+        settingsSummary: summary,
       });
     } catch (error) {
-      handleError(error as Error, 'toggleFeedback');
+      handleError(error as Error, "toggleFeedback");
     }
   }, [updateState, handleError]);
 
@@ -325,7 +358,7 @@ export const useSettings = (): UseSettingsReturn => {
     try {
       return controllerRef.current.isFeedbackEnabled();
     } catch (error) {
-      handleError(error as Error, 'isFeedbackEnabled');
+      handleError(error as Error, "isFeedbackEnabled");
       return true;
     }
   }, [handleError]);
@@ -335,16 +368,16 @@ export const useSettings = (): UseSettingsReturn => {
 
     try {
       controllerRef.current.toggleStrictMode();
-      
+
       const settings = controllerRef.current.getSettings();
       const summary = controllerRef.current.getSettingsSummary();
-      
+
       updateState({
         settings,
-        settingsSummary: summary
+        settingsSummary: summary,
       });
     } catch (error) {
-      handleError(error as Error, 'toggleStrictMode');
+      handleError(error as Error, "toggleStrictMode");
     }
   }, [updateState, handleError]);
 
@@ -354,70 +387,73 @@ export const useSettings = (): UseSettingsReturn => {
     try {
       return controllerRef.current.isStrictModeEnabled();
     } catch (error) {
-      handleError(error as Error, 'isStrictModeEnabled');
+      handleError(error as Error, "isStrictModeEnabled");
       return false;
     }
   }, [handleError]);
 
   const validateSettings = useCallback(() => {
     if (!controllerRef.current) {
-      return { isValid: false, errors: ['No controller available'] };
+      return { isValid: false, errors: ["No controller available"] };
     }
 
     try {
       return controllerRef.current.validateSettings();
     } catch (error) {
-      handleError(error as Error, 'validateSettings');
-      return { isValid: false, errors: ['Validation error'] };
+      handleError(error as Error, "validateSettings");
+      return { isValid: false, errors: ["Validation error"] };
     }
   }, [handleError]);
 
   const getSettingsSummary = useCallback(() => {
     if (!controllerRef.current) {
       return {
-        moduleName: 'unknown',
+        moduleName: "unknown",
         enabledInputTypes: [],
-        displayMode: 'mixed',
-        practiceMode: 'normal',
-        difficulty: 'beginner',
+        displayMode: "mixed",
+        practiceMode: "normal",
+        difficulty: "beginner",
         feedbackEnabled: true,
-        strictModeEnabled: false
+        strictModeEnabled: false,
       };
     }
 
     try {
       return controllerRef.current.getSettingsSummary();
     } catch (error) {
-      handleError(error as Error, 'getSettingsSummary');
+      handleError(error as Error, "getSettingsSummary");
       return {
-        moduleName: 'unknown',
+        moduleName: "unknown",
         enabledInputTypes: [],
-        displayMode: 'mixed',
-        practiceMode: 'normal',
-        difficulty: 'beginner',
+        displayMode: "mixed",
+        practiceMode: "normal",
+        difficulty: "beginner",
         feedbackEnabled: true,
-        strictModeEnabled: false
+        strictModeEnabled: false,
       };
     }
   }, [handleError]);
 
-  const applyPreset = useCallback((preset: 'beginner' | 'intermediate' | 'advanced' | 'custom') => {
-    if (!controllerRef.current) return;
+  const applyPreset = useCallback(
+    (preset: "beginner" | "intermediate" | "advanced" | "custom") => {
+      if (!controllerRef.current) return;
 
-    try {
-      controllerRef.current.applyPreset(preset);
-      
-      const settings = controllerRef.current.getSettings();
-      const summary = controllerRef.current.getSettingsSummary();
-      
-      updateState({
-        settings,
-        settingsSummary: summary
-      });
-    } catch (error) {
-      handleError(error as Error, 'applyPreset');
-    }
-  }, [updateState, handleError]);
+      try {
+        controllerRef.current.applyPreset(preset);
+
+        const settings = controllerRef.current.getSettings();
+        const summary = controllerRef.current.getSettingsSummary();
+
+        updateState({
+          settings,
+          settingsSummary: summary,
+        });
+      } catch (error) {
+        handleError(error as Error, "applyPreset");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const saveCurrentSettings = useCallback(async () => {
     if (!controllerRef.current) return;
@@ -426,67 +462,73 @@ export const useSettings = (): UseSettingsReturn => {
       updateState({ isLoading: true, error: null });
 
       await controllerRef.current.saveCurrentSettings();
-      
+
       updateState({
         isLoading: false,
-        error: null
+        error: null,
       });
     } catch (error) {
-      handleError(error as Error, 'saveCurrentSettings');
+      handleError(error as Error, "saveCurrentSettings");
     }
   }, [updateState, handleError]);
 
-  const getMultipleSettings = useCallback(async (moduleNames: string[]) => {
-    if (!controllerRef.current) return {};
+  const getMultipleSettings = useCallback(
+    async (moduleNames: string[]) => {
+      if (!controllerRef.current) return {};
 
-    try {
-      return await controllerRef.current.getMultipleSettings(moduleNames);
-    } catch (error) {
-      handleError(error as Error, 'getMultipleSettings');
-      return {};
-    }
-  }, [handleError]);
+      try {
+        return await controllerRef.current.getMultipleSettings(moduleNames);
+      } catch (error) {
+        handleError(error as Error, "getMultipleSettings");
+        return {};
+      }
+    },
+    [handleError],
+  );
 
-  const updateMultipleSettings = useCallback(async (settingsMap: Record<string, UserSettings>) => {
-    if (!controllerRef.current) return;
+  const updateMultipleSettings = useCallback(
+    async (settingsMap: Record<string, UserSettings>) => {
+      if (!controllerRef.current) return;
 
-    try {
-      updateState({ isLoading: true, error: null });
+      try {
+        updateState({ isLoading: true, error: null });
 
-      await controllerRef.current.updateMultipleSettings(settingsMap);
-      
-      updateState({
-        isLoading: false,
-        error: null
-      });
-    } catch (error) {
-      handleError(error as Error, 'updateMultipleSettings');
-    }
-  }, [updateState, handleError]);
+        await controllerRef.current.updateMultipleSettings(settingsMap);
+
+        updateState({
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "updateMultipleSettings");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const reset = useCallback(() => {
     if (!controllerRef.current) return;
 
     try {
       controllerRef.current.reset();
-      
+
       updateState({
         settings: null,
         isLoading: false,
         error: null,
         currentModule: null,
         settingsSummary: {
-          moduleName: 'unknown',
+          moduleName: "unknown",
           enabledInputTypes: [],
-          displayMode: 'mixed',
-          practiceMode: 'normal',
-          difficulty: 'beginner',
+          displayMode: "mixed",
+          practiceMode: "normal",
+          difficulty: "beginner",
           feedbackEnabled: true,
-          strictModeEnabled: false
-        }
+          strictModeEnabled: false,
+        },
       });
     } catch (error) {
-      handleError(error as Error, 'reset');
+      handleError(error as Error, "reset");
     }
   }, [updateState, handleError]);
 
@@ -521,7 +563,7 @@ export const useSettings = (): UseSettingsReturn => {
     getMultipleSettings,
     updateMultipleSettings,
     reset,
-    getState
+    getState,
   };
 };
 

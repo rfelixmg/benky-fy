@@ -1,4 +1,4 @@
 // Views exports
-export * from './FlashcardDisplay';
-export * from './Feedback';
-export * from './Progress';
+export * from "./FlashcardDisplay";
+export * from "./Feedback";
+export * from "./Progress";

@@ -1,8 +1,13 @@
-import { ValidationResult } from '@/core/validation/core/ValidationResult';
-import { AnswerSubmission, AnswerResult, AnswerFeedback, InputType } from '../types/AnswerTypes';
-import { AnswerModel } from '../models/AnswerModel';
-import { ValidationService } from '../services/ValidationService';
-import { FlashcardItem } from '../types/FlashcardTypes';
+import { ValidationResult } from "@/core/validation/core/ValidationResult";
+import {
+  AnswerSubmission,
+  AnswerResult,
+  AnswerFeedback,
+  InputType,
+} from "../types/AnswerTypes";
+import { AnswerModel } from "../models/AnswerModel";
+import { ValidationService } from "../services/ValidationService";
+import { FlashcardItem } from "../types/FlashcardTypes";
 
 /**
  * AnswerController - Controller layer for answer user interactions
@@ -27,7 +32,7 @@ export class AnswerController {
    */
   async submitAnswer(userAnswer: string): Promise<void> {
     if (!this.currentFlashcard) {
-      throw new Error('No current flashcard available for answer submission');
+      throw new Error("No current flashcard available for answer submission");
     }
 
     try {
@@ -38,7 +43,7 @@ export class AnswerController {
         inputTypes: this.getInputTypesFromAnswer(userAnswer),
         timestamp: new Date(),
         sessionId: this.sessionId,
-        moduleName: this.getModuleNameFromFlashcard()
+        moduleName: this.getModuleNameFromFlashcard(),
       };
 
       // Create answer model
@@ -46,16 +51,17 @@ export class AnswerController {
 
       // Validate the answer synchronously for immediate feedback
       const validationResult = this.validateAnswer(userAnswer);
-      
+
       // Update answer model with validation result
       this.currentAnswer.updateValidation(validationResult);
 
       // Add to history
       this.answerHistory.push(this.currentAnswer);
-
     } catch (error) {
-      console.error('Error submitting answer:', error);
-      throw new Error(`Failed to submit answer: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error submitting answer:", error);
+      throw new Error(
+        `Failed to submit answer: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -68,14 +74,16 @@ export class AnswerController {
     if (!this.currentFlashcard) {
       return {
         isCorrect: false,
-        feedback: ['No flashcard available for validation']
+        feedback: ["No flashcard available for validation"],
       };
     }
 
     try {
       // Create answer set from flashcard
-      const answerSet = this.createAnswerSetFromFlashcard(this.currentFlashcard);
-      
+      const answerSet = this.createAnswerSetFromFlashcard(
+        this.currentFlashcard,
+      );
+
       // Create user settings (simplified for now)
       const userSettings = this.createDefaultUserSettings();
 
@@ -84,15 +92,17 @@ export class AnswerController {
         userAnswer,
         answerSet,
         userSettings,
-        this.getModuleNameFromFlashcard()
+        this.getModuleNameFromFlashcard(),
       );
 
       return validationResult;
     } catch (error) {
-      console.error('Error validating answer:', error);
+      console.error("Error validating answer:", error);
       return {
         isCorrect: false,
-        feedback: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        feedback: [
+          `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        ],
       };
     }
   }
@@ -113,30 +123,30 @@ export class AnswerController {
     if (!this.currentAnswer) {
       return {
         isCorrect: false,
-        message: 'No answer submitted',
-        colorClass: 'text-gray-500',
-        iconClass: 'question-circle'
+        message: "No answer submitted",
+        colorClass: "text-gray-500",
+        iconClass: "question-circle",
       };
     }
 
     const validationResult = this.currentAnswer.getValidationResult();
-    
+
     if (validationResult.isCorrect) {
       return {
         isCorrect: true,
-        message: 'Correct! Well done!',
-        encouragement: 'Keep up the great work!',
-        colorClass: 'text-green-600',
-        iconClass: 'check-circle'
+        message: "Correct! Well done!",
+        encouragement: "Keep up the great work!",
+        colorClass: "text-green-600",
+        iconClass: "check-circle",
       };
     } else {
-      const feedback = validationResult.feedback || ['Incorrect answer'];
+      const feedback = validationResult.feedback || ["Incorrect answer"];
       return {
         isCorrect: false,
-        message: feedback[0] || 'Incorrect answer',
+        message: feedback[0] || "Incorrect answer",
         suggestions: feedback.slice(1),
-        colorClass: 'text-red-600',
-        iconClass: 'times-circle'
+        colorClass: "text-red-600",
+        iconClass: "times-circle",
       };
     }
   }
@@ -234,7 +244,9 @@ export class AnswerController {
    * @returns AnswerModel[]
    */
   getAnswerHistoryForFlashcard(flashcardId: string): AnswerModel[] {
-    return this.answerHistory.filter(answer => answer.flashcardId === flashcardId);
+    return this.answerHistory.filter(
+      (answer) => answer.flashcardId === flashcardId,
+    );
   }
 
   /**
@@ -246,8 +258,12 @@ export class AnswerController {
       return null;
     }
 
-    const flashcardAnswers = this.getAnswerHistoryForFlashcard(this.currentFlashcard.id);
-    return flashcardAnswers.length > 0 ? flashcardAnswers[flashcardAnswers.length - 1] : null;
+    const flashcardAnswers = this.getAnswerHistoryForFlashcard(
+      this.currentFlashcard.id,
+    );
+    return flashcardAnswers.length > 0
+      ? flashcardAnswers[flashcardAnswers.length - 1]
+      : null;
   }
 
   /**
@@ -278,7 +294,7 @@ export class AnswerController {
       katakana: flashcard.katakana,
       english: flashcard.english,
       kanji: flashcard.kanji,
-      romaji: flashcard.romaji
+      romaji: flashcard.romaji,
     };
   }
 
@@ -294,7 +310,7 @@ export class AnswerController {
       input_kanji: true,
       input_romaji: true,
       show_feedback: true,
-      strict_mode: false
+      strict_mode: false,
     };
   }
 
@@ -305,7 +321,7 @@ export class AnswerController {
    */
   private getInputTypesFromAnswer(userAnswer: string): InputType[] {
     const types: InputType[] = [];
-    
+
     // Simple detection logic - can be enhanced
     if (/[ひらがな]/.test(userAnswer)) {
       types.push(InputType.HIRAGANA);
@@ -322,7 +338,7 @@ export class AnswerController {
     if (/^[a-zA-Z\s]+$/.test(userAnswer)) {
       types.push(InputType.ROMAJI);
     }
-    
+
     return types.length > 0 ? types : [InputType.ENGLISH];
   }
 
@@ -333,20 +349,20 @@ export class AnswerController {
   private getModuleNameFromFlashcard(): string {
     // Map flashcard types to module names
     const typeToModuleMap: Record<string, string> = {
-      'verb': 'verbs',
-      'adjective': 'adjectives', 
-      'noun': 'base_nouns',
-      'color': 'colors_basic',
-      'number': 'numbers_basic',
-      'greeting': 'greetings_essential',
-      'day': 'days_of_week',
-      'month': 'months_complete',
-      'question': 'question_words',
-      'vocab': 'vocab'
+      verb: "verbs",
+      adjective: "adjectives",
+      noun: "base_nouns",
+      color: "colors_basic",
+      number: "numbers_basic",
+      greeting: "greetings_essential",
+      day: "days_of_week",
+      month: "months_complete",
+      question: "question_words",
+      vocab: "vocab",
     };
-    
-    const flashcardType = this.currentFlashcard?.type || 'unknown';
-    return typeToModuleMap[flashcardType] || 'unknown';
+
+    const flashcardType = this.currentFlashcard?.type || "unknown";
+    return typeToModuleMap[flashcardType] || "unknown";
   }
 
   /**

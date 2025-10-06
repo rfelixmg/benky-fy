@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useCallback, KeyboardEvent, ChangeEvent } from 'react';
-import { romajiToHiragana } from '@/core/romaji-conversion';
-import { Furigana } from './furigana';
+import { useState, useCallback, KeyboardEvent, ChangeEvent } from "react";
+import { romajiToHiragana } from "@/core/romaji-conversion";
+import { Furigana } from "./furigana";
 
 interface AnswerCheckerProps {
   question: string;
@@ -19,8 +19,8 @@ export function AnswerChecker({
   onCorrectAnswer,
   onIncorrectAnswer,
 }: AnswerCheckerProps): JSX.Element {
-  const [answer, setAnswer] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [answer, setAnswer] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const normalizeAnswer = useCallback((input: string): string => {
     // Convert romaji to hiragana if needed
@@ -33,32 +33,39 @@ export function AnswerChecker({
 
   const checkAnswer = useCallback((): void => {
     if (!answer) {
-      setError('Please enter an answer');
+      setError("Please enter an answer");
       return;
     }
 
     const normalizedInput = normalizeAnswer(answer);
     const isCorrect = [expectedAnswer, ...acceptableAnswers].some(
-      validAnswer => normalizeAnswer(validAnswer) === normalizedInput
+      (validAnswer) => normalizeAnswer(validAnswer) === normalizedInput,
     );
 
     if (isCorrect) {
       onCorrectAnswer();
-      setAnswer('');
-      setError('');
+      setAnswer("");
+      setError("");
     } else {
       onIncorrectAnswer();
-      setError('Incorrect answer. Try again.');
+      setError("Incorrect answer. Try again.");
     }
-  }, [answer, expectedAnswer, acceptableAnswers, onCorrectAnswer, onIncorrectAnswer, normalizeAnswer]);
+  }, [
+    answer,
+    expectedAnswer,
+    acceptableAnswers,
+    onCorrectAnswer,
+    onIncorrectAnswer,
+    normalizeAnswer,
+  ]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setAnswer(e.target.value);
-    setError('');
+    setError("");
   };
 
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>): void => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       checkAnswer();
     }
   };
@@ -67,11 +74,7 @@ export function AnswerChecker({
     <div className="flex flex-col gap-4 w-full max-w-md">
       <div className="flex items-center gap-4">
         <div className="text-2xl">
-          <Furigana
-            kanji={question}
-            mode="ruby"
-            showFurigana={false}
-          />
+          <Furigana kanji={question} mode="ruby" showFurigana={false} />
         </div>
       </div>
 

@@ -1,7 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { romajiToHiragana, romajiToKatakana, detectScript } from '@/core/romaji-conversion';
+import { useState, useEffect, useRef } from "react";
+import {
+  romajiToHiragana,
+  romajiToKatakana,
+  detectScript,
+} from "@/core/romaji-conversion";
 
 interface RomajiInputProps {
   value: string;
@@ -9,7 +13,7 @@ interface RomajiInputProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
-  outputType?: 'hiragana' | 'katakana' | 'auto';
+  outputType?: "hiragana" | "katakana" | "auto";
   showPreview?: boolean;
   onKeyPress?: (e: React.KeyboardEvent) => void;
 }
@@ -20,46 +24,46 @@ export function RomajiInput({
   placeholder = "Enter romaji...",
   disabled = false,
   className = "",
-  outputType = 'auto',
+  outputType = "auto",
   showPreview = true,
-  onKeyPress
+  onKeyPress,
 }: RomajiInputProps) {
-  const [preview, setPreview] = useState('');
+  const [preview, setPreview] = useState("");
   const [isConverting, setIsConverting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Convert romaji to kana for preview
   useEffect(() => {
     if (!value.trim() || !showPreview) {
-      setPreview('');
+      setPreview("");
       return;
     }
 
     setIsConverting(true);
-    
+
     // Debounce conversion
     const timeoutId = setTimeout(() => {
       try {
-        let converted = '';
-        
-        if (outputType === 'katakana') {
+        let converted = "";
+
+        if (outputType === "katakana") {
           converted = romajiToKatakana(value).converted;
-        } else if (outputType === 'hiragana') {
+        } else if (outputType === "hiragana") {
           converted = romajiToHiragana(value).converted;
         } else {
           // Auto-detect based on input
           const scriptType = detectScript(value);
-          if (scriptType === 'romaji') {
+          if (scriptType === "romaji") {
             converted = romajiToHiragana(value).converted;
           } else {
             converted = value;
           }
         }
-        
+
         setPreview(converted);
       } catch (error) {
-        console.error('Romaji conversion error:', error);
-        setPreview('');
+        console.error("Romaji conversion error:", error);
+        setPreview("");
       } finally {
         setIsConverting(false);
       }
@@ -92,7 +96,7 @@ export function RomajiInput({
         disabled={disabled}
         className={`w-full px-4 py-3 rounded-lg bg-background border border-input text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 ${className}`}
       />
-      
+
       {/* Preview */}
       {showPreview && preview && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none">
@@ -106,7 +110,7 @@ export function RomajiInput({
           </div>
         </div>
       )}
-      
+
       {/* Conversion Indicator */}
       {showPreview && value && !preview && !isConverting && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none">
@@ -126,9 +130,11 @@ export function RomajiInputWithOptions({
   placeholder = "Enter romaji...",
   disabled = false,
   className = "",
-  onKeyPress
-}: Omit<RomajiInputProps, 'outputType' | 'showPreview'>) {
-  const [outputType, setOutputType] = useState<'hiragana' | 'katakana' | 'auto'>('auto');
+  onKeyPress,
+}: Omit<RomajiInputProps, "outputType" | "showPreview">) {
+  const [outputType, setOutputType] = useState<
+    "hiragana" | "katakana" | "auto"
+  >("auto");
   const [showPreview, setShowPreview] = useState(true);
 
   return (
@@ -139,15 +145,23 @@ export function RomajiInputWithOptions({
           <label className="text-white/80">Output:</label>
           <select
             value={outputType}
-            onChange={(e) => setOutputType(e.target.value as 'hiragana' | 'katakana' | 'auto')}
+            onChange={(e) =>
+              setOutputType(e.target.value as "hiragana" | "katakana" | "auto")
+            }
             className="px-2 py-1 rounded bg-white/20 border border-white/30 text-white text-sm focus:outline-none focus:ring-1 focus:ring-white/50"
           >
-            <option value="auto" className="bg-gray-800">Auto</option>
-            <option value="hiragana" className="bg-gray-800">Hiragana</option>
-            <option value="katakana" className="bg-gray-800">Katakana</option>
+            <option value="auto" className="bg-gray-800">
+              Auto
+            </option>
+            <option value="hiragana" className="bg-gray-800">
+              Hiragana
+            </option>
+            <option value="katakana" className="bg-gray-800">
+              Katakana
+            </option>
           </select>
         </div>
-        
+
         <label className="flex items-center gap-2 text-white/80">
           <input
             type="checkbox"

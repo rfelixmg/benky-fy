@@ -1,8 +1,8 @@
-import { ValidationResult } from '@/core/validation/core/ValidationResult';
-import { AnswerSet } from '@/core/validation/core/ActivityValidator';
-import { UserSettings } from '@/core/api-client';
-import { ModuleValidatorFactory } from '@/core/validation/factories/ModuleValidatorFactory';
-import { AnswerModel } from '../models/AnswerModel';
+import { ValidationResult } from "@/core/validation/core/ValidationResult";
+import { AnswerSet } from "@/core/validation/core/ActivityValidator";
+import { UserSettings } from "@/core/api-client";
+import { ModuleValidatorFactory } from "@/core/validation/factories/ModuleValidatorFactory";
+import { AnswerModel } from "../models/AnswerModel";
 
 /**
  * ValidationService - Service layer for answer validation
@@ -24,24 +24,28 @@ export class ValidationService {
    * @returns ValidationResult with validation details
    */
   validateAnswer(
-    userAnswer: string, 
-    correctAnswers: AnswerSet, 
-    settings: UserSettings, 
-    moduleName?: string
+    userAnswer: string,
+    correctAnswers: AnswerSet,
+    settings: UserSettings,
+    moduleName?: string,
   ): ValidationResult {
     try {
       // Create module-specific validator
-      const moduleValidator = this.validatorFactory.createModuleValidator(moduleName || 'colors');
-      
+      const moduleValidator = this.validatorFactory.createModuleValidator(
+        moduleName || "colors",
+      );
+
       // Validate the answer
       const result = moduleValidator.validateAnswer(userAnswer, correctAnswers);
-      
+
       return result;
     } catch (error) {
-      console.error('Validation error:', error);
+      console.error("Validation error:", error);
       return {
         isCorrect: false,
-        feedback: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        feedback: [
+          `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        ],
       };
     }
   }
@@ -55,25 +59,34 @@ export class ValidationService {
    * @returns Array of ValidationResults for each input
    */
   validateMultipleInputs(
-    inputs: Record<string, string>, 
-    correctAnswers: AnswerSet, 
-    settings: UserSettings, 
-    moduleName?: string
+    inputs: Record<string, string>,
+    correctAnswers: AnswerSet,
+    settings: UserSettings,
+    moduleName?: string,
   ): ValidationResult[] {
     try {
       // Create module-specific validator
-      const moduleValidator = this.validatorFactory.createModuleValidator(moduleName || 'colors');
-      
+      const moduleValidator = this.validatorFactory.createModuleValidator(
+        moduleName || "colors",
+      );
+
       // Validate multiple inputs
-      const results = moduleValidator.validateMultipleInputs(inputs, correctAnswers);
-      
+      const results = moduleValidator.validateMultipleInputs(
+        inputs,
+        correctAnswers,
+      );
+
       return results;
     } catch (error) {
-      console.error('Multiple input validation error:', error);
-      return [{
-        isCorrect: false,
-        feedback: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`]
-      }];
+      console.error("Multiple input validation error:", error);
+      return [
+        {
+          isCorrect: false,
+          feedback: [
+            `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+          ],
+        },
+      ];
     }
   }
 
@@ -84,7 +97,7 @@ export class ValidationService {
    */
   getValidationFeedback(validationResult: ValidationResult): string[] {
     if (!validationResult) {
-      return ['No validation result available'];
+      return ["No validation result available"];
     }
 
     if (validationResult.feedback && validationResult.feedback.length > 0) {
@@ -92,9 +105,9 @@ export class ValidationService {
     }
 
     if (validationResult.isCorrect) {
-      return ['Correct!'];
+      return ["Correct!"];
     } else {
-      return ['Incorrect answer'];
+      return ["Incorrect answer"];
     }
   }
 
@@ -104,7 +117,10 @@ export class ValidationService {
    * @param showFeedback Global feedback setting
    * @returns True if feedback should be shown
    */
-  shouldShowFeedback(validationResult: ValidationResult, showFeedback: boolean = true): boolean {
+  shouldShowFeedback(
+    validationResult: ValidationResult,
+    showFeedback: boolean = true,
+  ): boolean {
     return showFeedback && validationResult !== null;
   }
 
@@ -120,14 +136,14 @@ export class ValidationService {
     flashcardId: string,
     userAnswer: string | Record<string, string>,
     validationResult: ValidationResult,
-    moduleName?: string
+    moduleName?: string,
   ): AnswerModel {
     const answerSubmission = {
       flashcardId,
       userAnswer,
       inputTypes: [], // TODO: Extract input types from userAnswer
       moduleName,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     const answerModel = new AnswerModel(answerSubmission);
@@ -146,19 +162,19 @@ export class ValidationService {
   async validateWithServer(
     userAnswer: string,
     flashcardId: string,
-    moduleName?: string
+    moduleName?: string,
   ): Promise<ValidationResult> {
     try {
-      const response = await fetch('/api/validation', {
-        method: 'POST',
+      const response = await fetch("/api/validation", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userAnswer,
           flashcardId,
-          moduleName
-        })
+          moduleName,
+        }),
       });
 
       if (!response.ok) {
@@ -168,10 +184,12 @@ export class ValidationService {
       const result = await response.json();
       return result;
     } catch (error) {
-      console.error('Server validation error:', error);
+      console.error("Server validation error:", error);
       return {
         isCorrect: false,
-        feedback: [`Server validation error: ${error instanceof Error ? error.message : 'Unknown error'}`]
+        feedback: [
+          `Server validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+        ],
       };
     }
   }
@@ -189,19 +207,22 @@ export class ValidationService {
     averageAttempts: number;
   } {
     const totalAnswers = answers.length;
-    const correctAnswers = answers.filter(answer => answer.isCorrect).length;
+    const correctAnswers = answers.filter((answer) => answer.isCorrect).length;
     const incorrectAnswers = totalAnswers - correctAnswers;
-    const accuracy = totalAnswers > 0 ? (correctAnswers / totalAnswers) * 100 : 0;
-    const averageAttempts = totalAnswers > 0 
-      ? answers.reduce((sum, answer) => sum + answer.attempts, 0) / totalAnswers 
-      : 0;
+    const accuracy =
+      totalAnswers > 0 ? (correctAnswers / totalAnswers) * 100 : 0;
+    const averageAttempts =
+      totalAnswers > 0
+        ? answers.reduce((sum, answer) => sum + answer.attempts, 0) /
+          totalAnswers
+        : 0;
 
     return {
       totalAnswers,
       correctAnswers,
       incorrectAnswers,
       accuracy,
-      averageAttempts
+      averageAttempts,
     };
   }
 
@@ -215,19 +236,22 @@ export class ValidationService {
     mistake: string;
     count: number;
   }> {
-    const mistakeMap = new Map<string, { flashcardId: string; count: number }>();
+    const mistakeMap = new Map<
+      string,
+      { flashcardId: string; count: number }
+    >();
 
-    answers.forEach(answer => {
+    answers.forEach((answer) => {
       if (!answer.isCorrect) {
         const mistake = answer.getAnswerAsString();
         const key = `${answer.flashcardId}:${mistake}`;
-        
+
         if (mistakeMap.has(key)) {
           mistakeMap.get(key)!.count++;
         } else {
           mistakeMap.set(key, {
             flashcardId: answer.flashcardId,
-            count: 1
+            count: 1,
           });
         }
       }
@@ -236,8 +260,8 @@ export class ValidationService {
     return Array.from(mistakeMap.entries())
       .map(([key, data]) => ({
         flashcardId: data.flashcardId,
-        mistake: key.split(':')[1],
-        count: data.count
+        mistake: key.split(":")[1],
+        count: data.count,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10); // Top 10 mistakes
@@ -260,13 +284,13 @@ export class ValidationService {
    */
   private getEnabledInputTypes(settings: UserSettings): string[] {
     const enabledTypes: string[] = [];
-    
-    if (settings.input_hiragana) enabledTypes.push('hiragana');
-    if (settings.input_katakana) enabledTypes.push('katakana');
-    if (settings.input_english) enabledTypes.push('english');
-    if (settings.input_kanji) enabledTypes.push('kanji');
-    if (settings.input_romaji) enabledTypes.push('romaji');
-    
+
+    if (settings.input_hiragana) enabledTypes.push("hiragana");
+    if (settings.input_katakana) enabledTypes.push("katakana");
+    if (settings.input_english) enabledTypes.push("english");
+    if (settings.input_kanji) enabledTypes.push("kanji");
+    if (settings.input_romaji) enabledTypes.push("romaji");
+
     return enabledTypes;
   }
 }

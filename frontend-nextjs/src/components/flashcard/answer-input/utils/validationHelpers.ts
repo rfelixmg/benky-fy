@@ -1,4 +1,4 @@
-import { ValidationResult } from '@/core/validation/core/ValidationResult';
+import { ValidationResult } from "@/core/validation/core/ValidationResult";
 
 /**
  * Format validation result for display
@@ -7,14 +7,14 @@ import { ValidationResult } from '@/core/validation/core/ValidationResult';
  */
 export const formatValidationResult = (result: ValidationResult): string => {
   if (result.isCorrect) {
-    return result.feedback?.[0] || 'Correct!';
+    return result.feedback?.[0] || "Correct!";
   }
-  
+
   if (result.feedback && result.feedback.length > 0) {
-    return result.feedback.join(', ');
+    return result.feedback.join(", ");
   }
-  
-  return 'Incorrect answer';
+
+  return "Incorrect answer";
 };
 
 /**
@@ -23,18 +23,21 @@ export const formatValidationResult = (result: ValidationResult): string => {
  * @param showDetails Whether to show detailed feedback
  * @returns Validation message string
  */
-export const getValidationMessage = (result: ValidationResult, showDetails: boolean = true): string => {
-  if (!result) return '';
-  
+export const getValidationMessage = (
+  result: ValidationResult,
+  showDetails: boolean = true,
+): string => {
+  if (!result) return "";
+
   if (result.isCorrect) {
-    return result.feedback?.[0] || 'Correct!';
+    return result.feedback?.[0] || "Correct!";
   }
-  
+
   if (showDetails && result.feedback && result.feedback.length > 0) {
-    return result.feedback.join(', ');
+    return result.feedback.join(", ");
   }
-  
-  return 'Incorrect';
+
+  return "Incorrect";
 };
 
 /**
@@ -45,9 +48,9 @@ export const getValidationMessage = (result: ValidationResult, showDetails: bool
  * @returns True if validation should be shown
  */
 export const shouldShowValidation = (
-  result: ValidationResult | null, 
-  showFeedback: boolean, 
-  timerDuration: number
+  result: ValidationResult | null,
+  showFeedback: boolean,
+  timerDuration: number,
 ): boolean => {
   return showFeedback && result !== null && timerDuration > 0;
 };
@@ -57,14 +60,16 @@ export const shouldShowValidation = (
  * @param result ValidationResult object
  * @returns CSS classes for validation styling
  */
-export const getValidationClasses = (result: ValidationResult | null): string => {
-  if (!result) return '';
-  
+export const getValidationClasses = (
+  result: ValidationResult | null,
+): string => {
+  if (!result) return "";
+
   if (result.isCorrect) {
-    return 'border-green-500 bg-green-50 text-green-700';
+    return "border-green-500 bg-green-50 text-green-700";
   }
-  
-  return 'border-red-500 bg-red-50 text-red-700';
+
+  return "border-red-500 bg-red-50 text-red-700";
 };
 
 /**
@@ -73,13 +78,13 @@ export const getValidationClasses = (result: ValidationResult | null): string =>
  * @returns Feedback color string
  */
 export const getFeedbackColor = (result: ValidationResult | null): string => {
-  if (!result) return '';
-  
+  if (!result) return "";
+
   if (result.isCorrect) {
-    return 'text-green-600';
+    return "text-green-600";
   }
-  
-  return 'text-red-600';
+
+  return "text-red-600";
 };
 
 /**
@@ -87,7 +92,9 @@ export const getFeedbackColor = (result: ValidationResult | null): string => {
  * @param result ValidationResult object
  * @returns True if validation was successful
  */
-export const isValidationSuccessful = (result: ValidationResult | null): boolean => {
+export const isValidationSuccessful = (
+  result: ValidationResult | null,
+): boolean => {
   return result?.isCorrect === true;
 };
 
@@ -96,12 +103,14 @@ export const isValidationSuccessful = (result: ValidationResult | null): boolean
  * @param result ValidationResult object
  * @returns Timer duration in milliseconds
  */
-export const getFeedbackTimerDuration = (result: ValidationResult | null): number => {
+export const getFeedbackTimerDuration = (
+  result: ValidationResult | null,
+): number => {
   if (!result) return 0;
-  
+
   if (result.isCorrect) {
     return 3000; // 3 seconds for correct answers
   }
-  
+
   return 5000; // 5 seconds for incorrect answers
 };

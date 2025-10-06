@@ -2,40 +2,124 @@
  * Katakana Validator - Handles katakana character validation
  */
 
-import { ValidationStrategy, ValidationResult } from '../core/ValidationStrategy';
-import { createSuccessResult, createFailureResult } from '../core/ValidationResult';
+import {
+  ValidationStrategy,
+  ValidationResult,
+} from "../core/ValidationStrategy";
+import {
+  createSuccessResult,
+  createFailureResult,
+} from "../core/ValidationResult";
 
 export class KatakanaValidator implements ValidationStrategy {
   private romajiToKatakanaMap: Map<string, string> = new Map([
     // Basic katakana mappings
-    ['a', 'ア'], ['i', 'イ'], ['u', 'ウ'], ['e', 'エ'], ['o', 'オ'],
-    ['ka', 'カ'], ['ki', 'キ'], ['ku', 'ク'], ['ke', 'ケ'], ['ko', 'コ'],
-    ['sa', 'サ'], ['shi', 'シ'], ['su', 'ス'], ['se', 'セ'], ['so', 'ソ'],
-    ['ta', 'タ'], ['chi', 'チ'], ['tsu', 'ツ'], ['te', 'テ'], ['to', 'ト'],
-    ['na', 'ナ'], ['ni', 'ニ'], ['nu', 'ヌ'], ['ne', 'ネ'], ['no', 'ノ'],
-    ['ha', 'ハ'], ['hi', 'ヒ'], ['fu', 'フ'], ['he', 'ヘ'], ['ho', 'ホ'],
-    ['ma', 'マ'], ['mi', 'ミ'], ['mu', 'ム'], ['me', 'メ'], ['mo', 'モ'],
-    ['ya', 'ヤ'], ['yu', 'ユ'], ['yo', 'ヨ'],
-    ['ra', 'ラ'], ['ri', 'リ'], ['ru', 'ル'], ['re', 'レ'], ['ro', 'ロ'],
-    ['wa', 'ワ'], ['wo', 'ヲ'], ['n', 'ン'],
+    ["a", "ア"],
+    ["i", "イ"],
+    ["u", "ウ"],
+    ["e", "エ"],
+    ["o", "オ"],
+    ["ka", "カ"],
+    ["ki", "キ"],
+    ["ku", "ク"],
+    ["ke", "ケ"],
+    ["ko", "コ"],
+    ["sa", "サ"],
+    ["shi", "シ"],
+    ["su", "ス"],
+    ["se", "セ"],
+    ["so", "ソ"],
+    ["ta", "タ"],
+    ["chi", "チ"],
+    ["tsu", "ツ"],
+    ["te", "テ"],
+    ["to", "ト"],
+    ["na", "ナ"],
+    ["ni", "ニ"],
+    ["nu", "ヌ"],
+    ["ne", "ネ"],
+    ["no", "ノ"],
+    ["ha", "ハ"],
+    ["hi", "ヒ"],
+    ["fu", "フ"],
+    ["he", "ヘ"],
+    ["ho", "ホ"],
+    ["ma", "マ"],
+    ["mi", "ミ"],
+    ["mu", "ム"],
+    ["me", "メ"],
+    ["mo", "モ"],
+    ["ya", "ヤ"],
+    ["yu", "ユ"],
+    ["yo", "ヨ"],
+    ["ra", "ラ"],
+    ["ri", "リ"],
+    ["ru", "ル"],
+    ["re", "レ"],
+    ["ro", "ロ"],
+    ["wa", "ワ"],
+    ["wo", "ヲ"],
+    ["n", "ン"],
     // Extended katakana for foreign words
-    ['ga', 'ガ'], ['gi', 'ギ'], ['gu', 'グ'], ['ge', 'ゲ'], ['go', 'ゴ'],
-    ['za', 'ザ'], ['ji', 'ジ'], ['zu', 'ズ'], ['ze', 'ゼ'], ['zo', 'ゾ'],
-    ['da', 'ダ'], ['di', 'ディ'], ['du', 'ドゥ'], ['de', 'デ'], ['do', 'ド'],
-    ['ba', 'バ'], ['bi', 'ビ'], ['bu', 'ブ'], ['be', 'ベ'], ['bo', 'ボ'],
-    ['pa', 'パ'], ['pi', 'ピ'], ['pu', 'プ'], ['pe', 'ペ'], ['po', 'ポ'],
+    ["ga", "ガ"],
+    ["gi", "ギ"],
+    ["gu", "グ"],
+    ["ge", "ゲ"],
+    ["go", "ゴ"],
+    ["za", "ザ"],
+    ["ji", "ジ"],
+    ["zu", "ズ"],
+    ["ze", "ゼ"],
+    ["zo", "ゾ"],
+    ["da", "ダ"],
+    ["di", "ディ"],
+    ["du", "ドゥ"],
+    ["de", "デ"],
+    ["do", "ド"],
+    ["ba", "バ"],
+    ["bi", "ビ"],
+    ["bu", "ブ"],
+    ["be", "ベ"],
+    ["bo", "ボ"],
+    ["pa", "パ"],
+    ["pi", "ピ"],
+    ["pu", "プ"],
+    ["pe", "ペ"],
+    ["po", "ポ"],
     // Small katakana
-    ['kya', 'キャ'], ['kyu', 'キュ'], ['kyo', 'キョ'],
-    ['sha', 'シャ'], ['shu', 'シュ'], ['sho', 'ショ'],
-    ['cha', 'チャ'], ['chu', 'チュ'], ['cho', 'チョ'],
-    ['nya', 'ニャ'], ['nyu', 'ニュ'], ['nyo', 'ニョ'],
-    ['hya', 'ヒャ'], ['hyu', 'ヒュ'], ['hyo', 'ヒョ'],
-    ['mya', 'ミャ'], ['myu', 'ミュ'], ['myo', 'ミョ'],
-    ['rya', 'リャ'], ['ryu', 'リュ'], ['ryo', 'リョ'],
-    ['gya', 'ギャ'], ['gyu', 'ギュ'], ['gyo', 'ギョ'],
-    ['ja', 'ジャ'], ['ju', 'ジュ'], ['jo', 'ジョ'],
-    ['bya', 'ビャ'], ['byu', 'ビュ'], ['byo', 'ビョ'],
-    ['pya', 'ピャ'], ['pyu', 'ピュ'], ['pyo', 'ピョ'],
+    ["kya", "キャ"],
+    ["kyu", "キュ"],
+    ["kyo", "キョ"],
+    ["sha", "シャ"],
+    ["shu", "シュ"],
+    ["sho", "ショ"],
+    ["cha", "チャ"],
+    ["chu", "チュ"],
+    ["cho", "チョ"],
+    ["nya", "ニャ"],
+    ["nyu", "ニュ"],
+    ["nyo", "ニョ"],
+    ["hya", "ヒャ"],
+    ["hyu", "ヒュ"],
+    ["hyo", "ヒョ"],
+    ["mya", "ミャ"],
+    ["myu", "ミュ"],
+    ["myo", "ミョ"],
+    ["rya", "リャ"],
+    ["ryu", "リュ"],
+    ["ryo", "リョ"],
+    ["gya", "ギャ"],
+    ["gyu", "ギュ"],
+    ["gyo", "ギョ"],
+    ["ja", "ジャ"],
+    ["ju", "ジュ"],
+    ["jo", "ジョ"],
+    ["bya", "ビャ"],
+    ["byu", "ビュ"],
+    ["byo", "ビョ"],
+    ["pya", "ピャ"],
+    ["pyu", "ピュ"],
+    ["pyo", "ピョ"],
   ]);
 
   /**
@@ -50,28 +134,34 @@ export class KatakanaValidator implements ValidationStrategy {
 
     // Direct match
     if (normalizedInput === normalizedExpected) {
-      return createSuccessResult('katakana', normalizedInput);
+      return createSuccessResult("katakana", normalizedInput);
     }
 
     // Check if input is romaji that converts to expected katakana
     const convertedKatakana = this.convertRomajiToKatakana(normalizedInput);
     if (convertedKatakana === normalizedExpected) {
-      return createSuccessResult('katakana', convertedKatakana, 0.9);
+      return createSuccessResult("katakana", convertedKatakana, 0.9);
     }
 
     // Check if expected is romaji that converts to input katakana
-    const convertedFromExpected = this.convertRomajiToKatakana(normalizedExpected);
+    const convertedFromExpected =
+      this.convertRomajiToKatakana(normalizedExpected);
     if (normalizedInput === convertedFromExpected) {
-      return createSuccessResult('katakana', normalizedInput, 0.9);
+      return createSuccessResult("katakana", normalizedInput, 0.9);
     }
 
     // Partial match check
-    const similarity = this.calculateSimilarity(normalizedInput, normalizedExpected);
+    const similarity = this.calculateSimilarity(
+      normalizedInput,
+      normalizedExpected,
+    );
     if (similarity > 0.7) {
       return {
         isCorrect: false,
-        matchedType: 'katakana',
-        feedback: [`Close! Expected: ${normalizedExpected}, Got: ${normalizedInput}`],
+        matchedType: "katakana",
+        feedback: [
+          `Close! Expected: ${normalizedExpected}, Got: ${normalizedInput}`,
+        ],
         confidence: similarity,
       };
     }
@@ -87,7 +177,7 @@ export class KatakanaValidator implements ValidationStrategy {
    * @returns Array of supported types
    */
   getSupportedTypes(): string[] {
-    return ['katakana', 'romaji'];
+    return ["katakana", "romaji"];
   }
 
   /**
@@ -115,7 +205,7 @@ export class KatakanaValidator implements ValidationStrategy {
    */
   private convertRomajiToKatakana(romaji: string): string {
     const normalized = romaji.toLowerCase().trim();
-    
+
     // Check for exact match first
     if (this.romajiToKatakanaMap.has(normalized)) {
       return this.romajiToKatakanaMap.get(normalized)!;
@@ -157,7 +247,9 @@ export class KatakanaValidator implements ValidationStrategy {
    * @returns Edit distance
    */
   private levenshteinDistance(str1: string, str2: string): number {
-    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+    const matrix = Array(str2.length + 1)
+      .fill(null)
+      .map(() => Array(str1.length + 1).fill(null));
 
     for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
     for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
@@ -166,9 +258,9 @@ export class KatakanaValidator implements ValidationStrategy {
       for (let i = 1; i <= str1.length; i++) {
         const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
         matrix[j][i] = Math.min(
-          matrix[j][i - 1] + 1,     // deletion
-          matrix[j - 1][i] + 1,     // insertion
-          matrix[j - 1][i - 1] + indicator // substitution
+          matrix[j][i - 1] + 1, // deletion
+          matrix[j - 1][i] + 1, // insertion
+          matrix[j - 1][i - 1] + indicator, // substitution
         );
       }
     }

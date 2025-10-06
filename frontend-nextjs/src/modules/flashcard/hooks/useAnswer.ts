@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { AnswerController } from '../controllers/AnswerController';
-import { ValidationResult } from '@/core/validation/core/ValidationResult';
-import { AnswerFeedback } from '../types/AnswerTypes';
-import { FlashcardItem } from '../types/FlashcardTypes';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { AnswerController } from "../controllers/AnswerController";
+import { ValidationResult } from "@/core/validation/core/ValidationResult";
+import { AnswerFeedback } from "../types/AnswerTypes";
+import { FlashcardItem } from "../types/FlashcardTypes";
 
 interface UseAnswerState {
   userAnswer: string;
@@ -34,14 +34,14 @@ interface UseAnswerReturn extends UseAnswerState {
 
 export const useAnswer = (): UseAnswerReturn => {
   const [state, setState] = useState<UseAnswerState>({
-    userAnswer: '',
+    userAnswer: "",
     validationResult: null,
     isSubmitting: false,
     showFeedback: false,
     currentAnswer: null,
     answerHistory: [],
-    sessionId: '',
-    error: null
+    sessionId: "",
+    error: null,
   });
 
   const controllerRef = useRef<AnswerController | null>(null);
@@ -50,92 +50,106 @@ export const useAnswer = (): UseAnswerReturn => {
   useEffect(() => {
     if (!controllerRef.current) {
       controllerRef.current = new AnswerController();
-      setState(prev => ({ ...prev, sessionId: controllerRef.current?.getSessionId() || '' }));
+      setState((prev) => ({
+        ...prev,
+        sessionId: controllerRef.current?.getSessionId() || "",
+      }));
     }
   }, []);
 
   const updateState = useCallback((updates: Partial<UseAnswerState>) => {
-    setState(prev => ({ ...prev, ...updates }));
+    setState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const handleError = useCallback((error: Error, context: string) => {
-    console.error(`useAnswer ${context}:`, error);
-    updateState({
-      error: `${context}: ${error.message}`,
-      isSubmitting: false
-    });
-  }, [updateState]);
-
-  const submitAnswer = useCallback(async (answer: string) => {
-    if (!controllerRef.current) return;
-
-    try {
-      updateState({ 
-        isSubmitting: true, 
-        error: null,
-        userAnswer: answer 
-      });
-
-      await controllerRef.current.submitAnswer(answer);
-      
-      const validationResult = controllerRef.current.validateAnswer(answer);
-      const feedback = controllerRef.current.getAnswerFeedback();
-      const currentAnswer = controllerRef.current.getCurrentAnswer();
-      const answerHistory = controllerRef.current.getAnswerHistory();
-      
+  const handleError = useCallback(
+    (error: Error, context: string) => {
+      console.error(`useAnswer ${context}:`, error);
       updateState({
-        validationResult,
-        showFeedback: true,
-        currentAnswer,
-        answerHistory,
+        error: `${context}: ${error.message}`,
         isSubmitting: false,
-        error: null
       });
-    } catch (error) {
-      handleError(error as Error, 'submitAnswer');
-    }
-  }, [updateState, handleError]);
+    },
+    [updateState],
+  );
 
-  const validateAnswer = useCallback((answer: string) => {
-    if (!controllerRef.current) {
-      return {
-        isCorrect: false,
-        feedback: ['No controller available for validation']
-      };
-    }
+  const submitAnswer = useCallback(
+    async (answer: string) => {
+      if (!controllerRef.current) return;
 
-    try {
-      const validationResult = controllerRef.current.validateAnswer(answer);
-      
-      updateState({
-        validationResult,
-        userAnswer: answer
-      });
-      
-      return validationResult;
-    } catch (error) {
-      handleError(error as Error, 'validateAnswer');
-      return {
-        isCorrect: false,
-        feedback: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`]
-      };
-    }
-  }, [updateState, handleError]);
+      try {
+        updateState({
+          isSubmitting: true,
+          error: null,
+          userAnswer: answer,
+        });
+
+        await controllerRef.current.submitAnswer(answer);
+
+        const validationResult = controllerRef.current.validateAnswer(answer);
+        const feedback = controllerRef.current.getAnswerFeedback();
+        const currentAnswer = controllerRef.current.getCurrentAnswer();
+        const answerHistory = controllerRef.current.getAnswerHistory();
+
+        updateState({
+          validationResult,
+          showFeedback: true,
+          currentAnswer,
+          answerHistory,
+          isSubmitting: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "submitAnswer");
+      }
+    },
+    [updateState, handleError],
+  );
+
+  const validateAnswer = useCallback(
+    (answer: string) => {
+      if (!controllerRef.current) {
+        return {
+          isCorrect: false,
+          feedback: ["No controller available for validation"],
+        };
+      }
+
+      try {
+        const validationResult = controllerRef.current.validateAnswer(answer);
+
+        updateState({
+          validationResult,
+          userAnswer: answer,
+        });
+
+        return validationResult;
+      } catch (error) {
+        handleError(error as Error, "validateAnswer");
+        return {
+          isCorrect: false,
+          feedback: [
+            `Validation error: ${error instanceof Error ? error.message : "Unknown error"}`,
+          ],
+        };
+      }
+    },
+    [updateState, handleError],
+  );
 
   const clearAnswer = useCallback(() => {
     if (!controllerRef.current) return;
 
     try {
       controllerRef.current.clearAnswer();
-      
+
       updateState({
-        userAnswer: '',
+        userAnswer: "",
         validationResult: null,
         showFeedback: false,
-        currentAnswer: null
+        currentAnswer: null,
       });
     } catch (error) {
-      handleError(error as Error, 'clearAnswer');
+      handleError(error as Error, "clearAnswer");
     }
   }, [updateState, handleError]);
 
@@ -143,42 +157,45 @@ export const useAnswer = (): UseAnswerReturn => {
     if (!controllerRef.current) {
       return {
         isCorrect: false,
-        message: 'No controller available',
-        colorClass: 'text-gray-500',
-        iconClass: 'question-circle'
+        message: "No controller available",
+        colorClass: "text-gray-500",
+        iconClass: "question-circle",
       };
     }
 
     try {
       return controllerRef.current.getAnswerFeedback();
     } catch (error) {
-      handleError(error as Error, 'getAnswerFeedback');
+      handleError(error as Error, "getAnswerFeedback");
       return {
         isCorrect: false,
-        message: 'Error getting feedback',
-        colorClass: 'text-red-500',
-        iconClass: 'exclamation-circle'
+        message: "Error getting feedback",
+        colorClass: "text-red-500",
+        iconClass: "exclamation-circle",
       };
     }
   }, [handleError]);
 
-  const setCurrentFlashcard = useCallback((flashcard: FlashcardItem) => {
-    if (!controllerRef.current) return;
+  const setCurrentFlashcard = useCallback(
+    (flashcard: FlashcardItem) => {
+      if (!controllerRef.current) return;
 
-    try {
-      controllerRef.current.setCurrentFlashcard(flashcard);
-      
-      // Clear previous answer when changing flashcard
-      updateState({
-        userAnswer: '',
-        validationResult: null,
-        showFeedback: false,
-        currentAnswer: null
-      });
-    } catch (error) {
-      handleError(error as Error, 'setCurrentFlashcard');
-    }
-  }, [updateState, handleError]);
+      try {
+        controllerRef.current.setCurrentFlashcard(flashcard);
+
+        // Clear previous answer when changing flashcard
+        updateState({
+          userAnswer: "",
+          validationResult: null,
+          showFeedback: false,
+          currentAnswer: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "setCurrentFlashcard");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const isCurrentAnswerCorrect = useCallback(() => {
     if (!controllerRef.current) return false;
@@ -186,7 +203,7 @@ export const useAnswer = (): UseAnswerReturn => {
     try {
       return controllerRef.current.isCurrentAnswerCorrect();
     } catch (error) {
-      handleError(error as Error, 'isCurrentAnswerCorrect');
+      handleError(error as Error, "isCurrentAnswerCorrect");
       return false;
     }
   }, [handleError]);
@@ -198,20 +215,20 @@ export const useAnswer = (): UseAnswerReturn => {
         correctAnswers: 0,
         incorrectAnswers: 0,
         accuracy: 0,
-        averageAttempts: 0
+        averageAttempts: 0,
       };
     }
 
     try {
       return controllerRef.current.getAnswerStatistics();
     } catch (error) {
-      handleError(error as Error, 'getAnswerStatistics');
+      handleError(error as Error, "getAnswerStatistics");
       return {
         totalAnswers: 0,
         correctAnswers: 0,
         incorrectAnswers: 0,
         accuracy: 0,
-        averageAttempts: 0
+        averageAttempts: 0,
       };
     }
   }, [handleError]);
@@ -222,21 +239,24 @@ export const useAnswer = (): UseAnswerReturn => {
     try {
       return controllerRef.current.getCommonMistakes();
     } catch (error) {
-      handleError(error as Error, 'getCommonMistakes');
+      handleError(error as Error, "getCommonMistakes");
       return [];
     }
   }, [handleError]);
 
-  const getAnswerHistoryForFlashcard = useCallback((flashcardId: string) => {
-    if (!controllerRef.current) return [];
+  const getAnswerHistoryForFlashcard = useCallback(
+    (flashcardId: string) => {
+      if (!controllerRef.current) return [];
 
-    try {
-      return controllerRef.current.getAnswerHistoryForFlashcard(flashcardId);
-    } catch (error) {
-      handleError(error as Error, 'getAnswerHistoryForFlashcard');
-      return [];
-    }
-  }, [handleError]);
+      try {
+        return controllerRef.current.getAnswerHistoryForFlashcard(flashcardId);
+      } catch (error) {
+        handleError(error as Error, "getAnswerHistoryForFlashcard");
+        return [];
+      }
+    },
+    [handleError],
+  );
 
   const getLatestAnswerForCurrentFlashcard = useCallback(() => {
     if (!controllerRef.current) return null;
@@ -244,7 +264,7 @@ export const useAnswer = (): UseAnswerReturn => {
     try {
       return controllerRef.current.getLatestAnswerForCurrentFlashcard();
     } catch (error) {
-      handleError(error as Error, 'getLatestAnswerForCurrentFlashcard');
+      handleError(error as Error, "getLatestAnswerForCurrentFlashcard");
       return null;
     }
   }, [handleError]);
@@ -255,7 +275,7 @@ export const useAnswer = (): UseAnswerReturn => {
     try {
       return controllerRef.current.hasAnswerForCurrentFlashcard();
     } catch (error) {
-      handleError(error as Error, 'hasAnswerForCurrentFlashcard');
+      handleError(error as Error, "hasAnswerForCurrentFlashcard");
       return false;
     }
   }, [handleError]);
@@ -266,7 +286,7 @@ export const useAnswer = (): UseAnswerReturn => {
     try {
       return controllerRef.current.getAnswerAttemptsForCurrentFlashcard();
     } catch (error) {
-      handleError(error as Error, 'getAnswerAttemptsForCurrentFlashcard');
+      handleError(error as Error, "getAnswerAttemptsForCurrentFlashcard");
       return 0;
     }
   }, [handleError]);
@@ -276,18 +296,18 @@ export const useAnswer = (): UseAnswerReturn => {
 
     try {
       controllerRef.current.reset();
-      
+
       updateState({
-        userAnswer: '',
+        userAnswer: "",
         validationResult: null,
         isSubmitting: false,
         showFeedback: false,
         currentAnswer: null,
         answerHistory: [],
-        sessionId: controllerRef.current.getSessionId()
+        sessionId: controllerRef.current.getSessionId(),
       });
     } catch (error) {
-      handleError(error as Error, 'reset');
+      handleError(error as Error, "reset");
     }
   }, [updateState, handleError]);
 
@@ -310,7 +330,7 @@ export const useAnswer = (): UseAnswerReturn => {
     hasAnswerForCurrentFlashcard,
     getAnswerAttemptsForCurrentFlashcard,
     reset,
-    getState
+    getState,
   };
 };
 

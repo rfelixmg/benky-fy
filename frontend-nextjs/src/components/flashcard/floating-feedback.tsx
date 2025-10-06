@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { FlashcardItem, UserSettings } from '@/core/api-client';
-import { ValidationResult } from '@/core/validation';
+import { useEffect, useState } from "react";
+import { FlashcardItem, UserSettings } from "@/core/api-client";
+import { ValidationResult } from "@/core/validation";
 
 interface FloatingFeedbackProps {
   item: FlashcardItem;
@@ -18,18 +18,18 @@ interface FloatingFeedbackProps {
   onClose: () => void;
 }
 
-export function FloatingFeedback({ 
-  item, 
-  userAnswer, 
-  isCorrect, 
-  matchedType, 
+export function FloatingFeedback({
+  item,
+  userAnswer,
+  isCorrect,
+  matchedType,
   convertedAnswer,
   settings,
   frontendValidationResult,
   userAnswers = {},
   moduleName,
   timerDuration = 8000,
-  onClose
+  onClose,
 }: FloatingFeedbackProps) {
   const [timeLeft, setTimeLeft] = useState(Math.ceil(timerDuration / 1000));
 
@@ -40,7 +40,7 @@ export function FloatingFeedback({
     }, timerDuration);
 
     const interval = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         if (prev <= 1) {
           onClose();
           return 0;
@@ -58,7 +58,7 @@ export function FloatingFeedback({
   // Handle keyboard events
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === 'Escape') {
+      if (e.key === "Enter" || e.key === "Escape") {
         e.preventDefault();
         e.stopPropagation();
         onClose();
@@ -66,40 +66,48 @@ export function FloatingFeedback({
     };
 
     // Add event listener with capture to ensure it's not blocked
-    document.addEventListener('keydown', handleKeyPress, true);
-    return () => document.removeEventListener('keydown', handleKeyPress, true);
+    document.addEventListener("keydown", handleKeyPress, true);
+    return () => document.removeEventListener("keydown", handleKeyPress, true);
   }, [onClose]);
 
   // Get enabled input modes (considering both user settings AND module support)
   const getEnabledModes = () => {
     const moduleSupports = {
-      katakana: moduleName === 'katakana' || moduleName === 'katakana_words',
-      kanji: !['hiragana', 'katakana', 'katakana_words'].includes(moduleName || ''),
+      katakana: moduleName === "katakana" || moduleName === "katakana_words",
+      kanji: !["hiragana", "katakana", "katakana_words"].includes(
+        moduleName || "",
+      ),
       english: true, // All modules support English
       hiragana: true, // All modules support Hiragana
-      romaji: true // All modules support Romaji
+      romaji: true, // All modules support Romaji
     };
-    
+
     const modes = [];
-    if (settings.input_hiragana && moduleSupports.hiragana) modes.push('hiragana');
-    if (settings.input_katakana && moduleSupports.katakana) modes.push('katakana');
-    if (settings.input_kanji && moduleSupports.kanji) modes.push('kanji');
-    if (settings.input_english && moduleSupports.english) modes.push('english');
-    if (settings.input_romaji && moduleSupports.romaji) modes.push('romaji');
+    if (settings.input_hiragana && moduleSupports.hiragana)
+      modes.push("hiragana");
+    if (settings.input_katakana && moduleSupports.katakana)
+      modes.push("katakana");
+    if (settings.input_kanji && moduleSupports.kanji) modes.push("kanji");
+    if (settings.input_english && moduleSupports.english) modes.push("english");
+    if (settings.input_romaji && moduleSupports.romaji) modes.push("romaji");
     return modes;
   };
 
   const enabledModes = getEnabledModes();
   const isMultipleInput = enabledModes.length > 1;
-  
 
   // Get feedback color for the container background
   const getContainerFeedbackColor = () => {
-    if (frontendValidationResult && frontendValidationResult.results && frontendValidationResult.results.length > 1) {
+    if (
+      frontendValidationResult &&
+      frontendValidationResult.results &&
+      frontendValidationResult.results.length > 1
+    ) {
       // Multiple input mode - use results array
-      const correctCount = frontendValidationResult.results.filter(Boolean).length;
+      const correctCount =
+        frontendValidationResult.results.filter(Boolean).length;
       const totalCount = frontendValidationResult.results.length;
-      
+
       if (correctCount === totalCount) {
         return "bg-emerald-500/20 border-emerald-400 text-emerald-300";
       } else if (correctCount > 0) {
@@ -115,7 +123,7 @@ export function FloatingFeedback({
       return "bg-red-500/20 border-red-400 text-red-300";
     }
     // Fallback to overall isCorrect
-    return isCorrect 
+    return isCorrect
       ? "bg-emerald-500/20 border-emerald-400 text-emerald-300"
       : "bg-red-500/20 border-red-400 text-red-300";
   };
@@ -123,12 +131,18 @@ export function FloatingFeedback({
   // Get expected values for each input type
   const getExpectedValue = (mode: string) => {
     switch (mode) {
-      case 'hiragana': return item.hiragana || '';
-      case 'katakana': return item.katakana || '';
-      case 'kanji': return item.kanji || '';
-      case 'english': return item.english || '';
-      case 'romaji': return item.hiragana || ''; // Romaji typically converts to hiragana
-      default: return '';
+      case "hiragana":
+        return item.hiragana || "";
+      case "katakana":
+        return item.katakana || "";
+      case "kanji":
+        return item.kanji || "";
+      case "english":
+        return item.english || "";
+      case "romaji":
+        return item.hiragana || ""; // Romaji typically converts to hiragana
+      default:
+        return "";
     }
   };
 
@@ -142,7 +156,11 @@ export function FloatingFeedback({
 
   // Get status for each input type
   const getStatus = (mode: string) => {
-    if (frontendValidationResult && frontendValidationResult.results && frontendValidationResult.results.length > 1) {
+    if (
+      frontendValidationResult &&
+      frontendValidationResult.results &&
+      frontendValidationResult.results.length > 1
+    ) {
       // Multiple input mode - check individual results
       const modeIndex = enabledModes.indexOf(mode);
       return frontendValidationResult.results[modeIndex] || false;
@@ -154,7 +172,7 @@ export function FloatingFeedback({
   };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget) {
@@ -162,7 +180,9 @@ export function FloatingFeedback({
         }
       }}
     >
-      <div className={`max-w-2xl w-full p-6 rounded-lg border backdrop-blur-sm ${getContainerFeedbackColor()}`}>
+      <div
+        className={`max-w-2xl w-full p-6 rounded-lg border backdrop-blur-sm ${getContainerFeedbackColor()}`}
+      >
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-white">Answer Feedback</h3>
@@ -216,28 +236,34 @@ export function FloatingFeedback({
               </tr>
             </thead>
             <tbody>
-              {(frontendValidationResult && frontendValidationResult.results && frontendValidationResult.results.length > 1 
-                ? enabledModes 
-                : matchedType ? [matchedType] : enabledModes
+              {(frontendValidationResult &&
+              frontendValidationResult.results &&
+              frontendValidationResult.results.length > 1
+                ? enabledModes
+                : matchedType
+                  ? [matchedType]
+                  : enabledModes
               ).map((mode) => {
                 const userInput = getUserInput(mode);
                 const expectedValue = getExpectedValue(mode);
                 const isCorrectField = getStatus(mode);
-                
+
                 return (
                   <tr key={mode} className="border-b border-white/10">
                     <td className="px-3 py-2 text-white/90 capitalize text-sm">
                       {mode}
                     </td>
                     <td className="px-3 py-2 text-white text-sm font-medium">
-                      {userInput || '-'}
+                      {userInput || "-"}
                     </td>
                     <td className="px-3 py-2 text-white/80 text-sm">
-                      {expectedValue || '-'}
+                      {expectedValue || "-"}
                     </td>
                     <td className="px-3 py-2 text-center">
-                      <span className={`text-lg ${isCorrectField ? 'text-emerald-400' : 'text-red-400'}`}>
-                        {isCorrectField ? '✅' : '❌'}
+                      <span
+                        className={`text-lg ${isCorrectField ? "text-emerald-400" : "text-red-400"}`}
+                      >
+                        {isCorrectField ? "✅" : "❌"}
                       </span>
                     </td>
                   </tr>

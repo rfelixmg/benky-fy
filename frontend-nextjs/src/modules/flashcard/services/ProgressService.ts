@@ -1,11 +1,11 @@
-import { 
-  ProgressData, 
-  ProgressUpdate, 
-  ProgressMetrics, 
-  ProgressStatus 
-} from '../types/ProgressTypes';
-import { ProgressModel } from '../models/ProgressModel';
-import { AnswerResult } from '../types/AnswerTypes';
+import {
+  ProgressData,
+  ProgressUpdate,
+  ProgressMetrics,
+  ProgressStatus,
+} from "../types/ProgressTypes";
+import { ProgressModel } from "../models/ProgressModel";
+import { AnswerResult } from "../types/AnswerTypes";
 
 /**
  * ProgressService - Service layer for progress tracking
@@ -15,7 +15,7 @@ export class ProgressService {
   private baseUrl: string;
   private cache: Map<string, ProgressData> = new Map();
 
-  constructor(baseUrl: string = '/api/progress') {
+  constructor(baseUrl: string = "/api/progress") {
     this.baseUrl = baseUrl;
   }
 
@@ -25,20 +25,25 @@ export class ProgressService {
    * @param answerResult Answer result
    * @returns Promise<void>
    */
-  async updateProgress(moduleName: string, answerResult: AnswerResult): Promise<void> {
+  async updateProgress(
+    moduleName: string,
+    answerResult: AnswerResult,
+  ): Promise<void> {
     try {
       // Get current progress
       let progress = await this.getProgress(moduleName);
-      
+
       // Create progress update
       const update: ProgressUpdate = {
         moduleName,
         itemId: answerResult.flashcardId,
         isCorrect: answerResult.isCorrect,
         attempts: answerResult.attempts,
-        timeSpent: answerResult.timestamp ? Date.now() - answerResult.timestamp.getTime() : 0,
+        timeSpent: answerResult.timestamp
+          ? Date.now() - answerResult.timestamp.getTime()
+          : 0,
         timestamp: new Date(),
-        sessionId: answerResult.sessionId
+        sessionId: answerResult.sessionId,
       };
 
       // Update progress model
@@ -47,10 +52,11 @@ export class ProgressService {
 
       // Save updated progress
       await this.saveProgress(moduleName, progressModel.toJSON());
-
     } catch (error) {
-      console.error('Error updating progress:', error);
-      throw new Error(`Failed to update progress: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error updating progress:", error);
+      throw new Error(
+        `Failed to update progress: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -67,7 +73,7 @@ export class ProgressService {
       }
 
       const response = await fetch(`${this.baseUrl}/${moduleName}`);
-      
+
       if (!response.ok) {
         if (response.status === 404) {
           // Create new progress if not found
@@ -77,14 +83,16 @@ export class ProgressService {
       }
 
       const progressData = await response.json();
-      
+
       // Cache the result
       this.cache.set(moduleName, progressData);
-      
+
       return progressData;
     } catch (error) {
-      console.error('Error fetching progress:', error);
-      throw new Error(`Failed to fetch progress: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error fetching progress:", error);
+      throw new Error(
+        `Failed to fetch progress: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -106,14 +114,17 @@ export class ProgressService {
         streakDays: progress.streakDays || 0,
         totalTimeSpent: progress.totalTimeSpent || 0,
         improvementRate: await this.calculateImprovementRate(moduleName),
-        difficultyDistribution: await this.getDifficultyDistribution(moduleName),
-        mistakePatterns: await this.getMistakePatterns(moduleName)
+        difficultyDistribution:
+          await this.getDifficultyDistribution(moduleName),
+        mistakePatterns: await this.getMistakePatterns(moduleName),
       };
 
       return metrics;
     } catch (error) {
-      console.error('Error getting progress metrics:', error);
-      throw new Error(`Failed to get progress metrics: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error getting progress metrics:", error);
+      throw new Error(
+        `Failed to get progress metrics: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -126,17 +137,18 @@ export class ProgressService {
     try {
       const progress = await this.getProgress(moduleName);
       const progressModel = new ProgressModel(progress);
-      
+
       progressModel.reset();
-      
+
       await this.saveProgress(moduleName, progressModel.toJSON());
-      
+
       // Clear cache
       this.cache.delete(moduleName);
-      
     } catch (error) {
-      console.error('Error resetting progress:', error);
-      throw new Error(`Failed to reset progress: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error resetting progress:", error);
+      throw new Error(
+        `Failed to reset progress: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -144,19 +156,23 @@ export class ProgressService {
    * Get progress summary for all modules
    * @returns Promise<Array<{moduleName: string, summary: any}>>
    */
-  async getAllProgressSummaries(): Promise<Array<{moduleName: string, summary: any}>> {
+  async getAllProgressSummaries(): Promise<
+    Array<{ moduleName: string; summary: any }>
+  > {
     try {
       const response = await fetch(`${this.baseUrl}/summaries`);
-      
+
       if (!response.ok) {
-        throw new Error('Failed to fetch progress summaries');
+        throw new Error("Failed to fetch progress summaries");
       }
 
       const summaries = await response.json();
       return summaries;
     } catch (error) {
-      console.error('Error getting progress summaries:', error);
-      throw new Error(`Failed to get progress summaries: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error getting progress summaries:", error);
+      throw new Error(
+        `Failed to get progress summaries: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -178,7 +194,7 @@ export class ProgressService {
       createdAt: new Date(),
       status: ProgressStatus.NOT_STARTED,
       streakDays: 0,
-      totalTimeSpent: 0
+      totalTimeSpent: 0,
     };
 
     await this.saveProgress(moduleName, newProgress);
@@ -191,14 +207,17 @@ export class ProgressService {
    * @param progressData Progress data to save
    * @returns Promise<void>
    */
-  private async saveProgress(moduleName: string, progressData: ProgressData): Promise<void> {
+  private async saveProgress(
+    moduleName: string,
+    progressData: ProgressData,
+  ): Promise<void> {
     try {
       const response = await fetch(`${this.baseUrl}/${moduleName}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(progressData)
+        body: JSON.stringify(progressData),
       });
 
       if (!response.ok) {
@@ -207,10 +226,11 @@ export class ProgressService {
 
       // Update cache
       this.cache.set(moduleName, progressData);
-      
     } catch (error) {
-      console.error('Error saving progress:', error);
-      throw new Error(`Failed to save progress: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error saving progress:", error);
+      throw new Error(
+        `Failed to save progress: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   }
 
@@ -221,8 +241,10 @@ export class ProgressService {
    */
   private async calculateImprovementRate(moduleName: string): Promise<number> {
     try {
-      const response = await fetch(`${this.baseUrl}/${moduleName}/improvement-rate`);
-      
+      const response = await fetch(
+        `${this.baseUrl}/${moduleName}/improvement-rate`,
+      );
+
       if (!response.ok) {
         return 0; // Default to 0 if not available
       }
@@ -230,7 +252,7 @@ export class ProgressService {
       const data = await response.json();
       return data.improvementRate || 0;
     } catch (error) {
-      console.error('Error calculating improvement rate:', error);
+      console.error("Error calculating improvement rate:", error);
       return 0;
     }
   }
@@ -240,10 +262,14 @@ export class ProgressService {
    * @param moduleName Module name
    * @returns Difficulty distribution object
    */
-  private async getDifficultyDistribution(moduleName: string): Promise<Record<string, number>> {
+  private async getDifficultyDistribution(
+    moduleName: string,
+  ): Promise<Record<string, number>> {
     try {
-      const response = await fetch(`${this.baseUrl}/${moduleName}/difficulty-distribution`);
-      
+      const response = await fetch(
+        `${this.baseUrl}/${moduleName}/difficulty-distribution`,
+      );
+
       if (!response.ok) {
         return { beginner: 0, intermediate: 0, advanced: 0 };
       }
@@ -251,7 +277,7 @@ export class ProgressService {
       const data = await response.json();
       return data.distribution || { beginner: 0, intermediate: 0, advanced: 0 };
     } catch (error) {
-      console.error('Error getting difficulty distribution:', error);
+      console.error("Error getting difficulty distribution:", error);
       return { beginner: 0, intermediate: 0, advanced: 0 };
     }
   }
@@ -261,14 +287,18 @@ export class ProgressService {
    * @param moduleName Module name
    * @returns Array of mistake patterns
    */
-  private async getMistakePatterns(moduleName: string): Promise<Array<{
-    pattern: string;
-    frequency: number;
-    severity: 'low' | 'medium' | 'high';
-  }>> {
+  private async getMistakePatterns(moduleName: string): Promise<
+    Array<{
+      pattern: string;
+      frequency: number;
+      severity: "low" | "medium" | "high";
+    }>
+  > {
     try {
-      const response = await fetch(`${this.baseUrl}/${moduleName}/mistake-patterns`);
-      
+      const response = await fetch(
+        `${this.baseUrl}/${moduleName}/mistake-patterns`,
+      );
+
       if (!response.ok) {
         return [];
       }
@@ -276,7 +306,7 @@ export class ProgressService {
       const data = await response.json();
       return data.patterns || [];
     } catch (error) {
-      console.error('Error getting mistake patterns:', error);
+      console.error("Error getting mistake patterns:", error);
       return [];
     }
   }
@@ -300,7 +330,7 @@ export class ProgressService {
   getCacheStats(): { size: number; modules: string[] } {
     return {
       size: this.cache.size,
-      modules: Array.from(this.cache.keys())
+      modules: Array.from(this.cache.keys()),
     };
   }
 }

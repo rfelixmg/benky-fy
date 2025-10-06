@@ -1,7 +1,7 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Loader2, CheckCircle, XCircle } from 'lucide-react';
-import { cn } from '@/core/utils';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Loader2, CheckCircle, XCircle } from "lucide-react";
+import { cn } from "@/core/utils";
 
 interface SubmitButtonProps {
   onSubmit: () => void;
@@ -19,10 +19,10 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   disabled = false,
   isSubmitting = false,
   className,
-  children = 'Submit'
+  children = "Submit",
 }) => {
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' && !disabled && !isSubmitting) {
+    if (event.key === "Enter" && !disabled && !isSubmitting) {
       event.preventDefault();
       onSubmit();
     }
@@ -53,11 +53,11 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
       disabled={disabled || isSubmitting}
       onKeyDown={handleKeyDown}
       className={cn(
-        'w-full transition-all duration-200',
-        'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-        disabled && 'opacity-50 cursor-not-allowed',
-        isSubmitting && 'opacity-75 cursor-wait',
-        className
+        "w-full transition-all duration-200",
+        "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+        disabled && "opacity-50 cursor-not-allowed",
+        isSubmitting && "opacity-75 cursor-wait",
+        className,
       )}
     >
       {getButtonContent()}

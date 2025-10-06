@@ -2,8 +2,8 @@
  * Activity Validator interfaces and types for learning activities
  */
 
-import { ValidationResult } from './ValidationResult';
-import { UserSettings } from '@/core/api-client';
+import { ValidationResult } from "./ValidationResult";
+import { UserSettings } from "@/core/api-client";
 
 /**
  * Answer set containing correct answers for different input types
@@ -45,7 +45,10 @@ export interface ActivityValidator {
    * @param correctAnswers Set of correct answers
    * @returns ValidationResult
    */
-  validateAnswer(userAnswer: string, correctAnswers: AnswerSet): ValidationResult;
+  validateAnswer(
+    userAnswer: string,
+    correctAnswers: AnswerSet,
+  ): ValidationResult;
 
   /**
    * Get enabled input types based on user settings
@@ -60,5 +63,8 @@ export interface ActivityValidator {
    * @param correctAnswers Set of correct answers
    * @returns Array of ValidationResults
    */
-  validateMultipleInputs(inputs: Record<string, string>, correctAnswers: AnswerSet): ValidationResult[];
+  validateMultipleInputs(
+    inputs: Record<string, string>,
+    correctAnswers: AnswerSet,
+  ): ValidationResult[];
 }

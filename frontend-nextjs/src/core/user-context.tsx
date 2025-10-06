@@ -1,6 +1,12 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 interface User {
   id: string;
@@ -23,43 +29,47 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // First, check localStorage for existing user
-    const storedUser = localStorage.getItem('benkyfy_user');
+    const storedUser = localStorage.getItem("benkyfy_user");
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
         setUser(userData);
       } catch (error) {
-        console.error('Error parsing stored user:', error);
-        localStorage.removeItem('benkyfy_user');
+        console.error("Error parsing stored user:", error);
+        localStorage.removeItem("benkyfy_user");
       }
     }
 
     // Then check for user info in URL params (from Google OAuth)
     const urlParams = new URLSearchParams(window.location.search);
-    const userParam = urlParams.get('user');
-    
+    const userParam = urlParams.get("user");
+
     if (userParam) {
       try {
         const userData = JSON.parse(userParam);
         setUser(userData);
         // Store in localStorage for persistence
-        localStorage.setItem('benkyfy_user', JSON.stringify(userData));
+        localStorage.setItem("benkyfy_user", JSON.stringify(userData));
         // Clean up URL
-        window.history.replaceState({}, document.title, window.location.pathname);
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        );
       } catch (error) {
-        console.error('Error parsing user info:', error);
+        console.error("Error parsing user info:", error);
       }
     }
-    
+
     setIsLoading(false);
   }, []);
 
   const updateUser = (newUser: User | null) => {
     setUser(newUser);
     if (newUser) {
-      localStorage.setItem('benkyfy_user', JSON.stringify(newUser));
+      localStorage.setItem("benkyfy_user", JSON.stringify(newUser));
     } else {
-      localStorage.removeItem('benkyfy_user');
+      localStorage.removeItem("benkyfy_user");
     }
   };
 
@@ -73,7 +83,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 export function useUser() {
   const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error('useUser must be used within a UserProvider');
+    throw new Error("useUser must be used within a UserProvider");
   }
   return context;
 }

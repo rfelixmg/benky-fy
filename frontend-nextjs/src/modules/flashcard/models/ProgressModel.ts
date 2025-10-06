@@ -1,8 +1,8 @@
-import { 
-  ProgressData, 
-  ProgressUpdate, 
-  ProgressStatus 
-} from '../types/ProgressTypes';
+import {
+  ProgressData,
+  ProgressUpdate,
+  ProgressStatus,
+} from "../types/ProgressTypes";
 
 /**
  * ProgressModel - Data model for progress tracking
@@ -32,7 +32,9 @@ export class ProgressModel {
     this.correctAnswers = data.correctAnswers || 0;
     this.incorrectAnswers = data.incorrectAnswers || 0;
     this.accuracy = data.accuracy || 0;
-    this.lastUpdated = data.lastUpdated ? new Date(data.lastUpdated) : new Date();
+    this.lastUpdated = data.lastUpdated
+      ? new Date(data.lastUpdated)
+      : new Date();
     this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
     this.status = data.status || ProgressStatus.NOT_STARTED;
     this.streakDays = data.streakDays || 0;
@@ -57,7 +59,7 @@ export class ProgressModel {
       createdAt: this.createdAt,
       status: this.status,
       streakDays: this.streakDays,
-      totalTimeSpent: this.totalTimeSpent
+      totalTimeSpent: this.totalTimeSpent,
     };
   }
 
@@ -77,45 +79,45 @@ export class ProgressModel {
   validate(): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
 
-    if (!this.id || this.id.trim() === '') {
-      errors.push('ID is required');
+    if (!this.id || this.id.trim() === "") {
+      errors.push("ID is required");
     }
 
-    if (!this.moduleName || this.moduleName.trim() === '') {
-      errors.push('Module name is required');
+    if (!this.moduleName || this.moduleName.trim() === "") {
+      errors.push("Module name is required");
     }
 
     if (this.totalItems < 0) {
-      errors.push('Total items cannot be negative');
+      errors.push("Total items cannot be negative");
     }
 
     if (this.completedItems < 0 || this.completedItems > this.totalItems) {
-      errors.push('Completed items must be between 0 and total items');
+      errors.push("Completed items must be between 0 and total items");
     }
 
     if (this.correctAnswers < 0) {
-      errors.push('Correct answers cannot be negative');
+      errors.push("Correct answers cannot be negative");
     }
 
     if (this.incorrectAnswers < 0) {
-      errors.push('Incorrect answers cannot be negative');
+      errors.push("Incorrect answers cannot be negative");
     }
 
     if (this.accuracy < 0 || this.accuracy > 100) {
-      errors.push('Accuracy must be between 0 and 100');
+      errors.push("Accuracy must be between 0 and 100");
     }
 
     if (this.streakDays && this.streakDays < 0) {
-      errors.push('Streak days cannot be negative');
+      errors.push("Streak days cannot be negative");
     }
 
     if (this.totalTimeSpent && this.totalTimeSpent < 0) {
-      errors.push('Total time spent cannot be negative');
+      errors.push("Total time spent cannot be negative");
     }
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -137,7 +139,7 @@ export class ProgressModel {
       createdAt: new Date(this.createdAt),
       status: this.status,
       streakDays: this.streakDays,
-      totalTimeSpent: this.totalTimeSpent
+      totalTimeSpent: this.totalTimeSpent,
     });
   }
 
@@ -147,11 +149,11 @@ export class ProgressModel {
    */
   updateProgress(update: ProgressUpdate): void {
     if (update.moduleName !== this.moduleName) {
-      throw new Error('Module name mismatch');
+      throw new Error("Module name mismatch");
     }
 
     this.completedItems += 1;
-    
+
     if (update.isCorrect) {
       this.correctAnswers += 1;
     } else {
@@ -161,7 +163,7 @@ export class ProgressModel {
     this.recalculateAccuracy();
     this.updateStatus();
     this.lastUpdated = new Date();
-    
+
     if (update.timeSpent) {
       this.totalTimeSpent = (this.totalTimeSpent || 0) + update.timeSpent;
     }
@@ -172,7 +174,8 @@ export class ProgressModel {
    */
   recalculateAccuracy(): void {
     const totalAnswers = this.correctAnswers + this.incorrectAnswers;
-    this.accuracy = totalAnswers > 0 ? (this.correctAnswers / totalAnswers) * 100 : 0;
+    this.accuracy =
+      totalAnswers > 0 ? (this.correctAnswers / totalAnswers) * 100 : 0;
   }
 
   /**
@@ -205,7 +208,9 @@ export class ProgressModel {
    * @returns Completion percentage
    */
   getCompletionPercentage(): number {
-    return this.totalItems > 0 ? (this.completedItems / this.totalItems) * 100 : 0;
+    return this.totalItems > 0
+      ? (this.completedItems / this.totalItems) * 100
+      : 0;
   }
 
   /**
@@ -229,7 +234,9 @@ export class ProgressModel {
    * @returns Average time in milliseconds
    */
   getAverageTimePerItem(): number {
-    return this.completedItems > 0 ? (this.totalTimeSpent || 0) / this.completedItems : 0;
+    return this.completedItems > 0
+      ? (this.totalTimeSpent || 0) / this.completedItems
+      : 0;
   }
 
   /**

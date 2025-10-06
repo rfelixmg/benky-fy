@@ -1,7 +1,11 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { ProgressController } from '../controllers/ProgressController';
-import { ProgressData, ProgressMetrics, ProgressSummary } from '../types/ProgressTypes';
-import { AnswerResult } from '../types/AnswerTypes';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { ProgressController } from "../controllers/ProgressController";
+import {
+  ProgressData,
+  ProgressMetrics,
+  ProgressSummary,
+} from "../types/ProgressTypes";
+import { AnswerResult } from "../types/AnswerTypes";
 
 interface UseProgressState {
   progress: ProgressData | null;
@@ -44,9 +48,9 @@ export const useProgress = (): UseProgressReturn => {
       sessionDuration: 0,
       itemsCompleted: 0,
       accuracy: 0,
-      averageTimePerItem: 0
+      averageTimePerItem: 0,
     },
-    progressInsights: []
+    progressInsights: [],
   });
 
   const controllerRef = useRef<ProgressController | null>(null);
@@ -59,40 +63,46 @@ export const useProgress = (): UseProgressReturn => {
   }, []);
 
   const updateState = useCallback((updates: Partial<UseProgressState>) => {
-    setState(prev => ({ ...prev, ...updates }));
+    setState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const handleError = useCallback((error: Error, context: string) => {
-    console.error(`useProgress ${context}:`, error);
-    updateState({
-      error: `${context}: ${error.message}`,
-      isLoading: false
-    });
-  }, [updateState]);
-
-  const updateProgress = useCallback(async (answerResult: AnswerResult) => {
-    if (!controllerRef.current) return;
-
-    try {
-      updateState({ isLoading: true, error: null });
-
-      await controllerRef.current.updateProgress(answerResult);
-      
-      const progress = controllerRef.current.getProgress();
-      const sessionStats = controllerRef.current.getSessionStatistics();
-      const insights = controllerRef.current.getProgressInsights();
-      
+  const handleError = useCallback(
+    (error: Error, context: string) => {
+      console.error(`useProgress ${context}:`, error);
       updateState({
-        progress,
-        sessionStatistics: sessionStats,
-        progressInsights: insights,
+        error: `${context}: ${error.message}`,
         isLoading: false,
-        error: null
       });
-    } catch (error) {
-      handleError(error as Error, 'updateProgress');
-    }
-  }, [updateState, handleError]);
+    },
+    [updateState],
+  );
+
+  const updateProgress = useCallback(
+    async (answerResult: AnswerResult) => {
+      if (!controllerRef.current) return;
+
+      try {
+        updateState({ isLoading: true, error: null });
+
+        await controllerRef.current.updateProgress(answerResult);
+
+        const progress = controllerRef.current.getProgress();
+        const sessionStats = controllerRef.current.getSessionStatistics();
+        const insights = controllerRef.current.getProgressInsights();
+
+        updateState({
+          progress,
+          sessionStatistics: sessionStats,
+          progressInsights: insights,
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "updateProgress");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const getProgress = useCallback(() => {
     if (!controllerRef.current) return null;
@@ -100,7 +110,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.getProgress();
     } catch (error) {
-      handleError(error as Error, 'getProgress');
+      handleError(error as Error, "getProgress");
       return null;
     }
   }, [handleError]);
@@ -112,16 +122,16 @@ export const useProgress = (): UseProgressReturn => {
       updateState({ isLoading: true, error: null });
 
       const metrics = await controllerRef.current.getProgressMetrics();
-      
+
       updateState({
         metrics,
         isLoading: false,
-        error: null
+        error: null,
       });
-      
+
       return metrics;
     } catch (error) {
-      handleError(error as Error, 'getProgressMetrics');
+      handleError(error as Error, "getProgressMetrics");
       return null;
     }
   }, [updateState, handleError]);
@@ -133,58 +143,64 @@ export const useProgress = (): UseProgressReturn => {
       updateState({ isLoading: true, error: null });
 
       await controllerRef.current.resetProgress();
-      
+
       const progress = controllerRef.current.getProgress();
       const sessionStats = controllerRef.current.getSessionStatistics();
       const insights = controllerRef.current.getProgressInsights();
-      
+
       updateState({
         progress,
         sessionStatistics: sessionStats,
         progressInsights: insights,
         isLoading: false,
-        error: null
+        error: null,
       });
     } catch (error) {
-      handleError(error as Error, 'resetProgress');
+      handleError(error as Error, "resetProgress");
     }
   }, [updateState, handleError]);
 
-  const loadProgress = useCallback(async (moduleName: string) => {
-    if (!controllerRef.current) return;
+  const loadProgress = useCallback(
+    async (moduleName: string) => {
+      if (!controllerRef.current) return;
 
-    try {
-      updateState({ isLoading: true, error: null });
+      try {
+        updateState({ isLoading: true, error: null });
 
-      await controllerRef.current.loadProgress(moduleName);
-      
-      const progress = controllerRef.current.getProgress();
-      const sessionStats = controllerRef.current.getSessionStatistics();
-      const insights = controllerRef.current.getProgressInsights();
-      
-      updateState({
-        progress,
-        currentModule: moduleName,
-        sessionStatistics: sessionStats,
-        progressInsights: insights,
-        isLoading: false,
-        error: null
-      });
-    } catch (error) {
-      handleError(error as Error, 'loadProgress');
-    }
-  }, [updateState, handleError]);
+        await controllerRef.current.loadProgress(moduleName);
 
-  const setCurrentModule = useCallback((moduleName: string) => {
-    if (!controllerRef.current) return;
+        const progress = controllerRef.current.getProgress();
+        const sessionStats = controllerRef.current.getSessionStatistics();
+        const insights = controllerRef.current.getProgressInsights();
 
-    try {
-      controllerRef.current.setCurrentModule(moduleName);
-      updateState({ currentModule: moduleName });
-    } catch (error) {
-      handleError(error as Error, 'setCurrentModule');
-    }
-  }, [updateState, handleError]);
+        updateState({
+          progress,
+          currentModule: moduleName,
+          sessionStatistics: sessionStats,
+          progressInsights: insights,
+          isLoading: false,
+          error: null,
+        });
+      } catch (error) {
+        handleError(error as Error, "loadProgress");
+      }
+    },
+    [updateState, handleError],
+  );
+
+  const setCurrentModule = useCallback(
+    (moduleName: string) => {
+      if (!controllerRef.current) return;
+
+      try {
+        controllerRef.current.setCurrentModule(moduleName);
+        updateState({ currentModule: moduleName });
+      } catch (error) {
+        handleError(error as Error, "setCurrentModule");
+      }
+    },
+    [updateState, handleError],
+  );
 
   const getProgressSummary = useCallback(() => {
     if (!controllerRef.current) return null;
@@ -192,7 +208,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.getProgressSummary();
     } catch (error) {
-      handleError(error as Error, 'getProgressSummary');
+      handleError(error as Error, "getProgressSummary");
       return null;
     }
   }, [handleError]);
@@ -203,19 +219,19 @@ export const useProgress = (): UseProgressReturn => {
         sessionDuration: 0,
         itemsCompleted: 0,
         accuracy: 0,
-        averageTimePerItem: 0
+        averageTimePerItem: 0,
       };
     }
 
     try {
       return controllerRef.current.getSessionStatistics();
     } catch (error) {
-      handleError(error as Error, 'getSessionStatistics');
+      handleError(error as Error, "getSessionStatistics");
       return {
         sessionDuration: 0,
         itemsCompleted: 0,
         accuracy: 0,
-        averageTimePerItem: 0
+        averageTimePerItem: 0,
       };
     }
   }, [handleError]);
@@ -226,7 +242,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.getProgressInsights();
     } catch (error) {
-      handleError(error as Error, 'getProgressInsights');
+      handleError(error as Error, "getProgressInsights");
       return [];
     }
   }, [handleError]);
@@ -237,7 +253,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.getCompletionPercentage();
     } catch (error) {
-      handleError(error as Error, 'getCompletionPercentage');
+      handleError(error as Error, "getCompletionPercentage");
       return 0;
     }
   }, [handleError]);
@@ -248,7 +264,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.getAccuracy();
     } catch (error) {
-      handleError(error as Error, 'getAccuracy');
+      handleError(error as Error, "getAccuracy");
       return 0;
     }
   }, [handleError]);
@@ -259,7 +275,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.getStreakDays();
     } catch (error) {
-      handleError(error as Error, 'getStreakDays');
+      handleError(error as Error, "getStreakDays");
       return 0;
     }
   }, [handleError]);
@@ -270,7 +286,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.getTotalTimeSpent();
     } catch (error) {
-      handleError(error as Error, 'getTotalTimeSpent');
+      handleError(error as Error, "getTotalTimeSpent");
       return 0;
     }
   }, [handleError]);
@@ -281,7 +297,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.isModuleCompleted();
     } catch (error) {
-      handleError(error as Error, 'isModuleCompleted');
+      handleError(error as Error, "isModuleCompleted");
       return false;
     }
   }, [handleError]);
@@ -292,7 +308,7 @@ export const useProgress = (): UseProgressReturn => {
     try {
       return controllerRef.current.isModuleMastered();
     } catch (error) {
-      handleError(error as Error, 'isModuleMastered');
+      handleError(error as Error, "isModuleMastered");
       return false;
     }
   }, [handleError]);
@@ -302,7 +318,7 @@ export const useProgress = (): UseProgressReturn => {
 
     try {
       controllerRef.current.reset();
-      
+
       updateState({
         progress: null,
         metrics: null,
@@ -313,12 +329,12 @@ export const useProgress = (): UseProgressReturn => {
           sessionDuration: 0,
           itemsCompleted: 0,
           accuracy: 0,
-          averageTimePerItem: 0
+          averageTimePerItem: 0,
         },
-        progressInsights: []
+        progressInsights: [],
       });
     } catch (error) {
-      handleError(error as Error, 'reset');
+      handleError(error as Error, "reset");
     }
   }, [updateState, handleError]);
 
@@ -344,7 +360,7 @@ export const useProgress = (): UseProgressReturn => {
     isModuleCompleted,
     isModuleMastered,
     reset,
-    getState
+    getState,
   };
 };
 

@@ -2,8 +2,14 @@
  * English Validator - Handles English text validation
  */
 
-import { ValidationStrategy, ValidationResult } from '../core/ValidationStrategy';
-import { createSuccessResult, createFailureResult } from '../core/ValidationResult';
+import {
+  ValidationStrategy,
+  ValidationResult,
+} from "../core/ValidationStrategy";
+import {
+  createSuccessResult,
+  createFailureResult,
+} from "../core/ValidationResult";
 
 export class EnglishValidator implements ValidationStrategy {
   /**
@@ -18,21 +24,24 @@ export class EnglishValidator implements ValidationStrategy {
 
     // Direct match
     if (normalizedInput === normalizedExpected) {
-      return createSuccessResult('english', normalizedInput);
+      return createSuccessResult("english", normalizedInput);
     }
 
     // Check for multiple correct answers (separated by / or ,)
     const expectedAnswers = this.parseMultipleAnswers(normalizedExpected);
     if (expectedAnswers.includes(normalizedInput)) {
-      return createSuccessResult('english', normalizedInput);
+      return createSuccessResult("english", normalizedInput);
     }
 
     // Check for partial matches
-    const similarity = this.calculateSimilarity(normalizedInput, normalizedExpected);
+    const similarity = this.calculateSimilarity(
+      normalizedInput,
+      normalizedExpected,
+    );
     if (similarity > 0.8) {
       return {
         isCorrect: false,
-        matchedType: 'english',
+        matchedType: "english",
         feedback: [`Close! Expected: ${expected}, Got: ${input}`],
         confidence: similarity,
       };
@@ -40,7 +49,7 @@ export class EnglishValidator implements ValidationStrategy {
 
     // Check for common variations
     if (this.hasCommonVariations(normalizedInput, normalizedExpected)) {
-      return createSuccessResult('english', normalizedInput, 0.8);
+      return createSuccessResult("english", normalizedInput, 0.8);
     }
 
     return createFailureResult([
@@ -54,7 +63,7 @@ export class EnglishValidator implements ValidationStrategy {
    * @returns Array of supported types
    */
   getSupportedTypes(): string[] {
-    return ['english', 'text'];
+    return ["english", "text"];
   }
 
   /**
@@ -66,8 +75,8 @@ export class EnglishValidator implements ValidationStrategy {
     return input
       .trim()
       .toLowerCase()
-      .replace(/[^\w\s\-']/g, '') // Remove punctuation except hyphens and apostrophes
-      .replace(/\s+/g, ' '); // Normalize whitespace
+      .replace(/[^\w\s\-']/g, "") // Remove punctuation except hyphens and apostrophes
+      .replace(/\s+/g, " "); // Normalize whitespace
   }
 
   /**
@@ -89,22 +98,22 @@ export class EnglishValidator implements ValidationStrategy {
 
     const answers = answerString
       .split(/[\/,]/)
-      .map(answer => this.normalize(answer))
-      .filter(answer => answer.length > 0);
+      .map((answer) => this.normalize(answer))
+      .filter((answer) => answer.length > 0);
 
     // Add variations for common patterns
     const flexibleAnswers = new Set<string>();
-    
-    answers.forEach(answer => {
+
+    answers.forEach((answer) => {
       flexibleAnswers.add(answer);
-      
+
       // Add version without "to " prefix for verbs
-      if (answer.startsWith('to ')) {
+      if (answer.startsWith("to ")) {
         flexibleAnswers.add(answer.substring(3));
       }
-      
+
       // Add version with "to " prefix if it doesn't have it
-      if (!answer.startsWith('to ') && answer.length > 0) {
+      if (!answer.startsWith("to ") && answer.length > 0) {
         flexibleAnswers.add(`to ${answer}`);
       }
     });
@@ -138,7 +147,9 @@ export class EnglishValidator implements ValidationStrategy {
    * @returns Edit distance
    */
   private levenshteinDistance(str1: string, str2: string): number {
-    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+    const matrix = Array(str2.length + 1)
+      .fill(null)
+      .map(() => Array(str1.length + 1).fill(null));
 
     for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
     for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
@@ -147,9 +158,9 @@ export class EnglishValidator implements ValidationStrategy {
       for (let i = 1; i <= str1.length; i++) {
         const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
         matrix[j][i] = Math.min(
-          matrix[j][i - 1] + 1,     // deletion
-          matrix[j - 1][i] + 1,     // insertion
-          matrix[j - 1][i - 1] + indicator // substitution
+          matrix[j][i - 1] + 1, // deletion
+          matrix[j - 1][i] + 1, // insertion
+          matrix[j - 1][i - 1] + indicator, // substitution
         );
       }
     }
@@ -176,20 +187,28 @@ export class EnglishValidator implements ValidationStrategy {
     };
 
     for (const [contracted, expanded] of Object.entries(contractions)) {
-      if ((input === contracted && expanded.includes(expected)) ||
-          (expected === contracted && expanded.includes(input))) {
+      if (
+        (input === contracted && expanded.includes(expected)) ||
+        (expected === contracted && expanded.includes(input))
+      ) {
         return true;
       }
     }
 
     // Check for singular/plural variations
-    if (input.endsWith('s') && !expected.endsWith('s') && 
-        input.slice(0, -1) === expected) {
+    if (
+      input.endsWith("s") &&
+      !expected.endsWith("s") &&
+      input.slice(0, -1) === expected
+    ) {
       return true;
     }
-    
-    if (expected.endsWith('s') && !input.endsWith('s') && 
-        expected.slice(0, -1) === input) {
+
+    if (
+      expected.endsWith("s") &&
+      !input.endsWith("s") &&
+      expected.slice(0, -1) === input
+    ) {
       return true;
     }
 
