@@ -67,9 +67,9 @@ class DatabaseManager:
     def _get_database_url(self) -> str:
         """Get database URL with GCP Cloud SQL support and local fallback."""
         # Check for direct DATABASE_URL first
-        database_url = os.getenv('DATABASE_URL')
-        if database_url:
-            return database_url
+        # database_url = os.getenv('DATABASE_URL')
+        # if database_url:
+        #     return database_url
         
         # Check for GCP Cloud SQL environment variables
         gcp_project_id = os.getenv('GCP_PROJECT_ID')
@@ -78,10 +78,16 @@ class DatabaseManager:
         gcp_db_user = os.getenv('GCP_DB_USER')
         gcp_db_password = os.getenv('GCP_DB_PASSWORD')
         gcp_db_name = os.getenv('GCP_DB_NAME')
+        gcp_db_host = os.getenv('GCP_DB_HOST')
         
         # Build Cloud SQL connection string
         if all([gcp_project_id, gcp_region, gcp_instance, gcp_db_user, gcp_db_password, gcp_db_name]):
-            return f"postgresql://{gcp_db_user}:{gcp_db_password}@/{gcp_db_name}?host=/cloudsql/{gcp_project_id}:{gcp_region}:{gcp_instance}"
+            if gcp_db_host:
+                # Direct connection via public IP
+                return f"postgresql://{gcp_db_user}:{gcp_db_password}@{gcp_db_host}:5432/{gcp_db_name}"
+            else:
+                # Unix socket connection (requires Cloud SQL Proxy)
+                return f"postgresql://{gcp_db_user}:{gcp_db_password}@/{gcp_db_name}?host=/cloudsql/{gcp_project_id}:{gcp_region}:{gcp_instance}"
         
         raise ValueError(
             "Database connection not configured. Set either:\n"
