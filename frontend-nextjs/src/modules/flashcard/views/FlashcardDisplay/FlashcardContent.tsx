@@ -3,7 +3,7 @@
 import React from "react";
 import { FlashcardItem } from "../../types/FlashcardTypes";
 import { UserSettings } from "@/core/api-client";
-import { Furigana, JapaneseText } from "@/components/japanese/furigana";
+import { FuriganaText, CharacterDisplay } from "@/components/japanese/core/display/furigana";
 
 interface FlashcardContentProps {
   flashcard: FlashcardItem;
@@ -23,20 +23,21 @@ export const FlashcardContent: React.FC<FlashcardContentProps> = ({
       const furiganaStyle = settings.furigana_style || "ruby";
 
       return (
-        <Furigana
-          kanji={text}
-          furigana={furigana}
-          showFurigana={true}
-          mode={furiganaStyle as "hover" | "inline" | "brackets" | "ruby"}
+        <FuriganaText
+          text={text}
+          reading={furigana}
+          showReading={true}
+          style={furiganaStyle === "ruby" ? "traditional" : "modern"}
           className="text-white"
+          size="xl"
         />
       );
     }
 
     return (
-      <JapaneseText
-        text={text}
-        showFurigana={settings.furigana_style === "hover"}
+      <CharacterDisplay
+        character={text}
+        size="xl"
         className="text-white"
       />
     );

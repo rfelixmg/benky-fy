@@ -25,10 +25,14 @@ export function KatakanaInput({
     }
 
     setIsConverting(true);
-    conversionHelper.debouncedConvert().then((result) => {
-      setPreview(result.converted);
-      setIsConverting(false);
-    });
+    const convert = async () => {
+      if (conversionHelper.debouncedConvert) {
+        const result = await conversionHelper.debouncedConvert();
+        setPreview(result.converted);
+        setIsConverting(false);
+      }
+    };
+    convert();
   }, [value, showPreview, conversionHelper]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

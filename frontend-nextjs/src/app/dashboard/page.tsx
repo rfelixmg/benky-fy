@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AuthGuard } from "@/components/common/auth/auth-guard";
 import { UserMenu } from "@/components/common/layout/navigation/user-menu";
 import { useAuth } from "@/core/hooks";
-import { FloatingElements } from "@/components/common/layout/floating-elements";
+import { FloatingElements } from "@/components/common/layout/background/floating-elements";
 import { RomajiInput } from "@/components/japanese/core/input/romaji";
 import { Button } from "@/components/ui/button";
 import {

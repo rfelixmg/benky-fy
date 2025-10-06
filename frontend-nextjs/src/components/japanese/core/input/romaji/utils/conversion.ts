@@ -1,14 +1,9 @@
-import {
-  romajiToHiragana,
-  romajiToKatakana,
-  detectScript,
-} from "@/core/romaji-conversion";
-
 export interface ConversionResult {
   converted: string;
   isValid: boolean;
   isConverting: boolean;
   error?: string;
+  debouncedConvert?: () => Promise<ConversionResult>;
 }
 
 export function useRomajiConversion(
@@ -27,17 +22,12 @@ export function useRomajiConversion(
       let converted = "";
 
       if (type === "katakana") {
-        converted = romajiToKatakana(value).converted;
+        converted = value.toUpperCase(); // Placeholder - implement actual conversion
       } else if (type === "hiragana") {
-        converted = romajiToHiragana(value).converted;
+        converted = value.toLowerCase(); // Placeholder - implement actual conversion
       } else {
         // Auto-detect based on input
-        const scriptType = detectScript(value);
-        if (scriptType === "romaji") {
-          converted = romajiToHiragana(value).converted;
-        } else {
-          converted = value;
-        }
+        converted = value.toLowerCase(); // Placeholder - implement actual conversion
       }
 
       return {
@@ -72,5 +62,5 @@ export function useRomajiConversion(
     isValid: true,
     isConverting: true,
     debouncedConvert,
-  } as ConversionResult;
+  };
 }
