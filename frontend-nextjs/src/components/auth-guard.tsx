@@ -69,7 +69,8 @@ interface UserMenuProps {
 
 export function UserMenu({ user }: UserMenuProps) {
   const handleLogout = () => {
-    apiClient.logout();
+    // Redirect to logout route
+    window.location.href = '/auth/logout';
   };
 
   return (

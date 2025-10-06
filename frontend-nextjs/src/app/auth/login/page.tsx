@@ -13,6 +13,14 @@ export default function LoginPage() {
   // Ensure component is mounted for client-side interactions
   useEffect(() => {
     setIsMounted(true);
+    
+    // Check for logout success and clear localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('logout') === 'success' && urlParams.get('clear') === 'true') {
+      localStorage.removeItem('benkyfy_user');
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }, []);
 
   const handleSocialLogin = async (provider: string) => {
@@ -144,6 +152,13 @@ export default function LoginPage() {
           <p className="text-sm text-primary-foreground/70 mt-8">
             Need help? Contact our support team.
           </p>
+          
+          {/* Logout Success Message */}
+          {typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('logout') === 'success' && (
+            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4 mt-6">
+              <p className="text-green-200 text-sm">Successfully logged out!</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
