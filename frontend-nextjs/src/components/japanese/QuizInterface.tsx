@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, KeyboardEvent } from "react";
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/ui/card";
 import { EnhancedFurigana } from "./furigana";
 import { romajiToHiragana } from "@/core/romaji-conversion";
 import {

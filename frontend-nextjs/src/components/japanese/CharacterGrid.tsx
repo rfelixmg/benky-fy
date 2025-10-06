@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, KeyboardEvent } from "react";
-import { Card, CardGrid } from "@/components/ui/Card";
+import { Card, CardGrid } from "@/components/ui/card";
 import { Furigana } from "./furigana";
 import {
   textStyles,

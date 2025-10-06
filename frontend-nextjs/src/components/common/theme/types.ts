@@ -11,7 +11,7 @@ export interface ThemeToggleProps {
 }
 
 export interface ThemeContextValue {
-  theme: string;
+  theme?: string;
   setTheme: (theme: string) => void;
   systemTheme?: string;
   resolvedTheme?: string;

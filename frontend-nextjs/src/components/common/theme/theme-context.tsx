@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useTheme as useNextTheme } from 'next-themes';
 import { ThemeContextValue } from './types';
 
@@ -15,7 +15,17 @@ export function useTheme() {
 }
 
 export function ThemeContextProvider({ children }: { children: React.ReactNode }) {
-  const themeContext = useNextTheme();
+  const nextTheme = useNextTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const themeContext: ThemeContextValue = {
+    ...nextTheme,
+    mounted,
+  };
 
   return (
     <ThemeContext.Provider value={themeContext}>

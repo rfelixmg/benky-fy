@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { AuthGuard } from "@/components/auth-guard";
-import { UserMenu } from "@/components/user-menu";
+import { AuthGuard } from "@/components/common/auth/auth-guard";
+import { UserMenu } from "@/components/common/layout/navigation/user-menu";
 import { useAuth } from "@/core/hooks";
-import { FloatingElements } from "@/components/floating-elements";
+import { FloatingElements } from "@/components/common/layout/floating-elements";
 import { RomajiInput } from "@/components/japanese/romaji-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { Card } from "@/components/ui/card";
+import { ProgressBar } from "@/components/common/layout/progress/progress-bar";
+import { StatCard } from "@/components/common/layout/stats/stat-card";
+import { ActivityCard } from "@/components/common/layout/activity/activity-card";
+import { GoalProgress } from "@/components/common/layout/progress/goal-progress";
 
 const dashboardData = {
   todayStats: {
@@ -126,8 +131,7 @@ export default function DashboardPage() {
             </Link>
             <div>
               <h1 className="text-3xl font-bold text-primary-foreground">
-                Welcome back, {authData?.user?.name?.split(" ")[0] || "Student"}
-                !
+                Welcome back, {authData?.user?.name?.split(" ")[0] || "Student"}!
               </h1>
               <p className="text-primary-foreground/80">
                 Ready to continue your Japanese learning journey?
@@ -135,7 +139,12 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {authData?.user && <UserMenu user={authData.user} />}
+          {authData?.user && (
+            <UserMenu
+              onProfileClick={() => window.location.href = '/profile'}
+              onSettingsClick={() => window.location.href = '/settings'}
+            />
+          )}
         </div>
 
         {/* Main Content */}
@@ -143,29 +152,19 @@ export default function DashboardPage() {
           <div className="max-w-6xl mx-auto">
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              {stats.map((stat) => {
-                const IconComponent = stat.icon;
-                return (
-                  <div
-                    key={stat.label}
-                    className="bg-background/10 backdrop-blur-sm rounded-lg p-6"
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <IconComponent className={`w-6 h-6 ${stat.color}`} />
-                    </div>
-                    <div className="text-2xl font-bold text-primary-foreground mb-1">
-                      {stat.value}
-                    </div>
-                    <div className="text-sm text-primary-foreground/70">
-                      {stat.label}
-                    </div>
-                  </div>
-                );
-              })}
+              {stats.map((stat) => (
+                <StatCard
+                  key={stat.label}
+                  label={stat.label}
+                  value={stat.value}
+                  icon={stat.icon}
+                  color={stat.color}
+                />
+              ))}
             </div>
 
             {/* Recent Modules */}
-            <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 mb-8">
+            <Card className="mb-8">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold text-primary-foreground">
                   Continue Learning
@@ -173,8 +172,7 @@ export default function DashboardPage() {
                 <Link href="/modules">
                   <Button
                     variant="outline"
-                    className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
-                  >
+                    className="border-primary-foreground text-primary hover:bg-background/90"                  >
                     View All Modules
                   </Button>
                 </Link>
@@ -187,7 +185,7 @@ export default function DashboardPage() {
                     href={`/flashcards/${module.id}`}
                     className="group"
                   >
-                    <div className="bg-background/5 rounded-lg p-4 hover:bg-background/10 transition-all duration-300">
+                    <Card className="bg-background/5 hover:bg-background/10 transition-all duration-300">
                       <div className="flex justify-between items-center mb-2">
                         <h3 className="font-medium text-primary-foreground">
                           {module.name}
@@ -197,58 +195,27 @@ export default function DashboardPage() {
                         </span>
                       </div>
 
-                      <div className="w-full bg-primary-foreground/20 rounded-full h-2 mb-2">
-                        <div
-                          className="bg-primary-foreground h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${module.progress}%` }}
-                        />
-                      </div>
+                      <ProgressBar progress={module.progress} />
 
                       <div className="text-xs text-primary-foreground/60">
                         Last studied: {module.lastStudied}
                       </div>
-                    </div>
+                    </Card>
                   </Link>
                 ))}
               </div>
-            </div>
+            </Card>
 
             {/* Enhanced Dashboard Sections */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Recent Activity */}
-              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-primary-foreground mb-4">
-                  Recent Activity
-                </h3>
-                <div className="space-y-4">
-                  {dashboardData.recentActivity.map((activity, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-center p-3 bg-background/5 rounded-lg"
-                    >
-                      <div>
-                        <p className="font-semibold text-primary-foreground">
-                          {activity.module}
-                        </p>
-                        <p className="text-sm text-primary-foreground/80">
-                          {activity.action}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-primary-foreground/60">
-                          {activity.time}
-                        </p>
-                        <p className="text-sm font-semibold text-green-400">
-                          {activity.accuracy}%
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <ActivityCard
+                title="Recent Activity"
+                activities={dashboardData.recentActivity}
+              />
 
               {/* Weekly Progress */}
-              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
+              <Card>
                 <h3 className="text-xl font-semibold text-primary-foreground mb-4">
                   Weekly Progress
                 </h3>
@@ -272,12 +239,12 @@ export default function DashboardPage() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </Card>
             </div>
 
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
+              <Card>
                 <h3 className="text-lg font-semibold text-primary-foreground mb-4">
                   Quick Start
                 </h3>
@@ -297,7 +264,7 @@ export default function DashboardPage() {
                   <Link href="/flashcards">
                     <Button
                       variant="outline"
-                      className="w-full justify-start border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
+                      className="w-full justify-start bg-background text-primary hover:bg-background/90"
                     >
                       <Brain className="w-4 h-4 mr-2" />
                       Browse All Flashcards
@@ -306,52 +273,40 @@ export default function DashboardPage() {
                   <Link href="/modules">
                     <Button
                       variant="outline"
-                      className="w-full justify-start border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10"
+                      className="w-full justify-start bg-background text-primary hover:bg-background/90"
                     >
                       <Target className="w-4 h-4 mr-2" />
                       Learning Modules
                     </Button>
                   </Link>
                 </div>
-              </div>
+              </Card>
 
-              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
+              <Card>
                 <h3 className="text-lg font-semibold text-primary-foreground mb-4">
                   Today&apos;s Goals
                 </h3>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-primary-foreground/80">
-                      Study 20 cards
-                    </span>
-                    <span className="text-sm text-primary-foreground/60">
-                      12/20
-                    </span>
-                  </div>
-                  <div className="w-full bg-primary-foreground/20 rounded-full h-2">
-                    <div className="bg-primary-foreground h-2 rounded-full w-3/5" />
-                  </div>
+                  <GoalProgress
+                    label="Study 20 cards"
+                    current={12}
+                    total={20}
+                    showProgress
+                  />
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-primary-foreground/80">
-                      Maintain streak
-                    </span>
-                    <span className="text-sm text-green-400">✓ Done</span>
-                  </div>
+                  <GoalProgress
+                    label="Maintain streak"
+                    isDone
+                  />
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-primary-foreground/80">
-                      Practice for 15 min
-                    </span>
-                    <span className="text-sm text-primary-foreground/60">
-                      8/15 min
-                    </span>
-                  </div>
-                  <div className="w-full bg-primary-foreground/20 rounded-full h-2">
-                    <div className="bg-primary-foreground h-2 rounded-full w-1/2" />
-                  </div>
+                  <GoalProgress
+                    label="Practice for 15 min"
+                    current={8}
+                    total={15}
+                    showProgress
+                  />
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         </div>

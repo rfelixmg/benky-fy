@@ -16,17 +16,22 @@ export const getEnabledInputModes = (settings: UserSettings, moduleName?: string
 };
 
 export const getExpectedValue = (mode: string, item: FlashcardItem): string => {
+  const getValue = (value: string | string[] | undefined): string => {
+    if (!value) return "";
+    return Array.isArray(value) ? value[0] : value;
+  };
+
   switch (mode) {
     case "hiragana":
-      return item.hiragana || "";
+      return getValue(item.hiragana);
     case "katakana":
-      return item.katakana || "";
+      return getValue(item.katakana);
     case "kanji":
-      return item.kanji || "";
+      return getValue(item.kanji);
     case "english":
-      return item.english || "";
+      return getValue(item.english);
     case "romaji":
-      return item.hiragana || ""; // Romaji typically converts to hiragana
+      return getValue(item.hiragana); // Romaji typically converts to hiragana
     default:
       return "";
   }

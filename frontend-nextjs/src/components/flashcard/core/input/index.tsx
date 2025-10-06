@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { AnswerFeedback } from "../../feedback/answer-feedback";
+import { AnswerFeedback } from "../feedback";
 import { useValidateInput } from "@/core/hooks";
 import { validateAnswer, validateWithSettings, ValidationResult } from "@/core/validation";
 import { convertInputForField } from "@/core/romaji-conversion";
@@ -234,7 +234,7 @@ export function AnswerInput({
     return modes;
   };
 
-  const getFeedbackColor = (mode: string) => {
+  const getFeedbackColor = (mode: string): string => {
     if (!frontendValidationResult || !showFeedback) return "";
 
     const enabledModes = getEnabledInputModes();
@@ -258,7 +258,7 @@ export function AnswerInput({
       }
     }
 
-    return frontendValidationResult.feedbackColor;
+    return frontendValidationResult.feedbackColor || "";
   };
 
   const renderInput = () => {

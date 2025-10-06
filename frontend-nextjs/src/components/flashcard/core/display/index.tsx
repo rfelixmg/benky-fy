@@ -33,9 +33,9 @@ export function FlashcardDisplay({
               kanaType={kanaType}
             />
           </div>
-          {displayMode !== "english" && (
+          {displayMode !== "english" && item.english && (
             <HintDisplay
-              text={item.english}
+              text={Array.isArray(item.english) ? item.english[0] : item.english}
               className="text-2xl text-white/80"
             />
           )}
@@ -52,11 +52,13 @@ export function FlashcardDisplay({
               displayMode="kanji"
             />
           </div>
-          <HintDisplay
-            text={item.english}
-            type={item.type}
-            className="text-lg text-white/80 mb-2"
-          />
+          {item.type && item.english && (
+            <HintDisplay
+              text={Array.isArray(item.english) ? item.english[0] : item.english}
+              type={item.type}
+              className="text-lg text-white/80 mb-2"
+            />
+          )}
         </>
       );
     }

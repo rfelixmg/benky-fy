@@ -1,54 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { OAuth2Client } from "google-auth-library";
-
-const getBaseUrl = () => {
-  if (process.env.NODE_ENV === "production") {
-    return process.env.AUTH_BASE_URL || "https://benkyfy.site";
-  }
-  return process.env.AUTH_BASE_URL || "http://localhost:3000";
-};
+import { getBaseUrl } from "@/core/api-utils";
 
 const client = new OAuth2Client(
   process.env.GOOGLE_OAUTH_CLIENT_ID,
   process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-  `${getBaseUrl()}/api/auth/google/callback`,
+  `${getBaseUrl()}/api/auth/google/callback`
 );
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
+  const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get("code");
-  const error = searchParams.get("error");
-
-  if (error) {
-    console.error("Google OAuth error:", error);
-    return NextResponse.redirect(
-      new URL("/auth/login?error=oauth_error", getBaseUrl()),
-    );
-  }
 
   if (!code) {
-    return NextResponse.redirect(
-      new URL("/auth/login?error=no_code", getBaseUrl()),
-    );
+    return NextResponse.redirect(new URL("/auth/login", getBaseUrl()));
   }
 
   try {
-    // Exchange code for tokens
     const { tokens } = await client.getToken(code);
     client.setCredentials(tokens);
 
-    // Get user info
     const ticket = await client.verifyIdToken({
       idToken: tokens.id_token!,
       audience: process.env.GOOGLE_OAUTH_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
-
     if (!payload) {
-      return NextResponse.redirect(
-        new URL("/auth/login?error=no_payload", getBaseUrl()),
-      );
+      throw new Error("No payload in ID token");
     }
 
     // Create user object with additional fields
@@ -76,8 +55,6 @@ export async function GET(request: NextRequest) {
       expires: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     };
 
-    console.log("Setting session cookie:", sessionData);
-
     response.cookies.set({
       name: "benkyfy_session",
       value: JSON.stringify(sessionData),
@@ -90,9 +67,7 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Google OAuth callback error:", error);
-    return NextResponse.redirect(
-      new URL("/auth/login?error=callback_failed", getBaseUrl()),
-    );
+    console.error("Google OAuth error:", error);
+    return NextResponse.redirect(new URL("/auth/login", getBaseUrl()));
   }
 }

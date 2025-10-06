@@ -56,7 +56,7 @@ export function ThemeToggle({
     );
   }
 
-  const isDark = theme === "dark";
+  const isDark = theme === "dark" || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
   const Icon = isDark ? Sun : Moon;
   const label = isDark ? "Light mode" : "Dark mode";
 
