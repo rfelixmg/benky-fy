@@ -4,26 +4,23 @@ import {
   romajiToHiragana,
   romajiToKatakana,
   convertInputForField,
-} from "@/components/japanese/core/input/romaji";
+} from "../index";
+
+interface ConversionHistoryEntry {
+  input: string;
+  output: string;
+  script: string;
+  timestamp: number;
+}
 
 /**
  * Custom hook for romaji conversion logic
  */
 export const useRomajiConversion = () => {
-  const [conversionHistory, setConversionHistory] = useState<
-    Array<{
-      input: string;
-      output: string;
-      script: string;
-      timestamp: number;
-    }>
-  >([]);
+  const [conversionHistory, setConversionHistory] = useState<ConversionHistoryEntry[]>([]);
 
   /**
    * Convert romaji to appropriate script
-   * @param input Romaji input string
-   * @param targetScript Target script ('hiragana' or 'katakana')
-   * @returns Converted string
    */
   const convertRomaji = useCallback(
     (
@@ -32,14 +29,10 @@ export const useRomajiConversion = () => {
     ): string => {
       if (!input.trim()) return input;
 
-      let converted: string;
-      if (targetScript === "hiragana") {
-        converted = romajiToHiragana(input).converted;
-      } else {
-        converted = romajiToKatakana(input).converted;
-      }
+      const converted = targetScript === "hiragana"
+        ? romajiToHiragana(input).converted
+        : romajiToKatakana(input).converted;
 
-      // Store conversion history
       setConversionHistory((prev) => [
         ...prev.slice(-9),
         {
@@ -57,8 +50,6 @@ export const useRomajiConversion = () => {
 
   /**
    * Detect script type of input
-   * @param input Input string to analyze
-   * @returns Detected script type
    */
   const detectScriptType = useCallback((input: string): string => {
     return detectScript(input);
@@ -66,9 +57,6 @@ export const useRomajiConversion = () => {
 
   /**
    * Normalize input for field conversion
-   * @param input Input string
-   * @param fieldType Field type ('hiragana', 'katakana', etc.)
-   * @returns Normalized and converted input
    */
   const normalizeInput = useCallback(
     (input: string, fieldType: "hiragana" | "katakana" | "romaji"): string => {
@@ -79,9 +67,8 @@ export const useRomajiConversion = () => {
 
   /**
    * Get conversion history
-   * @returns Array of conversion history entries
    */
-  const getConversionHistory = useCallback(() => {
+  const getConversionHistory = useCallback((): ConversionHistoryEntry[] => {
     return conversionHistory;
   }, [conversionHistory]);
 
@@ -94,9 +81,6 @@ export const useRomajiConversion = () => {
 
   /**
    * Auto-convert input based on detected script
-   * @param input Input string
-   * @param preferredScript Preferred script for conversion
-   * @returns Converted string
    */
   const autoConvert = useCallback(
     (
@@ -104,12 +88,7 @@ export const useRomajiConversion = () => {
       preferredScript: "hiragana" | "katakana" = "hiragana",
     ): string => {
       const detectedScript = detectScriptType(input);
-
-      if (detectedScript === "romaji") {
-        return convertRomaji(input, preferredScript);
-      }
-
-      return input;
+      return detectedScript === "romaji" ? convertRomaji(input, preferredScript) : input;
     },
     [convertRomaji, detectScriptType],
   );

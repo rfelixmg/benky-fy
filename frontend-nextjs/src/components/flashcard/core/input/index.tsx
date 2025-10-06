@@ -6,7 +6,8 @@ import { Loader2 } from "lucide-react";
 import { AnswerFeedback } from "../feedback";
 import { useValidateInput } from "@/core/hooks";
 import { validateAnswer, validateWithSettings, ValidationResult } from "@/core/validation";
-import { convertInputForField } from "@/core/romaji-conversion";
+import { RomajiInput } from "@/components/japanese/core/input/romaji/hiragana/hiragana-input";
+import { RomajiInputWithOptions } from "@/components/japanese/core/input/romaji/katakana/katakana-input";
 import { getModuleType } from "./helpers/module-type";
 import { MultiInputTable } from "./helpers/multi-input-table";
 import { TextInput } from "./text-input";
@@ -47,7 +48,6 @@ export function AnswerInput({
     }
   }, [disabled]);
 
-  // Reset feedback state when currentItem changes
   useEffect(() => {
     setShowFeedback(false);
     setValidationResult(null);
@@ -61,7 +61,6 @@ export function AnswerInput({
     }
   }, [currentItem?.id]);
 
-  // Feedback timer
   useEffect(() => {
     if (showFeedback && enableRealtimeFeedback) {
       setFeedbackTimer(10);
@@ -91,7 +90,6 @@ export function AnswerInput({
     };
   }, [showFeedback, enableRealtimeFeedback, onSubmit, validationResult, frontendValidationResult]);
 
-  // Enter key listener for navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter" && showFeedback && onAdvance) {
@@ -207,20 +205,6 @@ export function AnswerInput({
     }
   };
 
-  const handleInputChange = (mode: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-
-    if (["hiragana", "katakana", "romaji"].includes(mode)) {
-      const conversion = convertInputForField(inputValue, mode as any, {
-        romaji_output_type: settings.romaji_output_type as "hiragana" | "katakana",
-      });
-      setAnswers((prev) => ({ ...prev, [mode]: conversion.converted }));
-      return;
-    }
-
-    setAnswers((prev) => ({ ...prev, [mode]: inputValue }));
-  };
-
   const getEnabledInputModes = () => {
     const moduleType = getModuleType(moduleName);
     const modes = [];
@@ -273,7 +257,10 @@ export function AnswerInput({
           disabled={disabled}
           isSubmitting={isSubmitting}
           inputRefs={inputRefs}
-          handleInputChange={handleInputChange}
+          handleInputChange={(mode) => (e: React.ChangeEvent<HTMLInputElement>) => {
+            const value = e.target.value;
+            setAnswers((prev) => ({ ...prev, [mode]: value }));
+          }}
           handleKeyDown={handleKeyDown}
           getFeedbackColor={getFeedbackColor}
         />
@@ -281,6 +268,35 @@ export function AnswerInput({
     }
 
     const singleMode = enabledModes[0] || "answer";
+
+    // Use RomajiInput for hiragana/katakana modes
+    if (singleMode === "hiragana") {
+      return (
+        <RomajiInput
+          value={answers[singleMode] || ""}
+          onChange={(value) => setAnswers((prev) => ({ ...prev, [singleMode]: value }))}
+          placeholder={`Enter ${singleMode} answer...`}
+          disabled={disabled}
+          className={getFeedbackColor(singleMode)}
+          onKeyPress={handleKeyDown}
+        />
+      );
+    }
+
+    if (singleMode === "katakana") {
+      return (
+        <RomajiInputWithOptions
+          value={answers[singleMode] || ""}
+          onChange={(value) => setAnswers((prev) => ({ ...prev, [singleMode]: value }))}
+          placeholder={`Enter ${singleMode} answer...`}
+          disabled={disabled}
+          className={getFeedbackColor(singleMode)}
+          onKeyPress={handleKeyDown}
+        />
+      );
+    }
+
+    // Use TextInput for other modes
     return (
       <TextInput
         ref={(el) => {
@@ -288,7 +304,7 @@ export function AnswerInput({
         }}
         mode={singleMode}
         value={answers[singleMode] || ""}
-        onChange={handleInputChange(singleMode)}
+        onChange={(e) => setAnswers((prev) => ({ ...prev, [singleMode]: e.target.value }))}
         onKeyDown={handleKeyDown}
         disabled={disabled}
         isSubmitting={isSubmitting}

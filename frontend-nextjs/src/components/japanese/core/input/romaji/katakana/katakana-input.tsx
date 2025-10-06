@@ -1,85 +1,47 @@
 'use client';
 
-import { useState, useEffect, useRef } from "react";
-import { useRomajiConversion } from "../utils/conversion";
+import { useState, useRef } from "react";
+import { useRomajiConversion } from "../hooks/use-romaji-conversion";
 import { RomajiInputProps } from "@/components/japanese/types/input";
 
-export function KatakanaInput({
+export function RomajiInputWithOptions({
   value,
   onChange,
-  placeholder = "Enter romaji for katakana...",
-  disabled = false,
-  className = "",
+  placeholder,
+  disabled,
+  className,
   showPreview = true,
   onKeyPress,
 }: Omit<RomajiInputProps, "outputType">) {
-  const [preview, setPreview] = useState("");
-  const [isConverting, setIsConverting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const conversionHelper = useRomajiConversion(value, "katakana");
+  const conversionHelper = useRomajiConversion();
 
-  useEffect(() => {
-    if (!value.trim() || !showPreview) {
-      setPreview("");
-      return;
-    }
-
-    setIsConverting(true);
-    const convert = async () => {
-      if (conversionHelper.debouncedConvert) {
-        const result = await conversionHelper.debouncedConvert();
-        setPreview(result.converted);
-        setIsConverting(false);
-      }
-    };
-    convert();
-  }, [value, showPreview, conversionHelper]);
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (onKeyPress) {
-      onKeyPress(e);
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    // Convert immediately and update the input
+    const converted = conversionHelper.autoConvert(newValue, "katakana");
+    onChange(converted);
   };
 
-  const handleFocus = () => {
-    inputRef.current?.select();
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onKeyPress?.(e);
+    }
   };
 
   return (
     <div className="relative">
-      {/* Main Input */}
       <input
         ref={inputRef}
         type="text"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyPress={handleKeyPress}
-        onFocus={handleFocus}
+        onChange={handleChange}
         placeholder={placeholder}
         disabled={disabled}
-        className={`w-full px-4 py-3 rounded-lg bg-background border border-input text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 ${className}`}
+        className={`w-full px-4 py-2 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-1 focus:ring-white/50 ${className}`}
+        onKeyDown={handleKeyPress}
       />
-
-      {/* Preview */}
-      {showPreview && preview && (
-        <div className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none">
-          <div className="flex items-center gap-2">
-            {isConverting && (
-              <div className="w-4 h-4 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
-            )}
-            <span className="text-muted-foreground text-sm font-medium">
-              {preview}
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Invalid Input Indicator */}
-      {showPreview && value && !preview && !isConverting && (
-        <div className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none">
-          <span className="text-muted-foreground text-xs">Invalid romaji</span>
-        </div>
-      )}
     </div>
   );
 }
