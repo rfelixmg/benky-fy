@@ -8,7 +8,17 @@ def create_app() -> Flask:
     app = Flask(__name__)
 
     # Configure CORS for frontend integration
-    CORS(app, origins=['http://localhost:3000'], supports_credentials=True)
+    allowed_origins = [
+        'http://localhost:3000',  # Development
+        'https://benky-fy-frontend-193852054448.asia-northeast1.run.app',  # Production
+    ]
+    
+    # Allow additional origins from environment variable
+    if os.environ.get('ALLOWED_ORIGINS'):
+        additional_origins = os.environ.get('ALLOWED_ORIGINS').split(',')
+        allowed_origins.extend(additional_origins)
+    
+    CORS(app, origins=allowed_origins, supports_credentials=True)
 
     # Configure app
     app.secret_key = os.environ.get("FLASK_SECRET_KEY", "superkey-benky-fy")
