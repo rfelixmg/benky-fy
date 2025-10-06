@@ -9,7 +9,17 @@ import { SettingsModalProps } from "../../types/settings";
 import { SettingsSection } from "./settings-section";
 import { DisplaySettings } from "./display-settings";
 import { InputSettings } from "./input-settings";
+import { WordTypeSelector } from "./word-type-selector";
+import { DisplayConfig } from "./display-config";
+import { InputConfig } from "./input-config";
 import { getModuleType } from "../input/helpers/module-type";
+
+// Export custom configuration components
+export { WordTypeSelector } from "./word-type-selector";
+export { DisplayConfig } from "./display-config";
+export { InputConfig } from "./input-config";
+export { CustomFlashcardSettingsModal } from "./custom-flashcard-settings-modal";
+export type { CustomFlashcardSettings } from "./custom-flashcard-settings-modal";
 
 export function SettingsModal({ moduleName, onClose }: SettingsModalProps) {
   const { getSettings, updateSettings } = useSettingsStore();

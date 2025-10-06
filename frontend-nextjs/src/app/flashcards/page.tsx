@@ -14,10 +14,12 @@ import {
   Search,
   Clock,
   MessageCircle,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { CompactCard } from "@/components/flashcard/core/display/cards";
+import { Button } from "@/components/ui/button";
 
 const flashcardCategories = [
   {
@@ -283,6 +285,69 @@ export default function FlashcardsPage() {
                 </div>
               );
             })}
+          </div>
+
+          {/* Custom Flashcards Section */}
+          <div className="mt-12">
+            <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 max-w-4xl mx-auto mb-8">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-r from-purple-500 to-purple-600 flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-primary-foreground">
+                      Custom Flashcards
+                    </h3>
+                    <p className="text-primary-foreground/80">
+                      Create personalized learning sessions
+                    </p>
+                  </div>
+                </div>
+                <Link href="/flashcards/custom">
+                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Create Custom
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-background/20 backdrop-blur-sm rounded-lg p-4">
+                  <h4 className="font-semibold text-primary-foreground mb-2">
+                    Personalized Learning
+                  </h4>
+                  <p className="text-sm text-primary-foreground/80 mb-3">
+                    Configure word types, display modes, and input methods
+                  </p>
+                  <div className="text-xs text-primary-foreground/60">
+                    Choose what to learn and how to practice
+                  </div>
+                </div>
+                <div className="bg-background/20 backdrop-blur-sm rounded-lg p-4">
+                  <h4 className="font-semibold text-primary-foreground mb-2">
+                    Adaptive Difficulty
+                  </h4>
+                  <p className="text-sm text-primary-foreground/80 mb-3">
+                    AI-powered adjustments based on your performance
+                  </p>
+                  <div className="text-xs text-primary-foreground/60">
+                    Optimized for your learning pace
+                  </div>
+                </div>
+                <div className="bg-background/20 backdrop-blur-sm rounded-lg p-4">
+                  <h4 className="font-semibold text-primary-foreground mb-2">
+                    Detailed Analytics
+                  </h4>
+                  <p className="text-sm text-primary-foreground/80 mb-3">
+                    Track progress across all learning dimensions
+                  </p>
+                  <div className="text-xs text-primary-foreground/60">
+                    Insights to improve your study sessions
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Learning Path Recommendations */}
