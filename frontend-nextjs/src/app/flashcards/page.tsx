@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { AuthGuard } from "@/components/common/auth";
-import { UserMenu } from "@/components/common/layout/navigation";
+import { UserMenu } from "@/components/common/layout/navigation/user-menu";
 import { useAuth } from "@/core/hooks";
 import { FloatingElements } from "@/components/common/layout/background";
 import {

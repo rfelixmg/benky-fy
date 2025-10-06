@@ -5,9 +5,9 @@ import Link from "next/link";
 import { User, LogOut, Settings, BarChart3 } from "lucide-react";
 
 interface UserMenuProps {
-  user: {
-    name: string;
-    email: string;
+  user?: {
+    name?: string;
+    email?: string;
     picture?: string;
   };
   onProfileClick?: () => void;
@@ -15,6 +15,8 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ user, onProfileClick, onSettingsClick }: UserMenuProps) {
+  if (!user) return null;
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -55,8 +57,22 @@ export function UserMenu({ user, onProfileClick, onSettingsClick }: UserMenuProp
         {user.picture ? (
           <img
             src={user.picture}
-            alt={user.name}
+            alt={user.name || 'User'}
             className="w-8 h-8 rounded-full border-2 border-primary-foreground/20"
+            onError={(e) => {
+              // Fallback to user icon if image fails to load
+              e.currentTarget.style.display = 'none';
+              const parent = e.currentTarget.parentElement;
+              if (parent) {
+                const fallback = document.createElement('div');
+                fallback.className = "w-8 h-8 rounded-full bg-primary-foreground/10 flex items-center justify-center";
+                const icon = document.createElement('div');
+                icon.className = "w-5 h-5 text-primary-foreground";
+                icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+                fallback.appendChild(icon);
+                parent.appendChild(fallback);
+              }
+            }}
           />
         ) : (
           <div className="w-8 h-8 rounded-full bg-primary-foreground/10 flex items-center justify-center">
@@ -64,7 +80,7 @@ export function UserMenu({ user, onProfileClick, onSettingsClick }: UserMenuProp
           </div>
         )}
         <span className="text-sm font-medium text-primary-foreground hidden sm:block">
-          {user.name}
+          {user.name || 'User'}
         </span>
       </button>
 
@@ -86,10 +102,10 @@ export function UserMenu({ user, onProfileClick, onSettingsClick }: UserMenuProp
           >
             <div className="px-4 py-2 border-b border-primary-foreground/10">
               <p className="text-sm font-medium text-primary-foreground">
-                {user.name}
+                {user.name || 'User'}
               </p>
               <p className="text-xs text-primary-foreground/70 truncate">
-                {user.email}
+                {user.email || 'No email provided'}
               </p>
             </div>
 
@@ -113,6 +129,7 @@ export function UserMenu({ user, onProfileClick, onSettingsClick }: UserMenuProp
                   href="/profile"
                   className="block w-full text-left px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/10"
                   role="menuitem"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   <span className="flex items-center gap-2">
                     <User className="w-4 h-4" />
@@ -124,6 +141,7 @@ export function UserMenu({ user, onProfileClick, onSettingsClick }: UserMenuProp
                 href="/stats"
                 className="block w-full text-left px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/10"
                 role="menuitem"
+                onClick={() => setIsMenuOpen(false)}
               >
                 <span className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4" />
@@ -149,6 +167,7 @@ export function UserMenu({ user, onProfileClick, onSettingsClick }: UserMenuProp
                   href="/settings"
                   className="block w-full text-left px-4 py-2 text-sm text-primary-foreground hover:bg-primary-foreground/10"
                   role="menuitem"
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   <span className="flex items-center gap-2">
                     <Settings className="w-4 h-4" />
