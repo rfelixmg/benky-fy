@@ -12,20 +12,20 @@ import { Button } from '@/components/ui/button';
 
 const learningModules = [
   { 
-    id: 'lessons', 
-    name: 'Lessons', 
-    description: 'Structured Japanese lessons with grammar and vocabulary', 
-    status: 'Coming Soon',
-    icon: GraduationCap,
-    color: 'from-blue-500 to-blue-600'
-  },
-  { 
     id: 'flashcards', 
     name: 'Flashcards', 
     description: 'Practice with interactive flashcards', 
     status: 'Available',
     icon: Brain,
     color: 'from-green-500 to-green-600'
+  },
+  { 
+    id: 'lessons', 
+    name: 'Lessons', 
+    description: 'Structured Japanese lessons with grammar and vocabulary', 
+    status: 'Coming Soon',
+    icon: GraduationCap,
+    color: 'from-blue-500 to-blue-600'
   },
   { 
     id: 'sentences', 

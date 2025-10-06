@@ -10,6 +10,7 @@ def create_app() -> Flask:
     # Configure CORS for frontend integration
     allowed_origins = [
         'http://localhost:3000',  # Development
+        'http://192.168.0.23:3000',  # Development
         'https://benky-fy-frontend-193852054448.asia-northeast1.run.app',  # Production
         'https://benkyfy.site' # Production
     ]
