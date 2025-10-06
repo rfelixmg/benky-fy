@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     };
     
     // Redirect to dashboard with user info
-    const redirectUrl = new URL('/dashboard', getBaseUrl());
+    const redirectUrl = new URL('/home', getBaseUrl());
     redirectUrl.searchParams.set('user', JSON.stringify(user));
     redirectUrl.searchParams.set('auth', 'success');
     redirectUrl.searchParams.set('provider', 'google');

@@ -15,7 +15,7 @@ export default function ProfilePage() {
   const [userData, setUserData] = useState({
     name: 'Guest User',
     email: 'guest@example.com',
-    picture: '/user_icon.png',
+    picture: '/user_icon.svg',
     provider: 'Guest',
     joinDate: '2024-01-15',
     currentLevel: 'Beginner',
@@ -84,11 +84,11 @@ export default function ProfilePage() {
               <Card className="p-6 bg-background/10 backdrop-blur-sm border-primary-foreground/20">
                 <div className="text-center mb-6">
                   <img 
-                    src={userData.picture || '/user_icon.png'} 
+                    src={userData.picture || '/user_icon.svg'} 
                     alt="Profile" 
                     className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-primary-foreground/20 object-cover" 
                     onError={(e) => {
-                      e.currentTarget.src = '/user_icon.png';
+                      e.currentTarget.src = '/user_icon.svg';
                     }}
                   />
                   <h2 className="text-2xl font-bold text-primary-foreground">{userData.name}</h2>

@@ -36,7 +36,7 @@ export const useAuth = () => {
           user: {
             name: 'Test User',
             email: 'test@example.com',
-            picture: '/user_icon.png',
+            picture: '/user_icon.svg',
           },
           session_keys: ['user'],
           google_authorized: true,
