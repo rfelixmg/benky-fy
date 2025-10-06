@@ -8,12 +8,15 @@ gcloud config set project YOUR_PROJECT_ID
 
 ## 2. Build Docker Images
 ```bash
+docker buildx build --platform linux/amd64 ...
+```
+```bash
 # Backend
-docker buildx  build -f Dockerfile.backend -t gcr.io/PROJECT_ID/benky-fy-backend:latest .
+docker buildx build --platform linux/amd64 -f Dockerfile.backend -t gcr.io/PROJECT_ID/benky-fy-backend:latest .
 
 # Frontend
 cd frontend-nextjs
-docker buildx  build -f Dockerfile.frontend -t gcr.io/PROJECT_ID/benky-fy-frontend:latest .
+docker buildx build --platform linux/amd64 -f Dockerfile.frontend -t gcr.io/PROJECT_ID/benky-fy-frontend:latest .
 cd ..
 ```
 
