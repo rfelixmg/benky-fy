@@ -1,3 +1,5 @@
+// API_BASE_URL is set via environment variables in production (GCP Cloud Run)
+// Falls back to localhost for development
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export async function fetchFromBackend(endpoint: string, options?: RequestInit) {
