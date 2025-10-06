@@ -123,8 +123,11 @@ export interface AuthResponse {
 class ApiClient {
   private baseUrl: string;
 
-  constructor(baseUrl: string = API_BASE_URL) {
-    this.baseUrl = baseUrl;
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl || API_BASE_URL || '';
+    if (!this.baseUrl) {
+      throw new Error('API_BASE_URL environment variable is not set');
+    }
   }
 
   private async request<T>(
