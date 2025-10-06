@@ -1,78 +1,200 @@
 'use client';
 
-import { AuthGuard } from '@/components/auth-guard';
+import { useState } from 'react';
+import { UserMenu } from '@/components/user-menu';
+import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
-import { MessageSquare, ArrowLeft } from 'lucide-react';
+import { Send, Bot, User, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { Card } from '@/components/ui/Card';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
+const mockResponses = [
+  {
+    trigger: "how do you say",
+    response: {
+      content: "To say that in Japanese, you would use: ",
+      translation: "Let me break down the structure for you..."
+    }
+  },
+  {
+    trigger: "what is the difference",
+    response: {
+      content: "That's a great question! The main difference is: ",
+      translation: "Let me explain with some examples..."
+    }
+  },
+  {
+    trigger: "can you explain",
+    response: {
+      content: "I'll explain this concept step by step: ",
+      translation: "Here's a detailed breakdown..."
+    }
+  }
+];
+
+const defaultResponse = {
+  content: "申し訳ありませんが、もう少し具体的に質問していただけますか？",
+  translation: "I apologize, could you please be more specific with your question?"
+};
+
+const initialConversation = [
+  {
+    role: 'assistant',
+    content: 'こんにちは！ 日本語を練習しましょう。何を学びたいですか？',
+    translation: 'Hello! Let\'s practice Japanese. What would you like to learn?'
+  }
+];
+
 export default function ChatPage() {
+  const { data: authData } = useAuth();
+  const [message, setMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [conversation, setConversation] = useState(initialConversation);
+
+  const getMockResponse = (userMessage: string) => {
+    const lowerMessage = userMessage.toLowerCase();
+    const matchedResponse = mockResponses.find(r => 
+      lowerMessage.includes(r.trigger)
+    );
+
+    if (matchedResponse) {
+      return {
+        content: matchedResponse.response.content + userMessage,
+        translation: matchedResponse.response.translation
+      };
+    }
+
+    return defaultResponse;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim() || isTyping) return;
+
+    // Add user message
+    const userMessage = {
+      role: 'user',
+      content: message
+    };
+    setConversation(prev => [...prev, userMessage]);
+    setMessage('');
+    setIsTyping(true);
+
+    // Simulate AI typing delay
+    setTimeout(() => {
+      const response = getMockResponse(message);
+      setConversation(prev => [...prev, {
+        role: 'assistant',
+        content: response.content,
+        translation: response.translation
+      }]);
+      setIsTyping(false);
+    }, 1500);
+  };
+
   return (
-    <AuthGuard>
-      <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
-        <FloatingElements />
-        
-        {/* Header */}
-        <div className="relative z-10 p-6">
-          <div className="flex items-center gap-4 mb-8">
-            <Link href="/modules">
-              <Button variant="outline" className="border-border text-foreground hover:bg-accent">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Modules
-              </Button>
-            </Link>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <h1 className="text-3xl font-bold text-foreground">AI Tutor Chat</h1>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
+      <FloatingElements />
+      
+      {/* Header */}
+      <div className="relative z-10 p-6 flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <Link href="/home" className="flex items-center">
+            <Image
+              src="/logo1.webp"
+              alt="BenkoFY logo"
+              width={60}
+              height={36}
+              className="cursor-pointer hover:opacity-80 transition-opacity"
+              unoptimized
+              priority
+            />
+          </Link>
+          <div>
+            <h1 className="text-3xl font-bold text-primary-foreground">AI Tutor Chat</h1>
+            <p className="text-primary-foreground/80">Practice Japanese with AI assistance</p>
           </div>
         </div>
+        
+        {authData?.user && (
+          <UserMenu user={authData.user} />
+        )}
+      </div>
 
-        {/* Content */}
-        <div className="relative z-10 px-6 pb-6">
-          <div className="max-w-4xl mx-auto">
-            <Card className="p-8 text-center bg-background/10 backdrop-blur-sm border-primary-foreground/20">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center mx-auto mb-6">
-                <MessageSquare className="w-8 h-8 text-primary-foreground" />
-              </div>
-              
-              <h2 className="text-2xl font-bold text-foreground mb-4">
-                Chat with AI Tutors
-              </h2>
-              
-              <p className="text-foreground/80 mb-6 max-w-2xl mx-auto">
-                Get personalized help from AI tutors. Ask questions about Japanese grammar, 
-                vocabulary, and culture. Practice conversations in a safe environment.
-              </p>
-              
-              <div className="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg inline-block mb-6">
-                Coming Soon - Currently in Development
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div className="text-center">
-                  <div className="text-2xl mb-2">🤖</div>
-                  <h3 className="font-semibold text-foreground mb-2">AI Tutors</h3>
-                  <p className="text-sm text-foreground/70">Personalized AI assistance</p>
+      {/* Chat Interface */}
+      <div className="relative z-10 px-6 pb-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-background/10 backdrop-blur-sm rounded-lg border border-primary-foreground/20 h-[calc(100vh-240px)] flex flex-col">
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {conversation.map((msg, i) => (
+                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`flex gap-3 max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <div className="w-8 h-8 rounded-full bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
+                      {msg.role === 'user' ? (
+                        <User className="w-5 h-5 text-primary-foreground" />
+                      ) : (
+                        <Bot className="w-5 h-5 text-primary-foreground" />
+                      )}
+                    </div>
+                    <div className={`space-y-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                      <div className={`rounded-lg p-4 ${
+                        msg.role === 'user' 
+                          ? 'bg-primary-purple text-white dark:bg-primary-purple/80' 
+                          : 'bg-background/30 dark:bg-background/40 text-primary-foreground'
+                      }`}>
+                        <p className="whitespace-pre-wrap">{msg.content}</p>
+                        {msg.translation && (
+                          <p className="mt-2 text-sm opacity-80 border-t border-white/20 pt-2">
+                            {msg.translation}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl mb-2">💬</div>
-                  <h3 className="font-semibold text-foreground mb-2">Conversation Practice</h3>
-                  <p className="text-sm text-foreground/70">Practice speaking Japanese</p>
+              ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="flex gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary-foreground/10 flex items-center justify-center">
+                      <Bot className="w-5 h-5 text-primary-foreground" />
+                    </div>
+                    <div className="bg-background/30 dark:bg-background/40 rounded-lg p-4">
+                      <Loader2 className="w-5 h-5 animate-spin text-primary-foreground" />
+                    </div>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-2xl mb-2">❓</div>
-                  <h3 className="font-semibold text-foreground mb-2">Instant Help</h3>
-                  <p className="text-sm text-foreground/70">Get answers to your questions</p>
-                </div>
+              )}
+            </div>
+            
+            {/* Input */}
+            <form onSubmit={handleSubmit} className="p-4 border-t border-primary-foreground/20">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Ask anything about Japanese..."
+                  className="flex-1 bg-background/10 dark:bg-background/20 border border-primary-foreground/20 rounded-lg px-4 py-2 text-foreground dark:text-primary-foreground placeholder-foreground/60 dark:placeholder-primary-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary-purple"
+                />
+                <Button 
+                  type="submit"
+                  disabled={!message.trim() || isTyping}
+                  className="bg-primary-purple hover:bg-primary-purple/90"
+                >
+                  {isTyping ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
+                </Button>
               </div>
-            </Card>
+            </form>
           </div>
         </div>
       </div>
-    </AuthGuard>
+    </div>
   );
 }

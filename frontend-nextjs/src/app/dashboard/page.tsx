@@ -60,17 +60,17 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Link href="/home">
-              <Image
-                src="/logo1.webp"
-                alt="BenkoFY logo"
-                width={80}
-                height={48}
-                className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
-                priority
-                style={{ width: "auto", height: "auto" }}
-              />
-            </Link>
+            <Link href="/home" className="flex items-center">
+                <Image
+                  src="/logo1.webp"
+                  alt="BenkoFY logo"
+                  width={60}
+                  height={36}
+                  className="cursor-pointer hover:opacity-80 transition-opacity"
+                  unoptimized
+                  priority
+                />
+              </Link>
             <div>
               <h1 className="text-3xl font-bold text-primary-foreground">
                 Welcome back, {authData?.user?.name?.split(' ')[0] || 'Student'}!

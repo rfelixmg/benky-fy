@@ -166,7 +166,17 @@ export function romajiToHiragana(romaji: string): ConversionResult {
  * Convert romaji to katakana
  */
 export function romajiToKatakana(romaji: string): ConversionResult {
-  const hiraganaResult = romajiToHiragana(romaji);
+  // Handle special cases and long vowel marker for katakana
+  const normalized = romaji.toLowerCase().trim()
+    // Handle ja/ju/jo variations first
+    .replace(/j(y[auo])/g, 'j$1')  // Preserve jya/jyu/jyo
+    .replace(/j([auo])/g, 'j$1')   // Handle ja/ju/jo
+    // Then handle long vowels
+    .replace(/([aiueo])\1/g, '$1-') // Convert double vowels to vowel + dash
+    .replace(/u-/g, 'ū')  // Special case for juusu -> jūsu
+    .replace(/(\w)-/g, '$1ー'); // Convert remaining dashes to long vowel marker
+  
+  const hiraganaResult = romajiToHiragana(normalized);
   
   let katakana = '';
   for (let i = 0; i < hiraganaResult.converted.length; i++) {

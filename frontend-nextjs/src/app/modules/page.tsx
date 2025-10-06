@@ -12,36 +12,36 @@ import { Button } from '@/components/ui/button';
 
 const learningModules = [
   { 
+    id: 'lessons', 
+    name: 'Lessons', 
+    description: 'Structured Japanese lessons with grammar and vocabulary', 
+    status: 'Mock Up',
+    icon: GraduationCap,
+    color: 'from-blue-500 to-blue-600'
+  },
+  { 
     id: 'flashcards', 
     name: 'Flashcards', 
     description: 'Practice with interactive flashcards', 
     status: 'Available',
     icon: Brain,
-    color: 'from-green-500 to-green-600'
   },
+    color: 'from-green-500 to-green-600'
   { 
-    id: 'lessons', 
-    name: 'Lessons', 
-    description: 'Structured Japanese lessons with grammar and vocabulary', 
-    status: 'Coming Soon',
-    icon: GraduationCap,
-    color: 'from-blue-500 to-blue-600'
+    id: 'chat', 
+    name: 'AI Tutor Chat', 
+    description: 'Chat with AI tutors for personalized help', 
+    status: 'Mock Up',
+    icon: MessageSquare,
+    color: 'from-orange-500 to-orange-600'
   },
   { 
     id: 'sentences', 
     name: 'Sentences Practice', 
     description: 'Practice with real Japanese sentences', 
-    status: 'Coming Soon',
+    status: 'Mock Up',
     icon: FileText,
     color: 'from-purple-500 to-purple-600'
-  },
-  { 
-    id: 'chat', 
-    name: 'AI Tutor Chat', 
-    description: 'Chat with AI tutors for personalized help', 
-    status: 'Coming Soon',
-    icon: MessageSquare,
-    color: 'from-orange-500 to-orange-600'
   }
 ];
 
@@ -55,17 +55,17 @@ export default function ModulesPage() {
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Link href="/home">
-              <Image
-                src="/logo1.webp"
-                alt="BenkoFY logo"
-                width={80}
-                height={48}
-                className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
-                priority
-                style={{ width: "auto", height: "auto" }}
-              />
-            </Link>
+            <Link href="/home" className="flex items-center">
+                <Image
+                  src="/logo1.webp"
+                  alt="BenkoFY logo"
+                  width={60}
+                  height={36}
+                  className="cursor-pointer hover:opacity-80 transition-opacity"
+                  unoptimized
+                  priority
+                />
+              </Link>
             <div>
               <h1 className="text-3xl font-bold text-foreground">Learning Modules</h1>
               <p className="text-foreground/80">Choose your learning path</p>
@@ -100,7 +100,9 @@ export default function ModulesPage() {
                       <div className="flex-1">
                         <h3 className="text-xl font-semibold text-foreground">{module.name}</h3>
                         <span className={`text-sm px-2 py-1 rounded ${
-                          isAvailable ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                          module.status === 'Available' ? 'dark:bg-green-900 dark:text-green-200 bg-green-100 text-green-800' :
+                          module.status === 'Mock Up' ? 'dark:bg-blue-900 dark:text-blue-200 bg-blue-100 text-blue-800' :
+                          'dark:bg-yellow-900 dark:text-yellow-200 bg-yellow-100 text-yellow-800'
                         }`}>
                           {module.status}
                         </span>
@@ -108,18 +110,18 @@ export default function ModulesPage() {
                     </div>
                     <p className="text-foreground/80 mb-4">{module.description}</p>
                     
-                    {isAvailable ? (
-                      <Button asChild className="w-full">
-                        <Link href={`/modules/${module.id}`}>
+                    {module.status === 'Coming Soon' ? (
+                      <Button className="w-full" disabled>
+                        Coming Soon
+                      </Button>
+                    ) : (
+                      <Button asChild className={`w-full ${module.status === 'Mock Up' ? 'bg-blue-500 hover:bg-blue-600' : ''}`}>
+                        <Link href={isAvailable ? `/${module.id}` : `/modules/${module.id}`}>
                           <span className="flex items-center justify-center">
-                            Start Learning
+                            {module.status === 'Mock Up' ? 'View Demo' : 'Start Learning'}
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </span>
                         </Link>
-                      </Button>
-                    ) : (
-                      <Button className="w-full" disabled>
-                        Coming Soon
                       </Button>
                     )}
                   </Card>

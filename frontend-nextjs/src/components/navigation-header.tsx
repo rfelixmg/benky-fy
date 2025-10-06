@@ -68,7 +68,7 @@ export function NavigationHeader({ showUserMenu = true }: NavigationHeaderProps)
                 width={60}
                 height={36}
                 className="cursor-pointer hover:opacity-80 transition-opacity"
-                style={{ width: "auto", height: "auto" }}
+                unoptimized
                 priority
               />
             </Link>

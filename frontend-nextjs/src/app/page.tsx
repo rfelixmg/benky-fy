@@ -21,6 +21,7 @@ export default function LandingPage() {
                   width={200}
                   height={120}
                   className="mx-auto cursor-pointer hover:opacity-80 transition-opacity"
+                  unoptimized
                   priority
                 />
               </Link>
