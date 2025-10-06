@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { AuthGuard } from "@/components/auth-guard";
-import { UserMenu } from "@/components/user-menu";
+import { AuthGuard } from "@/components/common/auth";
+import { UserMenu } from "@/components/common/layout/navigation";
 import { useAuth } from "@/core/hooks";
-import { FloatingElements } from "@/components/floating-elements";
+import { FloatingElements } from "@/components/common/layout/background";
 import {
   BookOpen,
   Brain,
@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { CompactFlashcardCard } from "@/components/flashcard/compact-flashcard-card";
+import { CompactCard } from "@/components/flashcard/core/display/cards";
 
 const flashcardCategories = [
   {
@@ -273,7 +273,7 @@ export default function FlashcardsPage() {
                       };
 
                       return (
-                        <CompactFlashcardCard
+                        <CompactCard
                           key={module.id}
                           module={enhancedModule}
                         />

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Link from "next/link";
 import Image from "next/image";
@@ -12,10 +12,9 @@ import {
   Brain,
   BarChart3,
   Menu,
-  X,
 } from "lucide-react";
 import { MobileMenu } from "@/components/ui/mobile-menu";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useWindowScroll } from "@/core/hooks/use-window-scroll";
 import { useAuth } from "@/core/hooks";

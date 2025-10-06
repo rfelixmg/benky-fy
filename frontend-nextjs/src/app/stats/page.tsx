@@ -1,9 +1,9 @@
 "use client";
 
-import { AuthGuard } from "@/components/auth-guard";
-import { UserMenu } from "@/components/user-menu";
+import { AuthGuard } from "@/components/common/auth";
+import { UserMenu } from "@/components/common/layout/navigation";
 import { useAuth } from "@/core/hooks";
-import { FloatingElements } from "@/components/floating-elements";
+import { FloatingElements } from "@/components/common/layout/background";
 import {
   BarChart3,
   Clock,

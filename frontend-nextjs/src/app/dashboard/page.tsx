@@ -141,6 +141,7 @@ export default function DashboardPage() {
 
           {authData?.user && (
             <UserMenu
+              user={authData.user}
               onProfileClick={() => window.location.href = '/profile'}
               onSettingsClick={() => window.location.href = '/settings'}
             />

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { UserMenu } from "@/components/user-menu";
+import { UserMenu } from "@/components/common/layout/navigation";
 import { useAuth } from "@/core/hooks";
-import { FloatingElements } from "@/components/floating-elements";
+import { FloatingElements } from "@/components/common/layout/background";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";

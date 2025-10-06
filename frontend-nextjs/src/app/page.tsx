@@ -1,4 +1,4 @@
-import { FloatingElements } from "@/components/floating-elements";
+import { FloatingElements } from "@/components/common/layout/background";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Brain, Target, Zap } from "lucide-react";
 import Link from "next/link";

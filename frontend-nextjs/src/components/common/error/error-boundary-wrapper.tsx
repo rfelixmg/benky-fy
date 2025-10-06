@@ -1,20 +1,12 @@
 'use client';
 
 import { ErrorBoundary } from "./error-boundary";
-import { ErrorProvider } from "./error-context";
+import { ReactNode } from "react";
 
 interface ErrorBoundaryWrapperProps {
-  children: React.ReactNode;
-  fallback?: React.ComponentType<{ error?: Error; resetError: () => void }>;
+  children: ReactNode;
 }
 
-export function ErrorBoundaryWrapper({
-  children,
-  fallback,
-}: ErrorBoundaryWrapperProps) {
-  return (
-    <ErrorProvider>
-      <ErrorBoundary fallback={fallback}>{children}</ErrorBoundary>
-    </ErrorProvider>
-  );
+export function ErrorBoundaryWrapper({ children }: ErrorBoundaryWrapperProps) {
+  return <ErrorBoundary>{children}</ErrorBoundary>;
 }

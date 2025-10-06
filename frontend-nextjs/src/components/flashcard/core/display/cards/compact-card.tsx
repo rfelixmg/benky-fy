@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from "react";
 import Link from "next/link";
@@ -17,7 +17,7 @@ interface FlashcardModule {
   icon: React.ComponentType<any>;
 }
 
-export function CompactFlashcardCard({ module }: { module: FlashcardModule }) {
+export function CompactCard({ module }: { module: FlashcardModule }) {
   const [isHovered, setIsHovered] = useState(false);
   const IconComponent = module.icon;
 
@@ -40,9 +40,9 @@ export function CompactFlashcardCard({ module }: { module: FlashcardModule }) {
           {/* Animated Background */}
           <div
             className={`
-          absolute inset-0 bg-gradient-to-br ${module.color} opacity-0
-          transition-opacity duration-300 group-hover:opacity-5
-        `}
+              absolute inset-0 bg-gradient-to-br ${module.color} opacity-0
+              transition-opacity duration-300 group-hover:opacity-5
+            `}
           />
 
           <div className="relative z-10 p-6 flex flex-col h-full">
@@ -51,10 +51,10 @@ export function CompactFlashcardCard({ module }: { module: FlashcardModule }) {
               <div className="flex items-start space-x-3 min-h-[48px]">
                 <div
                   className={`
-                w-10 h-10 rounded-lg bg-gradient-to-br ${module.color} 
-                flex-shrink-0 flex items-center justify-center shadow-md
-                group-hover:scale-110 transition-transform duration-200
-              `}
+                    w-10 h-10 rounded-lg bg-gradient-to-br ${module.color} 
+                    flex-shrink-0 flex items-center justify-center shadow-md
+                    group-hover:scale-110 transition-transform duration-200
+                  `}
                 >
                   <IconComponent className="w-5 h-5 text-white" />
                 </div>

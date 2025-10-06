@@ -2,8 +2,8 @@
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/core/query-client";
-import { ThemeProvider } from "@/components/theme-provider";
-import { ErrorBoundaryWrapper } from "@/components/error-boundary-wrapper";
+import { ThemeProvider } from "@/components/common/theme";
+import { ErrorBoundaryWrapper } from "@/components/common/error";
 import { UserProvider } from "@/core/user-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {

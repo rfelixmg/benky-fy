@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { FloatingElements } from "@/components/floating-elements";
+import { FloatingElements } from "@/components/common/layout/background";
 import { Home, BookOpen, ArrowLeft } from "lucide-react";
 
 export default function NotFoundPage() {
