@@ -1,63 +1,96 @@
+'use client';
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
-  apiClient, 
-  FlashcardItem, 
-  ConjugationItem, 
-  ConjugationForm,
-  ConjugationResponse,
-  UserSettings, 
-  AuthResponse, 
-  AnswerCheckResponse,
-  ValidationRequest,
-  ValidationResponse
-} from './api-client';
-import { romajiToHiragana, romajiToKatakana, detectScript } from './romaji-conversion';
+import { apiClient } from './api-client';
 
 // Authentication hooks
 export const useAuth = () => {
-  return useQuery<AuthResponse>({
+  return useQuery({
     queryKey: ['auth'],
     queryFn: async () => {
       try {
-        // Try to get real authentication from backend
+        // Try to get session from cookie first
+        const cookies = document.cookie.split(';');
+        console.log('All cookies:', cookies);
+        const sessionCookie = cookies.find(c => c.trim().startsWith('benkyfy_session='));
+        console.log('Found session cookie:', sessionCookie);
+        
+        if (sessionCookie) {
+          try {
+            const cookieValue = sessionCookie.split('=')[1];
+            console.log('Cookie value:', cookieValue);
+            const sessionData = JSON.parse(decodeURIComponent(cookieValue));
+            console.log('Parsed session data:', sessionData);
+            
+            // Check if session is expired
+            if (sessionData.expires && sessionData.expires > Date.now()) {
+              return {
+                authenticated: true,
+                user: {
+                  ...sessionData.user,
+                  joinDate: sessionData.user.joinDate || new Date().toISOString().split('T')[0],
+                  currentLevel: sessionData.user.currentLevel || 'Beginner',
+                  totalStudyTime: sessionData.user.totalStudyTime || '0 hours',
+                  streakDays: sessionData.user.streakDays || 0,
+                  totalWordsLearned: sessionData.user.totalWordsLearned || 0,
+                  favoriteModules: sessionData.user.favoriteModules || ['Hiragana', 'Basic Words', 'Common Phrases'],
+                  provider: sessionData.provider || 'google'
+                },
+                session_keys: ['user'],
+                google_authorized: sessionData.provider === 'google'
+              };
+            }
+          } catch (parseError) {
+            console.error('Failed to parse session cookie:', parseError);
+          }
+        }
+        
+        // Development fallback - only if no cookie exists
+        if (process.env.NODE_ENV === 'development' && !cookies.find(c => c.trim().startsWith('benkyfy_session='))) {
+          console.log('Using development fallback - no session cookie found');
+          return {
+            authenticated: true,
+            user: {
+              name: 'Test User',
+              email: 'test@example.com',
+              picture: '/user_icon.svg',
+              joinDate: new Date().toISOString().split('T')[0],
+              currentLevel: 'Beginner',
+              totalStudyTime: '0 hours',
+              streakDays: 0,
+              totalWordsLearned: 0,
+              favoriteModules: ['Hiragana', 'Basic Words', 'Common Phrases'],
+              provider: 'development'
+            },
+            session_keys: ['user'],
+            google_authorized: true
+          };
+        }
+        
+        // Fallback to backend check
         const response = await apiClient.checkAuth();
         if (response.success && response.data?.authenticated) {
           return response.data;
         }
       } catch (error) {
-        console.log('Auth check failed, using fallback:', error);
+        console.error('Auth check failed:', error);
       }
       
-      // Fallback to dummy data only in development
-      const isDevelopment = process.env.NODE_ENV === 'development';
-      if (isDevelopment) {
-        return {
-          authenticated: true,
-          user: {
-            name: 'Test User',
-            email: 'test@example.com',
-            picture: '/user_icon.svg',
-          },
-          session_keys: ['user'],
-          google_authorized: true,
-        };
-      }
-      
-      // Production: return unauthenticated
+      // Return unauthenticated state
       return {
         authenticated: false,
         user: undefined,
         session_keys: [],
-        google_authorized: false,
+        google_authorized: false
       };
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 };
 
-// Flashcard hooks - Updated for V2 API
+// Flashcard hooks
 export const useWordsData = (moduleName: string) => {
-  return useQuery<FlashcardItem[]>({
+  return useQuery({
     queryKey: ['words', moduleName],
     queryFn: async () => {
       const response = await apiClient.getWordsData(moduleName);
@@ -66,13 +99,13 @@ export const useWordsData = (moduleName: string) => {
       }
       return response.data;
     },
-    enabled: !!moduleName,
+    enabled: !!moduleName
   });
 };
 
-// Random word selection hook for queue-based selection
+// Random word selection hook
 export const useRandomWord = (moduleName: string) => {
-  return useQuery<FlashcardItem>({
+  return useQuery({
     queryKey: ['randomWord', moduleName],
     queryFn: async () => {
       const response = await apiClient.getRandomWord(moduleName);
@@ -83,193 +116,13 @@ export const useRandomWord = (moduleName: string) => {
     },
     enabled: !!moduleName,
     staleTime: 0, // Always fetch fresh random word
-    refetchOnWindowFocus: false, // Don't refetch on window focus
+    refetchOnWindowFocus: false
   });
-};
-
-// Comprehensive answer validation with input type support
-export const validateAnswer = (
-  userAnswer: string, 
-  correctAnswers: {
-    hiragana?: string;
-    katakana?: string;
-    english?: string;
-    kanji?: string;
-  },
-  settings: UserSettings
-): { isCorrect: boolean; matchedType?: string; convertedAnswer?: string; timerDuration?: number; results?: boolean[] } => {
-  if (!userAnswer.trim()) {
-    return { isCorrect: false, timerDuration: 10000 };
-  }
-
-  // Convert romaji input if enabled
-  let processedAnswer = userAnswer.trim();
-  let convertedAnswer: string | undefined;
-  
-  if (settings.romajiConversionEnabled) {
-    const scriptType = detectScript(userAnswer);
-    if (scriptType === 'romaji') {
-      if (settings.romaji_output_type === 'hiragana') {
-        const conversion = romajiToHiragana(userAnswer);
-        processedAnswer = conversion.converted;
-        convertedAnswer = conversion.converted;
-      } else if (settings.romaji_output_type === 'katakana') {
-        const conversion = romajiToKatakana(userAnswer);
-        processedAnswer = conversion.converted;
-        convertedAnswer = conversion.converted;
-      } else {
-        // Auto-detect: default to hiragana
-        const conversion = romajiToHiragana(userAnswer);
-        processedAnswer = conversion.converted;
-        convertedAnswer = conversion.converted;
-      }
-    }
-  }
-
-  // Normalize function for comparison
-  const normalize = (text: string) => 
-    text.toLowerCase().trim().replace(/[\s\u3000]/g, ''); // Remove spaces and full-width spaces
-
-  const normalizedUser = normalize(processedAnswer);
-
-  // Get enabled input types in consistent order (same as floating feedback component)
-  const getEnabledTypes = () => {
-    const types = [];
-    if (settings.input_hiragana) types.push('hiragana');
-    if (settings.input_katakana) types.push('katakana');
-    if (settings.input_kanji) types.push('kanji');
-    if (settings.input_english) types.push('english');
-    if (settings.input_romaji) types.push('romaji');
-    return types;
-  };
-
-  const enabledTypes = getEnabledTypes();
-  const results = [];
-
-  // Validate each enabled input type in order
-  for (const type of enabledTypes) {
-    let isCorrect = false;
-    
-    switch (type) {
-      case 'hiragana':
-        if (correctAnswers.hiragana) {
-          const normalizedCorrect = normalize(correctAnswers.hiragana);
-          isCorrect = normalizedUser === normalizedCorrect;
-        }
-        break;
-      case 'katakana':
-        if (correctAnswers.katakana) {
-          const normalizedCorrect = normalize(correctAnswers.katakana);
-          isCorrect = normalizedUser === normalizedCorrect;
-        }
-        break;
-      case 'english':
-        if (correctAnswers.english) {
-          const normalizedCorrect = normalize(correctAnswers.english);
-          isCorrect = normalizedUser === normalizedCorrect;
-        }
-        break;
-      case 'kanji':
-        if (correctAnswers.kanji) {
-          const normalizedCorrect = normalize(correctAnswers.kanji);
-          isCorrect = normalizedUser === normalizedCorrect;
-        }
-        break;
-      case 'romaji':
-        const scriptType = detectScript(userAnswer);
-        if (scriptType === 'romaji') {
-          // Check against all possible answers for romaji
-          if (correctAnswers.hiragana) {
-            const normalizedCorrect = normalize(correctAnswers.hiragana);
-            if (normalizedUser === normalizedCorrect) isCorrect = true;
-          }
-          if (correctAnswers.katakana) {
-            const normalizedCorrect = normalize(correctAnswers.katakana);
-            if (normalizedUser === normalizedCorrect) isCorrect = true;
-          }
-          if (correctAnswers.english) {
-            const normalizedCorrect = normalize(correctAnswers.english);
-            if (normalizedUser === normalizedCorrect) isCorrect = true;
-          }
-          if (correctAnswers.kanji) {
-            const normalizedCorrect = normalize(correctAnswers.kanji);
-            if (normalizedUser === normalizedCorrect) isCorrect = true;
-          }
-        }
-        break;
-    }
-    
-    results.push(isCorrect);
-  }
-
-  // Determine overall correctness and matched type
-  const correctCount = results.filter(Boolean).length;
-  const totalCount = results.length;
-  const isCorrect = correctCount > 0;
-  
-  // Find the first correct match for matchedType
-  let matchedType: string | undefined;
-  for (let i = 0; i < results.length; i++) {
-    if (results[i]) {
-      matchedType = enabledTypes[i];
-      break;
-    }
-  }
-
-  // Determine timer duration based on results
-  let timerDuration = 10000; // Default for wrong answer
-  if (correctCount === totalCount) {
-    timerDuration = 6000; // All correct
-  } else if (correctCount > 0) {
-    timerDuration = 8000; // Partial correct
-  }
-
-  return { 
-    isCorrect,
-    matchedType,
-    convertedAnswer: convertedAnswer || processedAnswer,
-    timerDuration,
-    results: results.length > 0 ? results : undefined // Always include results when there are enabled inputs
-  };
-};
-
-// V2 Conjugation hooks
-export const useConjugationData = (wordId: string) => {
-  return useQuery<ConjugationResponse>({
-    queryKey: ['conjugation', wordId],
-    queryFn: async () => {
-      const response = await apiClient.getConjugationData(wordId);
-      if (!response.success || !response.data) {
-        throw new Error(response.error || 'Failed to fetch conjugation data');
-      }
-      return response.data;
-    },
-    enabled: !!wordId,
-  });
-};
-
-// Frontend conjugation validation (V2 API doesn't provide checking)
-export const validateConjugationAnswer = (
-  userInput: string, 
-  correctAnswer: string
-): { isCorrect: boolean; feedback: string } => {
-  const normalize = (text: string) => 
-    text.toLowerCase().trim().replace(/[^\w\s]/g, '');
-  
-  const normalizedUser = normalize(userInput);
-  const normalizedCorrect = normalize(correctAnswer);
-  
-  const isCorrect = normalizedUser === normalizedCorrect;
-  
-  return {
-    isCorrect,
-    feedback: isCorrect ? 'Correct!' : `Expected: ${correctAnswer}`
-  };
 };
 
 // Settings hooks
 export const useSettings = (moduleName: string) => {
-  return useQuery<UserSettings>({
+  return useQuery({
     queryKey: ['settings', moduleName],
     queryFn: async () => {
       const response = await apiClient.getSettings(moduleName);
@@ -279,34 +132,49 @@ export const useSettings = (moduleName: string) => {
       return response.data;
     },
     enabled: !!moduleName,
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 10 * 60 * 1000 // 10 minutes
   });
 };
+
+interface UpdateSettingsParams {
+  moduleName: string;
+  settings: Record<string, unknown>;
+}
 
 export const useUpdateSettings = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async ({ 
-      moduleName, 
-      settings 
-    }: { 
-      moduleName: string; 
-      settings: Partial<UserSettings>; 
-    }) => {
+    mutationFn: async ({ moduleName, settings }: UpdateSettingsParams) => {
       const response = await apiClient.updateSettings(moduleName, settings);
       if (!response.success || !response.data) {
         throw new Error(response.error || 'Failed to update settings');
       }
       return response.data;
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables: UpdateSettingsParams) => {
       queryClient.setQueryData(['settings', variables.moduleName], data);
-    },
+    }
   });
 };
 
-// Answer tracking hooks
+// Help hooks
+export const useWordInfo = (word: string) => {
+  return useQuery({
+    queryKey: ['wordInfo', word],
+    queryFn: async () => {
+      const response = await apiClient.getWordInfo(word);
+      if (!response.success) {
+        throw new Error(response.error || 'Failed to fetch word info');
+      }
+      return response.data;
+    },
+    enabled: !!word && word.length > 0,
+    staleTime: 30 * 60 * 1000 // 30 minutes
+  });
+};
+
+// Answer tracking types
 export interface AnswerResult {
   moduleName: string;
   itemId: string;
@@ -316,9 +184,18 @@ export interface AnswerResult {
   attempts: number;
   timestamp: string;
   timerDuration?: number;
-  settings: Partial<UserSettings>;
+  settings: {
+    input_hiragana: boolean;
+    input_katakana: boolean;
+    input_english: boolean;
+    input_kanji: boolean;
+    input_romaji: boolean;
+    display_mode: string;
+    furigana_style: string;
+  };
 }
 
+// Answer tracking hook
 export const useTrackAnswer = () => {
   return useMutation({
     mutationFn: async (result: AnswerResult) => {
@@ -346,31 +223,34 @@ export const useTrackAnswer = () => {
     },
     onError: (error) => {
       console.error('Failed to track answer result:', error);
-    },
+    }
   });
 };
 
-// Help hooks
-export const useWordInfo = (word: string) => {
-  return useQuery({
-    queryKey: ['wordInfo', word],
-    queryFn: async () => {
-      const response = await apiClient.getWordInfo(word);
-      if (!response.success) {
-        throw new Error(response.error || 'Failed to fetch word info');
-      }
-      return response.data;
-    },
-    enabled: !!word && word.length > 0,
-    staleTime: 30 * 60 * 1000, // 30 minutes
-  });
-};
+// Validation types
+export interface ValidationRequest {
+  input: string;
+  type: 'hiragana' | 'katakana' | 'kanji' | 'english' | 'romaji';
+  moduleName: string;
+  itemId?: string;
+  character?: string; // Required for stroke order validation
+}
 
-// V2 Validation hooks
+export interface ValidationResponse {
+  is_correct: boolean;
+  feedback?: string;
+  converted_input?: string;
+  matched_type?: string;
+}
+
+// Input validation hooks
 export const useValidateInput = () => {
   return useMutation({
     mutationFn: async (request: ValidationRequest) => {
-      const response = await apiClient.validateInput(request);
+      const response = await apiClient.validateInput({
+        ...request,
+        character: request.character || request.input // Fallback to input if character not provided
+      });
       if (!response.success || !response.data) {
         throw new Error(response.error || 'Failed to validate input');
       }
@@ -378,14 +258,17 @@ export const useValidateInput = () => {
     },
     onError: (error) => {
       console.error('Input validation failed:', error);
-    },
+    }
   });
 };
 
 export const useValidateStrokeOrder = () => {
   return useMutation({
     mutationFn: async (request: ValidationRequest) => {
-      const response = await apiClient.validateStrokeOrder(request);
+      const response = await apiClient.validateStrokeOrder({
+        ...request,
+        character: request.character || request.input // Fallback to input if character not provided
+      });
       if (!response.success || !response.data) {
         throw new Error(response.error || 'Failed to validate stroke order');
       }
@@ -393,6 +276,6 @@ export const useValidateStrokeOrder = () => {
     },
     onError: (error) => {
       console.error('Stroke order validation failed:', error);
-    },
+    }
   });
 };

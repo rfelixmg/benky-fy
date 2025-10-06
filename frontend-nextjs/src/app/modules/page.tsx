@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AuthGuard, UserMenu } from '@/components/auth-guard';
+import { UserMenu } from '@/components/user-menu';
 import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
 import { BookOpen, Brain, Target, Zap, ArrowRight, MessageSquare, FileText, GraduationCap } from 'lucide-react';
@@ -49,7 +49,6 @@ export default function ModulesPage() {
   const { data: authData } = useAuth();
 
   return (
-    <AuthGuard>
       <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
         <FloatingElements />
         
@@ -73,8 +72,14 @@ export default function ModulesPage() {
             </div>
           </div>
           
-          {authData?.user && (
+          {authData?.user ? (
             <UserMenu user={authData.user} />
+          ) : (
+            <Link href="/auth/login">
+              <Button className="bg-background text-primary hover:bg-background/90">
+                Sign In
+              </Button>
+            </Link>
           )}
         </div>
 
@@ -151,6 +156,5 @@ export default function ModulesPage() {
           </div>
         </div>
       </div>
-    </AuthGuard>
   );
 }

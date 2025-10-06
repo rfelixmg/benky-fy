@@ -1,6 +1,7 @@
 'use client';
 
-import { AuthGuard, UserMenu } from '@/components/auth-guard';
+import { AuthGuard } from '@/components/auth-guard';
+import { UserMenu } from '@/components/user-menu';
 import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
 import { BarChart3, Clock, Target, Trophy, TrendingUp, BookOpen, Calendar } from 'lucide-react';

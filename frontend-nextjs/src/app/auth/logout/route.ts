@@ -9,12 +9,19 @@ const getBaseUrl = () => {
 
 export async function GET(request: NextRequest) {
   try {
-    // Clear user data from localStorage via redirect
-    const redirectUrl = new URL('/auth/login', getBaseUrl());
-    redirectUrl.searchParams.set('logout', 'success');
-    redirectUrl.searchParams.set('clear', 'true');
+    const response = NextResponse.redirect(
+      new URL('/auth/login?logout=success', getBaseUrl())
+    );
     
-    return NextResponse.redirect(redirectUrl);
+    // Clear session cookie
+    response.cookies.set({
+      name: 'benkyfy_session',
+      value: '',
+      expires: new Date(0),
+      path: '/',
+    });
+    
+    return response;
     
   } catch (error) {
     console.error('Logout error:', error);

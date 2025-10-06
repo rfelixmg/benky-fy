@@ -81,9 +81,15 @@ export default function LoginPage() {
           <h1 className="text-4xl font-bold text-primary-foreground mb-4">
             Welcome to Benky-Fy
           </h1>
-          <p className="text-lg text-primary-foreground/90 mb-8">
+          <p className="text-lg text-primary-foreground/90 mb-4">
             Sign in to continue your Japanese learning journey
           </p>
+          <div className="bg-primary-purple/20 border border-primary-purple/30 rounded-lg p-4 mb-8">
+            <p className="text-primary-foreground/90 text-sm">
+              <span className="font-semibold">New to Benky-Fy?</span> You can explore our home page and basic features without signing in. 
+              Sign in to track your progress and access advanced learning tools.
+            </p>
+          </div>
 
           {/* Error Message */}
           {error && (

@@ -45,21 +45,44 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/auth/login?error=no_payload', getBaseUrl()));
     }
     
-    // Create user object
+    // Create user object with additional fields
     const user = {
       id: payload.sub,
       name: payload.name,
       email: payload.email,
       picture: payload.picture,
+      joinDate: new Date().toISOString().split('T')[0],
+      currentLevel: 'Beginner',
+      totalStudyTime: '0 hours',
+      streakDays: 0,
+      totalWordsLearned: 0,
+      favoriteModules: ['Hiragana', 'Basic Words', 'Common Phrases']
     };
     
-    // Redirect to dashboard with user info
-    const redirectUrl = new URL('/home', getBaseUrl());
-    redirectUrl.searchParams.set('user', JSON.stringify(user));
-    redirectUrl.searchParams.set('auth', 'success');
-    redirectUrl.searchParams.set('provider', 'google');
+    // Create session cookie and redirect
+    const response = NextResponse.redirect(new URL('/home', getBaseUrl()));
     
-    return NextResponse.redirect(redirectUrl);
+    // Set secure HTTP-only cookie with user session
+    const sessionData = {
+      user,
+      provider: 'google',
+      authenticated: true,
+      expires: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+    };
+    
+    console.log('Setting session cookie:', sessionData);
+    
+    response.cookies.set({
+      name: 'benkyfy_session',
+      value: JSON.stringify(sessionData),
+      httpOnly: false, // Allow JavaScript access in development
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 24 * 60 * 60, // 24 hours
+      path: '/'
+    });
+    
+    return response;
     
   } catch (error) {
     console.error('Google OAuth callback error:', error);

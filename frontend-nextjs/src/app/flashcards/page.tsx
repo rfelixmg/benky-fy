@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { AuthGuard, UserMenu } from '@/components/auth-guard';
+import { AuthGuard } from '@/components/auth-guard';
+import { UserMenu } from '@/components/user-menu';
 import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
 import { BookOpen, Brain, Target, Zap, ArrowRight, Search, Clock, MessageCircle } from 'lucide-react';

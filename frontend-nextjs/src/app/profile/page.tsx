@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AuthGuard, UserMenu } from '@/components/auth-guard';
+import { AuthGuard } from '@/components/auth-guard';
+import { UserMenu } from '@/components/user-menu';
 import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
 import { User, Calendar, Clock, Trophy, Target, BookOpen, Settings, BarChart3 } from 'lucide-react';
@@ -12,39 +13,7 @@ import { Button } from '@/components/ui/button';
 
 export default function ProfilePage() {
   const { data: authData } = useAuth();
-  const [userData, setUserData] = useState({
-    name: 'Guest User',
-    email: 'guest@example.com',
-    picture: '/user_icon.svg',
-    provider: 'Guest',
-    joinDate: '2024-01-15',
-    currentLevel: 'Beginner',
-    totalStudyTime: '0 hours',
-    streakDays: 0,
-    totalWordsLearned: 0,
-    favoriteModules: []
-  });
-
-  // Update user data from auth context if available
-  useEffect(() => {
-    if (authData?.user) {
-      setUserData(prev => ({
-        ...prev,
-        name: authData.user?.name || prev.name,
-        email: authData.user?.email || prev.email,
-        picture: authData.user?.picture || prev.picture,
-        provider: 'Authenticated' // AuthUser doesn't have provider field
-      }));
-    } else if (authData?.authenticated === false) {
-      // User is not authenticated, show guest data
-      setUserData(prev => ({
-        ...prev,
-        name: 'Guest User',
-        email: 'guest@example.com',
-        provider: 'Guest'
-      }));
-    }
-  }, [authData]);
+  const userData = authData?.user;
 
   return (
     <AuthGuard>
