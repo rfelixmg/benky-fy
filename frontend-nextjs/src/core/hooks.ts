@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from './api-client';
+import type { UserSettings } from './api-client';
 
 // Authentication hooks
 export const useAuth = () => {
@@ -136,9 +137,10 @@ export const useSettings = (moduleName: string) => {
   });
 };
 
+
 interface UpdateSettingsParams {
   moduleName: string;
-  settings: Record<string, unknown>;
+  settings: UserSettings;
 }
 
 export const useUpdateSettings = () => {

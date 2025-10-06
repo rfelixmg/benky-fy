@@ -26,9 +26,11 @@ export function useAnswerValidation({
     if (!enableServerValidation || !currentItem) return null;
 
     try {
-      const validationRequest: ValidationRequest = {
+      const validationRequest = {
         character: expectedCharacter,
         input: userInput,
+        type: 'hiragana' as const,
+        moduleName: currentItem.id.split('_')[0]
       };
 
       const result = await validateInputMutation.mutateAsync(validationRequest);

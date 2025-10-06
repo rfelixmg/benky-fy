@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { UserSettings, ValidationRequest } from '@/core/api-client';
+import { UserSettings } from '@/core/api-client';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/core/utils';
 import { detectScript, romajiToHiragana, romajiToKatakana, convertInputForField } from '@/core/romaji-conversion';
@@ -163,9 +163,11 @@ export function AnswerInput({
     if (!enableServerValidation || !currentItem) return null;
 
     try {
-      const validationRequest: ValidationRequest = {
+      const validationRequest = {
         character: expectedCharacter,
         input: userInput,
+        type: 'hiragana' as const,
+        moduleName: moduleName || 'unknown'
       };
 
       const result = await validateInputMutation.mutateAsync(validationRequest);

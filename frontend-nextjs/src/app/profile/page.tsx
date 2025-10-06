@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { AuthGuard } from '@/components/auth-guard';
 import { UserMenu } from '@/components/user-menu';
 import { useAuth } from '@/core/hooks';
+import type { UserData } from '@/types/user';
 import { FloatingElements } from '@/components/floating-elements';
 import { User, Calendar, Clock, Trophy, Target, BookOpen, Settings, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
@@ -13,7 +14,7 @@ import { Button } from '@/components/ui/button';
 
 export default function ProfilePage() {
   const { data: authData } = useAuth();
-  const userData = authData?.user;
+  const userData = authData?.user as UserData;
 
   return (
     <AuthGuard>
@@ -52,39 +53,49 @@ export default function ProfilePage() {
               {/* Profile Info */}
               <Card className="p-6 bg-background/10 backdrop-blur-sm border-primary-foreground/20">
                 <div className="text-center mb-6">
-                  <img 
-                    src={userData.picture || '/user_icon.svg'} 
-                    alt="Profile" 
-                    className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-primary-foreground/20 object-cover" 
-                    onError={(e) => {
-                      e.currentTarget.src = '/user_icon.svg';
-                    }}
-                  />
-                  <h2 className="text-2xl font-bold text-primary-foreground">{userData.name}</h2>
-                  <p className="text-primary-foreground/80">{userData.email}</p>
-                  <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mt-2">
-                    {userData.provider} User
-                  </span>
+                  {userData ? (
+                    <>
+                      <img 
+                        src={userData.picture || '/user_icon.svg'} 
+                        alt="Profile" 
+                        className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-primary-foreground/20 object-cover" 
+                        onError={(e) => {
+                          e.currentTarget.src = '/user_icon.svg';
+                        }}
+                      />
+                      <h2 className="text-2xl font-bold text-primary-foreground">{userData.name}</h2>
+                      <p className="text-primary-foreground/80">{userData.email}</p>
+                      <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mt-2">
+                        {userData.provider} User
+                      </span>
+                    </>
+                  ) : (
+                    <div className="text-center">
+                      <p className="text-primary-foreground">Loading profile...</p>
+                    </div>
+                  )}
                 </div>
                 
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span className="text-primary-foreground/80">Member since:</span>
-                    <span className="text-primary-foreground">{userData.joinDate}</span>
+                {userData && (
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-primary-foreground/80">Member since:</span>
+                      <span className="text-primary-foreground">{userData.joinDate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-primary-foreground/80">Current Level:</span>
+                      <span className="font-semibold text-primary-foreground">{userData.currentLevel}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-primary-foreground/80">Total Study Time:</span>
+                      <span className="text-primary-foreground">{userData.totalStudyTime}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-primary-foreground/80">Current Streak:</span>
+                      <span className="font-semibold text-green-400">{userData.streakDays} days</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-primary-foreground/80">Current Level:</span>
-                    <span className="font-semibold text-primary-foreground">{userData.currentLevel}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-primary-foreground/80">Total Study Time:</span>
-                    <span className="text-primary-foreground">{userData.totalStudyTime}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-primary-foreground/80">Current Streak:</span>
-                    <span className="font-semibold text-green-400">{userData.streakDays} days</span>
-                  </div>
-                </div>
+                )}
               </Card>
 
               {/* Learning Stats */}
@@ -93,20 +104,22 @@ export default function ProfilePage() {
                   <BarChart3 className="w-5 h-5 mr-2" />
                   Learning Statistics
                 </h3>
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <span className="text-primary-foreground/80">Words Learned:</span>
-                    <span className="font-semibold text-primary-foreground">{userData.totalWordsLearned}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-primary-foreground/80">Favorite Modules:</span>
-                    <div className="text-right">
-                      {userData.favoriteModules.map(module => (
-                        <span key={module} className="block text-sm text-primary-foreground">{module}</span>
-                      ))}
+                {userData && (
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-primary-foreground/80">Words Learned:</span>
+                      <span className="font-semibold text-primary-foreground">{userData.totalWordsLearned}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-primary-foreground/80">Favorite Modules:</span>
+                      <div className="text-right">
+                        {userData.favoriteModules?.map((module: string) => (
+                          <span key={module} className="block text-sm text-primary-foreground">{module}</span>
+                        )) || 'No modules yet'}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
                 
                 <div className="mt-6 pt-4 border-t border-primary-foreground/20">
                   <h4 className="font-semibold text-primary-foreground mb-3">Recent Achievements</h4>
