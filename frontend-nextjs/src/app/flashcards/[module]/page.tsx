@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { Menu } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useRandomWord, useTrackAnswer, AnswerResult } from '@/core/hooks';
 import { validateAnswer } from '@/core/validation';
@@ -13,8 +14,9 @@ import { FloatingFeedback } from '@/components/flashcard/floating-feedback';
 import { HelpModal } from '@/components/flashcard/help-modal';
 import { Statistics } from '@/components/flashcard/statistics';
 import { NavigationHeader } from '@/components/navigation-header';
+import { MobileMenu } from '@/components/ui/mobile-menu';
 import { Button } from '@/components/ui/button';
-import { Loader2, Settings, HelpCircle } from 'lucide-react';
+import { Loader2, Settings, HelpCircle, BarChart3 } from 'lucide-react';
 
 export default function FlashcardPage() {
   const params = useParams();
@@ -226,35 +228,72 @@ export default function FlashcardPage() {
             </h1>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowStats(true)}
-              className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
-            >
-              Statistics
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowHelp(true)}
-              className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
-            >
-              <HelpCircle className="w-4 h-4 mr-2" />
-              Help
-            </Button>
-            {currentMode === 'flashcard' && (
+          <div className="flex flex-col sm:flex-row gap-2">
+            {/* Mobile Menu */}
+            <div className="sm:hidden">
+              <MobileMenu
+                items={[
+                  {
+                    icon: BarChart3,
+                    label: 'Statistics',
+                    onClick: () => {setShowStats(true)}
+                  },
+                  {
+                    icon: HelpCircle,
+                    label: 'Help',
+                    onClick: () => setShowHelp(true)
+                  },
+                  ...(currentMode === 'flashcard' ? [{
+                    icon: Settings,
+                    label: 'Settings',
+                    onClick: () => setShowSettings(true)
+                  }] : [])
+                ]}
+                trigger={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10 min-h-[44px] w-full flex items-center justify-center gap-2"
+                  >
+                    <Menu className="w-5 h-5" />
+                    <span>Options</span>
+                  </Button>
+                }
+              />
+            </div>
+
+            {/* Desktop Action Buttons */}
+            <div className="hidden sm:flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setShowSettings(true)}
+                onClick={() => setShowStats(true)}
                 className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
               >
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Statistics
               </Button>
-            )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowHelp(true)}
+                className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
+              >
+                <HelpCircle className="w-4 h-4 mr-2" />
+                Help
+              </Button>
+              {currentMode === 'flashcard' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowSettings(true)}
+                  className="border-primary-purple/30 text-primary-purple hover:bg-primary-purple/10"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Settings
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 

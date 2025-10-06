@@ -4,8 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Home, LayoutDashboard, BookOpen, User, Settings, Brain, BarChart3, Menu, X } from 'lucide-react';
+import { MobileMenu } from '@/components/ui/mobile-menu';
 import { useState, useEffect, useCallback } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useWindowScroll } from '@/core/hooks/use-window-scroll';
 import { useAuth } from '@/core/hooks';
 
@@ -19,6 +20,7 @@ export function NavigationHeader({ showUserMenu = true }: NavigationHeaderProps)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const { y, direction } = useWindowScroll();
 
   // Handle scroll effects
@@ -121,77 +123,35 @@ export function NavigationHeader({ showUserMenu = true }: NavigationHeaderProps)
                 </Link>
               </div>
             )}
-
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
-            </Button>
           </div>
-        </div>
-      </div>
 
-      {/* Mobile Navigation */}
-      <div 
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen ? 'max-h-[400px]' : 'max-h-0'
-        }`}
-      >
-        <div className="px-4 py-2 space-y-1 bg-background/95 backdrop-blur-md border-t border-primary-purple/10 shadow-lg">
-          {navigationItems.map((item) => {
-            const IconComponent = item.icon;
-            const isActive = pathname === item.href;
-            
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'text-primary-purple bg-primary-purple/10 shadow-sm'
-                    : 'text-foreground/80 hover:text-primary-purple hover:bg-accent/50'
-                }`}
-              >
-                <IconComponent className="w-5 h-5" />
-                {item.label}
-              </Link>
-            );
-          })}
-
-          {/* Mobile User Menu */}
-          {showUserMenu && authData?.user && (
-            <div className="pt-2 mt-2 border-t border-primary-purple/10">
-              <Link href="/profile">
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start text-base hover:bg-accent/50"
-                >
-                  <User className="w-5 h-5 mr-3" />
-                  Profile
-                </Button>
-              </Link>
-              <Link href="/settings">
-                <Button 
-                  variant="ghost" 
-                  className="w-full justify-start text-base hover:bg-accent/50"
-                >
-                  <Settings className="w-5 h-5 mr-3" />
-                  Settings
-                </Button>
-              </Link>
-            </div>
-          )}
-        </div>
+          {/* Mobile Menu */}
+          <div className="md:hidden">
+            <MobileMenu
+              items={[
+                ...navigationItems.map(item => ({
+                  icon: item.icon,
+                  label: item.label,
+                  onClick: () => router.push(item.href)
+                })),
+                ...(showUserMenu && authData?.user ? [
+                  {
+                    icon: User,
+                    label: 'Profile',
+                    onClick: () => router.push('/profile')
+                  },
+                  {
+                    icon: Settings,
+                    label: 'Settings',
+                    onClick: () => router.push('/settings')
+                  }
+                ] : [])
+              ]}
+              className="relative z-50"
+            />
+          </div>
       </div>
+    </div>
     </header>
 
       {/* Mobile Bottom Navigation */}
