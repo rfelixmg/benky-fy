@@ -1,158 +1,52 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { AuthGuard, UserMenu } from '@/components/auth-guard';
 import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
-import { RomajiInput } from '@/components/japanese/romaji-input';
-import { BookOpen, Brain, Target, Zap, ArrowRight, Search } from 'lucide-react';
+import { BookOpen, Brain, Target, Zap, ArrowRight, MessageSquare, FileText, GraduationCap } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/button';
 
-const modules = [
-  {
-    id: 'hiragana',
-    name: 'Hiragana',
-    description: 'Learn the basic Japanese syllabary',
-    icon: BookOpen,
-    color: 'from-blue-500 to-blue-600',
-    difficulty: 'Beginner',
-    cards: 46,
+const learningModules = [
+  { 
+    id: 'lessons', 
+    name: 'Lessons', 
+    description: 'Structured Japanese lessons with grammar and vocabulary', 
+    status: 'Coming Soon',
+    icon: GraduationCap,
+    color: 'from-blue-500 to-blue-600'
   },
-  {
-    id: 'katakana',
-    name: 'Katakana',
-    description: 'Master the katakana writing system',
+  { 
+    id: 'flashcards', 
+    name: 'Flashcards', 
+    description: 'Practice with interactive flashcards', 
+    status: 'Available',
     icon: Brain,
-    color: 'from-green-500 to-green-600',
-    difficulty: 'Beginner',
-    cards: 46,
+    color: 'from-green-500 to-green-600'
   },
-  {
-    id: 'numbers_basic',
-    name: 'Basic Numbers',
-    description: 'Learn Japanese numbers 1-10',
-    icon: Target,
-    color: 'from-indigo-500 to-indigo-600',
-    difficulty: 'Beginner',
-    cards: 10,
+  { 
+    id: 'sentences', 
+    name: 'Sentences Practice', 
+    description: 'Practice with real Japanese sentences', 
+    status: 'Coming Soon',
+    icon: FileText,
+    color: 'from-purple-500 to-purple-600'
   },
-  {
-    id: 'numbers_extended',
-    name: 'Extended Numbers',
-    description: 'Master larger Japanese numbers',
-    icon: Target,
-    color: 'from-indigo-600 to-indigo-700',
-    difficulty: 'Intermediate',
-    cards: 20,
-  },
-  {
-    id: 'colors_basic',
-    name: 'Colors',
-    description: 'Learn Japanese color words',
-    icon: BookOpen,
-    color: 'from-red-500 to-orange-500',
-    difficulty: 'Beginner',
-    cards: 10,
-  },
-  {
-    id: 'adjectives',
-    name: 'Adjectives',
-    description: 'i-adjectives and na-adjectives',
-    icon: Zap,
-    color: 'from-orange-500 to-orange-600',
-    difficulty: 'Intermediate',
-    cards: 30,
-  },
-  {
-    id: 'base_nouns',
-    name: 'Basic Nouns',
-    description: 'Essential Japanese nouns',
-    icon: BookOpen,
-    color: 'from-teal-500 to-teal-600',
-    difficulty: 'Beginner',
-    cards: 25,
-  },
-  {
-    id: 'greetings_essential',
-    name: 'Greetings',
-    description: 'Essential Japanese greetings',
-    icon: BookOpen,
-    color: 'from-cyan-500 to-cyan-600',
-    difficulty: 'Beginner',
-    cards: 15,
-  },
-  {
-    id: 'question_words',
-    name: 'Question Words',
-    description: 'Learn Japanese question words',
-    icon: BookOpen,
-    color: 'from-emerald-500 to-emerald-600',
-    difficulty: 'Beginner',
-    cards: 12,
-  },
-  {
-    id: 'katakana_words',
-    name: 'Katakana Words',
-    description: 'Common katakana words',
-    icon: Brain,
-    color: 'from-green-600 to-green-700',
-    difficulty: 'Intermediate',
-    cards: 20,
-  },
-  {
-    id: 'days_of_week',
-    name: 'Days of Week',
-    description: 'Learn days of the week in Japanese',
-    icon: BookOpen,
-    color: 'from-violet-500 to-violet-600',
-    difficulty: 'Beginner',
-    cards: 7,
-  },
-  {
-    id: 'months_complete',
-    name: 'Months',
-    description: 'Learn months in Japanese',
-    icon: BookOpen,
-    color: 'from-purple-500 to-purple-600',
-    difficulty: 'Beginner',
-    cards: 12,
-  },
-  {
-    id: 'verbs',
-    name: 'Japanese Verbs',
-    description: 'Essential Japanese verbs',
-    icon: Target,
-    color: 'from-purple-600 to-purple-700',
-    difficulty: 'Intermediate',
-    cards: 50,
-  },
-  {
-    id: 'vocab',
-    name: 'Vocabulary',
-    description: 'General Japanese vocabulary',
-    icon: BookOpen,
-    color: 'from-pink-500 to-pink-600',
-    difficulty: 'Intermediate',
-    cards: 40,
-  },
+  { 
+    id: 'chat', 
+    name: 'AI Tutor Chat', 
+    description: 'Chat with AI tutors for personalized help', 
+    status: 'Coming Soon',
+    icon: MessageSquare,
+    color: 'from-orange-500 to-orange-600'
+  }
 ];
 
 export default function ModulesPage() {
   const { data: authData } = useAuth();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [useRomajiInput, setUseRomajiInput] = useState(false);
-
-  // Filter modules based on search term
-  const filteredModules = useMemo(() => {
-    if (!searchTerm.trim()) return modules;
-    
-    return modules.filter(module => 
-      module.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      module.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      module.difficulty.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [searchTerm]);
 
   return (
     <AuthGuard>
@@ -162,7 +56,7 @@ export default function ModulesPage() {
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard">
+            <Link href="/home">
               <Image
                 src="/logo1.webp"
                 alt="BenkoFY logo"
@@ -174,8 +68,8 @@ export default function ModulesPage() {
               />
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-primary-foreground">Learning Modules</h1>
-              <p className="text-primary-foreground/80">Choose a module to start learning</p>
+              <h1 className="text-3xl font-bold text-foreground">Learning Modules</h1>
+              <p className="text-foreground/80">Choose your learning path</p>
             </div>
           </div>
           
@@ -183,48 +77,47 @@ export default function ModulesPage() {
             <UserMenu user={authData.user} />
           )}
         </div>
-        
 
         {/* Modules Grid */}
         <div className="relative z-10 px-6 pb-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredModules.map((module) => {
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {learningModules.map((module) => {
                 const IconComponent = module.icon;
+                const isAvailable = module.status === 'Available';
+                
                 return (
-                  <Link
-                    key={module.id}
-                    href={`/flashcards/${module.id}`}
-                    className="group"
-                  >
-                    <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 hover:bg-background/20 transition-all duration-300 transform hover:scale-105">
-                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${module.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <Card key={module.id} className="p-6 bg-background/10 backdrop-blur-sm border-primary-foreground/20">
+                    <div className="flex items-center mb-4">
+                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${module.color} flex items-center justify-center mr-4`}>
                         <IconComponent className="w-6 h-6 text-primary-foreground" />
                       </div>
-                      
-                      <h3 className="text-xl font-semibold text-primary-foreground mb-2">
-                        {module.name}
-                      </h3>
-                      
-                      <p className="text-primary-foreground/80 text-sm mb-4">
-                        {module.description}
-                      </p>
-                      
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="text-xs bg-primary-foreground/20 text-primary-foreground px-2 py-1 rounded-full">
-                          {module.difficulty}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-foreground">{module.name}</h3>
+                        <span className={`text-sm px-2 py-1 rounded ${
+                          isAvailable ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                          {module.status}
                         </span>
-                        <span className="text-xs text-primary-foreground/60">
-                          {module.cards} cards
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center text-primary-foreground/60 text-sm group-hover:text-primary-foreground transition-colors">
-                        Start Learning
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
-                  </Link>
+                    <p className="text-foreground/80 mb-4">{module.description}</p>
+                    
+                    {isAvailable ? (
+                      <Button asChild className="w-full">
+                        <Link href={`/modules/${module.id}`}>
+                          <span className="flex items-center justify-center">
+                            Start Learning
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </span>
+                        </Link>
+                      </Button>
+                    ) : (
+                      <Button className="w-full" disabled>
+                        Coming Soon
+                      </Button>
+                    )}
+                  </Card>
                 );
               })}
             </div>
@@ -232,21 +125,25 @@ export default function ModulesPage() {
             {/* Additional Info */}
             <div className="mt-12 text-center">
               <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
-                <h3 className="text-xl font-semibold text-primary-foreground mb-4">
-                  How it works
+                <h3 className="text-xl font-semibold text-foreground mb-4">
+                  Learning Path
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-primary-foreground/80">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-foreground/80">
                   <div>
-                    <div className="font-medium text-primary-foreground mb-2">1. Choose a Module</div>
-                    <p>Select from Hiragana, Katakana, Verbs, or Adjectives</p>
+                    <div className="font-medium text-foreground mb-2">📚 Structured Learning</div>
+                    <p>Follow lessons designed by Japanese language experts</p>
                   </div>
                   <div>
-                    <div className="font-medium text-primary-foreground mb-2">2. Practice with Flashcards</div>
-                    <p>Type your answers and get instant feedback</p>
+                    <div className="font-medium text-foreground mb-2">🎴 Interactive Practice</div>
+                    <p>Reinforce learning with flashcards and exercises</p>
                   </div>
                   <div>
-                    <div className="font-medium text-primary-foreground mb-2">3. Track Progress</div>
-                    <p>Monitor your learning with detailed statistics</p>
+                    <div className="font-medium text-foreground mb-2">📝 Real Context</div>
+                    <p>Practice with authentic Japanese sentences</p>
+                  </div>
+                  <div>
+                    <div className="font-medium text-foreground mb-2">🤖 AI Support</div>
+                    <p>Get personalized help from AI tutors</p>
                   </div>
                 </div>
               </div>

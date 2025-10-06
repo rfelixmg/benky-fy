@@ -90,7 +90,7 @@ export function RomajiInput({
         onFocus={handleFocus}
         placeholder={placeholder}
         disabled={disabled}
-        className={`w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 ${className}`}
+        className={`w-full px-4 py-3 rounded-lg bg-background border border-input text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 ${className}`}
       />
       
       {/* Preview */}
@@ -98,9 +98,9 @@ export function RomajiInput({
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none">
           <div className="flex items-center gap-2">
             {isConverting && (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" />
             )}
-            <span className="text-white/70 text-sm font-medium">
+            <span className="text-muted-foreground text-sm font-medium">
               {preview}
             </span>
           </div>
@@ -110,7 +110,7 @@ export function RomajiInput({
       {/* Conversion Indicator */}
       {showPreview && value && !preview && !isConverting && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none">
-          <span className="text-white/40 text-xs">Invalid romaji</span>
+          <span className="text-muted-foreground text-xs">Invalid romaji</span>
         </div>
       )}
     </div>

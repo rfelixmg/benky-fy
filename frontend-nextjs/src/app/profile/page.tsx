@@ -1,169 +1,214 @@
 'use client';
 
-import { useUser } from '@/core/user-context';
+import { useState, useEffect } from 'react';
+import { AuthGuard, UserMenu } from '@/components/auth-guard';
+import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/Card';
-import { User, Mail, Calendar, LogOut, Edit3 } from 'lucide-react';
+import { User, Calendar, Clock, Trophy, Target, BookOpen, Settings, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/button';
 
 export default function ProfilePage() {
-  const { user, isLoading } = useUser();
+  const { data: authData } = useAuth();
+  const [userData, setUserData] = useState({
+    name: 'Guest User',
+    email: 'guest@example.com',
+    picture: '/user_icon.png',
+    provider: 'Guest',
+    joinDate: '2024-01-15',
+    currentLevel: 'Beginner',
+    totalStudyTime: '0 hours',
+    streakDays: 0,
+    totalWordsLearned: 0,
+    favoriteModules: []
+  });
 
-  const handleLogout = () => {
-    window.location.href = '/auth/logout';
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-foreground mx-auto mb-4"></div>
-          <p className="text-primary-foreground">Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-purple to-secondary-purple">
-        <div className="text-center">
-          <User className="w-16 h-16 text-primary-foreground/50 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-primary-foreground mb-4">No User Found</h2>
-          <p className="text-primary-foreground/80 mb-6">Please log in to view your profile.</p>
-          <Link href="/auth/login">
-            <Button>Go to Login</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // Update user data from auth context if available
+  useEffect(() => {
+    if (authData?.user) {
+      setUserData(prev => ({
+        ...prev,
+        name: authData.user?.name || prev.name,
+        email: authData.user?.email || prev.email,
+        picture: authData.user?.picture || prev.picture,
+        provider: 'Authenticated' // AuthUser doesn't have provider field
+      }));
+    } else if (authData?.authenticated === false) {
+      // User is not authenticated, show guest data
+      setUserData(prev => ({
+        ...prev,
+        name: 'Guest User',
+        email: 'guest@example.com',
+        provider: 'Guest'
+      }));
+    }
+  }, [authData]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
-      <FloatingElements />
-      
-      <div className="relative z-10 p-6">
+    <AuthGuard>
+      <div className="min-h-screen bg-gradient-to-br from-primary-purple to-secondary-purple relative overflow-hidden">
+        <FloatingElements />
+        
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-primary-foreground">Profile</h1>
-            <p className="text-primary-foreground/80">Manage your account information</p>
+        <div className="relative z-10 p-6 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Link href="/home">
+              <Image
+                src="/logo1.webp"
+                alt="BenkoFY logo"
+                width={80}
+                height={48}
+                className="flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                priority
+                style={{ width: "auto", height: "auto" }}
+              />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-primary-foreground">User Profile</h1>
+              <p className="text-primary-foreground/80">Manage your learning journey</p>
+            </div>
           </div>
-          <Button
-            onClick={handleLogout}
-            variant="outline"
-            className="flex items-center gap-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </Button>
+          
+          {authData?.user && (
+            <UserMenu user={authData.user} />
+          )}
         </div>
 
-        {/* Profile Content */}
-        <div className="max-w-2xl mx-auto">
-          <Card variant="primary" className="p-8">
-            {/* Profile Picture and Basic Info */}
-            <div className="flex items-center gap-6 mb-8">
-              <div className="relative">
-                {user.picture ? (
-                  <img
-                    src={user.picture}
-                    alt={user.name}
-                    className="w-24 h-24 rounded-full border-4 border-primary-purple/20"
+        {/* Content */}
+        <div className="relative z-10 px-6 pb-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Profile Info */}
+              <Card className="p-6 bg-background/10 backdrop-blur-sm border-primary-foreground/20">
+                <div className="text-center mb-6">
+                  <img 
+                    src={userData.picture || '/user_icon.png'} 
+                    alt="Profile" 
+                    className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-primary-foreground/20 object-cover" 
+                    onError={(e) => {
+                      e.currentTarget.src = '/user_icon.png';
+                    }}
                   />
-                ) : (
-                  <div className="w-24 h-24 rounded-full bg-primary-purple/20 flex items-center justify-center border-4 border-primary-purple/20">
-                    <User className="w-12 h-12 text-primary-purple" />
-                  </div>
-                )}
-              </div>
-              <div className="flex-1">
-                <h2 className="text-2xl font-bold text-primary-foreground mb-2">
-                  {user.name}
-                </h2>
-                <p className="text-primary-foreground/80 mb-4">
-                  {user.email}
-                </p>
-                <div className="flex items-center gap-2 text-sm text-primary-foreground/70">
-                  <Calendar className="w-4 h-4" />
-                  <span>Member since {new Date().toLocaleDateString()}</span>
+                  <h2 className="text-2xl font-bold text-primary-foreground">{userData.name}</h2>
+                  <p className="text-primary-foreground/80">{userData.email}</p>
+                  <span className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm mt-2">
+                    {userData.provider} User
+                  </span>
                 </div>
-              </div>
-            </div>
-
-            {/* User Details */}
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-primary-foreground/80">Full Name</label>
-                  <div className="flex items-center gap-2 p-3 bg-background/50 rounded-lg">
-                    <User className="w-4 h-4 text-primary-purple" />
-                    <span className="text-primary-foreground">{user.name}</span>
+                
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-primary-foreground/80">Member since:</span>
+                    <span className="text-primary-foreground">{userData.joinDate}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-primary-foreground/80">Current Level:</span>
+                    <span className="font-semibold text-primary-foreground">{userData.currentLevel}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-primary-foreground/80">Total Study Time:</span>
+                    <span className="text-primary-foreground">{userData.totalStudyTime}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-primary-foreground/80">Current Streak:</span>
+                    <span className="font-semibold text-green-400">{userData.streakDays} days</span>
                   </div>
                 </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-primary-foreground/80">Email Address</label>
-                  <div className="flex items-center gap-2 p-3 bg-background/50 rounded-lg">
-                    <Mail className="w-4 h-4 text-primary-purple" />
-                    <span className="text-primary-foreground">{user.email}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Google Account Info */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-primary-foreground/80">Google Account</label>
-                <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">G</span>
-                    </div>
-                    <span className="text-green-200 text-sm">Connected to Google</span>
-                  </div>
-                  <p className="text-green-200/70 text-xs mt-1">
-                    Account ID: {user.id}
-                  </p>
-                </div>
-              </div>
+              </Card>
 
               {/* Learning Stats */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-primary-foreground/80">Learning Progress</label>
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-background/50 rounded-lg">
-                    <div className="text-2xl font-bold text-primary-purple">0</div>
-                    <div className="text-xs text-primary-foreground/70">Cards Studied</div>
+              <Card className="p-6 bg-background/10 backdrop-blur-sm border-primary-foreground/20">
+                <h3 className="text-xl font-semibold text-primary-foreground mb-4 flex items-center">
+                  <BarChart3 className="w-5 h-5 mr-2" />
+                  Learning Statistics
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-primary-foreground/80">Words Learned:</span>
+                    <span className="font-semibold text-primary-foreground">{userData.totalWordsLearned}</span>
                   </div>
-                  <div className="text-center p-4 bg-background/50 rounded-lg">
-                    <div className="text-2xl font-bold text-primary-purple">0</div>
-                    <div className="text-xs text-primary-foreground/70">Streak Days</div>
-                  </div>
-                  <div className="text-center p-4 bg-background/50 rounded-lg">
-                    <div className="text-2xl font-bold text-primary-purple">0</div>
-                    <div className="text-xs text-primary-foreground/70">Modules Completed</div>
+                  <div className="flex justify-between">
+                    <span className="text-primary-foreground/80">Favorite Modules:</span>
+                    <div className="text-right">
+                      {userData.favoriteModules.map(module => (
+                        <span key={module} className="block text-sm text-primary-foreground">{module}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+                
+                <div className="mt-6 pt-4 border-t border-primary-foreground/20">
+                  <h4 className="font-semibold text-primary-foreground mb-3">Recent Achievements</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center text-sm text-primary-foreground/80">
+                      <Trophy className="w-4 h-4 mr-2 text-yellow-400" />
+                      Completed Hiragana Module
+                    </div>
+                    <div className="flex items-center text-sm text-primary-foreground/80">
+                      <Target className="w-4 h-4 mr-2 text-green-400" />
+                      7-day learning streak
+                    </div>
+                    <div className="flex items-center text-sm text-primary-foreground/80">
+                      <BookOpen className="w-4 h-4 mr-2 text-blue-400" />
+                      Learned 50 new words
+                    </div>
+                  </div>
+                </div>
+              </Card>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4 mt-8">
-              <Button className="flex items-center gap-2">
-                <Edit3 className="w-4 h-4" />
-                Edit Profile
-              </Button>
-              <Link href="/dashboard">
-                <Button variant="outline" className="flex items-center gap-2">
-                  Back to Dashboard
-                </Button>
-              </Link>
+              {/* Quick Actions */}
+              <Card className="p-6 bg-background/10 backdrop-blur-sm border-primary-foreground/20">
+                <h3 className="text-xl font-semibold text-primary-foreground mb-4 flex items-center">
+                  <Settings className="w-5 h-5 mr-2" />
+                  Quick Actions
+                </h3>
+                <div className="space-y-3">
+                  <Button asChild className="w-full justify-start bg-background text-primary hover:bg-background/90">
+                    <Link href="/dashboard">
+                      <User className="w-4 h-4 mr-2" />
+                      Go to Dashboard
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="w-full justify-start border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                    <Link href="/stats">
+                      <BarChart3 className="w-4 h-4 mr-2" />
+                      View Statistics
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="w-full justify-start border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                    <Link href="/flashcards">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Practice Flashcards
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="w-full justify-start border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                    <Link href="/modules">
+                      <Target className="w-4 h-4 mr-2" />
+                      Browse Modules
+                    </Link>
+                  </Button>
+                </div>
+                
+                <div className="mt-6 pt-4 border-t border-primary-foreground/20">
+                  <h4 className="font-semibold text-primary-foreground mb-3">Account Settings</h4>
+                  <div className="space-y-2">
+                    <Button variant="ghost" className="w-full justify-start text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10">
+                      <Settings className="w-4 h-4 mr-2" />
+                      Preferences
+                    </Button>
+                    <Button variant="ghost" className="w-full justify-start text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Study Schedule
+                    </Button>
+                  </div>
+                </div>
+              </Card>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </AuthGuard>
   );
 }

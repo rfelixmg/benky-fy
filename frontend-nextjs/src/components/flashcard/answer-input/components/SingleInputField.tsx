@@ -77,9 +77,11 @@ export const SingleInputField = React.forwardRef<
       onFocus={onFocus}
       onBlur={onBlur}
       className={cn(
-        'w-full px-3 py-2 border border-gray-300 rounded-md',
-        'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
-        'disabled:bg-gray-100 disabled:cursor-not-allowed',
+        'w-full px-3 py-2 rounded-md',
+        'bg-background text-foreground placeholder-muted-foreground',
+        'border border-input',
+        'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
+        'disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed',
         'transition-colors duration-200',
         className
       )}

@@ -18,16 +18,37 @@ export const useAuth = () => {
   return useQuery<AuthResponse>({
     queryKey: ['auth'],
     queryFn: async () => {
-      // Bypass login for development - return mock authenticated user
+      try {
+        // Try to get real authentication from backend
+        const response = await apiClient.checkAuth();
+        if (response.success && response.data?.authenticated) {
+          return response.data;
+        }
+      } catch (error) {
+        console.log('Auth check failed, using fallback:', error);
+      }
+      
+      // Fallback to dummy data only in development
+      const isDevelopment = process.env.NODE_ENV === 'development';
+      if (isDevelopment) {
+        return {
+          authenticated: true,
+          user: {
+            name: 'Test User',
+            email: 'test@example.com',
+            picture: '/user_icon.png',
+          },
+          session_keys: ['user'],
+          google_authorized: true,
+        };
+      }
+      
+      // Production: return unauthenticated
       return {
-        authenticated: true,
-        user: {
-          name: 'Test User',
-          email: 'test@example.com',
-          picture: undefined,
-        },
-        session_keys: ['user'],
-        google_authorized: true,
+        authenticated: false,
+        user: undefined,
+        session_keys: [],
+        google_authorized: false,
       };
     },
     staleTime: 5 * 60 * 1000, // 5 minutes

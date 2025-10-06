@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Home, LayoutDashboard, BookOpen, User, Settings } from 'lucide-react';
+import { Home, LayoutDashboard, BookOpen, User, Settings, Brain, BarChart3 } from 'lucide-react';
 import { useAuth } from '@/core/hooks';
 
 interface NavigationHeaderProps {
@@ -17,7 +17,9 @@ export function NavigationHeader({ currentPage, showUserMenu = true }: Navigatio
   const navigationItems = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/flashcards', label: 'Flashcards', icon: Brain },
     { href: '/modules', label: 'Modules', icon: BookOpen },
+    { href: '/stats', label: 'Stats', icon: BarChart3 },
   ];
 
   return (
@@ -26,7 +28,7 @@ export function NavigationHeader({ currentPage, showUserMenu = true }: Navigatio
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/dashboard" className="flex items-center">
+            <Link href="/home" className="flex items-center">
               <Image
                 src="/logo1.webp"
                 alt="BenkoFY logo"
@@ -52,7 +54,7 @@ export function NavigationHeader({ currentPage, showUserMenu = true }: Navigatio
                   className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     isActive
                       ? 'text-primary-purple bg-primary-purple/10'
-                      : 'text-primary-foreground/80 hover:text-primary-purple hover:bg-primary-purple/5'
+                      : 'text-foreground/80 hover:text-primary-purple hover:bg-accent'
                   }`}
                 >
                   <IconComponent className="w-4 h-4" />
@@ -68,13 +70,13 @@ export function NavigationHeader({ currentPage, showUserMenu = true }: Navigatio
             {showUserMenu && authData?.user && (
               <div className="flex items-center gap-2">
                 <Link href="/profile">
-                  <Button variant="ghost" size="sm" className="text-primary-foreground/80 hover:text-primary-purple">
+                  <Button variant="ghost" size="sm">
                     <User className="w-4 h-4 mr-2" />
                     Profile
                   </Button>
                 </Link>
                 <Link href="/settings">
-                  <Button variant="ghost" size="sm" className="text-primary-foreground/80 hover:text-primary-purple">
+                  <Button variant="ghost" size="sm">
                     <Settings className="w-4 h-4" />
                   </Button>
                 </Link>
@@ -98,7 +100,7 @@ export function NavigationHeader({ currentPage, showUserMenu = true }: Navigatio
                 className={`flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
                   isActive
                     ? 'text-primary-purple bg-primary-purple/10'
-                    : 'text-primary-foreground/80 hover:text-primary-purple hover:bg-primary-purple/5'
+                    : 'text-foreground/80 hover:text-primary-purple hover:bg-accent'
                 }`}
               >
                 <IconComponent className="w-5 h-5" />

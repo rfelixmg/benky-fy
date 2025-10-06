@@ -10,17 +10,40 @@ import { BookOpen, Brain, Target, TrendingUp, Clock, Award, Search } from 'lucid
 import Link from 'next/link';
 import Image from 'next/image';
 
+const dashboardData = {
+  todayStats: {
+    studyTime: '2 hours 30 minutes',
+    cardsReviewed: 45,
+    accuracy: 87,
+    streakDays: 12
+  },
+  recentActivity: [
+    { module: 'Hiragana', action: 'Completed 20 cards', time: '2 hours ago', accuracy: 90 },
+    { module: 'Numbers', action: 'Reviewed 15 cards', time: '1 day ago', accuracy: 85 },
+    { module: 'Time', action: 'Started new session', time: '2 days ago', accuracy: 78 }
+  ],
+  weeklyProgress: [
+    { day: 'Mon', cards: 25, accuracy: 88 },
+    { day: 'Tue', cards: 30, accuracy: 92 },
+    { day: 'Wed', cards: 20, accuracy: 85 },
+    { day: 'Thu', cards: 35, accuracy: 90 },
+    { day: 'Fri', cards: 28, accuracy: 87 },
+    { day: 'Sat', cards: 22, accuracy: 89 },
+    { day: 'Sun', cards: 18, accuracy: 91 }
+  ]
+};
+
 const recentModules = [
   { id: 'hiragana', name: 'Hiragana', progress: 75, lastStudied: '2 hours ago' },
   { id: 'katakana', name: 'Katakana', progress: 20, lastStudied: '3 days ago' },
-  { id: 'colors', name: 'Colors', progress: 60, lastStudied: '1 day ago' },
+  { id: 'colors_basic', name: 'Colors', progress: 60, lastStudied: '1 day ago' },
 ];
 
 const stats = [
-  { label: 'Total Cards Studied', value: '156', icon: BookOpen, color: 'text-blue-500' },
-  { label: 'Current Streak', value: '7 days', icon: TrendingUp, color: 'text-green-500' },
-  { label: 'Study Time Today', value: '25 min', icon: Clock, color: 'text-purple-500' },
-  { label: 'Accuracy Rate', value: '87%', icon: Award, color: 'text-orange-500' },
+  { label: 'Study Time Today', value: dashboardData.todayStats.studyTime, icon: Clock, color: 'text-purple-500' },
+  { label: 'Cards Reviewed', value: dashboardData.todayStats.cardsReviewed.toString(), icon: BookOpen, color: 'text-blue-500' },
+  { label: 'Accuracy Rate', value: `${dashboardData.todayStats.accuracy}%`, icon: Award, color: 'text-orange-500' },
+  { label: 'Current Streak', value: `${dashboardData.todayStats.streakDays} days`, icon: TrendingUp, color: 'text-green-500' },
 ];
 
 export default function DashboardPage() {
@@ -36,7 +59,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="relative z-10 p-6 flex justify-between items-center">
           <div className="flex items-center gap-4">
-            <Link href="/dashboard">
+            <Link href="/home">
               <Image
                 src="/logo1.webp"
                 alt="BenkoFY logo"
@@ -58,57 +81,6 @@ export default function DashboardPage() {
           {authData?.user && (
             <UserMenu user={authData.user} />
           )}
-        </div>
-        
-        {/* Quick Search */}
-        <div className="relative z-10 px-6 pb-6">
-          <div className="max-w-6xl mx-auto mb-6">
-            <div className="bg-background/10 backdrop-blur-sm rounded-lg p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Search className="w-4 h-4 text-primary-foreground" />
-                <h3 className="text-sm font-semibold text-primary-foreground">Quick Search</h3>
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <label className="flex items-center gap-2 text-primary-foreground/80 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={useRomajiInput}
-                    onChange={(e) => setUseRomajiInput(e.target.checked)}
-                    className="rounded border-white/30 bg-white/20 text-white focus:ring-white/50"
-                  />
-                  Romaji
-                </label>
-                
-                {useRomajiInput ? (
-                  <RomajiInput
-                    value={searchTerm}
-                    onChange={setSearchTerm}
-                    placeholder="Search modules..."
-                    showPreview={true}
-                    outputType="auto"
-                    className="text-sm flex-1"
-                  />
-                ) : (
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Search modules..."
-                    className="flex-1 px-3 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent text-sm"
-                  />
-                )}
-                
-                {searchTerm && (
-                  <Link href={`/modules?search=${encodeURIComponent(searchTerm)}`}>
-                    <Button size="sm" className="bg-white text-primary hover:bg-white/90">
-                      Go
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Main Content */}
@@ -170,8 +142,46 @@ export default function DashboardPage() {
               </div>
             </div>
             
+            {/* Enhanced Dashboard Sections */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Recent Activity */}
+              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-primary-foreground mb-4">Recent Activity</h3>
+                <div className="space-y-4">
+                  {dashboardData.recentActivity.map((activity, index) => (
+                    <div key={index} className="flex justify-between items-center p-3 bg-background/5 rounded-lg">
+                      <div>
+                        <p className="font-semibold text-primary-foreground">{activity.module}</p>
+                        <p className="text-sm text-primary-foreground/80">{activity.action}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-primary-foreground/60">{activity.time}</p>
+                        <p className="text-sm font-semibold text-green-400">{activity.accuracy}%</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Weekly Progress */}
+              <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-primary-foreground mb-4">Weekly Progress</h3>
+                <div className="space-y-3">
+                  {dashboardData.weeklyProgress.map((day, index) => (
+                    <div key={index} className="flex justify-between items-center">
+                      <span className="font-semibold text-primary-foreground">{day.day}</span>
+                      <div className="flex items-center space-x-4">
+                        <span className="text-sm text-primary-foreground/80">{day.cards} cards</span>
+                        <span className="text-sm font-semibold text-green-400">{day.accuracy}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
               <div className="bg-background/10 backdrop-blur-sm rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-primary-foreground mb-4">Quick Start</h3>
                 <div className="space-y-3">
@@ -181,16 +191,22 @@ export default function DashboardPage() {
                       Practice Hiragana
                     </Button>
                   </Link>
-                  <Link href="/flashcards/colors">
+                  <Link href="/flashcards/colors_basic">
                     <Button className="w-full justify-start bg-background text-primary hover:bg-background/90">
                       <Target className="w-4 h-4 mr-2" />
                       Practice Colors
                     </Button>
                   </Link>
-                  <Link href="/modules">
+                  <Link href="/flashcards">
                     <Button variant="outline" className="w-full justify-start border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
                       <Brain className="w-4 h-4 mr-2" />
-                      Browse All Modules
+                      Browse All Flashcards
+                    </Button>
+                  </Link>
+                  <Link href="/modules">
+                    <Button variant="outline" className="w-full justify-start border-primary-foreground text-primary-foreground hover:bg-primary-foreground/10">
+                      <Target className="w-4 h-4 mr-2" />
+                      Learning Modules
                     </Button>
                   </Link>
                 </div>
