@@ -50,7 +50,12 @@ export default function ChatPage() {
   const { data: authData } = useAuth();
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [conversation, setConversation] = useState(initialConversation);
+  type Message = {
+    role: 'user' | 'assistant';
+    content: string;
+    translation?: string;
+  };
+  const [conversation, setConversation] = useState<Message[]>(initialConversation);
 
   const getMockResponse = (userMessage: string) => {
     const lowerMessage = userMessage.toLowerCase();
@@ -75,7 +80,8 @@ export default function ChatPage() {
     // Add user message
     const userMessage = {
       role: 'user',
-      content: message
+      content: message,
+      translation: undefined
     };
     setConversation(prev => [...prev, userMessage]);
     setMessage('');

@@ -4,13 +4,24 @@ import { useState } from 'react';
 import { UserMenu } from '@/components/user-menu';
 import { useAuth } from '@/core/hooks';
 import { FloatingElements } from '@/components/floating-elements';
-import { BookOpen, Brain, Target, Zap, ArrowRight, MessageSquare, FileText, GraduationCap } from 'lucide-react';
+import { BookOpen, Brain, Target, Zap, ArrowRight, MessageSquare, FileText, GraduationCap, LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/button';
 
-const learningModules = [
+type ModuleStatus = 'Available' | 'Mock Up' | 'Coming Soon';
+
+interface LearningModule {
+  id: string;
+  name: string;
+  description: string;
+  status: ModuleStatus;
+  icon: LucideIcon;
+  color: string;
+}
+
+const learningModules: LearningModule[] = [
   { 
     id: 'lessons', 
     name: 'Lessons', 
@@ -18,15 +29,23 @@ const learningModules = [
     status: 'Mock Up',
     icon: GraduationCap,
     color: 'from-blue-500 to-blue-600'
-  },
+  },  
   { 
     id: 'flashcards', 
     name: 'Flashcards', 
     description: 'Practice with interactive flashcards', 
     status: 'Available',
     icon: Brain,
-  },
     color: 'from-green-500 to-green-600'
+  },
+  { 
+    id: 'kanjistrikes', 
+    name: 'Kanji Strikes', 
+    description: 'Practice your kanji writing', 
+    status: 'Coming Soon',
+    icon: FileText,
+    color: 'from-green-500 to-green-600'
+  },
   { 
     id: 'chat', 
     name: 'AI Tutor Chat', 
