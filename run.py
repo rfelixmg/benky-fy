@@ -9,9 +9,6 @@ try:
     app = create_app()
 except Exception as e:
     print(f"Error creating app: {e}")
-    print("Make sure all required environment variables are set:")
-    print("- GOOGLE_OAUTH_CLIENT_ID")
-    print("- GOOGLE_OAUTH_CLIENT_SECRET")
     raise
 
 if __name__ == "__main__":

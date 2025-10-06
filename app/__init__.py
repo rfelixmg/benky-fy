@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import os
+from .database import init_database
 
 def create_app() -> Flask:
     """Application factory pattern for Benkyo-Fi."""
@@ -24,10 +25,33 @@ def create_app() -> Flask:
     # Configure app
     app.secret_key = os.environ.get("FLASK_SECRET_KEY", "superkey-benky-fy")
 
+    # Initialize database
+    init_database(app)
+
     # Health check endpoint
     @app.route('/health')
     def health_check():
         return jsonify({'status': 'healthy', 'service': 'benky-fy-backend'}), 200
+    
+    # Database health check endpoint
+    @app.route('/health/db')
+    def db_health_check():
+        try:
+            # Test database connection
+            from .database import db
+            from sqlalchemy import text
+            db.session.execute(text('SELECT 1'))
+            return jsonify({
+                'status': 'healthy', 
+                'database': 'connected',
+                'url': app.config.get('SQLALCHEMY_DATABASE_URI', 'not_set')[:50] + '...'
+            }), 200
+        except Exception as e:
+            return jsonify({
+                'status': 'error', 
+                'database': 'disconnected',
+                'error': str(e)
+            }), 500
 
     # Global error handlers
     @app.errorhandler(404)
