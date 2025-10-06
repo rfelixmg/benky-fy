@@ -11,6 +11,7 @@ def create_app() -> Flask:
     allowed_origins = [
         'http://localhost:3000',  # Development
         'https://benky-fy-frontend-193852054448.asia-northeast1.run.app',  # Production
+        'https://benkyfy.site' # Production
     ]
     
     # Allow additional origins from environment variable
