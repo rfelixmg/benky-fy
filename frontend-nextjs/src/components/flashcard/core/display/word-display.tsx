@@ -21,26 +21,19 @@ export function WordDisplay({
   const renderJapaneseText = (text: string, furigana?: string, hiragana?: string) => {
     const furiganaStyle = settings.furigana_style || "ruby";
     const isHoverMode = furiganaStyle === "hover";
-
-    // If it's kanji, show with furigana
+    
     if (text === item.kanji) {
       return (
         <div className="flex flex-col items-center gap-4">
           <FuriganaText
             text={text}
-            reading={furigana}
+            reading={hiragana}
             showReading={!isHoverMode}
             hoverToShow={isHoverMode}
             style={furiganaStyle === "ruby" ? "traditional" : "modern"}
             className={className || "text-white"}
             size="xl"
           />
-          {/* Always show hiragana below kanji */}
-          {item.hiragana && (
-            <div className={`text-2xl ${className || "text-white/80"}`}>
-              {item.hiragana}
-            </div>
-          )}
         </div>
       );
     }
@@ -66,7 +59,6 @@ export function WordDisplay({
         return <span className={className || "text-white"}>{item.english}</span>;
       case "kana":
       default:
-        // Show hiragana or katakana based on kana_type setting
         if (kanaType === "katakana" && item.katakana) {
           return renderJapaneseText(item.katakana, item.furigana, item.hiragana);
         } else if (item.hiragana) {

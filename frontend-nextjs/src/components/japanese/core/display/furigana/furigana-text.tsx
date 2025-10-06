@@ -78,6 +78,12 @@ export function FuriganaText({
           {reading}
         </span>
       )}
+      <span className={`
+        ${sizeClass.text} ${styleClass.text}
+        text-primary-foreground
+      `}>
+        {text}
+      </span>
     </div>
   );
 }
