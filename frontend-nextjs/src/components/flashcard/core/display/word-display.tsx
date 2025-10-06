@@ -1,7 +1,7 @@
 'use client';
 
 import { FlashcardItem, UserSettings } from "@/core/api-client";
-import { Furigana, JapaneseText } from "@/components/japanese/furigana";
+import { FuriganaText, CharacterDisplay } from "@/components/japanese/core/display/furigana";
 
 interface WordDisplayProps {
   item: FlashcardItem;
@@ -18,25 +18,38 @@ export function WordDisplay({
   kanaType = 'hiragana',
   className = '',
 }: WordDisplayProps) {
-  const renderJapaneseText = (text: string, furigana?: string) => {
-    if (furigana) {
-      const furiganaStyle = settings.furigana_style || "ruby";
+  const renderJapaneseText = (text: string, furigana?: string, hiragana?: string) => {
+    const furiganaStyle = settings.furigana_style || "ruby";
+    const isHoverMode = furiganaStyle === "hover";
 
+    // If it's kanji, show with furigana
+    if (text === item.kanji) {
       return (
-        <Furigana
-          kanji={text}
-          furigana={furigana}
-          showFurigana={true}
-          mode={furiganaStyle as "hover" | "inline" | "brackets" | "ruby"}
-          className={className || "text-white"}
-        />
+        <div className="flex flex-col items-center gap-4">
+          <FuriganaText
+            text={text}
+            reading={furigana}
+            showReading={!isHoverMode}
+            hoverToShow={isHoverMode}
+            style={furiganaStyle === "ruby" ? "traditional" : "modern"}
+            className={className || "text-white"}
+            size="xl"
+          />
+          {/* Always show hiragana below kanji */}
+          {item.hiragana && (
+            <div className={`text-2xl ${className || "text-white/80"}`}>
+              {item.hiragana}
+            </div>
+          )}
+        </div>
       );
     }
 
+    // For non-kanji (hiragana/katakana), just show the text
     return (
-      <JapaneseText
-        text={text}
-        showFurigana={settings.furigana_style === "hover"}
+      <CharacterDisplay
+        character={text}
+        size="xl"
         className={className || "text-white"}
       />
     );
@@ -47,7 +60,7 @@ export function WordDisplay({
       case "kanji":
       case "kanji_furigana":
         return item.kanji
-          ? renderJapaneseText(item.kanji, item.furigana)
+          ? renderJapaneseText(item.kanji, item.furigana, item.hiragana)
           : null;
       case "english":
         return <span className={className || "text-white"}>{item.english}</span>;
@@ -55,11 +68,11 @@ export function WordDisplay({
       default:
         // Show hiragana or katakana based on kana_type setting
         if (kanaType === "katakana" && item.katakana) {
-          return renderJapaneseText(item.katakana, item.furigana);
+          return renderJapaneseText(item.katakana, item.furigana, item.hiragana);
         } else if (item.hiragana) {
           return renderJapaneseText(item.hiragana, item.furigana);
         } else if (item.katakana) {
-          return renderJapaneseText(item.katakana, item.furigana);
+          return renderJapaneseText(item.katakana, item.furigana, item.hiragana);
         }
         return null;
     }
